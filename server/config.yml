@@ -1,0 +1,29 @@
+USED_CONFIG: DevelopmentConfig
+
+
+DefaultConfig:
+  Flask:
+    # http://flask.pocoo.org/docs/0.10/config/
+    SECRET_KEY: ImportantSecretString
+    DEBUG: False
+    TESTING: False
+
+
+ProductionConfig:
+  Base: DefaultConfig
+
+
+DevelopmentConfig:
+  Base: DefaultConfig
+
+  Flask:
+    WTF_CSRF_ENABLED: False
+    DEBUG: True
+
+
+TestingConfig:
+  Base: DefaultConfig
+
+  Flask:
+    WTF_CSRF_ENABLED: False
+    TESTING: True

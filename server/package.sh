@@ -18,7 +18,8 @@ function init()
 
 function do_preinstall()
 {
-    packages="python${PYTHON_VERSION}"
+    # Extra dependencies for fast Yaml file reading (http://stackoverflow.com/a/24791419/1108919)
+    packages="build-essential python${PYTHON_VERSION} python${PYTHON_VERSION}-dev libyaml-dev"
     if [ "${GLOBAL_INSTALL}" == true ]
     then
         packages="${packages} python3-pip"
@@ -42,10 +43,26 @@ function do_postinstall()
     # Update Python packages
     "${PIP}" install --upgrade pip setuptools
     "${PIP}" install -r requirements.txt --upgrade
+    if [ "${PRODUCTION}" == false ]
+    then
+        "${PIP}" install -r requirements-dev.txt --upgrade
+    fi
+
+    # Create directories
+    if [ ! -e tmp ]
+    then
+        mkdir -p tmp
+    fi
 }
 
 function do_clear()
 {
+    # Remove directories
+    if [ -e tmp ]
+    then
+        rm -r tmp
+    fi
+
     # Remove virtualenv
     if [ -e flask ]
     then
