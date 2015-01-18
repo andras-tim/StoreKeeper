@@ -1,2 +1,4 @@
+app.sqlite
+db_repository/
 flask/
 tmp/

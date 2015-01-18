@@ -1,2 +1,5 @@
 Flask>=0.10.1
 PyYAML>=3.11
+Flask-SQLAlchemy>=2.0
+sqlalchemy-migrate>=0.9.2
+PyMySQL>=0.6.3
