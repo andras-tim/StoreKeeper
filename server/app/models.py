@@ -1,28 +1,6 @@
-import sqlalchemy
+from datetime import datetime
 from wtforms.validators import Email
-
 from .server import db, bcrypt
-
-
-def set_yearly_reset_for_autoincrement_counter(table_object: sqlalchemy.sql.schema.Table,
-                                               id_column_name: str="id",
-                                               year_column_name: str="year"):
-    trigger = """
-        CREATE TRIGGER yearly_restart_autoincrement_on_%(table)s BEFORE INSERT ON %(table)s
-        FOR EACH ROW
-        BEGIN
-            IF NEW.%(id)s = 0 THEN
-                SET NEW.%(id)s = (SELECT IFNULL(MAX(t.%(id)s), 0) + 1
-                                  FROM %(table)s AS t
-                                  WHERE t.%(year)s = NEW.%(year)s);
-            END IF;
-        END;
-    """ % {
-        "table": table_object.name,
-        "id": id_column_name,
-        "year": year_column_name,
-    }
-    sqlalchemy.event.listen(table_object, "after_create", db.DDL(trigger))
 
 
 class User(db.Model):
@@ -32,7 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(50), nullable=False, info={'validators': Email()})
     disabled = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, username: str, password: str, email: str):
+    def __init__(self, username, password, email):
         self.username = username
         self.password = bcrypt.generate_password_hash(password)
         self.email = email
@@ -50,7 +28,7 @@ class Item(db.Model):
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
     barcodes = db.relationship('Barcode', backref='item', lazy='dynamic')
 
-    def __init__(self, name: str, vendor_id: int, quantity: int, unit_id: int):
+    def __init__(self, name, vendor_id, quantity, unit_id):
         self.name = name
         self.vendor_id = vendor_id
         self.quantity = quantity
@@ -66,7 +44,7 @@ class Barcode(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=1)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
 
-    def __init__(self, barcode: str, quantity: int, item_id: int):
+    def __init__(self, barcode, quantity, item_id):
         self.barcode = barcode
         self.quantity = quantity
         self.item_id = item_id
@@ -79,7 +57,7 @@ class Vendor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
 
-    def __init__(self, name: str):
+    def __init__(self, name):
         self.name = name
 
     def __repr__(self):
@@ -90,7 +68,7 @@ class Unit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     unit = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, unit: str):
+    def __init__(self, unit):
         self.unit = unit
 
     def __repr__(self):
@@ -98,22 +76,119 @@ class Unit(db.Model):
 
 
 class Work(db.Model):
-    year = db.Column(db.Integer, primary_key=True, autoincrement=False)
-    id = db.Column(db.Integer, primary_key=True, autoincrement=False, default=0)
-    full_id = db.column_property(year + "-" + id)
-    name = db.Column(db.String(50), nullable=False)
+    year = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    comment = db.Column(db.Text)
+    outbound_close_timestamp = db.Column(db.DateTime)
+    outbound_close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    return_close_timestamp = db.Column(db.DateTime)
+    return_close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    work_items = db.relationship('WorkItem', backref='work', lazy='dynamic')
 
-    def __init__(self, year: int, name: str):
-        self.year = year
+    def __init__(self, creator_user_id, customer_id, comment):
+        self.year = datetime.utcnow().year
+        self.creator_user_id = creator_user_id
+        self.customer_id = customer_id
+        self.comment = comment
+
+    def __repr__(self):
+        return '<Work %r>' % self.get_id()
+
+    def get_id(self):
+        return "%d-%d" % (self.year, self.id)
+
+
+class WorkItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    work_id = db.Column(db.Integer, db.ForeignKey('work.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+    outbound_quantity = db.Column(db.Integer, nullable=False)
+    return_quantity = db.Column(db.Integer)
+
+    def __init__(self, work_id, item_id, outbound_quantity):
+        self.work_id = work_id
+        self.item_id = item_id
+        self.outbound_quantity = outbound_quantity
+
+    def __repr__(self):
+        return '<WorkItem %r>' % self.id
+
+
+class Customer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+
+    def __init__(self, name):
         self.name = name
 
     def __repr__(self):
-        return '<Work %r>' % self.id
+        return '<Customer %r>' % self.name
 
 
-set_yearly_reset_for_autoincrement_counter(Work.__table__)
+class Acquisition(db.Model):
+    year = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    comment = db.Column(db.Text)
+    items = db.relationship('AcquisitionItem', backref='acquisition', lazy='dynamic')
+
+    def __init__(self, comment):
+        self.date = datetime.utcnow()
+        self.year = self.date.year
+        self.comment = comment
+
+    def __repr__(self):
+        return '<Acquisition %r>' % self.get_id()
+
+    def get_id(self):
+        return "%d-%d" % (self.year, self.id)
 
 
+class AcquisitionItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    acquisition_id = db.Column(db.Integer, db.ForeignKey('acquisition.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
 
-# sys.path.extend(['/home/tia/codes/github-com/StoreKeeper/server']); from app.server import db; from app.models import *
-# w = Work(2014, "test"); db.session.add(w); db.session.commit()
+    def __init__(self, acquisition_id, item_id, quantity):
+        self.acquisition_id = acquisition_id
+        self.item_id = item_id
+        self.quantity = quantity
+
+    def __repr__(self):
+        return '<AcquisitionItem %r>' % self.id
+
+
+class Stocktaking(db.Model):
+    year = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    comment = db.Column(db.Text)
+    items = db.relationship('StocktakingItem', backref='stocktaking', lazy='dynamic')
+
+    def __init__(self, comment):
+        self.date = datetime.utcnow()
+        self.year = self.date.year
+        self.comment = comment
+
+    def __repr__(self):
+        return '<StockTaking %r>' % self.get_id()
+
+    def get_id(self):
+        return "%d-%d" % (self.year, self.id)
+
+
+class StocktakingItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    stocktaking_id = db.Column(db.Integer, db.ForeignKey('stocktaking.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, stocktaking_id, item_id, quantity):
+        self.stocktaking_id = stocktaking_id
+        self.item_id = item_id
+        self.quantity = quantity
+
+    def __repr__(self):
+        return '<StocktakingItem %r>' % self.id
