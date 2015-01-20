@@ -19,7 +19,7 @@ ProductionConfig:
   Base: DefaultConfig
 
   Flask:
-    SQLALCHEMY_DATABASE_URI: "mysql+pymysql://username:password@host/schema"
+    SQLALCHEMY_DATABASE_URI: "mysql+pymysql://storekeeper:StoreKeeper@localhost/storekeeper"
 
 
 DevelopmentConfig:
