@@ -75,6 +75,11 @@ function do_start()
     "${PYTHON}" run.py
 }
 
+function do_test()
+{
+    "${PYTHON}" test.py
+}
+
 
 cd "$(dirname "$0")"
 source ../.main.sh
