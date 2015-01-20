@@ -3,7 +3,7 @@ StoreKeeper is an open source, multilingual warehouse/store management software
 
 
 ## Features
-*Currently this is empty ;)*
+*Currently, this is empty ;)*
 
 
 ## Prepare & Run
@@ -11,8 +11,10 @@ All commands can run with `package.sh` scripts what you want. All of these scrip
  available getting some info about the current module.
 
 1. Install all dependencies: `./package.sh install`
-2. Run application: `./package.sh start`
-3. Open [http://localhost:8000](http://localhost:8000) in a browser
+2. Check the `./server/config.yml` for database and other settings
+3. Prepare database: `./server/db_create.py`
+4. Run application: `./package.sh start`
+5. Open [http://localhost:8000](http://localhost:8000) in a browser
 
 
 ### Details ###
