@@ -1,5 +1,6 @@
 from datetime import datetime
 from wtforms.validators import Email
+
 from .server import db, bcrypt
 
 
@@ -10,12 +11,12 @@ class User(db.Model):
     email = db.Column(db.String(50), nullable=False, info={'validators': Email()})
     disabled = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, username, password, email):
+    def __init__(self, username: str, password: str, email: str):
         self.username = username
         self.password = bcrypt.generate_password_hash(password)
         self.email = email
 
-    def __repr__(self):
+    def __repr__(self)-> str:
         return '<User %r>' % self.username
 
 
@@ -28,13 +29,13 @@ class Item(db.Model):
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
     barcodes = db.relationship('Barcode', backref='item', lazy='dynamic')
 
-    def __init__(self, name, vendor_id, quantity, unit_id):
+    def __init__(self, name: str, vendor_id: int, quantity: int, unit_id: int):
         self.name = name
         self.vendor_id = vendor_id
         self.quantity = quantity
         self.unit_id = unit_id
 
-    def __repr__(self):
+    def __repr__(self)-> str:
         return '<Item %r>' % self.name
 
 
@@ -44,12 +45,12 @@ class Barcode(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=1)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
 
-    def __init__(self, barcode, quantity, item_id):
+    def __init__(self, barcode: str, quantity: int, item_id: int):
         self.barcode = barcode
         self.quantity = quantity
         self.item_id = item_id
 
-    def __repr__(self):
+    def __repr__(self)-> str:
         return '<Barcode %r>' % self.barcode
 
 
@@ -57,10 +58,10 @@ class Vendor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def __repr__(self):
+    def __repr__(self)-> str:
         return '<Vendor %r>' % self.name
 
 
@@ -68,10 +69,10 @@ class Unit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     unit = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, unit):
+    def __init__(self, unit: str):
         self.unit = unit
 
-    def __repr__(self):
+    def __repr__(self)-> str:
         return '<Unit %r>' % self.unit
 
 
@@ -101,12 +102,12 @@ class WorkItem(db.Model):
     outbound_quantity = db.Column(db.Integer, nullable=False)
     return_quantity = db.Column(db.Integer)
 
-    def __init__(self, work_id, item_id, outbound_quantity):
+    def __init__(self, work_id: int, item_id: int, outbound_quantity: int):
         self.work_id = work_id
         self.item_id = item_id
         self.outbound_quantity = outbound_quantity
 
-    def __repr__(self):
+    def __repr__(self)-> str:
         return '<WorkItem %r>' % self.id
 
 
@@ -114,10 +115,10 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def __repr__(self):
+    def __repr__(self)-> str:
         return '<Customer %r>' % self.name
 
 
@@ -141,12 +142,12 @@ class AcquisitionItem(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, acquisition_id, item_id, quantity):
+    def __init__(self, acquisition_id: int, item_id: int, quantity: int):
         self.acquisition_id = acquisition_id
         self.item_id = item_id
         self.quantity = quantity
 
-    def __repr__(self):
+    def __repr__(self)-> str:
         return '<AcquisitionItem %r>' % self.id
 
 
@@ -170,10 +171,10 @@ class StocktakingItem(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, stocktaking_id, item_id, quantity):
+    def __init__(self, stocktaking_id: int, item_id: int, quantity: int):
         self.stocktaking_id = stocktaking_id
         self.item_id = item_id
         self.quantity = quantity
 
-    def __repr__(self):
+    def __repr__(self)-> str:
         return '<StocktakingItem %r>' % self.id

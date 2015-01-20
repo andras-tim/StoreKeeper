@@ -1,4 +1,4 @@
-USED_CONFIG: ProductionConfig
+USED_CONFIG: DevelopmentConfig
 
 
 DefaultConfig:
