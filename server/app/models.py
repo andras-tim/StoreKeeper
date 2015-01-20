@@ -76,7 +76,6 @@ class Unit(db.Model):
 
 
 class Work(db.Model):
-    year = db.Column(db.Integer, primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     comment = db.Column(db.Text)
@@ -86,17 +85,13 @@ class Work(db.Model):
     return_close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     work_items = db.relationship('WorkItem', backref='work', lazy='dynamic')
 
-    def __init__(self, creator_user_id, customer_id, comment):
-        self.year = datetime.utcnow().year
+    def __init__(self, creator_user_id: int, customer_id: int, comment: str):
         self.creator_user_id = creator_user_id
         self.customer_id = customer_id
         self.comment = comment
 
-    def __repr__(self):
-        return '<Work %r>' % self.get_id()
-
-    def get_id(self):
-        return "%d-%d" % (self.year, self.id)
+    def __repr__(self)-> str:
+        return '<Work %r>' % self.id
 
 
 class WorkItem(db.Model):
@@ -127,22 +122,17 @@ class Customer(db.Model):
 
 
 class Acquisition(db.Model):
-    year = db.Column(db.Integer, primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False)
     comment = db.Column(db.Text)
     items = db.relationship('AcquisitionItem', backref='acquisition', lazy='dynamic')
 
-    def __init__(self, comment):
+    def __init__(self, comment: str):
         self.date = datetime.utcnow()
-        self.year = self.date.year
         self.comment = comment
 
-    def __repr__(self):
-        return '<Acquisition %r>' % self.get_id()
-
-    def get_id(self):
-        return "%d-%d" % (self.year, self.id)
+    def __repr__(self)-> str:
+        return '<Acquisition %r>' % self.id
 
 
 class AcquisitionItem(db.Model):
@@ -161,22 +151,17 @@ class AcquisitionItem(db.Model):
 
 
 class Stocktaking(db.Model):
-    year = db.Column(db.Integer, primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False)
     comment = db.Column(db.Text)
     items = db.relationship('StocktakingItem', backref='stocktaking', lazy='dynamic')
 
-    def __init__(self, comment):
+    def __init__(self, comment: str):
         self.date = datetime.utcnow()
-        self.year = self.date.year
         self.comment = comment
 
-    def __repr__(self):
-        return '<StockTaking %r>' % self.get_id()
-
-    def get_id(self):
-        return "%d-%d" % (self.year, self.id)
+    def __repr__(self)-> str:
+        return '<StockTaking %r>' % self.id
 
 
 class StocktakingItem(db.Model):
