@@ -4,6 +4,35 @@ from wtforms.validators import Email
 from .server import db, bcrypt
 
 
+def yearly_reset_id(commit_function, retry_count=3):
+    def get_new_id(self, session):
+        return session.query(
+            db.func.ifnull(
+                db.func.max(self.__class__.id),
+                0
+            )
+        ).filter(
+            Work.year == self.year
+        ).first()[0] + 1
+
+    def wrapper(self, session):
+        if self.id:
+            commit_function(self, session)
+            return
+
+        error = None
+        for i in range(retry_count):
+            self.id = get_new_id(self, session)
+            try:
+                commit_function(self, session)
+                return
+            except sqlalchemy.exc.IntegrityError as error:
+                session.rollback()
+
+        raise Exception("Can not commit %d time(s)! %s" % (retry_count, str(error)))
+    return wrapper
+
+
 def set_yearly_reset_for_autoincrement_counter(table_object: sqlalchemy.sql.schema.Table,
                                                id_column_name: str="id",
                                                year_column_name: str="year"):
@@ -108,12 +137,9 @@ class Work(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<Work %r>' % self.id
+        return '<Work %r>' % self.full_id
 
-
-set_yearly_reset_for_autoincrement_counter(Work.__table__)
-
-
-
-# sys.path.extend(['/home/tia/codes/github-com/StoreKeeper/server']); from app.server import db; from app.models import *
-# w = Work(2014, "test"); db.session.add(w); db.session.commit()
+    @yearly_reset_id
+    def commit(self, session):
+        session.add(self)
+        session.commit()
