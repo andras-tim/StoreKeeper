@@ -2,7 +2,7 @@
 import unittest
 from coverage import coverage
 
-from test.TestConfig import TestConfig
+from test import *
 
 
 if __name__ == '__main__':

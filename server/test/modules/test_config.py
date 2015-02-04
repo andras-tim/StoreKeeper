@@ -1,6 +1,7 @@
 import unittest
+
 from test.Mock.ConfigMock import ConfigMock
-from app.config import Config, CircularDependency
+from app.modules.config import Config, CircularDependency
 
 
 class TestConfig(unittest.TestCase):
