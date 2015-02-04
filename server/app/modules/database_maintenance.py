@@ -19,16 +19,8 @@ class DatabaseMaintenance(object):
             api.version_control(cls.__database_uri, cls.__migrate_repo_path, api.version(cls.__migrate_repo_path))
 
     @classmethod
-    def downgrade(cls):
-        db_version = cls.__get_version()
-        api.downgrade(cls.__database_uri, cls.__migrate_repo_path, db_version - 1)
-        db_version = cls.__get_version()
-
-        cls.__show_results(db_version)
-
-    @classmethod
     def migrate(cls):
-        db_version = cls.__get_version()
+        db_version = cls.get_version()
         migration = '%s/versions/%03d_migration.py' % (cls.__migrate_repo_path, db_version + 1)
 
         tmp_module = imp.new_module('old_model')
@@ -42,24 +34,18 @@ class DatabaseMaintenance(object):
         with open(migration, "wt") as fd:
             fd.write(script)
         api.upgrade(cls.__database_uri, cls.__migrate_repo_path)
-        db_version = cls.__get_version()
 
-        cls.__show_results(db_version, 'New migration saved as %s' % migration)
+        return migration
+
+    @classmethod
+    def downgrade(cls):
+        db_version = cls.get_version()
+        api.downgrade(cls.__database_uri, cls.__migrate_repo_path, db_version - 1)
 
     @classmethod
     def upgrade(cls):
         api.upgrade(cls.__database_uri, cls.__migrate_repo_path)
-        db_version = cls.__get_version()
-
-        cls.__show_results(db_version)
 
     @classmethod
-    def __get_version(cls) -> int:
+    def get_version(cls) -> int:
         return api.db_version(cls.__database_uri, cls.__migrate_repo_path)
-
-    @classmethod
-    def __show_results(cls, db_version: int, process_specific_info: str=None):
-        if process_specific_info:
-            print(process_specific_info)
-        print('Current database version: %d' % db_version)
-

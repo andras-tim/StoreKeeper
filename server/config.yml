@@ -36,8 +36,11 @@ DevelopmentConfig:
 TestingConfig:
   Base: DefaultConfig
 
+  App:
+    MIGRATE_REPO_PATH: "$BASEDIR/tmp/test_db_repository"
+
   Flask:
     WTF_CSRF_ENABLED: False
     TESTING: True
 
-    SQLALCHEMY_DATABASE_URI: "sqlite:///:memory:"
+    SQLALCHEMY_DATABASE_URI: "sqlite:///$BASEDIR/tmp/test.sqlite"
