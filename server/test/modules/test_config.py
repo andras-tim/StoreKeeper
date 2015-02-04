@@ -1,7 +1,7 @@
 import unittest
 
 from test.Mock.ConfigMock import ConfigMock
-from app.modules.config import Config, CircularDependency
+from app.modules.config import Config, CircularDependencyError
 
 
 class TestConfig(unittest.TestCase):
@@ -46,13 +46,13 @@ class TestConfig(unittest.TestCase):
         try:
             Config.read(config_reader=ConfigMock('MinimalCircularConfig').config_reader)
         except Exception as e:
-            self.assertIsInstance(e, CircularDependency)
+            self.assertIsInstance(e, CircularDependencyError)
 
     def test_multi_level_circular_dependency_in__inheritance(self):
         try:
             Config.read(config_reader=ConfigMock('MultiCircularConfigTop').config_reader)
         except Exception as e:
-            self.assertIsInstance(e, CircularDependency)
+            self.assertIsInstance(e, CircularDependencyError)
 
     def test_magic_attribute_not_exits_exception(self):
         try:

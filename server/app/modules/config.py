@@ -6,7 +6,7 @@ from collections import Mapping
 from app import basedir
 
 
-class CircularDependency(Exception):
+class CircularDependencyError(Exception):
     pass
 
 
@@ -86,7 +86,7 @@ class Config(object):
         # Skipping circular-dependency
         base_config_name = parsed_yaml[config_name]["Base"]
         if base_config_name in parent_stack:
-            raise CircularDependency("Circular dependency detected in config! callstack=%s" %
+            raise CircularDependencyError("Circular dependency detected in config! callstack=%s" %
                                      str(parent_stack + [base_config_name]))
         del parsed_yaml[config_name]["Base"]
 
