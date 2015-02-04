@@ -1,7 +1,7 @@
 from datetime import datetime
 from wtforms.validators import Email
 
-from .server import db, bcrypt
+from app.server import db, bcrypt
 
 
 class User(db.Model):
