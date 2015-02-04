@@ -25,6 +25,7 @@ class Item(db.Model):
     name = db.Column(db.String(80), nullable=False, unique=True)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
     article_number = db.Column(db.Integer)
+    main_barcode_id = db.Column(db.Integer, db.ForeignKey('barcode.id'))
     quantity = db.Column(db.Integer, nullable=False)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
     barcodes = db.relationship('Barcode', backref='item', lazy='dynamic')
