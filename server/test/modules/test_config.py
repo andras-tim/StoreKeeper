@@ -18,6 +18,19 @@ class TestConfig(unittest.TestCase):
         config = self.config.read(config_reader=ConfigMock('TestingConfig').config_reader)
         self.assertEqual("Testing", config.DebugId)
 
+    def test_overridden_used_config(self):
+        config = self.config.read(config_reader=ConfigMock('ProductionConfig').config_reader,
+                                  used_config="DevelopmentConfig")
+        self.assertEqual("Development", config.DebugId)
+
+        config = self.config.read(config_reader=ConfigMock('DevelopmentConfig').config_reader,
+                                  used_config="TestingConfig")
+        self.assertEqual("Testing", config.DebugId)
+
+        config = self.config.read(config_reader=ConfigMock('TestingConfig').config_reader,
+                                  used_config="ProductionConfig")
+        self.assertEqual("Production", config.DebugId)
+
     def test_config_iterator(self):
         config = self.config.read(config_reader=ConfigMock('DefaultConfig').config_reader)
         self.assertIn("App", config)

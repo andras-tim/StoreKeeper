@@ -39,7 +39,7 @@ class Config(object):
         self.__yaml_config_path = yaml_config_path
         self.__config_variables = config_variables or {}
 
-    def read(self, config_reader: callable=None)-> ConfigObject:
+    def read(self, config_reader: callable=None, used_config: str=None)-> ConfigObject:
         if not config_reader:
             config_reader = self.__read_file
 
@@ -47,7 +47,7 @@ class Config(object):
         substituted_config = self.__substitute_config(raw_config)
         parsed_yaml = yaml.load(substituted_config, Loader=yaml.CLoader)
 
-        used_config = parsed_yaml["USED_CONFIG"]
+        used_config = used_config or parsed_yaml["USED_CONFIG"]
         inherited_config = self.__inherit_config(parsed_yaml, used_config)
 
         return ConfigObject(inherited_config[used_config])
