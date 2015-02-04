@@ -1,9 +1,6 @@
 import string
-import os
 import yaml
 from collections import Mapping
-
-from app import basedir
 
 
 class CircularDependencyError(Exception):
@@ -38,26 +35,20 @@ class ConfigObject(object):
 
 
 class Config(object):
-    config_variables = {
-        'BASEDIR': basedir
-    }
+    def __init__(self, yaml_config_path: str, config_variables: dict=None):
+        self.__yaml_config_path = yaml_config_path
+        self.__config_variables = config_variables or {}
 
-    @classmethod
-    def read(cls, yaml_config_path: str=None, config_variables: dict=None, config_reader: callable=None)-> ConfigObject:
-        if not yaml_config_path:
-            yaml_config_path = os.path.join(basedir, "config.yml")
-        if not config_variables:
-            config_variables = cls.config_variables
+    def read(self, config_reader: callable=None)-> ConfigObject:
         if not config_reader:
-            config_reader = cls.__read_file
+            config_reader = self.__read_file
 
-        raw_config = config_reader(yaml_config_path)
-
-        substituted_config = cls.__substitute_config(raw_config, config_variables)
+        raw_config = config_reader(self.__yaml_config_path)
+        substituted_config = self.__substitute_config(raw_config)
         parsed_yaml = yaml.load(substituted_config, Loader=yaml.CLoader)
 
         used_config = parsed_yaml["USED_CONFIG"]
-        inherited_config = cls.__inherit_config(parsed_yaml, used_config)
+        inherited_config = self.__inherit_config(parsed_yaml, used_config)
 
         return ConfigObject(inherited_config[used_config])
 
@@ -67,10 +58,9 @@ class Config(object):
             raw_config = fd.read()
         return raw_config
 
-    @classmethod
-    def __substitute_config(cls, raw_config: str, config_variables: dict)-> str:
+    def __substitute_config(self, raw_config: str)-> str:
         config_template = string.Template(raw_config)
-        substituted_config = config_template.substitute(config_variables)
+        substituted_config = config_template.substitute(self.__config_variables)
         return substituted_config
 
     @classmethod
