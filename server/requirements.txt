@@ -1,7 +1,7 @@
 Flask>=0.10.1
-PyYAML>=3.11
+Flask-Bcrypt>=0.6.0
 Flask-SQLAlchemy>=2.0
 git+git://github.com/andras-tim/sqlalchemy-migrate
 PyMySQL>=0.6.3
-Flask-Bcrypt>=0.6.0
+PyYAML>=3.11
 WTForms>=2.0.1
