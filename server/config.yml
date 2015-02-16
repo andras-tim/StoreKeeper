@@ -3,6 +3,7 @@ USED_CONFIG: DevelopmentConfig
 
 DefaultConfig:
   App:
+    NAME: "storekeeper"
     MIGRATE_REPO_PATH: "$BASEDIR/db_repository"
 
   Flask:

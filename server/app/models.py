@@ -1,14 +1,14 @@
 from datetime import datetime
-from wtforms.validators import Email
 
+from app import validators
 from app.server import db, bcrypt
 
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), nullable=False, unique=True)
+    username = db.Column(db.String(30), nullable=False, unique=True, info={'validators': validators.username})
     password = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.String(50), nullable=False, info={'validators': Email()})
+    email = db.Column(db.String(50), nullable=False, info={'validators': validators.email})
     disabled = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self, username: str, password: str, email: str):
