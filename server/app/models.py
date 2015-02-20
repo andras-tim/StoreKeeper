@@ -19,6 +19,26 @@ class User(db.Model):
     def __repr__(self)-> str:
         return '<User %r>' % self.username
 
+    @classmethod
+    def get_user(cls, username):
+        return User.query.filter_by(username=username).first()
+
+    # flask-loginmanager
+    def is_authenticated(self):
+        return True
+
+    # flask-loginmanager
+    def is_active(self):
+        return True
+
+    # flask-loginmanager
+    def is_anonymous(self):
+        return False
+
+    # flask-loginmanager
+    def get_id(self):
+        return str(self.id)
+
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)

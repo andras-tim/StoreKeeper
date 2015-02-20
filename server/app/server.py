@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask.ext import restful
+from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 
@@ -22,6 +23,10 @@ app.config.update(config["Flask"])
 
 # flask-sqlalchemy
 db = SQLAlchemy(app)
+
+# flask-login
+lm = LoginManager()
+lm.init_app(app)
 
 # flask-restful
 api = restful.Api(app)

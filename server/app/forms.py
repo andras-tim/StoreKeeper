@@ -1,4 +1,6 @@
 from flask.ext.wtf import Form
+from wtforms import StringField
+from wtforms.validators import DataRequired
 from wtforms_alchemy import model_form_factory
 
 from app.server import db
@@ -17,3 +19,8 @@ class ModelForm(BaseModelForm):
 class UserCreateForm(ModelForm):
     class Meta:
         model = User
+
+
+class SessionCreateForm(Form):
+    username = StringField('username', validators=[DataRequired()])
+    password = StringField('password', validators=[DataRequired()])

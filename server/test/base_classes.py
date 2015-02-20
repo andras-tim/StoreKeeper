@@ -2,7 +2,7 @@ import json
 import unittest
 from flask import Response
 
-from app.server import config, app, db
+from app.server import config, app, db, lm
 
 
 class CommonTestWithDatabaseSupport(unittest.TestCase):
@@ -47,3 +47,21 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
             self.assertListEqual(expected_data, data_json)
         elif type(expected_data) == dict:
             self.assertDictEqual(expected_data, data_json)
+
+
+class CommonSessionTest(CommonApiTest):
+    """
+    Super class of Session tests
+
+    Have to turn off temporary TESTING mode, because Flask-Login will not authenticate @login_required requests.
+    https://flask-login.readthedocs.org/en/latest/#protecting-views
+    """
+    def setUp(self):
+        app.config["TESTING"] = False
+        lm.init_app(app)
+        super().setUp()
+
+    def tearDown(self):
+        super().tearDown()
+        app.config["TESTING"] = True
+        lm.init_app(app)

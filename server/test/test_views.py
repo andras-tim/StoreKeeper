@@ -1,4 +1,5 @@
-from test.base_classes import CommonApiTest
+from app.server import app
+from test.base_classes import CommonApiTest, CommonSessionTest
 
 
 _USER1_ADD = {"username": "foo", "password": "a", "email": "foo@bar.com"}
@@ -95,3 +96,51 @@ class TestUserWithPreFilledDb(CommonApiTest):
         self.assertRequest("put", "/users/2", data={"username": "foo.two", "password": "a", "email": "foo2@bar.com"},
                            expected_data=user2)
         self.assertRequest("get", "/users", expected_data=[_USER1_GET, user2])
+
+
+class TestLoginWithoutActiveSession(CommonSessionTest):
+    def setUp(self):
+        super().setUp()
+        self.assertRequest("post", "/users", data=_USER1_ADD)
+        self.assertRequest("post", "/users", data=_USER2_ADD)
+
+    def test_session_without_before(self):
+        self.assertRequest("get", "/sessions", expected_status_code=401)
+
+    def test_logging_in_with_one_existed_user(self):
+        self.assertRequest("post", "/sessions", data={"username": _USER1_ADD["username"],
+                                                      "password": _USER1_ADD["password"]},
+                           expected_data=_USER1_GET,
+                           expected_status_code=201)
+
+        self.assertRequest("get", "/sessions", expected_data=_USER1_GET)
+
+    def test_logging_in_with_one_non_existed_user(self):
+        self.assertRequest("post", "/sessions", data={"username": "not_exist",
+                                                      "password": "orange"},
+                           expected_status_code=401)
+
+    def test_logging_cant_happen_without_active_session(self):
+        self.assertRequest("delete", "/sessions", expected_status_code=401)
+
+
+class TestLoginWithActiveSession(CommonSessionTest):
+    def setUp(self):
+        super().setUp()
+        self.assertRequest("post", "/users", data=_USER1_ADD)
+        self.assertRequest("post", "/users", data=_USER2_ADD)
+        self.assertRequest("post", "/sessions", data={"username": _USER1_ADD["username"],
+                                                      "password": _USER1_ADD["password"]},
+                           expected_status_code=201)
+
+    def test_re_login_with_different_user(self):
+        self.assertRequest("post", "/sessions", data={"username": _USER2_ADD["username"],
+                                                      "password": _USER2_ADD["password"]},
+                           expected_data=_USER2_GET,
+                           expected_status_code=201)
+
+        self.assertRequest("get", "/sessions", expected_data=_USER2_GET)
+
+    def test_logout(self):
+        self.assertRequest("delete", "/sessions")
+        self.assertRequest("get", "/sessions", expected_status_code=401)
