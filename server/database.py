@@ -1,4 +1,4 @@
-#!flask/bin/python
+#!./flask/bin/python
 import argparse
 import sys
 from app.modules.database_maintenance import DatabaseMaintenance

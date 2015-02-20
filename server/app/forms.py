@@ -17,7 +17,7 @@ class ModelForm(BaseModelForm):
 
 
 class UserCreateForm(ModelForm):
-    class Meta:
+    class Meta(object):
         model = User
 
 
