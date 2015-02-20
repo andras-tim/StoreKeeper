@@ -30,7 +30,7 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
 
         if expected_data is not None:
             self.assertResponseData(expected_data, response)
-        self.assertEqual(expected_status_code, response.status_code)
+        self.assertEqual(expected_status_code, response.status_code, msg="response=%r" % response.data.decode("utf-8"))
 
     def assertResponseData(self, expected_data: (str, list, dict), r: Response):
         data_string = r.data.decode("utf-8")
