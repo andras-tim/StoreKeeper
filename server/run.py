@@ -1,4 +1,4 @@
-#!flask/bin/python
+#!./flask/bin/python
 from app.server import app
 
 if __name__ == '__main__':

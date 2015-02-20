@@ -1,4 +1,4 @@
-#!flask/bin/python
+#!./flask/bin/python
 import unittest
 from coverage import coverage
 
