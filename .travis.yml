@@ -1,0 +1,10 @@
+language: python
+python:
+  - 3.4
+install:
+  - pip install -r server/requirements.txt
+  - pip install coveralls
+script:
+  coverage run --source=server/app server/test.py
+after_success:
+  coveralls
