@@ -6,6 +6,11 @@ from app.server import config, app, db, lm
 
 
 class CommonTestWithDatabaseSupport(unittest.TestCase):
+    """
+    Super class of database based tests
+
+    Initialize a brand-new database at start, and purge at stop.
+    """
     def setUp(self):
         db.create_all()
 
@@ -19,6 +24,11 @@ class CommonTestWithDatabaseSupport(unittest.TestCase):
 
 
 class CommonApiTest(CommonTestWithDatabaseSupport):
+    """
+    Super class of API based tests
+
+    Adds some assert function and makes a test client instance into `self.client`.
+    """
     def setUp(self):
         super().setUp()
         self.client = app.test_client()
