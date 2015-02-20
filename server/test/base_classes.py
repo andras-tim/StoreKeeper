@@ -18,7 +18,7 @@ class CommonTestWithDatabaseSupport(unittest.TestCase):
         db.drop_all()
 
 
-class CommonApiCommonTest(CommonTestWithDatabaseSupport):
+class CommonApiTest(CommonTestWithDatabaseSupport):
     def setUp(self):
         super().setUp()
         self.client = app.test_client()

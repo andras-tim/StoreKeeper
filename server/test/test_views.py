@@ -1,4 +1,4 @@
-from test.base_classes import CommonApiCommonTest
+from test.base_classes import CommonApiTest
 
 
 _USER1_ADD = {"username": "foo", "password": "a", "email": "foo@bar.com"}
@@ -8,7 +8,7 @@ _USER2_ADD = {"username": "1f-o_o.2", "password": "a", "email": "foo2@bar.com"}
 _USER2_GET = {"id": 2, "username": "1f-o_o.2", "email": "foo2@bar.com", "disabled": False}
 
 
-class TestUserWithInitiallyEmptyDbCommon(CommonApiCommonTest):
+class TestUserWithInitiallyEmptyDb(CommonApiTest):
     def test_empty_db(self):
         self.assertRequest("get", "/users", expected_data="[]")
         self.assertRequest("get", "/user/1", expected_status_code=404)
@@ -69,7 +69,7 @@ class TestUserWithInitiallyEmptyDbCommon(CommonApiCommonTest):
                            expected_status_code=422)
 
 
-class TestUserWithPreFilledDbCommon(CommonApiCommonTest):
+class TestUserWithPreFilledDb(CommonApiTest):
     def setUp(self):
         super().setUp()
         self.assertRequest("post", "/users", data=_USER1_ADD)
