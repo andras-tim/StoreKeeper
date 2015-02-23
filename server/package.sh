@@ -47,12 +47,6 @@ function do_postinstall()
     then
         "${PIP}" install -r requirements-dev.txt --upgrade
     fi
-
-    # Create directories
-    if [ ! -e tmp ]
-    then
-        mkdir -p tmp
-    fi
 }
 
 function do_clear()

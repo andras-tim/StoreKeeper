@@ -27,6 +27,10 @@ class CommonDatabaseMaintenanceTest(unittest.TestCase):
         if db_path != ":memory:" and os.path.exists(db_path):
             os.remove(db_path)
 
+        dir_path_of_db = os.path.dirname(db_path)
+        if not os.path.exists(dir_path_of_db):
+            os.mkdir(dir_path_of_db)
+
         if os.path.exists(config.App.MIGRATE_REPO_PATH):
             shutil.rmtree(config.App.MIGRATE_REPO_PATH)
 

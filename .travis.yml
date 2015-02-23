@@ -5,6 +5,7 @@ install:
   - pip install -r server/requirements.txt
   - pip install coveralls
 script:
-  coverage run --source=server/app server/test.py
+  - coverage run --rcfile server/.coveragerc server/test.py
+  - coverage report --rcfile server/.coveragerc -m
 after_success:
-  coveralls
+  - coveralls --rcfile server/.coveragerc
