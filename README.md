@@ -1,6 +1,7 @@
 # StoreKeeper
-[![Code Health](https://landscape.io/github/andras-tim/StoreKeeper/master/landscape.svg?style=flat)](https://landscape.io/github/andras-tim/StoreKeeper/master)
 [![Build Status](https://travis-ci.org/andras-tim/StoreKeeper.svg?branch=master)](https://travis-ci.org/andras-tim/StoreKeeper)
+[![Code Health](https://landscape.io/github/andras-tim/StoreKeeper/master/landscape.svg?style=flat)](https://landscape.io/github/andras-tim/StoreKeeper/master)
+[![Coverage Status](https://coveralls.io/repos/andras-tim/StoreKeeper/badge.svg?branch=master)](https://coveralls.io/r/andras-tim/StoreKeeper?branch=master)
 
 StoreKeeper is an open source, multilingual warehouse/store management software
 
