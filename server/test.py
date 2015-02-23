@@ -1,16 +1,18 @@
 #!./flask/bin/python
+import os
 import unittest
 from coverage import coverage
 
-from test import *
+import app
 
 
 if __name__ == '__main__':
     cov = coverage()
+    suite = unittest.defaultTestLoader.discover(os.path.join(app.basedir, "test"))
 
     cov.start()
     try:
-        unittest.main()
+        unittest.TextTestRunner(verbosity=1).run(suite)
     except:
         pass
     cov.stop()

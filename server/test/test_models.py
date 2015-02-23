@@ -1,7 +1,7 @@
 import unittest
 
-from app.models import User
 from app.server import bcrypt
+from app.models import User
 
 
 class TestUser(unittest.TestCase):

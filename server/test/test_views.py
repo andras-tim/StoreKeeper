@@ -1,5 +1,4 @@
-from app.server import app
-from test.base_classes import CommonApiTest, CommonSessionTest
+from test import CommonApiTest, CommonSessionTest
 
 
 _USER1_ADD = {"username": "foo", "password": "a", "email": "foo@bar.com"}
