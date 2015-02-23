@@ -5,6 +5,8 @@ function do_install()
     server/package.sh preinstall
 
     server/package.sh postinstall
+
+    doc/package.sh install
 }
 
 function do_start()
@@ -15,6 +17,8 @@ function do_start()
 function do_clear()
 {
     server/package.sh clear
+
+    doc/package.sh clear
 }
 
 

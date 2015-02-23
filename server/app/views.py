@@ -31,11 +31,78 @@ def before_request():
 
 
 class UserListView(restful.Resource):
-    def get(self):  # list_users
+    def get(self):
+        """
+        List users
+
+        .. http:get:: /api/users/
+
+            **Example request**:
+
+            .. sourcecode:: http
+
+                GET /storekeeper/api/users HTTP/1.1
+                Host: localhost:8000
+                Content-Type: application/json
+
+            **Example response**:
+
+            .. sourcecode:: http
+
+                HTTP/1.0 200 OK
+                Content-Type: application/json
+
+                [
+                    {
+                        "disabled": false,
+                        "email": "foo@bar.com",
+                        "id": 1,
+                        "username": "foo"
+                    }
+                ]
+
+            :statuscode 200: no error
+        """
         users = User.query.all()
         return UserSerializer(users, many=True).data
 
-    def post(self):  # create_user
+    def post(self):
+        """
+        Create user
+
+        .. http:post:: /api/users/
+
+            **Example request**:
+
+            .. sourcecode:: http
+
+                POST /storekeeper/api/users HTTP/1.1
+                Host: localhost:8000
+                Content-Type: application/json
+
+                {
+                    "username": "foo",
+                    "password": "pass",
+                    "email": "foo@bar.com"
+                }
+
+            **Example response**:
+
+            .. sourcecode:: http
+
+                HTTP/1.0 200 OK
+                Content-Type: application/json
+
+                {
+                    "disabled": false,
+                    "email": "foo@bar.com",
+                    "id": 1,
+                    "username": "foo"
+                }
+
+            :statuscode 200: no error
+            :statuscode 422: there is missing field, or user is already exist
+        """
         form = UserCreateForm()
         if not form.validate_on_submit():
             abort(422, message=form.errors)
@@ -47,7 +114,38 @@ class UserListView(restful.Resource):
 
 
 class UserView(restful.Resource):
-    def get(self, id: int):  # get_user
+    def get(self, id: int):
+        """
+        Get user
+
+        .. http:get:: /api/users/(int:id)
+
+            **Example request**:
+
+            .. sourcecode:: http
+
+                GET /storekeeper/api/users/1 HTTP/1.1
+                Host: localhost:8000
+                Content-Type: application/json
+
+            **Example response**:
+
+            .. sourcecode:: http
+
+                HTTP/1.0 200 OK
+                Content-Type: application/json
+
+                {
+                    "disabled": false,
+                    "email": "foo@bar.com",
+                    "id": 1,
+                    "username": "foo"
+                }
+
+            :query id: ID of selected user for change
+            :statuscode 201: no error
+            :statuscode 404: there is no user
+        """
         user = User.query.filter_by(id=id).first()
         if not user:
             abort(404)
@@ -55,7 +153,48 @@ class UserView(restful.Resource):
         return UserSerializer(user).data
 
     @login_required
-    def put(self, id: int):  # change_user
+    def put(self, id: int):
+        """
+        Change user
+
+        .. http:put:: /api/users/(int:id)
+
+            **Example request**:
+
+            .. sourcecode:: http
+
+                PUT /storekeeper/api/users/1 HTTP/1.1
+                Host: localhost:8000
+                Content-Type: application/json
+
+                {
+                    "username": "foo",
+                    "password": "pass_new",
+                    "email": "foo@bar.com"
+                }
+
+            **Example response**:
+
+            .. sourcecode:: http
+
+                HTTP/1.0 200 OK
+                Set-Cookie: session=xxx
+                Content-Type: application/json
+
+                {
+                    "disabled": false,
+                    "email": "foo@bar.com",
+                    "id": 1,
+                    "username": "foo"
+                }
+
+            :query id: ID of selected user for change
+            :resheader Set-Cookie: new session ID for authentication
+            :statuscode 201: no error
+            :statuscode 401: unauthorized
+            :statuscode 404: there is no user
+            :statuscode 422: there is missing field
+        """
         form = UserCreateForm()
         if not form.validate_on_submit():
             abort(422, message=form.errors)
@@ -72,7 +211,38 @@ class UserView(restful.Resource):
         return UserSerializer(user).data
 
     @login_required
-    def delete(self, id: int):  # delete_user
+    def delete(self, id: int):
+        """
+        Delete user
+
+        .. http:delete:: /api/users/(int:id)
+
+            **Example request**:
+
+            .. sourcecode:: http
+
+                DELETE /storekeeper/api/users/1 HTTP/1.1
+                Host: localhost:8000
+                Cookie: session=xxx
+                Content-Type: application/json
+
+            **Example response**:
+
+            .. sourcecode:: http
+
+                HTTP/1.0 200 OK
+                Set-Cookie: session=xxx
+                Content-Type: application/json
+
+                null
+
+            :query id: ID of selected user for delete
+            :reqheader Cookie: session ID to authenticate
+            :resheader Set-Cookie: new session ID for authentication
+            :statuscode 200: no error
+            :statuscode 401: unauthorized
+            :statuscode 404: there is no user
+        """
         user = User.query.filter_by(id=id).first()
         if not user:
             abort(404)
@@ -83,13 +253,82 @@ class UserView(restful.Resource):
 
 
 class SessionView(restful.Resource):
-    def get(self):  # check is logged in
-        if not g.user.is_authenticated():
-            abort(401)
+    @login_required
+    def get(self):
+        """
+        Get session
+
+        .. http:get:: /api/sessions
+
+            **Example request**:
+
+            .. sourcecode:: http
+
+                GET /storekeeper/api/sessions HTTP/1.1
+                Host: localhost:8000
+                Content-Type: application/json
+
+            **Example response**:
+
+            .. sourcecode:: http
+
+                HTTP/1.0 201 CREATED
+                Set-Cookie: session=xxx
+                Content-Type: application/json
+
+                {
+                    "disabled": false,
+                    "email": "foo@bar.com",
+                    "id": 1,
+                    "username": "foo"
+                }
+
+            :resheader Set-Cookie: new session ID for authentication
+            :statuscode 201: no error
+            :statuscode 401: unauthorized
+        """
         user = User.get_user(g.user.username)
         return UserSerializer(user).data
 
-    def post(self):  # login
+    def post(self):
+        """
+        Login user
+
+        .. http:post:: /api/sessions
+
+            **Example request**:
+
+            .. sourcecode:: http
+
+                POST /storekeeper/api/sessions HTTP/1.1
+                Host: localhost:8000
+                Content-Type: application/json
+
+                {
+                    "username": "foo",
+                    "password": "pass"
+                }
+
+            **Example response**:
+
+            .. sourcecode:: http
+
+                HTTP/1.0 201 CREATED
+                Set-Cookie: session=xxx
+                Content-Type: application/json
+
+                {
+                    "disabled": false,
+                    "email": "foo@bar.com",
+                    "id": 1,
+                    "username": "foo"
+                }
+
+            :resheader Set-Cookie: new session ID for authentication
+            :statuscode 201: no error
+            :statuscode 401: unauthorized
+            :statuscode 422: there is missing field
+        """
         form = SessionCreateForm()
         if not form.validate_on_submit():
             abort(422, message=form.errors)
@@ -101,7 +340,34 @@ class SessionView(restful.Resource):
         abort(401)
 
     @login_required
-    def delete(self):  # logout
+    def delete(self):
+        """
+        Logout
+
+        .. http:delete:: /api/sessions
+
+            **Example request**:
+
+            .. sourcecode:: http
+
+                DELETE /storekeeper/api/sessions HTTP/1.1
+                Host: localhost:8000
+                Cookie: session=xxx
+                Content-Type: application/json
+
+            **Example response**:
+
+            .. sourcecode:: http
+
+                HTTP/1.0 200 OK
+                Content-Type: application/json
+
+                null
+
+            :reqheader Cookie: session ID to authenticate
+            :statuscode 200: no error
+            :statuscode 401: unauthorized (was not login)
+        """
         logout_user()
         return
 
