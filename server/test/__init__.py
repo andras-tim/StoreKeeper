@@ -14,6 +14,10 @@ class CommonTestWithDatabaseSupport(unittest.TestCase):
 
     Initialize a brand-new database at start, and purge at stop.
     """
+    @classmethod
+    def setUpClass(cls):
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+
     def setUp(self):
         db.create_all()
 

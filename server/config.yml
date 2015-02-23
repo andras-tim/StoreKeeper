@@ -44,4 +44,6 @@ TestingConfig:
     WTF_CSRF_ENABLED: False
     TESTING: True
 
+    # Most of SQL related tests override this settings and use in-memory database, however tests of DatabaseMaintenance
+    # class have to use file based database!
     SQLALCHEMY_DATABASE_URI: "sqlite:///$BASEDIR/tmp/test.sqlite"
