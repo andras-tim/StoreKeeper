@@ -11,7 +11,6 @@ def main(args: list) -> bool:
     run_by_ci = "--ci" in args
     suite = unittest.defaultTestLoader.discover(os.path.join(app.basedir, "test"))
 
-    os.chdir(app.basedir)
     cov = coverage(config_file=os.path.join(app.basedir, ".coveragerc"))
     cov.start()
     result = unittest.TextTestRunner(verbosity=1).run(suite)
