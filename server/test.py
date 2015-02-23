@@ -18,9 +18,10 @@ def main(args: list) -> bool:
     cov.stop()
     cov.save()
 
+    print("\n\nCoverage Report:\n")
+    cov.report()
+
     if not run_by_ci:
-        print("\n\nCoverage Report:\n")
-        cov.report()
         print("\nHTML version: tmp/coverage/index.html")
         cov.html_report()
 
