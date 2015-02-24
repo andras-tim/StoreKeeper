@@ -1,4 +1,2 @@
 coverage>=3.7.1
-sphinx
-sphinx-autobuild
-sphinxcontrib-httpdomain
+sphinx-autobuild>=0.5.0
