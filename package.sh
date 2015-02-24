@@ -1,4 +1,16 @@
 #!/bin/bash -e
+function show_git_config()
+{
+    cat - <<EOF
+
+------8<------------------------------------------------------------------------------------------------------->8-------
+
+Please, verify your git user for future contribution ;)
+  Uername: '$(git config user.name)'
+  Email:   '$(git config user.email)'
+
+EOF
+}
 
 function do_install()
 {
@@ -7,6 +19,8 @@ function do_install()
 
     docs/package.sh install
 
+    echo -e "\nAll Done!"
+    show_git_config
 }
 
 function do_start()
