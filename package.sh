@@ -3,10 +3,10 @@
 function do_install()
 {
     server/package.sh preinstall
-
     server/package.sh postinstall
 
-    doc/package.sh install
+    docs/package.sh install
+
 }
 
 function do_start()
