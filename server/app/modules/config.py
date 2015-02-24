@@ -1,4 +1,5 @@
 import string
+import sys
 import yaml
 from collections import Mapping
 
@@ -45,7 +46,12 @@ class Config(object):
 
         raw_config = config_reader(self.__yaml_config_path)
         substituted_config = self.__substitute_config(raw_config)
-        parsed_yaml = yaml.load(substituted_config, Loader=yaml.CLoader)
+        if "CLoader" in dir(yaml):
+            parsed_yaml = yaml.load(substituted_config, Loader=yaml.CLoader)
+        else:
+            print("YAML file parsing may be sub-optimal. Please, make available yaml.CLoader with package.sh install!",
+                  file=sys.stderr)
+            parsed_yaml = yaml.load(substituted_config)
 
         used_config = used_config or parsed_yaml["USED_CONFIG"]
         inherited_config = self.__inherit_config(parsed_yaml, used_config)
