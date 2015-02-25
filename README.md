@@ -5,9 +5,12 @@
 
 StoreKeeper is an open source, multilingual warehouse/store management software
 
+*Project is under development, so pleas go back some weeks later for first release!*
+
 
 ## Features
-*Currently, this is empty ;)*
+* Manage users, and login-logout via API
+* *Others will be soon*
 
 
 ## Prepare & Run
@@ -16,16 +19,14 @@ All commands can run with `package.sh` scripts what you want. All of these scrip
 
 1. Install all dependencies: `./package.sh install`
 2. Check the `./server/config.yml` for database and other settings
-3. Prepare database: `./server/db_create.py`
-4. Run application: `./package.sh start`
-5. Open [http://localhost:8000](http://localhost:8000) in a browser
+3. Prepare database: `./server/database.py --create`
+4. Start server: `./package.sh start`
+
+Now, you can manage server via RPC API on [http://localhost:8000/storekeeper](http://localhost:8000/storekeeper)
 
 
-### Details ###
-Basically, the `install` command consists of `preinstall` and `postinstall` parts.
-* `preinstall` checks/prepares system components for `postinstall` and `start`. This command has only one dependency, an **DEB** based system (for `apt-get install`).
-* `postinstall` checks/prepares external dependencies (e.g. Python, Bower modules).
+## Documentation
+You can read more details in documentation. It's available in online and offline format too:
 
-You can modify installing method with this arguments:
-* `--global` makes changes on system instead of virtual environments.
-* `--production` installs dependencies for production running only (e.g. did not install unit test framework)
+* Run `./package.sh docs` after preparation for offline format
+* For online, pre-built docs, please open the [http://storekeeper.readthedocs.org/](http://storekeeper.readthedocs.org/)

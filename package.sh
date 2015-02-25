@@ -35,6 +35,11 @@ function do_clear()
     doc/package.sh clear
 }
 
+function do_docs()
+{
+    docs/package.sh start
+}
+
 
 cd "$(dirname "$0")"
 source .main.sh
