@@ -16,6 +16,16 @@ function get_code_of_init()
     fi
 }
 
+function show_title()
+{
+    dirname="$(basename "$(dirname "$0")")"
+    prefix=
+    if [ "${dirname}" != '.' ]; then
+        prefix="${dirname}: "
+    fi
+    echo -e "\n### ${prefix}${cmd} ###"
+}
+
 function show_help()
 {
     cat - << EOF
@@ -74,5 +84,6 @@ fi
 
 # Start
 eval "$(get_code_of_init)"
+show_title
 do_${cmd}
 exit 0
