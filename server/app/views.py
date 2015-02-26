@@ -27,6 +27,8 @@ def before_request():
     if g.user.is_authenticated():
         app.logger.debug("before_request: user: %s\nauthenticated" % str(g.user))
     else:
+        g.user.id = None
+        g.user.admin = app.config["TESTING"]
         app.logger.debug("before_request: user: %s\nnot authenticated" % str(g.user))
 
 
@@ -220,12 +222,15 @@ class UserView(restful.Resource):
             :resheader Set-Cookie: new session ID for authentication
             :statuscode 201: no error
             :statuscode 401: unauthorized
+            :statuscode 403: user can not modify another users
             :statuscode 404: there is no user
             :statuscode 422: there is missing field
         """
         form = UserUpdateForm()
         if not form.validate_on_submit():
             abort(422, message=form.errors)
+        if not g.user.admin and id != g.user.id:
+            abort(403)
 
         user = User.query.filter_by(id=id).first()
         if not user:
@@ -271,7 +276,12 @@ class UserView(restful.Resource):
             :statuscode 401: user was not logged in
             :statuscode 403: user has not enough rights
             :statuscode 404: there is no user
+            :statuscode 422: user can not remove itself
         """
+
+        if id == g.user.id:
+            abort(422, message="User can not remove itself")
+
         user = User.query.filter_by(id=id).first()
         if not user:
             abort(404)

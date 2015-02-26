@@ -195,8 +195,8 @@ class TestAdminRights(CommonSessionTest):
     def test_admin_can_update_another_user(self):
         self.assertRequestAsAdmin("put", "/users/%d" % _USER1_GET["id"], data=_USER1_SET)
 
-    def test_admin_can_delete_itself(self):
-        self.assertRequestAsAdmin("delete", "/users/%d" % self._ADMIN_GET["id"])
+    def test_admin_can_not_delete_itself(self):
+        self.assertRequestAsAdmin("delete", "/users/%d" % self._ADMIN_GET["id"], expected_status_code=422)
 
     def test_admin_can_delete_another_user(self):
         self.assertRequestAsAdmin("delete", "/users/%d" % _USER1_GET["id"])
@@ -228,8 +228,8 @@ class TestUserRights(CommonSessionTest):
     def test_user_can_update_itself(self):
         self.assertRequest("put", "/users/%d" % _USER1_GET["id"], data=_USER1_SET)
 
-    def test_user_can_update_another_user(self):
-        self.assertRequest("put", "/users/%d" % self._ADMIN_GET["id"], data=self._ADMIN_SET)
+    def test_user_can_not_update_another_user(self):
+        self.assertRequest("put", "/users/%d" % self._ADMIN_GET["id"], data=self._ADMIN_SET, expected_status_code=403)
 
     def test_user_can_not_delete_itself(self):
         self.assertRequest("delete", "/users/%d" % _USER1_GET["id"], expected_status_code=403)
