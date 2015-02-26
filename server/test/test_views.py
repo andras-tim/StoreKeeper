@@ -1,27 +1,28 @@
 from test import CommonApiTest, CommonSessionTest
 
 
-_USER1_ADD = {"username": "foo", "password": "a", "email": "foo@bar.com"}
-_USER1_GET = {"id": 1, "username": "foo", "email": "foo@bar.com", "disabled": False}
+_USER1_SET = {"username": "foo", "password": "a", "email": "foo@bar.com"}
+_USER1_GET = {"admin": False, "id": 2, "username": "foo", "email": "foo@bar.com", "disabled": False}
 
-_USER2_ADD = {"username": "1f-o_o.2", "password": "a", "email": "foo2@bar.com"}
-_USER2_GET = {"id": 2, "username": "1f-o_o.2", "email": "foo2@bar.com", "disabled": False}
+_USER2_SET = {"username": "1f-o_o.2", "password": "a", "email": "foo2@bar.com"}
+_USER2_GET = {"admin": False, "id": 3, "username": "1f-o_o.2", "email": "foo2@bar.com", "disabled": False}
 
 
-class TestUserWithInitiallyEmptyDb(CommonApiTest):
-    def test_empty_db(self):
-        self.assertRequest("get", "/users", expected_data="[]")
-        self.assertRequest("get", "/user/1", expected_status_code=404)
+class TestUserWithBrandNewDb(CommonApiTest):
+    def test_new_db(self):
+        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET])
+        self.assertRequest("get", "/users/1", expected_data=self._ADMIN_GET)
+        self.assertRequest("get", "/users/2", expected_status_code=404)
 
     def test_adding_new_users(self):
-        self.assertRequest("post", "/users", data=_USER1_ADD, expected_data=_USER1_GET)
-        self.assertRequest("post", "/users", data=_USER2_ADD, expected_data=_USER2_GET)
+        self.assertRequest("post", "/users", data=_USER1_SET, expected_data=_USER1_GET)
+        self.assertRequest("post", "/users", data=_USER2_SET, expected_data=_USER2_GET)
 
     def test_can_not_add_user_with_same_username(self):
-        user2 = dict(_USER2_ADD)
-        user2["username"] = _USER1_ADD["username"]
+        user2 = dict(_USER2_SET)
+        user2["username"] = _USER1_SET["username"]
 
-        self.assertRequest("post", "/users", data=_USER1_ADD)
+        self.assertRequest("post", "/users", data=_USER1_SET)
         self.assertRequest("post", "/users", data=user2,
                            expected_data={'message': {'username': ['Already exists.']}},
                            expected_status_code=422)
@@ -62,7 +63,7 @@ class TestUserWithInitiallyEmptyDb(CommonApiTest):
                                expected_status_code=422)
 
     def test_can_not_add_user_with_bad_email(self):
-        user1 = dict(_USER1_ADD)
+        user1 = dict(_USER1_SET)
         user1["email"] = "foo.bar"
         self.assertRequest("post", "/users", data=user1,
                            expected_data={"message": {'email': ['Invalid email address.']}},
@@ -72,51 +73,80 @@ class TestUserWithInitiallyEmptyDb(CommonApiTest):
 class TestUserWithPreFilledDb(CommonApiTest):
     def setUp(self):
         super().setUp()
-        self.assertRequest("post", "/users", data=_USER1_ADD)
-        self.assertRequest("post", "/users", data=_USER2_ADD)
+        self.assertRequest("post", "/users", data=_USER1_SET)
+        self.assertRequest("post", "/users", data=_USER2_SET)
 
     def test_list_users(self):
-        self.assertRequest("get", "/users", expected_data=[_USER1_GET, _USER2_GET])
+        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET, _USER1_GET, _USER2_GET])
 
     def test_get_user(self):
-        self.assertRequest("get", "/users/2", expected_data=_USER2_GET)
-        self.assertRequest("get", "/users/1", expected_data=_USER1_GET)
+        self.assertRequest("get", "/users/3", expected_data=_USER2_GET)
+        self.assertRequest("get", "/users/2", expected_data=_USER1_GET)
 
     def test_remove_user(self):
-        self.assertRequest("delete", "/users/1")
-        self.assertRequest("get", "/users", expected_data=[_USER2_GET])
+        self.assertRequest("delete", "/users/2")
+        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET, _USER2_GET])
 
     def test_can_not_remove_non_existed_user(self):
-        self.assertRequest("delete", "/users/3", expected_status_code=404)
-        self.assertRequest("get", "/users", expected_data=[_USER1_GET, _USER2_GET])
+        self.assertRequest("delete", "/users/4", expected_status_code=404)
+        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET, _USER1_GET, _USER2_GET])
 
     def test_update_user(self):
-        user2 = {"id": 2, "username": "foo.two", "email": "foo2@bar.com", "disabled": False}
-        self.assertRequest("put", "/users/2", data={"username": "foo.two", "password": "a", "email": "foo2@bar.com"},
-                           expected_data=user2)
-        self.assertRequest("get", "/users", expected_data=[_USER1_GET, user2])
+        request = dict(_USER2_SET)
+        request["username"] = "foo2"
+        request["email"] = "foo2@bar.com"
+
+        response = dict(_USER2_GET)
+        response["username"] = request["username"]
+        response["email"] = request["email"]
+
+        self.assertRequest("put", "/users/%d" % _USER2_GET["id"], data=request, expected_data=response)
+        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET, _USER1_GET, response])
+
+
+class TestAdminCanLogin(CommonSessionTest):
+    def test_no_sessions(self):
+        self.assertRequest("get", "/sessions", expected_status_code=401)
+
+    def test_logging_in_with_admin(self):
+        self.assertRequest("post", "/sessions", data={"username": self._ADMIN_SET["username"],
+                                                      "password": self._ADMIN_SET["password"]},
+                           expected_data=self._ADMIN_GET,
+                           expected_status_code=201)
+
+        self.assertRequest("get", "/sessions", expected_data=self._ADMIN_GET)
+
+    def test_logging_in_with_admin_with_bad_password(self):
+        self.assertRequest("post", "/sessions", data={"username": self._ADMIN_SET["username"],
+                                                      "password": "bad_%s" % self._ADMIN_SET["password"]},
+                           expected_status_code=401)
 
 
 class TestLoginWithoutActiveSession(CommonSessionTest):
     def setUp(self):
         super().setUp()
-        self.assertRequest("post", "/users", data=_USER1_ADD)
-        self.assertRequest("post", "/users", data=_USER2_ADD)
+        self.assertRequestAsAdmin("post", "/users", data=_USER1_SET)
+        self.assertRequestAsAdmin("post", "/users", data=_USER2_SET)
 
-    def test_session_without_before(self):
+    def test_no_sessions(self):
         self.assertRequest("get", "/sessions", expected_status_code=401)
 
-    def test_logging_in_with_one_existed_user(self):
-        self.assertRequest("post", "/sessions", data={"username": _USER1_ADD["username"],
-                                                      "password": _USER1_ADD["password"]},
+    def test_logging_in_with_existed_user(self):
+        self.assertRequest("post", "/sessions", data={"username": _USER1_SET["username"],
+                                                      "password": _USER1_SET["password"]},
                            expected_data=_USER1_GET,
                            expected_status_code=201)
 
         self.assertRequest("get", "/sessions", expected_data=_USER1_GET)
 
-    def test_logging_in_with_one_non_existed_user(self):
+    def test_logging_in_with_non_existed_user(self):
         self.assertRequest("post", "/sessions", data={"username": "not_exist",
                                                       "password": "orange"},
+                           expected_status_code=401)
+
+    def test_logging_in_with_existed_user_with_bad_password(self):
+        self.assertRequest("post", "/sessions", data={"username": _USER1_SET["username"],
+                                                      "password": "bad_%s" % _USER1_SET["password"]},
                            expected_status_code=401)
 
     def test_logging_cant_happen_without_active_session(self):
@@ -126,15 +156,15 @@ class TestLoginWithoutActiveSession(CommonSessionTest):
 class TestLoginWithActiveSession(CommonSessionTest):
     def setUp(self):
         super().setUp()
-        self.assertRequest("post", "/users", data=_USER1_ADD)
-        self.assertRequest("post", "/users", data=_USER2_ADD)
-        self.assertRequest("post", "/sessions", data={"username": _USER1_ADD["username"],
-                                                      "password": _USER1_ADD["password"]},
+        self.assertRequestAsAdmin("post", "/users", data=_USER1_SET)
+        self.assertRequestAsAdmin("post", "/users", data=_USER2_SET)
+        self.assertRequest("post", "/sessions", data={"username": _USER1_SET["username"],
+                                                      "password": _USER1_SET["password"]},
                            expected_status_code=201)
 
     def test_re_login_with_different_user(self):
-        self.assertRequest("post", "/sessions", data={"username": _USER2_ADD["username"],
-                                                      "password": _USER2_ADD["password"]},
+        self.assertRequest("post", "/sessions", data={"username": _USER2_SET["username"],
+                                                      "password": _USER2_SET["password"]},
                            expected_data=_USER2_GET,
                            expected_status_code=201)
 
@@ -143,3 +173,69 @@ class TestLoginWithActiveSession(CommonSessionTest):
     def test_logout(self):
         self.assertRequest("delete", "/sessions")
         self.assertRequest("get", "/sessions", expected_status_code=401)
+
+
+class TestAdminRights(CommonSessionTest):
+    def setUp(self):
+        super().setUp()
+        self.assertRequestAsAdmin("post", "/users", data=_USER1_SET)
+
+    def test_admin_can_get_list_of_users(self):
+        self.assertRequestAsAdmin("get", "/users")
+
+    def test_admin_can_get_itself(self):
+        self.assertRequestAsAdmin("get", "/users/%d" % self._ADMIN_GET["id"])
+
+    def test_admin_can_get_another_user(self):
+        self.assertRequestAsAdmin("get", "/users/%d" % _USER1_GET["id"])
+
+    def test_admin_can_update_itself(self):
+        self.assertRequestAsAdmin("put", "/users/%d" % self._ADMIN_GET["id"], data=self._ADMIN_SET)
+
+    def test_admin_can_update_another_user(self):
+        self.assertRequestAsAdmin("put", "/users/%d" % _USER1_GET["id"], data=_USER1_SET)
+
+    def test_admin_can_delete_itself(self):
+        self.assertRequestAsAdmin("delete", "/users/%d" % self._ADMIN_GET["id"])
+
+    def test_admin_can_delete_another_user(self):
+        self.assertRequestAsAdmin("delete", "/users/%d" % _USER1_GET["id"])
+
+    def test_admin_can_get_current_session(self):
+        self.assertRequestAsAdmin("get", "/sessions")
+
+
+class TestUserRights(CommonSessionTest):
+    def setUp(self):
+        super().setUp()
+        self.assertRequestAsAdmin("post", "/users", data=_USER1_SET)
+        self.assertRequest("post", "/sessions", data={"username": _USER1_SET["username"],
+                                                      "password": _USER1_SET["password"]},
+                           expected_status_code=201)
+
+    def test_user_can_not_get_list_of_users(self):
+        self.assertRequest("get", "/users", expected_status_code=403)
+
+    def test_user_can_not_add_new_user(self):
+        self.assertRequest("post", "/users", data=_USER2_SET, expected_status_code=403)
+
+    def test_user_can_get_itself(self):
+        self.assertRequest("get", "/users/%d" % _USER1_GET["id"])
+
+    def test_user_can_get_another_user(self):
+        self.assertRequest("get", "/users/%d" % self._ADMIN_GET["id"])
+
+    def test_user_can_update_itself(self):
+        self.assertRequest("put", "/users/%d" % _USER1_GET["id"], data=_USER1_SET)
+
+    def test_user_can_update_another_user(self):
+        self.assertRequest("put", "/users/%d" % self._ADMIN_GET["id"], data=self._ADMIN_SET)
+
+    def test_user_can_not_delete_itself(self):
+        self.assertRequest("delete", "/users/%d" % _USER1_GET["id"], expected_status_code=403)
+
+    def test_user_can_not_delete_another_user(self):
+        self.assertRequest("delete", "/users/%d" % self._ADMIN_GET["id"], expected_status_code=403)
+
+    def test_user_can_get_current_session(self):
+        self.assertRequest("get", "/sessions")

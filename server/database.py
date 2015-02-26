@@ -1,6 +1,9 @@
 #!./flask/bin/python
 import argparse
 import sys
+
+from app.server import db
+from app.models import User
 from app.modules.database_maintenance import DatabaseMaintenance
 
 
@@ -21,6 +24,8 @@ def main():
     args = parse_arguments()
     if args.create:
         DatabaseMaintenance.create()
+        db.session.add(User(username="admin", password="admin", email="admin@localhost", admin=True))
+        db.session.commit()
         print("Done")
 
     elif args.migrate:

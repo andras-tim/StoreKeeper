@@ -6,6 +6,7 @@ import app
 app.test_mode = True
 
 from app.server import config, app, db, lm
+from app.models import User
 
 
 class CommonTestWithDatabaseSupport(unittest.TestCase):
@@ -34,10 +35,16 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
     """
     Super class of API based tests
 
-    Adds some assert function and makes a test client instance into `self.client`.
+    Added default `admin` user, added some assert functions and made a test client instance into `self.client`.
     """
+    _ADMIN_SET = {"username": "admin", "password": "admin", "email": "admin@test.com"}
+    _ADMIN_GET = {"admin": True, "id": 1, "username": "admin", "email": "admin@test.com", "disabled": False}
+
     def setUp(self):
         super().setUp()
+        db.session.add(User(self._ADMIN_SET["username"], self._ADMIN_SET["password"], email=self._ADMIN_SET["email"],
+                            admin=True))
+        db.session.commit()
         self.client = app.test_client()
 
     def assertRequest(self, command: str, url: str, data: (dict, None)=None,
@@ -74,11 +81,35 @@ class CommonSessionTest(CommonApiTest):
     https://flask-login.readthedocs.org/en/latest/#protecting-views
     """
     def setUp(self):
-        app.config["TESTING"] = False
-        lm.init_app(app)
+        CommonSessionTest.__set_testing_mode(False)
         super().setUp()
+        self.admin_is_authenticated = False
 
     def tearDown(self):
         super().tearDown()
-        app.config["TESTING"] = True
+        CommonSessionTest.__set_testing_mode(True)
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        cls.__set_testing_mode(True)
+
+    @classmethod
+    def __set_testing_mode(cls, enable: bool):
+        app.config["TESTING"] = enable
         lm.init_app(app)
+
+    def assertRequest(self, *args, **kwargs):
+        if self.admin_is_authenticated:
+            super().assertRequest("delete", "/sessions")
+            self.admin_is_authenticated = False
+        super().assertRequest(*args, **kwargs)
+
+    def assertRequestAsAdmin(self, *args, **kwargs):
+        if not self.admin_is_authenticated:
+            super().assertRequest("post", "/sessions", data={"username": self._ADMIN_SET["username"],
+                                                             "password": self._ADMIN_SET["password"]},
+                                  expected_data=self._ADMIN_GET,
+                                  expected_status_code=201)
+            self.admin_is_authenticated = True
+        super().assertRequest(*args, **kwargs)

@@ -3,7 +3,7 @@ from flask.ext import restful
 from flask.ext.restful import abort
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
-from app.forms import UserCreateForm, SessionCreateForm
+from app.forms import UserCreateForm, SessionCreateForm, UserUpdateForm
 from app.models import User
 from app.serializers import UserSerializer
 from app.server import app, db, config, api, lm, bcrypt
@@ -30,10 +30,22 @@ def before_request():
         app.logger.debug("before_request: user: %s\nnot authenticated" % str(g.user))
 
 
+def admin_login_required(func: callable):
+    def wrapper(*args, **kwargs):
+        if not app.config["TESTING"]:
+            if not g.user.is_authenticated():
+                abort(401)
+            if not g.user.admin:
+                abort(403)
+        return func(*args, **kwargs)
+    return wrapper
+
+
 class UserListView(restful.Resource):
+    @admin_login_required
     def get(self):
         """
-        List users
+        List users (for administrators only)
 
         .. http:get:: /api/users/
 
@@ -54,21 +66,32 @@ class UserListView(restful.Resource):
 
                 [
                     {
+                        "admin": true,
+                        "disabled": false,
+                        "email": "admin@bar.com",
+                        "id": 1,
+                        "username": "admin"
+                    },
+                    {
+                        "admin": false,
                         "disabled": false,
                         "email": "foo@bar.com",
-                        "id": 1,
+                        "id": 2,
                         "username": "foo"
                     }
                 ]
 
             :statuscode 200: no error
+            :statuscode 401: user was not logged in
+            :statuscode 403: user has not enough rights
         """
         users = User.query.all()
         return UserSerializer(users, many=True).data
 
+    @admin_login_required
     def post(self):
         """
-        Create user
+        Create user (for administrators only)
 
         .. http:post:: /api/users/
 
@@ -94,6 +117,7 @@ class UserListView(restful.Resource):
                 Content-Type: application/json
 
                 {
+                    "admin": false,
                     "disabled": false,
                     "email": "foo@bar.com",
                     "id": 1,
@@ -101,6 +125,8 @@ class UserListView(restful.Resource):
                 }
 
             :statuscode 200: no error
+            :statuscode 401: user was not logged in
+            :statuscode 403: user has not enough rights
             :statuscode 422: there is missing field, or user is already exist
         """
         form = UserCreateForm()
@@ -136,6 +162,7 @@ class UserView(restful.Resource):
                 Content-Type: application/json
 
                 {
+                    "admin": false,
                     "disabled": false,
                     "email": "foo@bar.com",
                     "id": 1,
@@ -155,7 +182,7 @@ class UserView(restful.Resource):
     @login_required
     def put(self, id: int):
         """
-        Change user
+        Update user (login required)
 
         .. http:put:: /api/users/(int:id)
 
@@ -182,6 +209,7 @@ class UserView(restful.Resource):
                 Content-Type: application/json
 
                 {
+                    "admin": false,
                     "disabled": false,
                     "email": "foo@bar.com",
                     "id": 1,
@@ -195,7 +223,7 @@ class UserView(restful.Resource):
             :statuscode 404: there is no user
             :statuscode 422: there is missing field
         """
-        form = UserCreateForm()
+        form = UserUpdateForm()
         if not form.validate_on_submit():
             abort(422, message=form.errors)
 
@@ -210,10 +238,10 @@ class UserView(restful.Resource):
         db.session.commit()
         return UserSerializer(user).data
 
-    @login_required
+    @admin_login_required
     def delete(self, id: int):
         """
-        Delete user
+        Delete user (for administrators only)
 
         .. http:delete:: /api/users/(int:id)
 
@@ -240,7 +268,8 @@ class UserView(restful.Resource):
             :reqheader Cookie: session ID to authenticate
             :resheader Set-Cookie: new session ID for authentication
             :statuscode 200: no error
-            :statuscode 401: unauthorized
+            :statuscode 401: user was not logged in
+            :statuscode 403: user has not enough rights
             :statuscode 404: there is no user
         """
         user = User.query.filter_by(id=id).first()
@@ -256,7 +285,7 @@ class SessionView(restful.Resource):
     @login_required
     def get(self):
         """
-        Get session
+        Get current session
 
         .. http:get:: /api/sessions
 
@@ -277,6 +306,7 @@ class SessionView(restful.Resource):
                 Content-Type: application/json
 
                 {
+                    "admin": false,
                     "disabled": false,
                     "email": "foo@bar.com",
                     "id": 1,
@@ -285,7 +315,7 @@ class SessionView(restful.Resource):
 
             :resheader Set-Cookie: new session ID for authentication
             :statuscode 201: no error
-            :statuscode 401: unauthorized
+            :statuscode 401: user was not logged in
         """
         user = User.get_user(g.user.username)
         return UserSerializer(user).data
@@ -318,6 +348,7 @@ class SessionView(restful.Resource):
                 Content-Type: application/json
 
                 {
+                    "admin": false,
                     "disabled": false,
                     "email": "foo@bar.com",
                     "id": 1,
@@ -326,7 +357,7 @@ class SessionView(restful.Resource):
 
             :resheader Set-Cookie: new session ID for authentication
             :statuscode 201: no error
-            :statuscode 401: unauthorized
+            :statuscode 401: user was not logged in
             :statuscode 422: there is missing field
         """
         form = SessionCreateForm()
@@ -342,7 +373,7 @@ class SessionView(restful.Resource):
     @login_required
     def delete(self):
         """
-        Logout
+        Logout user
 
         .. http:delete:: /api/sessions
 
@@ -366,7 +397,7 @@ class SessionView(restful.Resource):
 
             :reqheader Cookie: session ID to authenticate
             :statuscode 200: no error
-            :statuscode 401: unauthorized (was not login)
+            :statuscode 401: user was not logged in
         """
         logout_user()
         return

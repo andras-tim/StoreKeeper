@@ -9,15 +9,17 @@ class User(db.Model):
     username = db.Column(db.String(30), nullable=False, unique=True, info={'validators': validators.username})
     password = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(50), nullable=False, info={'validators': validators.email})
+    admin = db.Column(db.Boolean, nullable=False, default=False)
     disabled = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, username: str, password: str, email: str):
+    def __init__(self, username: str, password: str, email: str, admin: bool=False):
         self.username = username
         self.password = bcrypt.generate_password_hash(password)
         self.email = email
+        self.admin = admin
 
     def __repr__(self)-> str:
-        return '<User %r>' % self.username
+        return '<User username=%r admin=%r disabled=%r>' % (self.username, self.admin, self.disabled)
 
     @classmethod
     def get_user(cls, username):

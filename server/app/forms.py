@@ -21,6 +21,14 @@ class UserCreateForm(ModelForm):
         model = User
 
 
+class UserUpdateForm(ModelForm):
+    class Meta(object):
+        model = User
+        all_fields_optional = True
+        assign_required = False
+        unique_validator = None
+
+
 class SessionCreateForm(Form):
     username = StringField('username', validators=[DataRequired()])
     password = StringField('password', validators=[DataRequired()])
