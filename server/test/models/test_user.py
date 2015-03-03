@@ -7,7 +7,7 @@ from app.models import User
 class TestUser(unittest.TestCase):
     _USER = "foo"
     _PASSWORD = "secret_pass"
-    _EMAIL = "foo@bar"
+    _EMAIL = "foo@bar.com"
 
     def setUp(self):
         self.user = User(TestUser._USER, TestUser._PASSWORD, TestUser._EMAIL)

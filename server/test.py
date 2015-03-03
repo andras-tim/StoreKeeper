@@ -4,6 +4,7 @@ import unittest
 import sys
 
 import app
+app.test_mode = True
 
 
 def main() -> bool:
