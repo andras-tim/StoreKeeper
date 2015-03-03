@@ -26,7 +26,6 @@ class UserUpdateForm(ModelForm):
         model = User
         all_fields_optional = True
         assign_required = False
-        unique_validator = None
 
 
 class SessionCreateForm(Form):

@@ -103,6 +103,12 @@ class TestUserWithPreFilledDb(CommonApiTest):
         self.assertRequest("put", "/users/%d" % _USER2_GET["id"], data=request, expected_data=response)
         self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET, _USER1_GET, response])
 
+    def test_update_username_to_name_of_another_user(self):
+        request = dict(_USER2_SET)
+        request["username"] = _USER1_SET["username"]
+
+        self.assertRequest("put", "/users/%d" % _USER2_GET["id"], data=request, expected_status_code=422)
+
 
 class TestAdminCanLogin(CommonSessionTest):
     def test_no_sessions(self):

@@ -226,9 +226,6 @@ class UserView(restful.Resource):
             :statuscode 404: there is no user
             :statuscode 422: there is missing field
         """
-        form = UserUpdateForm()
-        if not form.validate_on_submit():
-            abort(422, message=form.errors)
         if not g.user.admin and id != g.user.id:
             abort(403)
 
@@ -236,9 +233,11 @@ class UserView(restful.Resource):
         if not user:
             abort(404)
 
-        user.username = form.username.data
-        user.password = form.password.data
-        user.email = form.email.data
+        form = UserUpdateForm(obj=user)
+        if not form.validate_on_submit():
+            abort(422, message=form.errors)
+
+        form.populate_obj(user)
         db.session.add(user)
         db.session.commit()
         return UserSerializer(user).data
