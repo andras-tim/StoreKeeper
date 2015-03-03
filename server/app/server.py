@@ -35,5 +35,5 @@ api = restful.Api(app)
 bcrypt = Bcrypt(app)
 
 
-# Init models and views (must be the last)
-from app import views
+# Init views (must be the last)
+from app.views import *
