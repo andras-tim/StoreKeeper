@@ -1,6 +1,7 @@
 from flask import g
 from flask.ext.restful import abort
 from flask.ext.login import current_user
+from functools import wraps
 
 from app.models import User
 from app.server import app, db, lm
@@ -30,6 +31,7 @@ def before_request():
 
 
 def admin_login_required(func: callable):
+    @wraps(func)
     def wrapper(*args, **kwargs):
         if not app.config["TESTING"]:
             if not g.user.is_authenticated():

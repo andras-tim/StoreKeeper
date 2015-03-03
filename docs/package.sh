@@ -12,10 +12,7 @@ function do_start()
 
 function do_clear()
 {
-    if [ -e _build ]
-    then
-        rm -rf _build
-    fi
+    make clean
 }
 
 
