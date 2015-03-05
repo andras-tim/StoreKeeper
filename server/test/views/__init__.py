@@ -7,6 +7,7 @@ app.test_mode = True
 
 from app.server import config, app, db, lm
 from app.models import User
+from app.modules.example_data import ExampleUsers as TestUsers
 
 
 class CommonTestWithDatabaseSupport(unittest.TestCase):
@@ -37,18 +38,9 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
 
     Added default `admin` user, added some assert functions and made a test client instance into `self.client`.
     """
-    _ADMIN_SET = {"username": "admin", "password": "admin", "email": "admin@test.com"}
-    _ADMIN_GET = {"admin": True, "id": 1, "username": "admin", "email": "admin@test.com", "disabled": False}
-
-    _USER1_SET = {"username": "foo", "password": "a", "email": "foo@bar.com"}
-    _USER1_GET = {"admin": False, "id": 2, "username": "foo", "email": "foo@bar.com", "disabled": False}
-
-    _USER2_SET = {"username": "1f-o_o.2", "password": "a", "email": "foo2@bar.com"}
-    _USER2_GET = {"admin": False, "id": 3, "username": "1f-o_o.2", "email": "foo2@bar.com", "disabled": False}
-
     def setUp(self):
         super().setUp()
-        db.session.add(User(self._ADMIN_SET["username"], self._ADMIN_SET["password"], email=self._ADMIN_SET["email"],
+        db.session.add(User(TestUsers.ADMIN["username"], TestUsers.ADMIN["password"], email=TestUsers.ADMIN["email"],
                             admin=True))
         db.session.commit()
         self.client = app.test_client()
@@ -113,9 +105,8 @@ class CommonSessionTest(CommonApiTest):
 
     def assertRequestAsAdmin(self, *args, **kwargs):
         if not self.admin_is_authenticated:
-            super().assertRequest("post", "/sessions", data={"username": self._ADMIN_SET["username"],
-                                                             "password": self._ADMIN_SET["password"]},
-                                  expected_data=self._ADMIN_GET,
+            super().assertRequest("post", "/sessions", data=TestUsers.ADMIN.login(),
+                                  expected_data=TestUsers.ADMIN.get(),
                                   expected_status_code=201)
             self.admin_is_authenticated = True
         super().assertRequest(*args, **kwargs)

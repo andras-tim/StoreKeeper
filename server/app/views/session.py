@@ -5,81 +5,25 @@ from flask.ext.login import login_user, logout_user, login_required
 
 from app.forms import SessionCreateForm
 from app.models import User
+from app.modules.example_data import ExampleUsers
 from app.serializers import UserSerializer
 from app.server import config, api, bcrypt
+from app.modules.doc_helper import api_doc
 
 
 class SessionView(restful.Resource):
+    @api_doc("Get current session", url_tail="sessions",
+             login_required=True,
+             response=ExampleUsers.ADMIN.get())
     @login_required
     def get(self):
-        """
-        Get current session
-
-        **Example request**:
-
-        .. sourcecode:: http
-
-            GET /storekeeper/api/sessions HTTP/1.1
-            Host: localhost:8000
-            Content-Type: application/json
-
-        **Example response**:
-
-        .. sourcecode:: http
-
-            HTTP/1.0 201 CREATED
-            Content-Type: application/json
-
-            {
-                "admin": false,
-                "disabled": false,
-                "email": "foo@bar.com",
-                "id": 1,
-                "username": "foo"
-            }
-
-        :statuscode 201: no error
-        :statuscode 401: user was not logged in
-        """
         user = User.get_user(g.user.username)
         return UserSerializer(user).data
 
+    @api_doc("Login user", url_tail="sessions",
+             request=ExampleUsers.ADMIN.set(["username", "password"]),
+             response=ExampleUsers.ADMIN.get())
     def post(self):
-        """
-        Login user
-
-        **Example request**:
-
-        .. sourcecode:: http
-
-            POST /storekeeper/api/sessions HTTP/1.1
-            Host: localhost:8000
-            Content-Type: application/json
-
-            {
-                "username": "foo",
-                "password": "pass"
-            }
-
-        **Example response**:
-
-        .. sourcecode:: http
-
-            HTTP/1.0 201 CREATED
-            Content-Type: application/json
-
-            {
-                "admin": false,
-                "disabled": false,
-                "email": "foo@bar.com",
-                "id": 1,
-                "username": "foo"
-            }
-
-        :statuscode 201: no error
-        :statuscode 401: user was not logged in
-        :statuscode 422: there is missing field
-        """
         form = SessionCreateForm()
         if not form.validate_on_submit():
             abort(422, message=form.errors)
@@ -90,31 +34,11 @@ class SessionView(restful.Resource):
             return UserSerializer(user).data, 201
         abort(401)
 
+    @api_doc("Logout user", url_tail="sessions",
+             login_required=True,
+             response=None)
     @login_required
     def delete(self):
-        """
-        Logout user
-
-        **Example request**:
-
-        .. sourcecode:: http
-
-            DELETE /storekeeper/api/sessions HTTP/1.1
-            Host: localhost:8000
-            Content-Type: application/json
-
-        **Example response**:
-
-        .. sourcecode:: http
-
-            HTTP/1.0 200 OK
-            Content-Type: application/json
-
-            null
-
-        :statuscode 200: no error
-        :statuscode 401: user was not logged in
-        """
         logout_user()
         return
 

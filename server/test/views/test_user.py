@@ -1,22 +1,19 @@
-from test.views import CommonApiTest
+from test.views import CommonApiTest, TestUsers
 
 
 class TestUserWithBrandNewDb(CommonApiTest):
     def test_new_db(self):
-        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET])
-        self.assertRequest("get", "/users/1", expected_data=self._ADMIN_GET)
+        self.assertRequest("get", "/users", expected_data=[TestUsers.ADMIN.get()])
+        self.assertRequest("get", "/users/1", expected_data=TestUsers.ADMIN.get())
         self.assertRequest("get", "/users/2", expected_status_code=404)
 
     def test_adding_new_users(self):
-        self.assertRequest("post", "/users", data=self._USER1_SET, expected_data=self._USER1_GET)
-        self.assertRequest("post", "/users", data=self._USER2_SET, expected_data=self._USER2_GET)
+        self.assertRequest("post", "/users", data=TestUsers.USER1.set(), expected_data=TestUsers.USER1.get())
+        self.assertRequest("post", "/users", data=TestUsers.USER2.set(), expected_data=TestUsers.USER2.get())
 
     def test_can_not_add_user_with_same_username(self):
-        user2 = dict(self._USER2_SET)
-        user2["username"] = self._USER1_SET["username"]
-
-        self.assertRequest("post", "/users", data=self._USER1_SET)
-        self.assertRequest("post", "/users", data=user2,
+        self.assertRequest("post", "/users", data=TestUsers.USER1.set())
+        self.assertRequest("post", "/users", data=TestUsers.USER2.set(change={"username": TestUsers.USER1["username"]}),
                            expected_data={'message': {'username': ['Already exists.']}},
                            expected_status_code=422)
 
@@ -56,9 +53,7 @@ class TestUserWithBrandNewDb(CommonApiTest):
                                expected_status_code=422)
 
     def test_can_not_add_user_with_bad_email(self):
-        user1 = dict(self._USER1_SET)
-        user1["email"] = "foo.bar"
-        self.assertRequest("post", "/users", data=user1,
+        self.assertRequest("post", "/users", data=TestUsers.USER1.set(change={"email": "foo.bar"}),
                            expected_data={"message": {'email': ['Invalid email address.']}},
                            expected_status_code=422)
 
@@ -66,38 +61,37 @@ class TestUserWithBrandNewDb(CommonApiTest):
 class TestUserWithPreFilledDb(CommonApiTest):
     def setUp(self):
         super().setUp()
-        self.assertRequest("post", "/users", data=self._USER1_SET)
-        self.assertRequest("post", "/users", data=self._USER2_SET)
+        self.assertRequest("post", "/users", data=TestUsers.USER1.set())
+        self.assertRequest("post", "/users", data=TestUsers.USER2.set())
 
     def test_list_users(self):
-        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET, self._USER1_GET, self._USER2_GET])
+        self.assertRequest("get", "/users", expected_data=[TestUsers.ADMIN.get(),
+                                                           TestUsers.USER1.get(),
+                                                           TestUsers.USER2.get()])
 
     def test_get_user(self):
-        self.assertRequest("get", "/users/3", expected_data=self._USER2_GET)
-        self.assertRequest("get", "/users/2", expected_data=self._USER1_GET)
+        self.assertRequest("get", "/users/3", expected_data=TestUsers.USER2.get())
+        self.assertRequest("get", "/users/2", expected_data=TestUsers.USER1.get())
 
     def test_remove_user(self):
         self.assertRequest("delete", "/users/2")
-        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET, self._USER2_GET])
+        self.assertRequest("get", "/users", expected_data=[TestUsers.ADMIN.get(),
+                                                           TestUsers.USER2.get()])
 
     def test_can_not_remove_non_existed_user(self):
         self.assertRequest("delete", "/users/4", expected_status_code=404)
-        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET, self._USER1_GET, self._USER2_GET])
+        self.assertRequest("get", "/users", expected_data=[TestUsers.ADMIN.get(),
+                                                           TestUsers.USER1.get(),
+                                                           TestUsers.USER2.get()])
 
     def test_update_user(self):
-        request = dict(self._USER2_SET)
-        request["username"] = "foo2"
-        request["email"] = "foo2@bar.com"
+        request = TestUsers.USER2.set(change={"username": "foo2", "email": "new_foo2@bar.com"})
+        response = TestUsers.USER2.get(change={"username": "foo2", "email": "new_foo2@bar.com"})
 
-        response = dict(self._USER2_GET)
-        response["username"] = request["username"]
-        response["email"] = request["email"]
-
-        self.assertRequest("put", "/users/%d" % self._USER2_GET["id"], data=request, expected_data=response)
-        self.assertRequest("get", "/users", expected_data=[self._ADMIN_GET, self._USER1_GET, response])
+        self.assertRequest("put", "/users/%d" % TestUsers.USER2["id"], data=request, expected_data=response)
+        self.assertRequest("get", "/users", expected_data=[TestUsers.ADMIN.get(), TestUsers.USER1.get(), response])
 
     def test_update_username_to_name_of_another_user(self):
-        request = dict(self._USER2_SET)
-        request["username"] = self._USER1_SET["username"]
+        request = TestUsers.USER2.set(change={"username": TestUsers.USER1["username"]})
 
-        self.assertRequest("put", "/users/%d" % self._USER2_GET["id"], data=request, expected_status_code=422)
+        self.assertRequest("put", "/users/%d" % TestUsers.USER2["id"], data=request, expected_status_code=422)

@@ -1,0 +1,152 @@
+import json
+from operator import itemgetter
+import re
+from jinja2 import Template
+
+from app import doc_mode, test_mode
+from app.server import config
+
+
+class ApiDoc(object):
+    __API_CALL_TEMPLATE = Template("""
+    {{ title }}
+    {% for query in queries %}
+    :query {{ query["name"] }}: {{ query["description"] }}{% endfor %}
+    {% for status in statuses %}
+    :statuscode {{ status["code"] }}: {{ status["description"] }}{% endfor %}
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        {{ command }} /{{ app_name }}/api/{{ url_tail }} HTTP/1.1
+        Host: localhost:8000
+        Content-Type: application/json
+        {% for request_line in request_lines %}
+        {{ request_line }}{% endfor %}
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.0 {{ response_status }}
+        Content-Type: application/json
+        {% for response_line in response_lines %}
+        {{ response_line }}{% endfor %}
+    """)
+
+    __STATUSES = {
+        200: ["OK", "no error"],
+        201: ["CREATED", "no error"],
+        401: ["UNAUTHORIZED", "user was not logged in"],
+        403: ["FORBIDDEN", "user has not enough rights"],
+        404: ["NOT FOUND", ""],
+        422: ["UNPROCESSABLE ENTITY", "there is missing field"],
+        }
+
+    @classmethod
+    def get_doc(cls, title: str, command: str, url_tail: str, request: (list, dict, None)=None,
+                response: (list, dict, None)=None, response_status: int=200, queries: (dict, None)=None,
+                status_codes: (dict, None)=None) -> str:
+        doc = cls.__API_CALL_TEMPLATE.render(
+            title=title,
+            command=command.upper(),
+            url_tail=url_tail,
+            app_name=config.App.NAME,
+            queries=cls.__format_queries(queries),
+            statuses=cls.__format_status_codes(status_codes),
+            request_lines=cls.__format_request(request),
+            response_status=cls.__format_response_status(response_status),
+            response_lines=cls.__format_response(response)
+        )
+        return cls.__remove_double_blank_lines(cls.__rstrip_lines(doc))
+
+    @classmethod
+    def __format_queries(cls, queries: (dict, None)) -> list:
+        queries = queries or {}
+        lines = [{"name": name, "description": description} for name, description in queries.items()]
+        return sorted(lines, key=itemgetter('name'))
+
+    @classmethod
+    def __format_status_codes(cls, status_codes: (dict, None)) -> list:
+        status_codes = status_codes or {}
+        lines = []
+        for code, description in status_codes.items():
+            if not description:
+                description = cls.__STATUSES[code][1]
+            lines.append({"code": code, "description": description})
+        return sorted(lines, key=itemgetter('code'))
+
+    @classmethod
+    def __format_request(cls, request: (list, dict, None)) -> list:
+        if request is None:
+            return []
+        return cls.__json_dump_to_lines(request)
+
+    @classmethod
+    def __format_response(cls, response: (list, dict, None)) -> list:
+        return cls.__json_dump_to_lines(response)
+
+    @classmethod
+    def __format_response_status(cls, response_status: int) -> str:
+        return "%d %s" % (response_status, cls.__STATUSES[response_status][0])
+
+    @classmethod
+    def __json_dump_to_lines(cls, data: (list, dict, None)) -> list:
+        return json.dumps(data, sort_keys=True, indent=2).splitlines()
+
+    @classmethod
+    def __rstrip_lines(cls, text: str) -> str:
+        return "\n".join([line.rstrip() for line in text.splitlines()])
+
+    @classmethod
+    def __remove_double_blank_lines(cls, text: str) -> str:
+        return re.sub(r"\n{2,}", r"\n\n", text)
+
+
+def api_doc(title: str, url_tail: str, request: (list, dict, None)=None, response: (list, dict, None)=None,
+            response_status: (int, None)=None, queries: (dict, None)=None, status_codes: (dict, None)=None,
+            login_required: bool=False, admin_required: bool=False) -> callable:
+
+    def wrapper(func: callable) -> callable:
+        if not doc_mode and not test_mode:
+            return func
+
+        login_required = __get_login_required()
+        title = __get_title()
+        response_status = __get_response_status(func)
+        status_codes = __get_status_codes(func, login_required, response_status)
+
+        func.__doc__ = ApiDoc.get_doc(title=title, command=func.__name__, url_tail=url_tail, request=request,
+                                      response=response, response_status=response_status, queries=queries,
+                                      status_codes=status_codes)
+        return func
+
+    def __get_login_required() -> bool:
+        return login_required or admin_required
+
+    def __get_title() -> str:
+        if not admin_required:
+            return title
+        return "%s *(for administrators only)*" % title
+
+    def __get_response_status(func: callable) -> int:
+        if func.__name__ == "post":
+            return response_status or 201
+        return response_status or 200
+
+    def __get_status_codes(func: callable, login_required: bool, response_status: int) -> dict:
+        new_status_codes = status_codes or {}
+
+        if response_status not in new_status_codes.keys():
+            new_status_codes[response_status] = ""
+        if login_required and 401 not in new_status_codes.keys():
+            new_status_codes[401] = ""
+        if admin_required and 403 not in new_status_codes.keys():
+            new_status_codes[403] = ""
+        if func.__name__ == "post" and 422 not in new_status_codes.keys():
+            new_status_codes[422] = ""
+
+        return new_status_codes
+
+    return wrapper

@@ -5,6 +5,7 @@ Flask-RESTful>=0.3.1
 Flask-SQLAlchemy>=2.0
 Flask-WTF>=0.10.0
 git+git://github.com/andras-tim/sqlalchemy-migrate
+Jinja2>=2.7.3
 marshmallow>=0.7.0
 PyMySQL>=0.6.3
 PyYAML>=3.11

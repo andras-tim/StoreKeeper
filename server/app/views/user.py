@@ -5,95 +5,29 @@ from flask.ext.login import login_required
 
 from app.forms import UserCreateForm, UserUpdateForm
 from app.models import User
+from app.modules.doc_helper import api_doc
+from app.modules.example_data import ExampleUsers
 from app.serializers import UserSerializer
 from app.server import db, config, api
 from app.views.common import admin_login_required
 
 
 class UserListView(restful.Resource):
+    @api_doc("List users", url_tail="users",
+             admin_required=True,
+             response=[ExampleUsers.ADMIN.get(), ExampleUsers.USER1.get()])
     @admin_login_required
     def get(self):
-        """
-        List users (for administrators only)
-
-        **Example request**:
-
-        .. sourcecode:: http
-
-            GET /storekeeper/api/users HTTP/1.1
-            Host: localhost:8000
-            Content-Type: application/json
-
-        **Example response**:
-
-        .. sourcecode:: http
-
-            HTTP/1.0 200 OK
-            Content-Type: application/json
-
-            [
-                {
-                    "admin": true,
-                    "disabled": false,
-                    "email": "admin@bar.com",
-                    "id": 1,
-                    "username": "admin"
-                },
-                {
-                    "admin": false,
-                    "disabled": false,
-                    "email": "foo@bar.com",
-                    "id": 2,
-                    "username": "foo"
-                }
-            ]
-
-        :statuscode 200: no error
-        :statuscode 401: user was not logged in
-        :statuscode 403: user has not enough rights
-        """
         users = User.query.all()
         return UserSerializer(users, many=True).data
 
+    @api_doc("Create user", url_tail="users",
+             admin_required=True,
+             request=ExampleUsers.USER1.set(),
+             response=ExampleUsers.USER1.get(),
+             status_codes={422: "there is missing field, or user is already exist"})
     @admin_login_required
     def post(self):
-        """
-        Create user (for administrators only)
-
-        **Example request**:
-
-        .. sourcecode:: http
-
-            POST /storekeeper/api/users HTTP/1.1
-            Host: localhost:8000
-            Content-Type: application/json
-
-            {
-                "username": "foo",
-                "password": "pass",
-                "email": "foo@bar.com"
-            }
-
-        **Example response**:
-
-        .. sourcecode:: http
-
-            HTTP/1.0 200 OK
-            Content-Type: application/json
-
-            {
-                "admin": false,
-                "disabled": false,
-                "email": "foo@bar.com",
-                "id": 1,
-                "username": "foo"
-            }
-
-        :statuscode 200: no error
-        :statuscode 401: user was not logged in
-        :statuscode 403: user has not enough rights
-        :statuscode 422: there is missing field, or user is already exist
-        """
         form = UserCreateForm()
         if not form.validate_on_submit():
             abort(422, message=form.errors)
@@ -105,84 +39,25 @@ class UserListView(restful.Resource):
 
 
 class UserView(restful.Resource):
+    @api_doc("Get user", url_tail="users/2",
+             response=ExampleUsers.USER1.get(),
+             queries={"id": "ID of selected user for change"},
+             status_codes={404: "there is no user"})
     def get(self, id: int):
-        """
-        Get user
-
-        **Example request**:
-
-        .. sourcecode:: http
-
-            GET /storekeeper/api/users/1 HTTP/1.1
-            Host: localhost:8000
-            Content-Type: application/json
-
-        **Example response**:
-
-        .. sourcecode:: http
-
-            HTTP/1.0 200 OK
-            Content-Type: application/json
-
-            {
-                "admin": false,
-                "disabled": false,
-                "email": "foo@bar.com",
-                "id": 1,
-                "username": "foo"
-            }
-
-        :query id: ID of selected user for change
-        :statuscode 201: no error
-        :statuscode 404: there is no user
-        """
         user = User.query.filter_by(id=id).first()
         if not user:
             abort(404)
 
         return UserSerializer(user).data
 
+    @api_doc("Update user", url_tail="users/2",
+             login_required=True,
+             request=ExampleUsers.USER1.set(change={"username": "new_foo"}),
+             response=ExampleUsers.USER1.get(change={"username": "new_foo"}),
+             queries={"id": "ID of selected user for change"},
+             status_codes={403: "user can not modify another users", 404: "there is no user"})
     @login_required
     def put(self, id: int):
-        """
-        Update user (login required)
-
-        **Example request**:
-
-        .. sourcecode:: http
-
-            PUT /storekeeper/api/users/1 HTTP/1.1
-            Host: localhost:8000
-            Content-Type: application/json
-
-            {
-                "username": "foo",
-                "password": "pass_new",
-                "email": "foo@bar.com"
-            }
-
-        **Example response**:
-
-        .. sourcecode:: http
-
-            HTTP/1.0 200 OK
-            Content-Type: application/json
-
-            {
-                "admin": false,
-                "disabled": false,
-                "email": "foo@bar.com",
-                "id": 1,
-                "username": "foo"
-            }
-
-        :query id: ID of selected user for change
-        :statuscode 201: no error
-        :statuscode 401: unauthorized
-        :statuscode 403: user can not modify another users
-        :statuscode 404: there is no user
-        :statuscode 422: there is missing field
-        """
         if not g.user.admin and id != g.user.id:
             abort(403)
 
@@ -199,36 +74,13 @@ class UserView(restful.Resource):
         db.session.commit()
         return UserSerializer(user).data
 
+    @api_doc("Delete user", url_tail="users/2",
+             admin_required=True,
+             response=None,
+             queries={"id": "ID of selected user for change"},
+             status_codes={404: "there is no user", 422: "user can not remove itself"})
     @admin_login_required
     def delete(self, id: int):
-        """
-        Delete user (for administrators only)
-
-        **Example request**:
-
-        .. sourcecode:: http
-
-            DELETE /storekeeper/api/users/1 HTTP/1.1
-            Host: localhost:8000
-            Content-Type: application/json
-
-        **Example response**:
-
-        .. sourcecode:: http
-
-            HTTP/1.0 200 OK
-            Content-Type: application/json
-
-            null
-
-        :query id: ID of selected user for delete
-        :statuscode 200: no error
-        :statuscode 401: user was not logged in
-        :statuscode 403: user has not enough rights
-        :statuscode 404: there is no user
-        :statuscode 422: user can not remove itself
-        """
-
         if id == g.user.id:
             abort(422, message="User can not remove itself")
 
