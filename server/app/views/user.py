@@ -40,9 +40,11 @@ class UserListView(restful.Resource):
 
 class UserView(restful.Resource):
     @api_doc("Get user", url_tail="users/2",
+             login_required=True,
              response=ExampleUsers.USER1.get(),
              queries={"id": "ID of selected user for change"},
              status_codes={404: "there is no user"})
+    @login_required
     def get(self, id: int):
         user = User.query.filter_by(id=id).first()
         if not user:
