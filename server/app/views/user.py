@@ -16,43 +16,41 @@ class UserListView(restful.Resource):
         """
         List users (for administrators only)
 
-        .. http:get:: /api/users/
+        **Example request**:
 
-            **Example request**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            GET /storekeeper/api/users HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
 
-                GET /storekeeper/api/users HTTP/1.1
-                Host: localhost:8000
-                Content-Type: application/json
+        **Example response**:
 
-            **Example response**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            HTTP/1.0 200 OK
+            Content-Type: application/json
 
-                HTTP/1.0 200 OK
-                Content-Type: application/json
+            [
+                {
+                    "admin": true,
+                    "disabled": false,
+                    "email": "admin@bar.com",
+                    "id": 1,
+                    "username": "admin"
+                },
+                {
+                    "admin": false,
+                    "disabled": false,
+                    "email": "foo@bar.com",
+                    "id": 2,
+                    "username": "foo"
+                }
+            ]
 
-                [
-                    {
-                        "admin": true,
-                        "disabled": false,
-                        "email": "admin@bar.com",
-                        "id": 1,
-                        "username": "admin"
-                    },
-                    {
-                        "admin": false,
-                        "disabled": false,
-                        "email": "foo@bar.com",
-                        "id": 2,
-                        "username": "foo"
-                    }
-                ]
-
-            :statuscode 200: no error
-            :statuscode 401: user was not logged in
-            :statuscode 403: user has not enough rights
+        :statuscode 200: no error
+        :statuscode 401: user was not logged in
+        :statuscode 403: user has not enough rights
         """
         users = User.query.all()
         return UserSerializer(users, many=True).data
@@ -62,41 +60,39 @@ class UserListView(restful.Resource):
         """
         Create user (for administrators only)
 
-        .. http:post:: /api/users/
+        **Example request**:
 
-            **Example request**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            POST /storekeeper/api/users HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
 
-                POST /storekeeper/api/users HTTP/1.1
-                Host: localhost:8000
-                Content-Type: application/json
+            {
+                "username": "foo",
+                "password": "pass",
+                "email": "foo@bar.com"
+            }
 
-                {
-                    "username": "foo",
-                    "password": "pass",
-                    "email": "foo@bar.com"
-                }
+        **Example response**:
 
-            **Example response**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            HTTP/1.0 200 OK
+            Content-Type: application/json
 
-                HTTP/1.0 200 OK
-                Content-Type: application/json
+            {
+                "admin": false,
+                "disabled": false,
+                "email": "foo@bar.com",
+                "id": 1,
+                "username": "foo"
+            }
 
-                {
-                    "admin": false,
-                    "disabled": false,
-                    "email": "foo@bar.com",
-                    "id": 1,
-                    "username": "foo"
-                }
-
-            :statuscode 200: no error
-            :statuscode 401: user was not logged in
-            :statuscode 403: user has not enough rights
-            :statuscode 422: there is missing field, or user is already exist
+        :statuscode 200: no error
+        :statuscode 401: user was not logged in
+        :statuscode 403: user has not enough rights
+        :statuscode 422: there is missing field, or user is already exist
         """
         form = UserCreateForm()
         if not form.validate_on_submit():
@@ -113,34 +109,32 @@ class UserView(restful.Resource):
         """
         Get user
 
-        .. http:get:: /api/users/(int:id)
+        **Example request**:
 
-            **Example request**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            GET /storekeeper/api/users/1 HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
 
-                GET /storekeeper/api/users/1 HTTP/1.1
-                Host: localhost:8000
-                Content-Type: application/json
+        **Example response**:
 
-            **Example response**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            HTTP/1.0 200 OK
+            Content-Type: application/json
 
-                HTTP/1.0 200 OK
-                Content-Type: application/json
+            {
+                "admin": false,
+                "disabled": false,
+                "email": "foo@bar.com",
+                "id": 1,
+                "username": "foo"
+            }
 
-                {
-                    "admin": false,
-                    "disabled": false,
-                    "email": "foo@bar.com",
-                    "id": 1,
-                    "username": "foo"
-                }
-
-            :query id: ID of selected user for change
-            :statuscode 201: no error
-            :statuscode 404: there is no user
+        :query id: ID of selected user for change
+        :statuscode 201: no error
+        :statuscode 404: there is no user
         """
         user = User.query.filter_by(id=id).first()
         if not user:
@@ -153,45 +147,41 @@ class UserView(restful.Resource):
         """
         Update user (login required)
 
-        .. http:put:: /api/users/(int:id)
+        **Example request**:
 
-            **Example request**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            PUT /storekeeper/api/users/1 HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
 
-                PUT /storekeeper/api/users/1 HTTP/1.1
-                Host: localhost:8000
-                Content-Type: application/json
+            {
+                "username": "foo",
+                "password": "pass_new",
+                "email": "foo@bar.com"
+            }
 
-                {
-                    "username": "foo",
-                    "password": "pass_new",
-                    "email": "foo@bar.com"
-                }
+        **Example response**:
 
-            **Example response**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            HTTP/1.0 200 OK
+            Content-Type: application/json
 
-                HTTP/1.0 200 OK
-                Set-Cookie: session=xxx
-                Content-Type: application/json
+            {
+                "admin": false,
+                "disabled": false,
+                "email": "foo@bar.com",
+                "id": 1,
+                "username": "foo"
+            }
 
-                {
-                    "admin": false,
-                    "disabled": false,
-                    "email": "foo@bar.com",
-                    "id": 1,
-                    "username": "foo"
-                }
-
-            :query id: ID of selected user for change
-            :resheader Set-Cookie: new session ID for authentication
-            :statuscode 201: no error
-            :statuscode 401: unauthorized
-            :statuscode 403: user can not modify another users
-            :statuscode 404: there is no user
-            :statuscode 422: there is missing field
+        :query id: ID of selected user for change
+        :statuscode 201: no error
+        :statuscode 401: unauthorized
+        :statuscode 403: user can not modify another users
+        :statuscode 404: there is no user
+        :statuscode 422: there is missing field
         """
         if not g.user.admin and id != g.user.id:
             abort(403)
@@ -214,35 +204,29 @@ class UserView(restful.Resource):
         """
         Delete user (for administrators only)
 
-        .. http:delete:: /api/users/(int:id)
+        **Example request**:
 
-            **Example request**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            DELETE /storekeeper/api/users/1 HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
 
-                DELETE /storekeeper/api/users/1 HTTP/1.1
-                Host: localhost:8000
-                Cookie: session=xxx
-                Content-Type: application/json
+        **Example response**:
 
-            **Example response**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            HTTP/1.0 200 OK
+            Content-Type: application/json
 
-                HTTP/1.0 200 OK
-                Set-Cookie: session=xxx
-                Content-Type: application/json
+            null
 
-                null
-
-            :query id: ID of selected user for delete
-            :reqheader Cookie: session ID to authenticate
-            :resheader Set-Cookie: new session ID for authentication
-            :statuscode 200: no error
-            :statuscode 401: user was not logged in
-            :statuscode 403: user has not enough rights
-            :statuscode 404: there is no user
-            :statuscode 422: user can not remove itself
+        :query id: ID of selected user for delete
+        :statuscode 200: no error
+        :statuscode 401: user was not logged in
+        :statuscode 403: user has not enough rights
+        :statuscode 404: there is no user
+        :statuscode 422: user can not remove itself
         """
 
         if id == g.user.id:

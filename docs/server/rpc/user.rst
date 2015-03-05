@@ -5,13 +5,10 @@ User
 
 ``/api/users``
 --------------
-  .. autoclass:: app.views.user.UserListView
-     :members: get, post
-     :undoc-members:
-
+  .. autoflask:: app.server:app
+     :endpoints: users
 
 ``/api/users/<id>``
 -------------------
-  .. autoclass:: app.views.user.UserView
-     :members: get, put, delete
-     :undoc-members:
+  .. autoflask:: app.server:app
+     :endpoints: user

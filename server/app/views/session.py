@@ -15,35 +15,31 @@ class SessionView(restful.Resource):
         """
         Get current session
 
-        .. http:get:: /api/sessions
+        **Example request**:
 
-            **Example request**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            GET /storekeeper/api/sessions HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
 
-                GET /storekeeper/api/sessions HTTP/1.1
-                Host: localhost:8000
-                Content-Type: application/json
+        **Example response**:
 
-            **Example response**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            HTTP/1.0 201 CREATED
+            Content-Type: application/json
 
-                HTTP/1.0 201 CREATED
-                Set-Cookie: session=xxx
-                Content-Type: application/json
+            {
+                "admin": false,
+                "disabled": false,
+                "email": "foo@bar.com",
+                "id": 1,
+                "username": "foo"
+            }
 
-                {
-                    "admin": false,
-                    "disabled": false,
-                    "email": "foo@bar.com",
-                    "id": 1,
-                    "username": "foo"
-                }
-
-            :resheader Set-Cookie: new session ID for authentication
-            :statuscode 201: no error
-            :statuscode 401: user was not logged in
+        :statuscode 201: no error
+        :statuscode 401: user was not logged in
         """
         user = User.get_user(g.user.username)
         return UserSerializer(user).data
@@ -52,41 +48,37 @@ class SessionView(restful.Resource):
         """
         Login user
 
-        .. http:post:: /api/sessions
+        **Example request**:
 
-            **Example request**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            POST /storekeeper/api/sessions HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
 
-                POST /storekeeper/api/sessions HTTP/1.1
-                Host: localhost:8000
-                Content-Type: application/json
+            {
+                "username": "foo",
+                "password": "pass"
+            }
 
-                {
-                    "username": "foo",
-                    "password": "pass"
-                }
+        **Example response**:
 
-            **Example response**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            HTTP/1.0 201 CREATED
+            Content-Type: application/json
 
-                HTTP/1.0 201 CREATED
-                Set-Cookie: session=xxx
-                Content-Type: application/json
+            {
+                "admin": false,
+                "disabled": false,
+                "email": "foo@bar.com",
+                "id": 1,
+                "username": "foo"
+            }
 
-                {
-                    "admin": false,
-                    "disabled": false,
-                    "email": "foo@bar.com",
-                    "id": 1,
-                    "username": "foo"
-                }
-
-            :resheader Set-Cookie: new session ID for authentication
-            :statuscode 201: no error
-            :statuscode 401: user was not logged in
-            :statuscode 422: there is missing field
+        :statuscode 201: no error
+        :statuscode 401: user was not logged in
+        :statuscode 422: there is missing field
         """
         form = SessionCreateForm()
         if not form.validate_on_submit():
@@ -103,29 +95,25 @@ class SessionView(restful.Resource):
         """
         Logout user
 
-        .. http:delete:: /api/sessions
+        **Example request**:
 
-            **Example request**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            DELETE /storekeeper/api/sessions HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
 
-                DELETE /storekeeper/api/sessions HTTP/1.1
-                Host: localhost:8000
-                Cookie: session=xxx
-                Content-Type: application/json
+        **Example response**:
 
-            **Example response**:
+        .. sourcecode:: http
 
-            .. sourcecode:: http
+            HTTP/1.0 200 OK
+            Content-Type: application/json
 
-                HTTP/1.0 200 OK
-                Content-Type: application/json
+            null
 
-                null
-
-            :reqheader Cookie: session ID to authenticate
-            :statuscode 200: no error
-            :statuscode 401: user was not logged in
+        :statuscode 200: no error
+        :statuscode 401: user was not logged in
         """
         logout_user()
         return
