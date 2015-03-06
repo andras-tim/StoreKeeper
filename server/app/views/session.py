@@ -1,28 +1,27 @@
 from flask import g
 from flask.ext import restful
 from flask.ext.restful import abort
-from flask.ext.login import login_user, logout_user, login_required
+from flask.ext.login import login_user, logout_user
 
 from app.forms import SessionCreateForm
 from app.models import User
 from app.modules.example_data import ExampleUsers
 from app.serializers import UserSerializer
 from app.server import config, api, bcrypt
-from app.modules.doc_helper import api_doc
+from app.views.common import api_func
 
 
 class SessionView(restful.Resource):
-    @api_doc("Get current session", url_tail="sessions",
-             login_required=True,
-             response=ExampleUsers.ADMIN.get())
-    @login_required
+    @api_func("Get current session", url_tail="sessions",
+              login_required=True,
+              response=ExampleUsers.ADMIN.get())
     def get(self):
         user = User.get_user(g.user.username)
         return UserSerializer(user).data
 
-    @api_doc("Login user", url_tail="sessions",
-             request=ExampleUsers.ADMIN.set(["username", "password"]),
-             response=ExampleUsers.ADMIN.get())
+    @api_func("Login user", url_tail="sessions",
+              request=ExampleUsers.ADMIN.set(["username", "password"]),
+              response=ExampleUsers.ADMIN.get())
     def post(self):
         form = SessionCreateForm()
         if not form.validate_on_submit():
@@ -34,10 +33,9 @@ class SessionView(restful.Resource):
             return UserSerializer(user).data, 201
         abort(401)
 
-    @api_doc("Logout user", url_tail="sessions",
-             login_required=True,
-             response=None)
-    @login_required
+    @api_func("Logout user", url_tail="sessions",
+              login_required=True,
+              response=None)
     def delete(self):
         logout_user()
         return

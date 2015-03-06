@@ -3,7 +3,6 @@ from operator import itemgetter
 import re
 from jinja2 import Template
 
-from app import doc_mode, test_mode
 from app.server import config
 
 
@@ -102,51 +101,3 @@ class ApiDoc(object):
     @classmethod
     def __remove_double_blank_lines(cls, text: str) -> str:
         return re.sub(r"\n{2,}", r"\n\n", text)
-
-
-def api_doc(title: str, url_tail: str, request: (list, dict, None)=None, response: (list, dict, None)=None,
-            response_status: (int, None)=None, queries: (dict, None)=None, status_codes: (dict, None)=None,
-            login_required: bool=False, admin_required: bool=False) -> callable:
-
-    def wrapper(func: callable) -> callable:
-        if not doc_mode and not test_mode:
-            return func
-
-        login_required = __get_login_required()
-        title = __get_title()
-        response_status = __get_response_status(func)
-        status_codes = __get_status_codes(func, login_required, response_status)
-
-        func.__doc__ = ApiDoc.get_doc(title=title, command=func.__name__, url_tail=url_tail, request=request,
-                                      response=response, response_status=response_status, queries=queries,
-                                      status_codes=status_codes)
-        return func
-
-    def __get_login_required() -> bool:
-        return login_required or admin_required
-
-    def __get_title() -> str:
-        if not admin_required:
-            return title
-        return "%s *(for administrators only)*" % title
-
-    def __get_response_status(func: callable) -> int:
-        if func.__name__ == "post":
-            return response_status or 201
-        return response_status or 200
-
-    def __get_status_codes(func: callable, login_required: bool, response_status: int) -> dict:
-        new_status_codes = status_codes or {}
-
-        if response_status not in new_status_codes.keys():
-            new_status_codes[response_status] = ""
-        if login_required and 401 not in new_status_codes.keys():
-            new_status_codes[401] = ""
-        if admin_required and 403 not in new_status_codes.keys():
-            new_status_codes[403] = ""
-        if func.__name__ == "post" and 422 not in new_status_codes.keys():
-            new_status_codes[422] = ""
-
-        return new_status_codes
-
-    return wrapper

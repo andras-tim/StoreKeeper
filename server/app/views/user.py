@@ -1,32 +1,28 @@
 from flask import g
 from flask.ext import restful
 from flask.ext.restful import abort
-from flask.ext.login import login_required
 
 from app.forms import UserCreateForm, UserUpdateForm
 from app.models import User
-from app.modules.doc_helper import api_doc
 from app.modules.example_data import ExampleUsers
 from app.serializers import UserSerializer
 from app.server import db, config, api
-from app.views.common import admin_login_required
+from app.views.common import api_func
 
 
 class UserListView(restful.Resource):
-    @api_doc("List users", url_tail="users",
-             admin_required=True,
-             response=[ExampleUsers.ADMIN.get(), ExampleUsers.USER1.get()])
-    @admin_login_required
+    @api_func("List users", url_tail="users",
+              admin_required=True,
+              response=[ExampleUsers.ADMIN.get(), ExampleUsers.USER1.get()])
     def get(self):
         users = User.query.all()
         return UserSerializer(users, many=True).data
 
-    @api_doc("Create user", url_tail="users",
-             admin_required=True,
-             request=ExampleUsers.USER1.set(),
-             response=ExampleUsers.USER1.get(),
-             status_codes={422: "there is missing field, or user is already exist"})
-    @admin_login_required
+    @api_func("Create user", url_tail="users",
+              admin_required=True,
+              request=ExampleUsers.USER1.set(),
+              response=ExampleUsers.USER1.get(),
+              status_codes={422: "there is missing field, or user is already exist"})
     def post(self):
         form = UserCreateForm()
         if not form.validate_on_submit():
@@ -39,12 +35,11 @@ class UserListView(restful.Resource):
 
 
 class UserView(restful.Resource):
-    @api_doc("Get user", url_tail="users/2",
-             login_required=True,
-             response=ExampleUsers.USER1.get(),
-             queries={"id": "ID of selected user for change"},
-             status_codes={404: "there is no user"})
-    @login_required
+    @api_func("Get user", url_tail="users/2",
+              login_required=True,
+              response=ExampleUsers.USER1.get(),
+              queries={"id": "ID of selected user for change"},
+              status_codes={404: "there is no user"})
     def get(self, id: int):
         user = User.query.filter_by(id=id).first()
         if not user:
@@ -52,13 +47,12 @@ class UserView(restful.Resource):
 
         return UserSerializer(user).data
 
-    @api_doc("Update user", url_tail="users/2",
-             login_required=True,
-             request=ExampleUsers.USER1.set(change={"username": "new_foo"}),
-             response=ExampleUsers.USER1.get(change={"username": "new_foo"}),
-             queries={"id": "ID of selected user for change"},
-             status_codes={403: "user can not modify another users", 404: "there is no user"})
-    @login_required
+    @api_func("Update user", url_tail="users/2",
+              login_required=True,
+              request=ExampleUsers.USER1.set(change={"username": "new_foo"}),
+              response=ExampleUsers.USER1.get(change={"username": "new_foo"}),
+              queries={"id": "ID of selected user for change"},
+              status_codes={403: "user can not modify another users", 404: "there is no user"})
     def put(self, id: int):
         if not g.user.admin and id != g.user.id:
             abort(403)
@@ -76,12 +70,11 @@ class UserView(restful.Resource):
         db.session.commit()
         return UserSerializer(user).data
 
-    @api_doc("Delete user", url_tail="users/2",
-             admin_required=True,
-             response=None,
-             queries={"id": "ID of selected user for change"},
-             status_codes={404: "there is no user", 422: "user can not remove itself"})
-    @admin_login_required
+    @api_func("Delete user", url_tail="users/2",
+              admin_required=True,
+              response=None,
+              queries={"id": "ID of selected user for change"},
+              status_codes={404: "there is no user", 422: "user can not remove itself"})
     def delete(self, id: int):
         if id == g.user.id:
             abort(422, message="User can not remove itself")
