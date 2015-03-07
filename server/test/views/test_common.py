@@ -1,5 +1,3 @@
-from flask.ext.restful import abort
-
 from test.modules import ApiDocTestCase
 from app.views.common import api_func
 
