@@ -58,3 +58,7 @@ target/
 # Editor
 .idea/
 *.swp
+
+# Temporary and backup files
+*~
+*.bak
