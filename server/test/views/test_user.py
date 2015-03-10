@@ -42,6 +42,12 @@ class TestUserWithBrandNewDb(CommonApiTest):
                                                       "email": ["This field is required."]}},
                            expected_status_code=422)
 
+        self.assertRequest("post", "/users", data={"username": "", "password": "", "email": ""},
+                           expected_data={"message": {"username": ["This field is required."],
+                                                      "password": ["This field is required."],
+                                                      "email": ["This field is required."]}},
+                           expected_status_code=422)
+
     def test_can_not_add_user_with_bad_username(self):
         bad_usernames = ["_foo",
                          "foo_",
