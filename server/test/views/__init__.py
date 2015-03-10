@@ -61,7 +61,11 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
             self.assertEqual(expected_data.strip(), data_string.strip())
             return
 
-        data_json = json.loads(data_string)
+        try:
+            data_json = json.loads(data_string)
+        except Exception as e:
+            self.assertTrue(False, msg="Can not parse received data as JSON; data=%r, error=%r" % (data_string, e))
+            return
         if data_json is None:
             return
 
