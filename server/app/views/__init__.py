@@ -1,1 +1,1 @@
-from . import common, user, session
+from . import common, user, session, vendor

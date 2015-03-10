@@ -1,4 +1,4 @@
-from app.modules.example_data import ExampleUsers as Users
+from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors
 from test.views import CommonSessionTest
 
 
@@ -68,7 +68,12 @@ class TestLoginWithActiveSession(CommonSessionTest):
         self.assertRequest("get", "/sessions", expected_status_code=401)
 
 
-class TestAdminRights(CommonSessionTest):
+class TestAdminRightsOnSessions(CommonSessionTest):
+    def test_admin_can_get_current_session(self):
+        self.assertRequestAsAdmin("get", "/sessions")
+
+
+class TestAdminRightsOnUsers(CommonSessionTest):
     def setUp(self):
         super().setUp()
         self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
@@ -94,11 +99,36 @@ class TestAdminRights(CommonSessionTest):
     def test_admin_can_delete_another_user(self):
         self.assertRequestAsAdmin("delete", "/users/%d" % Users.USER1["id"])
 
-    def test_admin_can_get_current_session(self):
-        self.assertRequestAsAdmin("get", "/sessions")
+
+class TestAdminRightsOnVendors(CommonSessionTest):
+    def setUp(self):
+        super().setUp()
+        self.assertRequestAsAdmin("post", "/vendors", data=Vendors.VENDOR1.set())
+
+    def test_admin_can_get_list_of_vendors(self):
+        self.assertRequestAsAdmin("get", "/vendors")
+
+    def test_admin_can_get_a_vendor(self):
+        self.assertRequestAsAdmin("get", "/vendors/%d" % Vendors.VENDOR1["id"])
+
+    def test_admin_can_update_a_vendor(self):
+        self.assertRequestAsAdmin("put", "/vendors/%d" % Vendors.VENDOR1["id"], data=Vendors.VENDOR1.set())
+
+    def test_admin_delete_a_vendor(self):
+        self.assertRequestAsAdmin("delete", "/vendors/%d" % Vendors.VENDOR1["id"])
 
 
-class TestUserRights(CommonSessionTest):
+class TestUserRightsOnSessions(CommonSessionTest):
+    def setUp(self):
+        super().setUp()
+        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
+        self.assertRequest("post", "/sessions", data=Users.USER1.login(), expected_status_code=201)
+
+    def test_user_can_get_current_session(self):
+        self.assertRequest("get", "/sessions")
+
+
+class TestUserRightsOnUsers(CommonSessionTest):
     def setUp(self):
         super().setUp()
         self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
@@ -128,5 +158,22 @@ class TestUserRights(CommonSessionTest):
     def test_user_can_not_delete_another_user(self):
         self.assertRequest("delete", "/users/%d" % Users.ADMIN["id"], expected_status_code=403)
 
-    def test_user_can_get_current_session(self):
-        self.assertRequest("get", "/sessions")
+
+class TestUserRightsOnVendors(CommonSessionTest):
+    def setUp(self):
+        super().setUp()
+        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
+        self.assertRequestAsAdmin("post", "/vendors", data=Vendors.VENDOR1.set())
+        self.assertRequest("post", "/sessions", data=Users.USER1.login(), expected_status_code=201)
+
+    def test_user_can_get_list_of_vendors(self):
+        self.assertRequest("get", "/vendors")
+
+    def test_user_can_get_a_vendor(self):
+        self.assertRequest("get", "/vendors/%d" % Vendors.VENDOR1["id"])
+
+    def test_user_can_update_a_vendor(self):
+        self.assertRequest("put", "/vendors/%d" % Vendors.VENDOR1["id"], data=Vendors.VENDOR1.set())
+
+    def test_user_delete_a_vendor(self):
+        self.assertRequest("delete", "/vendors/%d" % Vendors.VENDOR1["id"])

@@ -20,3 +20,4 @@ Contents:
 
    session
    user
+   vendor
