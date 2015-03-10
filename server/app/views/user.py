@@ -38,7 +38,7 @@ class UserView(restful.Resource):
     @api_func("Get user", url_tail="users/2",
               login_required=True,
               response=ExampleUsers.USER1.get(),
-              queries={"id": "ID of selected user for change"},
+              queries={"id": "ID of selected user"},
               status_codes={404: "there is no user"})
     def get(self, id: int):
         user = User.query.filter_by(id=id).first()
@@ -73,7 +73,7 @@ class UserView(restful.Resource):
     @api_func("Delete user", url_tail="users/2",
               admin_required=True,
               response=None,
-              queries={"id": "ID of selected user for change"},
+              queries={"id": "ID of selected user for delete"},
               status_codes={404: "there is no user", 422: "user can not remove itself"})
     def delete(self, id: int):
         if id == g.user.id:
