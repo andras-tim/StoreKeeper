@@ -21,7 +21,7 @@ class VendorListView(restful.Resource):
               login_required=True,
               request=ExampleVendors.VENDOR1.set(),
               response=ExampleVendors.VENDOR1.get(),
-              status_codes={422: "there is missing field"})
+              status_codes={422: "there is missing field, or vendor is already exist"})
     def post(self):
         form = VendorCreateForm()
         if not form.validate_on_submit():
