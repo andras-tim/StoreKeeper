@@ -63,10 +63,10 @@ def api_func(title: str, url_tail: str, request: (list, dict, None)=None, respon
         return func
 
     def __decorate_function(func: callable) -> callable:
-        if login_required:
-            func = login_required_decorator(func)
-        elif admin_required:
+        if admin_required:
             func = admin_login_required(func)
+        elif login_required:
+            func = login_required_decorator(func)
         return func
 
     def __get_login_required() -> bool:
