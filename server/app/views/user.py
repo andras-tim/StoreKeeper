@@ -36,7 +36,6 @@ class UserListView(restful.Resource):
 
 class UserView(restful.Resource):
     @api_func("Get user", url_tail="users/2",
-              login_required=True,
               response=ExampleUsers.USER1.get(),
               queries={"id": "ID of selected user"},
               status_codes={404: "there is no user"})
@@ -48,7 +47,6 @@ class UserView(restful.Resource):
         return UserSerializer(user).data
 
     @api_func("Update user", url_tail="users/2",
-              login_required=True,
               request=ExampleUsers.USER1.set(change={"username": "new_foo"}),
               response=ExampleUsers.USER1.get(change={"username": "new_foo"}),
               queries={"id": "ID of selected user for change"},

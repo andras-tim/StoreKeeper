@@ -13,13 +13,13 @@ from app.views.common import api_func
 
 class SessionView(restful.Resource):
     @api_func("Get current session", url_tail="sessions",
-              login_required=True,
               response=ExampleUsers.ADMIN.get())
     def get(self):
         user = User.get_user(g.user.username)
         return UserSerializer(user).data
 
     @api_func("Login user", url_tail="sessions",
+              login_required=False,
               request=ExampleUsers.ADMIN.set(["username", "password"]),
               response=ExampleUsers.ADMIN.get())
     def post(self):
@@ -34,7 +34,6 @@ class SessionView(restful.Resource):
         abort(401)
 
     @api_func("Logout user", url_tail="sessions",
-              login_required=True,
               response=None)
     def delete(self):
         logout_user()

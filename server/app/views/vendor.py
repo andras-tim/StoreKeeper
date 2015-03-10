@@ -11,14 +11,12 @@ from app.views.common import api_func
 
 class VendorListView(restful.Resource):
     @api_func("List vendors", url_tail="vendors",
-              login_required=True,
               response=[ExampleVendors.VENDOR1.get(), ExampleVendors.VENDOR2.get()])
     def get(self):
         vendors = Vendor.query.all()
         return VendorSerializer(vendors, many=True).data
 
     @api_func("Create vendor", url_tail="vendors",
-              login_required=True,
               request=ExampleVendors.VENDOR1.set(),
               response=ExampleVendors.VENDOR1.get(),
               status_codes={422: "there is missing field, or vendor is already exist"})
@@ -35,7 +33,6 @@ class VendorListView(restful.Resource):
 
 class VendorView(restful.Resource):
     @api_func("Get vendor", url_tail="vendors/1",
-              login_required=True,
               response=ExampleVendors.VENDOR1.get(),
               queries={"id": "ID of selected vendor for change"},
               status_codes={404: "there is no vendor"})
@@ -47,7 +44,6 @@ class VendorView(restful.Resource):
         return VendorSerializer(vendor).data
     
     @api_func("Update vendor", url_tail="vendors/1",
-              login_required=True,
               request=ExampleVendors.VENDOR1.set(change={"name": "new_foo"}),
               response=ExampleVendors.VENDOR1.get(change={"name": "new_foo"}),
               queries={"id": "ID of selected vendor for change"})
@@ -66,7 +62,6 @@ class VendorView(restful.Resource):
         return VendorSerializer(vendor).data
 
     @api_func("Delete vendor", url_tail="vendors/1",
-              login_required=True,
               response=None,
               queries={"id": "ID of selected vendor for change"},
               status_codes={404: "there is no vendor"})

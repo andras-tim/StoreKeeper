@@ -46,7 +46,7 @@ def admin_login_required(func: callable):
 
 def api_func(title: str, url_tail: str, request: (list, dict, None)=None, response: (list, dict, None)=None,
              response_status: (int, None)=None, queries: (dict, None)=None, status_codes: (dict, None)=None,
-             login_required: bool=False, admin_required: bool=False) -> callable:
+             login_required: bool=True, admin_required: bool=False) -> callable:
     def wrapper(func: callable) -> callable:
         func = __decorate_function(func)
         if not doc_mode and not test_mode:

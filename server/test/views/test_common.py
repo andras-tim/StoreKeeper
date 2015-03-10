@@ -12,6 +12,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         Test command
 
         :statuscode 200: no error
+        :statuscode 401: user was not logged in
 
         **Example request**:
 
@@ -40,6 +41,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         Test command
 
         :statuscode 201: no error
+        :statuscode 401: user was not logged in
         :statuscode 422: there is missing field
 
         **Example request**:
@@ -69,6 +71,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         Test command
 
         :statuscode 200: no error
+        :statuscode 401: user was not logged in
 
         **Example request**:
 
@@ -97,6 +100,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         Test command
 
         :statuscode 200: no error
+        :statuscode 401: user was not logged in
 
         **Example request**:
 
@@ -124,6 +128,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         self.assertApiDoc(get.__doc__, """
         Test command
 
+        :statuscode 401: user was not logged in
         :statuscode 403: user has not enough rights
 
         **Example request**:
@@ -153,6 +158,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         Test command
 
         :statuscode 200: no error
+        :statuscode 401: user was not logged in
         :statuscode 600: foo bar
 
         **Example request**:
@@ -182,6 +188,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         Test command
 
         :statuscode 200: foo bar
+        :statuscode 401: user was not logged in
 
         **Example request**:
 
