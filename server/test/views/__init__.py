@@ -7,7 +7,7 @@ app.test_mode = True
 
 from app.server import config, app, db, lm
 from app.models import User
-from app.modules.example_data import ExampleUsers as TestUsers
+from app.modules.example_data import ExampleUsers as Users
 
 
 class CommonTestWithDatabaseSupport(unittest.TestCase):
@@ -40,8 +40,7 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
     """
     def setUp(self):
         super().setUp()
-        db.session.add(User(TestUsers.ADMIN["username"], TestUsers.ADMIN["password"], email=TestUsers.ADMIN["email"],
-                            admin=True))
+        db.session.add(User(Users.ADMIN["username"], Users.ADMIN["password"], email=Users.ADMIN["email"], admin=True))
         db.session.commit()
         self.client = app.test_client()
 
@@ -109,8 +108,8 @@ class CommonSessionTest(CommonApiTest):
 
     def assertRequestAsAdmin(self, *args, **kwargs):
         if not self.admin_is_authenticated:
-            super().assertRequest("post", "/sessions", data=TestUsers.ADMIN.login(),
-                                  expected_data=TestUsers.ADMIN.get(),
+            super().assertRequest("post", "/sessions", data=Users.ADMIN.login(),
+                                  expected_data=Users.ADMIN.get(),
                                   expected_status_code=201)
             self.admin_is_authenticated = True
         super().assertRequest(*args, **kwargs)
