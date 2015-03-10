@@ -12,7 +12,7 @@ function do_start()
 
 function do_clear()
 {
-    make clean
+    purge '_build'
 }
 
 

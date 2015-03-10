@@ -19,7 +19,7 @@ function do_clear()
 {
     server/package.sh clear
 
-    doc/package.sh clear
+    docs/package.sh clear
 }
 
 function do_docs()

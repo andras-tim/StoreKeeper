@@ -42,6 +42,17 @@ Available arguments:
 EOF
 }
 
+function purge()
+{
+    local path="$1"
+
+    if [ -e "${path}" ]
+    then
+        echo -n "Removing ${path}... "
+        rm -r "${path}"
+        echo 'Done'
+    fi
+}
 
 # Init
 cmd=

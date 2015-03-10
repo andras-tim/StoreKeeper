@@ -52,16 +52,10 @@ function do_postinstall()
 function do_clear()
 {
     # Remove directories
-    if [ -e tmp ]
-    then
-        rm -r tmp
-    fi
+    purge 'tmp'
 
     # Remove virtualenv
-    if [ -e flask ]
-    then
-        rm -r flask
-    fi
+    purge 'flask'
 }
 
 function do_start()
