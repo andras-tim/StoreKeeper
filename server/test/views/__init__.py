@@ -116,3 +116,75 @@ class CommonSessionTest(CommonApiTest):
                                   expected_status_codes=201)
             self.admin_is_authenticated = True
         super().assertRequest(*args, **kwargs)
+
+
+class CommonRightsTest(CommonSessionTest):
+    INIT_PUSH = {}
+    OBJECTS = {}
+    RIGHTS = ()
+
+    class AnnotatedRight(dict):
+        pass
+
+    @classmethod
+    def __annotate_right(cls, right: dict):
+        name_template = "%(actor)s_calls_%(command)s"
+        if "data" in right.keys():
+            name_template += "_%(data)s"
+
+        r = cls.AnnotatedRight(right)
+        setattr(r, "__name__", name_template % right)
+        return r
+
+    @classmethod
+    def __iterate_rights(cls, rights: dict):
+        for actor, per_command_rights in rights.items():
+            for command, expected in per_command_rights.items():
+                yield from cls.__parse_expected(actor, command, expected)
+
+    @classmethod
+    def __parse_expected(cls, actor: str, command: str, expected: (tuple, list, bool)):
+        if type(expected) == list:
+            for exp in expected:
+                yield from cls.__parse_expected(actor, command, exp)
+
+        elif type(expected) == bool:
+            yield {"actor": actor, "command": command, "expected": expected}
+
+        elif type(expected) == tuple:
+            data, exp = expected
+            yield {"actor": actor, "command": command, "data": data, "expected": exp}
+
+    @classmethod
+    def iterate_rights(cls, rights: dict) -> tuple:
+        return tuple(cls.__annotate_right(right) for right in cls.__iterate_rights(rights))
+
+    def setUp(self):
+        super().setUp()
+        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
+        for endpoint, push_objects in self.INIT_PUSH.items():
+            for push_object in push_objects:
+                self.assertRequestAsAdmin("post", endpoint, data=push_object.set())
+
+    def _test_right(self, endpoint: str, actor: str, command: str, expected: bool, data=None):
+        url = endpoint
+        if data is not None and command != "post":
+            url += "/%d" % self.OBJECTS[data].get()["id"]
+
+        if data is not None:
+            data = self.OBJECTS[data].set()
+
+        if actor != "anonymous":
+            if actor == "admin":
+                actor = Users.ADMIN
+            elif actor == "user1":
+                actor = Users.USER1
+
+            self.assertRequest("post", "/sessions", data=actor.login(),
+                               expected_data=actor.get(),
+                               expected_status_codes=201)
+
+        expected_status_codes = [200, 201]
+        if not expected:
+            expected_status_codes = [401, 403]
+        self.assertRequest(command, url, data=data, expected_status_codes=expected_status_codes)

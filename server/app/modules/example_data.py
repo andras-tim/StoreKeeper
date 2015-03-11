@@ -48,6 +48,10 @@ class ExampleUsers(object):
                         setters={"password": "bar2"},
                         getters={"admin": False, "id": 3, "disabled": False})
 
+    USER3 = ExampleUser(commons={"username": "user3", "email": "user3@bar.com"},
+                        setters={"password": "pw3"},
+                        getters={"admin": False, "id": 4, "disabled": False})
+
 
 class ExampleVendors(object):
     VENDOR1 = FilterableDict(commons={"name": "Heavy Duty Ltd."},
