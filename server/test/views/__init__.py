@@ -45,13 +45,16 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
         self.client = app.test_client()
 
     def assertRequest(self, command: str, url: str, data: (dict, None)=None,
-                      expected_data: (str, list, dict, None)=None, expected_status_code: int=200):
+                      expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
 
         response = getattr(self.client, command)("/%s/api%s" % (config.App.NAME, url), data=data)
 
         if expected_data is not None:
             self.assertResponseData(expected_data, response)
-        self.assertEqual(expected_status_code, response.status_code, msg="response=%r" % response.data.decode("utf-8"))
+        if type(expected_status_codes) != list:
+            expected_status_codes = [expected_status_codes]
+        self.assertIn(response.status_code, expected_status_codes,
+                      msg="request=%r, response=%r" % (data, response.data.decode("utf-8")))
 
     def assertResponseData(self, expected_data: (str, list, dict), r: Response):
         data_string = r.data.decode("utf-8")
@@ -110,6 +113,6 @@ class CommonSessionTest(CommonApiTest):
         if not self.admin_is_authenticated:
             super().assertRequest("post", "/sessions", data=Users.ADMIN.login(),
                                   expected_data=Users.ADMIN.get(),
-                                  expected_status_code=201)
+                                  expected_status_codes=201)
             self.admin_is_authenticated = True
         super().assertRequest(*args, **kwargs)
