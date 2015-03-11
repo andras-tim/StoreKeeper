@@ -91,7 +91,7 @@ class Vendor(db.Model):
 
 class Unit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    unit = db.Column(db.String(20), nullable=False)
+    unit = db.Column(db.String(20), nullable=False, unique=True)
 
     def __init__(self, unit: str):
         self.unit = unit

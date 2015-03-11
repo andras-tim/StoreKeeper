@@ -58,3 +58,10 @@ class ExampleVendors(object):
                              getters={"id": 1})
     VENDOR2 = FilterableDict(commons={"name": "Star Shop Ltd."},
                              getters={"id": 2})
+
+
+class ExampleUnits(object):
+    UNIT1 = FilterableDict(commons={"unit": "m"},
+                           getters={"id": 1})
+    UNIT2 = FilterableDict(commons={"unit": "db"},
+                           getters={"id": 2})

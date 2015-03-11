@@ -1,6 +1,6 @@
 from ddt import ddt, data
 
-from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors
+from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units
 from test.views import CommonRightsTest
 
 
@@ -89,3 +89,33 @@ class TestVendorRights(CommonRightsTest):
     @data(*RIGHTS)
     def test_rights(self, r: dict):
         super()._test_right(endpoint="/vendors", **r)
+
+
+@ddt
+class TestUnitRights(CommonRightsTest):
+    INIT_PUSH = {"/units": [Units.UNIT1]}
+    OBJECTS = {"unit1": Units.UNIT1, "unit2": Units.UNIT2}
+    RIGHTS = CommonRightsTest.iterate_rights({
+        "anonymous": {
+            "get": [False, ("unit1", False)],
+            "post": [("unit2", False)],
+            "put": [("unit1", False)],
+            "delete": [("unit1", False)],
+        },
+        "admin": {
+            "get": [True, ("unit1", True)],
+            "post": [("unit2", True)],
+            "put": [("unit1", True)],
+            "delete": [("unit1", True)],
+        },
+        "user1": {
+            "get": [True, ("unit1", True)],
+            "post": [("unit2", True)],
+            "put": [("unit1", True)],
+            "delete": [("unit1", True)],
+        },
+    })
+
+    @data(*RIGHTS)
+    def test_rights(self, r: dict):
+        super()._test_right(endpoint="/units", **r)
