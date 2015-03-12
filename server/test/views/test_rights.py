@@ -6,8 +6,9 @@ from test.views import CommonRightsTest
 
 @ddt
 class TestSessionsRights(CommonRightsTest):
+    ENDPOINT = "/sessions"
     INIT_PUSH = {"/users": [Users.USER2]}
-    OBJECTS = {"admin": Users.ADMIN, "user1": Users.USER1, "user2": Users.USER2}
+    DATA_MAP = {"admin": Users.ADMIN, "user1": Users.USER1, "user2": Users.USER2}
     RIGHTS = CommonRightsTest.iterate_rights({
         "anonymous": {
             "get": False,
@@ -28,13 +29,14 @@ class TestSessionsRights(CommonRightsTest):
 
     @data(*RIGHTS)
     def test_rights(self, r: dict):
-        super()._test_right(endpoint="/sessions", **r)
+        self._test_right(**r)
 
 
 @ddt
 class TestUsersRights(CommonRightsTest):
+    ENDPOINT = "/users"
     INIT_PUSH = {"/users": [Users.USER2]}
-    OBJECTS = {"admin": Users.ADMIN, "user1": Users.USER1, "user2": Users.USER2, "user3": Users.USER3}
+    DATA_MAP = {"admin": Users.ADMIN, "user1": Users.USER1, "user2": Users.USER2, "user3": Users.USER3}
     RIGHTS = CommonRightsTest.iterate_rights({
         "anonymous": {
             "get": [False, ("admin", False), ("user1", False)],
@@ -58,13 +60,14 @@ class TestUsersRights(CommonRightsTest):
 
     @data(*RIGHTS)
     def test_rights(self, r: dict):
-        super()._test_right(endpoint="/users", **r)
+        self._test_right(**r)
 
 
 @ddt
 class TestVendorRights(CommonRightsTest):
+    ENDPOINT = "/vendors"
     INIT_PUSH = {"/vendors": [Vendors.VENDOR1]}
-    OBJECTS = {"vendor1": Vendors.VENDOR1, "vendor2": Vendors.VENDOR2}
+    DATA_MAP = {"vendor1": Vendors.VENDOR1, "vendor2": Vendors.VENDOR2}
     RIGHTS = CommonRightsTest.iterate_rights({
         "anonymous": {
             "get": [False, ("vendor1", False)],
@@ -88,13 +91,14 @@ class TestVendorRights(CommonRightsTest):
 
     @data(*RIGHTS)
     def test_rights(self, r: dict):
-        super()._test_right(endpoint="/vendors", **r)
+        self._test_right(**r)
 
 
 @ddt
 class TestUnitRights(CommonRightsTest):
+    ENDPOINT = "/units"
     INIT_PUSH = {"/units": [Units.UNIT1]}
-    OBJECTS = {"unit1": Units.UNIT1, "unit2": Units.UNIT2}
+    DATA_MAP = {"unit1": Units.UNIT1, "unit2": Units.UNIT2}
     RIGHTS = CommonRightsTest.iterate_rights({
         "anonymous": {
             "get": [False, ("unit1", False)],
@@ -118,4 +122,4 @@ class TestUnitRights(CommonRightsTest):
 
     @data(*RIGHTS)
     def test_rights(self, r: dict):
-        super()._test_right(endpoint="/units", **r)
+        self._test_right(**r)

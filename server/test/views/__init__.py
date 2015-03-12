@@ -119,8 +119,9 @@ class CommonSessionTest(CommonApiTest):
 
 
 class CommonRightsTest(CommonSessionTest):
+    ENDPOINT = ""
     INIT_PUSH = {}
-    OBJECTS = {}
+    DATA_MAP = {}
     RIGHTS = ()
 
     class AnnotatedRight(dict):
@@ -135,6 +136,10 @@ class CommonRightsTest(CommonSessionTest):
         r = cls.AnnotatedRight(right)
         setattr(r, "__name__", name_template % right)
         return r
+
+    @classmethod
+    def iterate_rights(cls, rights: dict) -> tuple:
+        return tuple(cls.__annotate_right(right) for right in cls.__iterate_rights(rights))
 
     @classmethod
     def __iterate_rights(cls, rights: dict):
@@ -155,10 +160,6 @@ class CommonRightsTest(CommonSessionTest):
             data, exp = expected
             yield {"actor": actor, "command": command, "data": data, "expected": exp}
 
-    @classmethod
-    def iterate_rights(cls, rights: dict) -> tuple:
-        return tuple(cls.__annotate_right(right) for right in cls.__iterate_rights(rights))
-
     def setUp(self):
         super().setUp()
         self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
@@ -166,13 +167,13 @@ class CommonRightsTest(CommonSessionTest):
             for push_object in push_objects:
                 self.assertRequestAsAdmin("post", endpoint, data=push_object.set())
 
-    def _test_right(self, endpoint: str, actor: str, command: str, expected: bool, data=None):
-        url = endpoint
+    def _test_right(self, actor: str, command: str, expected: bool, data=None):
+        url = self.ENDPOINT
         if data is not None and command != "post":
-            url += "/%d" % self.OBJECTS[data].get()["id"]
+            url += "/%d" % self.DATA_MAP[data].get()["id"]
 
         if data is not None:
-            data = self.OBJECTS[data].set()
+            data = self.DATA_MAP[data].set()
 
         if actor != "anonymous":
             if actor == "admin":
