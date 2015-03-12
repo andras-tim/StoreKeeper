@@ -1,6 +1,7 @@
 import json
 import unittest
 from flask import Response
+import pytest
 
 import app
 app.test_mode = True
@@ -118,6 +119,7 @@ class CommonSessionTest(CommonApiTest):
         super().assertRequest(*args, **kwargs)
 
 
+@pytest.mark.single_threaded
 class CommonRightsTest(CommonSessionTest):
     ENDPOINT = ""
     INIT_PUSH = {}

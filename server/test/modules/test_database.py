@@ -2,6 +2,7 @@ import os
 import re
 import shutil
 import unittest
+import pytest
 
 import app
 app.test_mode = True
@@ -10,6 +11,7 @@ from app.server import config
 from app.modules.database_maintenance import DatabaseMaintenance
 
 
+@pytest.mark.single_threaded
 class CommonDatabaseMaintenanceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

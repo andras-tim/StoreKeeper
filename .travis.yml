@@ -5,7 +5,6 @@ install:
   - pip install -r server/requirements.txt
   - pip install coveralls
 script:
-  - coverage run --rcfile server/.coveragerc server/test.py
-  - coverage report --rcfile server/.coveragerc -m
+  - py.test --cov server/app --cov-config server/.coveragerc --cov-report=term-missing server/test
 after_success:
   - coveralls --rcfile server/.coveragerc
