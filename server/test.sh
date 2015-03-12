@@ -48,6 +48,6 @@ if [ "${FAST}" == 'true' ]
 then
     run_coverage -m 'not single_threaded' -n $[$(get_count_of_cpu_cores) + 1]
 else
-    run_coverage --pdb
+    run_coverage -v --pdb
 fi
 exit 0
