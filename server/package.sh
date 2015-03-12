@@ -65,7 +65,7 @@ function do_start()
 
 function do_test()
 {
-    "${PYTHON}" test.py
+    "${PYTHON}" test.sh
 }
 
 
