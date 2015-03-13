@@ -34,7 +34,7 @@ class User(db.Model):
 
     # flask-loginmanager
     def is_active(self) -> bool:
-        return True
+        return not self.disabled
 
     # flask-loginmanager
     def is_anonymous(self) -> bool:

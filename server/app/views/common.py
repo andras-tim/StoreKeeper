@@ -1,6 +1,6 @@
 from flask import g, request
 from flask.ext.restful import abort
-from flask.ext.login import current_user, login_required as login_required_decorator
+from flask.ext.login import current_user, login_required as login_required_decorator, logout_user
 from functools import wraps
 
 from app import doc_mode, test_mode
@@ -26,6 +26,10 @@ def before_request():
     g.user = current_user
 
     app.logger.debug(request)
+
+    if g.user.is_authenticated() and not g.user.is_active():
+        logout_user()
+        app.logger.debug("before_request: user: %s\nlogged out because is not active" % str(g.user))
 
     if g.user.is_authenticated():
         app.logger.debug("before_request: user: %s\nauthenticated" % str(g.user))

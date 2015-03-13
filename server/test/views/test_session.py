@@ -66,3 +66,23 @@ class TestLoginWithActiveSession(CommonSessionTest):
     def test_logout(self):
         self.assertRequest("delete", "/sessions")
         self.assertRequest("get", "/sessions", expected_status_codes=401)
+
+
+class TestDisabledUser(CommonSessionTest):
+    def setUp(self):
+        super().setUp()
+        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
+        self.assertRequestAsAdmin("put", "/users/%d" % Users.USER1["id"],
+                                  data=Users.USER1.set(change={"disabled": True}))
+        self.assertRequestAsAdmin("post", "/users", data=Users.USER2.set())
+
+    def test_logging_in_with_disabled_user(self):
+        self.assertRequest("post", "/sessions", data=Users.USER1.login(),
+                           expected_status_codes=401)
+
+    def test_logging_out_recently_disabled_user(self):
+        self.assertRequest("post", "/sessions", data=Users.USER2.login(),
+                           expected_status_codes=201)
+        self.assertRequest("put", "/users/%d" % Users.USER2["id"],
+                           data=Users.USER2.set(change={"disabled": True}))
+        self.assertRequest("get", "/sessions", expected_status_codes=401)
