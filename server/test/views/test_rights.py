@@ -1,15 +1,12 @@
-from ddt import ddt, data
-
 from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units
-from test.views import CommonRightsTest
+from test.views import CommonRightsTest, rights_data_provider
 
 
-@ddt
+@rights_data_provider("/sessions")
 class TestSessionsRights(CommonRightsTest):
-    ENDPOINT = "/sessions"
     INIT_PUSH = {"/users": [Users.USER2]}
     DATA_MAP = {"admin": Users.ADMIN, "user1": Users.USER1, "user2": Users.USER2}
-    RIGHTS = CommonRightsTest.iterate_rights({
+    RIGHTS = {
         "anonymous": {
             "get": False,
             "post": [("admin", True), ("user1", True)],
@@ -25,19 +22,14 @@ class TestSessionsRights(CommonRightsTest):
             "post": [("admin", True), ("user1", True), ("user2", True)],
             "delete": True,
         },
-    })
-
-    @data(*RIGHTS)
-    def test_rights(self, r: dict):
-        self._test_right(**r)
+    }
 
 
-@ddt
+@rights_data_provider("/users")
 class TestUsersRights(CommonRightsTest):
-    ENDPOINT = "/users"
     INIT_PUSH = {"/users": [Users.USER2]}
     DATA_MAP = {"admin": Users.ADMIN, "user1": Users.USER1, "user2": Users.USER2, "user3": Users.USER3}
-    RIGHTS = CommonRightsTest.iterate_rights({
+    RIGHTS = {
         "anonymous": {
             "get": [False, ("admin", False), ("user1", False)],
             "post": [("user3", False)],
@@ -56,19 +48,14 @@ class TestUsersRights(CommonRightsTest):
             "put": {"admin":    False, "user1": True,  "user2": False},
             "delete": {"admin": False, "user1": False, "user2": False},
         },
-    })
-
-    @data(*RIGHTS)
-    def test_rights(self, r: dict):
-        self._test_right(**r)
+    }
 
 
-@ddt
+@rights_data_provider("/vendors")
 class TestVendorRights(CommonRightsTest):
-    ENDPOINT = "/vendors"
     INIT_PUSH = {"/vendors": [Vendors.VENDOR1]}
     DATA_MAP = {"vendor1": Vendors.VENDOR1, "vendor2": Vendors.VENDOR2}
-    RIGHTS = CommonRightsTest.iterate_rights({
+    RIGHTS = {
         "anonymous": {
             "get": [False, ("vendor1", False)],
             "post": [("vendor2", False)],
@@ -87,19 +74,14 @@ class TestVendorRights(CommonRightsTest):
             "put": [("vendor1", True)],
             "delete": [("vendor1", True)],
         },
-    })
-
-    @data(*RIGHTS)
-    def test_rights(self, r: dict):
-        self._test_right(**r)
+    }
 
 
-@ddt
+@rights_data_provider("/units")
 class TestUnitRights(CommonRightsTest):
-    ENDPOINT = "/units"
     INIT_PUSH = {"/units": [Units.UNIT1]}
     DATA_MAP = {"unit1": Units.UNIT1, "unit2": Units.UNIT2}
-    RIGHTS = CommonRightsTest.iterate_rights({
+    RIGHTS = {
         "anonymous": {
             "get": [False, ("unit1", False)],
             "post": [("unit2", False)],
@@ -118,8 +100,4 @@ class TestUnitRights(CommonRightsTest):
             "put": [("unit1", True)],
             "delete": [("unit1", True)],
         },
-    })
-
-    @data(*RIGHTS)
-    def test_rights(self, r: dict):
-        self._test_right(**r)
+    }

@@ -119,32 +119,42 @@ class CommonSessionTest(CommonApiTest):
         super().assertRequest(*args, **kwargs)
 
 
+def rights_data_provider(endpoint: str):
+    def decorator(test_class):
+        setattr(test_class, "ENDPOINT", endpoint)
+        for right in test_class.iterate_rights(test_class.RIGHTS):
+            setattr(test_class, get_name_of_test_func(right), test_wrapper(test_class, right))
+        return test_class
+
+    def get_name_of_test_func(right: dict) -> str:
+        values = dict(right)
+
+        values["verb"] = "can_call"
+        if not right["expected"]:
+            values["verb"] = "can_not_call"
+
+        name_template = "test_%(actor)s_%(verb)s_%(command)s"
+        if "data" in right.keys():
+            name_template += "_%(data)s"
+
+        return name_template % values
+
+    def test_wrapper(test_class, right: dict) -> callable:
+        def test_func(self):
+            test_class.check_right(self, **right)
+        return test_func
+    return decorator
+
+
 @pytest.mark.single_threaded
 class CommonRightsTest(CommonSessionTest):
-    ENDPOINT = ""
+    ENDPOINT = ""  # Use foo() decorator
     INIT_PUSH = {}
     DATA_MAP = {}
     RIGHTS = ()
 
-    class AnnotatedRight(dict):
-        pass
-
     @classmethod
-    def __annotate_right(cls, right: dict):
-        name_template = "%(actor)s_calls_%(command)s"
-        if "data" in right.keys():
-            name_template += "_%(data)s"
-
-        r = cls.AnnotatedRight(right)
-        setattr(r, "__name__", name_template % right)
-        return r
-
-    @classmethod
-    def iterate_rights(cls, rights: dict) -> tuple:
-        return tuple(cls.__annotate_right(right) for right in cls.__iterate_rights(rights))
-
-    @classmethod
-    def __iterate_rights(cls, rights: dict):
+    def iterate_rights(cls, rights: dict):
         for actor, per_command_rights in rights.items():
             for command, expected in per_command_rights.items():
                 yield from cls.__parse_expected(actor, command, expected)
@@ -169,7 +179,7 @@ class CommonRightsTest(CommonSessionTest):
             for push_object in push_objects:
                 self.assertRequestAsAdmin("post", endpoint, data=push_object.set())
 
-    def _test_right(self, actor: str, command: str, expected: bool, data=None):
+    def check_right(self, actor: str, command: str, expected: bool, data=None):
         url = self.ENDPOINT
         if data is not None and command != "post":
             url += "/%d" % self.DATA_MAP[data].get()["id"]
