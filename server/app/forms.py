@@ -19,13 +19,17 @@ class ModelForm(BaseModelForm):
 class UserCreateForm(ModelForm):
     class Meta(object):
         model = User
+        exclude = ["password_hash"]
+    password = StringField('password', validators=[DataRequired()])
 
 
 class UserUpdateForm(ModelForm):
     class Meta(object):
         model = User
+        exclude = ["password_hash"]
         all_fields_optional = True
         assign_required = False
+    password = StringField('password')
 
 
 class VendorCreateForm(ModelForm):
