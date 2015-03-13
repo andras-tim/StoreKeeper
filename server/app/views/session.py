@@ -21,7 +21,8 @@ class SessionView(restful.Resource):
     @api_func("Login user", url_tail="sessions",
               login_required=False,
               request=ExampleUsers.ADMIN.set(["username", "password"]),
-              response=ExampleUsers.ADMIN.get())
+              response=ExampleUsers.ADMIN.get(),
+              status_codes={401: "bad authentication data"})
     def post(self):
         form = SessionCreateForm()
         if not form.validate_on_submit():
