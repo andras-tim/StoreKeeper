@@ -1,6 +1,9 @@
 import unittest
 
-from app.server import bcrypt
+import app
+app.test_mode = True
+
+import app.server
 from app.models import User
 
 
@@ -13,8 +16,8 @@ class TestUser(unittest.TestCase):
         self.user = User(TestUser._USER, TestUser._PASSWORD, TestUser._EMAIL)
 
     def test_password_is_not_stored_plain_text(self):
-        self.assertNotEqual(TestUser._PASSWORD, self.user.password)
-        self.assertIsNotNone(self.user.password)
+        self.assertNotEqual(TestUser._PASSWORD, self.user.password_hash)
+        self.assertIsNotNone(self.user.password_hash)
 
     def test_password_is_able_to_check(self):
-        self.assertTrue(bcrypt.check_password_hash(self.user.password, TestUser._PASSWORD))
+        self.assertTrue(self.user.check_password(TestUser._PASSWORD))
