@@ -1,4 +1,4 @@
-from flask import g
+from flask import g, request
 from flask.ext.restful import abort
 from flask.ext.login import current_user, login_required as login_required_decorator
 from functools import wraps
@@ -24,6 +24,9 @@ def load_user(unique_id):
 @app.before_request
 def before_request():
     g.user = current_user
+
+    app.logger.debug(request)
+
     if g.user.is_authenticated():
         app.logger.debug("before_request: user: %s\nauthenticated" % str(g.user))
     else:
