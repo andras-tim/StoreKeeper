@@ -25,6 +25,9 @@ class User(db.Model):
     def get_user(cls, username):
         return User.query.filter_by(username=username).first()
 
+    def check_password(self, password: str) -> bool:
+        return bcrypt.check_password_hash(self.password_hash, password)
+
     # flask-loginmanager
     def is_authenticated(self):
         return True

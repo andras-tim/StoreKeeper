@@ -7,7 +7,7 @@ from app.forms import SessionCreateForm
 from app.models import User
 from app.modules.example_data import ExampleUsers
 from app.serializers import UserSerializer
-from app.server import config, api, bcrypt
+from app.server import config, api
 from app.views.common import api_func
 
 
@@ -29,7 +29,7 @@ class SessionView(restful.Resource):
             abort(422, message=form.errors)
 
         user = User.get_user(form.username.data)
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if not user or not user.check_password(form.password.data):
             login_user(user)
             return UserSerializer(user).data, 201
         abort(401)
