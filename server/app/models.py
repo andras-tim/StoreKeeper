@@ -22,26 +22,26 @@ class User(db.Model):
         return '<User username=%r admin=%r disabled=%r>' % (self.username, self.admin, self.disabled)
 
     @classmethod
-    def get_user(cls, username):
+    def get_user(cls, username: str) -> "User":
         return User.query.filter_by(username=username).first()
 
     def check_password(self, password: str) -> bool:
         return bcrypt.check_password_hash(self.password_hash, password)
 
     # flask-loginmanager
-    def is_authenticated(self):
+    def is_authenticated(self) -> bool:
         return True
 
     # flask-loginmanager
-    def is_active(self):
+    def is_active(self) -> bool:
         return True
 
     # flask-loginmanager
-    def is_anonymous(self):
+    def is_anonymous(self) -> bool:
         return False
 
     # flask-loginmanager
-    def get_id(self):
+    def get_id(self) -> str:
         return str(self.id)
 
 
