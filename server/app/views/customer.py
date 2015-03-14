@@ -19,7 +19,7 @@ class CustomerListView(restful.Resource):
     @api_func("Create customer", url_tail="customers",
               request=ExampleCustomers.CUSTOMER1.set(),
               response=ExampleCustomers.CUSTOMER1.get(),
-              status_codes={422: "there is missing field, or customer is already exist"})
+              status_codes={422: "there is wrong type / missing field, or customer is already exist"})
     def post(self):
         form = CustomerCreateForm()
         if not form.validate_on_submit():

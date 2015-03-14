@@ -22,7 +22,7 @@ class UserListView(restful.Resource):
               admin_required=True,
               request=ExampleUsers.USER1.set(),
               response=ExampleUsers.USER1.get(),
-              status_codes={422: "there is missing field, or user is already exist"})
+              status_codes={422: "there is wrong type / missing field, or user is already exist"})
     def post(self):
         form = UserCreateForm()
         if not form.validate_on_submit():

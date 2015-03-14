@@ -19,7 +19,7 @@ class UnitListView(restful.Resource):
     @api_func("Create unit", url_tail="units",
               request=ExampleUnits.UNIT1.set(),
               response=ExampleUnits.UNIT1.get(),
-              status_codes={422: "there is missing field, or unit is already exist"})
+              status_codes={422: "there is wrong type / missing field, or unit is already exist"})
     def post(self):
         form = UnitCreateForm()
         if not form.validate_on_submit():
