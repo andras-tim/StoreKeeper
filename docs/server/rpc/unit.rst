@@ -3,6 +3,8 @@
 Unit
 ====
 
+Unit endpoint of RPC API.
+
 ``/api/units``
 --------------
   .. autoflask:: app.server:app

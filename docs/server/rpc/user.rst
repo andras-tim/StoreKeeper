@@ -3,6 +3,8 @@
 User
 ====
 
+User endpoint of RPC API.
+
 ``/api/users``
 --------------
   .. autoflask:: app.server:app

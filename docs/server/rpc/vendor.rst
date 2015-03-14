@@ -3,6 +3,8 @@
 Vendor
 ======
 
+Vendor endpoint of RPC API.
+
 ``/api/vendors``
 ----------------
   .. autoflask:: app.server:app

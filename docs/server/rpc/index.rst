@@ -14,7 +14,8 @@ other. The URLs are prefixed with name of application what you can customize in 
     ``http://localhost:8000/<name>/api/<command>``
 
 
-Contents:
+Endpoints
+---------
 
 .. toctree::
    :maxdepth: 2
