@@ -155,8 +155,8 @@ class Acquisition(db.Model):
     comment = db.Column(db.Text)
     items = db.relationship('AcquisitionItem', backref='acquisition', lazy='dynamic')
 
-    def __init__(self, comment: str):
-        self.date = datetime.utcnow()
+    def __init__(self, comment: str=""):
+        self.timestamp = datetime.utcnow()
         self.comment = comment
 
     def __repr__(self)-> str:
@@ -185,7 +185,7 @@ class Stocktaking(db.Model):
     items = db.relationship('StocktakingItem', backref='stocktaking', lazy='dynamic')
 
     def __init__(self, comment: str):
-        self.date = datetime.utcnow()
+        self.timestamp = datetime.utcnow()
         self.comment = comment
 
     def __repr__(self)-> str:
