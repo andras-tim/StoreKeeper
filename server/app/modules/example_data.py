@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 class FilterableDict(object):
     def __init__(self, commons: (dict, None)=None, getters: (dict, None)=None, setters: (dict, None)=None):
         self.__commons = commons or {}
@@ -33,6 +36,14 @@ class FilterableDict(object):
 class ExampleUser(FilterableDict):
     def login(self, username: (str, None)=None, password: (str, None)=None):
         return {"username": username or self["username"], "password": password or self["password"]}
+
+
+class ExampleTimestamp(object):
+    REST_API_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%f+00:00"
+
+    @classmethod
+    def utcnow(cls) -> str:
+        return datetime.utcnow().strftime(cls.REST_API_DATE_FORMAT)
 
 
 class ExampleUsers(object):

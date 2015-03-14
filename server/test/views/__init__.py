@@ -1,4 +1,5 @@
 import json
+import re
 import unittest
 from flask import Response
 import pytest
@@ -39,6 +40,10 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
 
     Added default `admin` user, added some assert functions and made a test client instance into `self.client`.
     """
+
+    # Pattern for timestamp; e.g: "2015-03-14T07:38:08.430655+00:00"
+    __API_TIMESTAMP = re.compile(r"(?P<quote>['\"])\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}\.\d{6}\+\d{2}:\d{2}['\"]")
+
     def setUp(self):
         super().setUp()
         db.session.add(User(Users.ADMIN["username"], Users.ADMIN["password"], email=Users.ADMIN["email"], admin=True))
@@ -54,7 +59,8 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
         self.assertStatusCode(expected_status_codes, response)
 
     def assertResponseData(self, expected_data: (str, list, dict, None), response: Response):
-        response_string = response.data.decode("utf-8")
+        response_string = self.__make_testable_data(response.data.decode("utf-8"))
+        expected_data = self.__make_testable_data(expected_data)
         try:
             data_json = json.loads(response_string)
         except Exception as e:
@@ -68,6 +74,17 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
 
     def __call_api(self, command, data, url):
         return getattr(self.client, command)("/%s/api%s" % (config.App.NAME, url), data=data)
+
+    def __make_testable_data(self, data: (str, list, dict)) -> (str, list, dict):
+        data_type = type(data)
+        if not data_type == str:
+            data = json.dumps(data, default=str)
+
+        data = self.__API_TIMESTAMP.sub("\g<quote><TS>\g<quote>", data)
+
+        if not data_type == str:
+            data = json.loads(data)
+        return data
 
 
 class CommonSessionTest(CommonApiTest):
