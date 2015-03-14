@@ -157,7 +157,7 @@ def rights_data_provider(endpoint: str):
 
 @pytest.mark.single_threaded
 class CommonRightsTest(CommonSessionTest):
-    ENDPOINT = ""  # Use foo() decorator
+    ENDPOINT = ""  # Use rights_data_provider() decorator
     INIT_PUSH = {}
     DATA_MAP = {}
     RIGHTS = ()
