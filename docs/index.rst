@@ -6,7 +6,21 @@
 Welcome to StoreKeeper's documentation!
 =======================================
 
-Contents:
+StoreKeeper is an open source, multilingual warehouse/store management software
+
+.. warning::
+    *Project is under development, so pleas go back some weeks later for first release!*
+
+
+Features
+--------
+
+* Manage users, and login-logout via API
+* *Others will be soon*
+
+
+The Guide
+=========
 
 .. toctree::
    :maxdepth: 2
@@ -19,6 +33,5 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
