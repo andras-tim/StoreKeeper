@@ -1,5 +1,5 @@
 from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units, \
-    ExampleCustomers as Customers
+    ExampleCustomers as Customers, ExampleAcquisitions as Acquisitions
 from test.views import CommonRightsTest, rights_data_provider
 
 
@@ -126,5 +126,31 @@ class TestCustomerRights(CommonRightsTest):
             "post": [("customer2", True)],
             "put": [("customer1", True)],
             "delete": [("customer1", True)],
+        },
+    }
+
+
+@rights_data_provider("/acquisitions")
+class TestAcquisitionRights(CommonRightsTest):
+    INIT_PUSH = {"/acquisitions": [Acquisitions.ACQUISITION1]}
+    DATA_MAP = {"acquisition1": Acquisitions.ACQUISITION1, "acquisition2": Acquisitions.ACQUISITION2}
+    RIGHTS = {
+        "anonymous": {
+            "get": [False, ("acquisition1", False)],
+            "post": [("acquisition2", False)],
+            "put": [("acquisition1", False)],
+            "delete": [("acquisition1", False)],
+        },
+        "admin": {
+            "get": [True, ("acquisition1", True)],
+            "post": [("acquisition2", True)],
+            "put": [("acquisition1", True)],
+            "delete": [("acquisition1", True)],
+        },
+        "user1": {
+            "get": [True, ("acquisition1", True)],
+            "post": [("acquisition2", True)],
+            "put": [("acquisition1", True)],
+            "delete": [("acquisition1", True)],
         },
     }

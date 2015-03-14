@@ -1,4 +1,4 @@
-from marshmallow import Serializer
+from marshmallow import Serializer, fields
 
 
 class UserSerializer(Serializer):
@@ -19,3 +19,11 @@ class UnitSerializer(Serializer):
 class CustomerSerializer(Serializer):
     class Meta:
         fields = ("id", "name")
+
+
+class AcquisitionSerializer(Serializer):
+    comment = fields.Str()
+    # TODO: items = fields.Nested(AcquisitionItemSerializer)
+
+    class Meta:
+        fields = ("id", "timestamp", "comment")

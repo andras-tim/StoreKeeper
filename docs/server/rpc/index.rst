@@ -27,3 +27,4 @@ Endpoints
    vendors
    units
    customers
+   acquisitions
