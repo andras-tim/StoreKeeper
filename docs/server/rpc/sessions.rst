@@ -1,9 +1,9 @@
 .. StoreKeeper documentation
 
-Session
-=======
+Sessions
+========
 
-Session endpoint of RPC API.
+Sessions endpoint of RPC API.
 
 ``/api/sessions``
 -----------------

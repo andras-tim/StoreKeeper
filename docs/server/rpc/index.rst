@@ -22,7 +22,7 @@ Endpoints
 .. toctree::
    :maxdepth: 2
 
-   session
-   user
-   vendor
-   unit
+   sessions
+   users
+   vendors
+   units

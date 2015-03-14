@@ -1,16 +1,17 @@
 .. StoreKeeper documentation
 
-User
-====
+Units
+=====
 
-User endpoint of RPC API.
+Units endpoint of RPC API.
 
-``/api/users``
+``/api/units``
 --------------
   .. autoflask:: app.server:app
-     :endpoints: users
+     :endpoints: units
 
-``/api/users/<id>``
+``/api/units/<id>``
 -------------------
   .. autoflask:: app.server:app
-     :endpoints: user
+     :endpoints: unit
+
