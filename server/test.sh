@@ -8,7 +8,7 @@ function run_test()
 
 function run_coverage()
 {
-    run_test --cov "${BASEDIR}/app" --cov-config "${BASEDIR}/.coveragerc" --cov-report=term-missing --cov-report=html "$@"
+    run_test --cov "${BASEDIR}/app" --cov-config "${BASEDIR}/.coveragerc" --cov-report=term-missing "$@"
 }
 
 function show_help()
@@ -40,14 +40,15 @@ then
                     exit 0
                     ;;
         -f|--fast)  FAST=true
+                    shift
                     ;;
     esac
 fi
 
 if [ "${FAST}" == 'true' ]
 then
-    run_coverage -m 'not single_threaded' -n $[$(get_count_of_cpu_cores) + 1]
+    run_coverage -m 'not single_threaded' -n $[$(get_count_of_cpu_cores) + 1] "$@"
 else
-    run_coverage -v --pdb
+    run_coverage -v --pdb "$@"
 fi
 exit 0
