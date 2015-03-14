@@ -6,6 +6,8 @@ Setup
 Prepare & Run
 -------------
 
+.. index:: package.sh, dependencies
+
 All commands can run with ``package.sh`` scripts what you want. All of these scripts has ``--help`` argument for
 available getting some info about the current module.
 

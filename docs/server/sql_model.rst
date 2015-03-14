@@ -3,6 +3,8 @@
 SQL Model
 =========
 
+.. index:: sql
+
 .. image:: ../_static/model/sql_model.*
    :width: 636px
    :height: 590px

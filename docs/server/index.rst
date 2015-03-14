@@ -3,6 +3,8 @@
 Server
 ======
 
+.. index:: server
+
 .. toctree::
    :maxdepth: 1
 
