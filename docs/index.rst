@@ -25,7 +25,7 @@ The Guide
 .. toctree::
    :maxdepth: 2
 
-   install
+   setup
    server/index
 
 
