@@ -140,7 +140,7 @@ class WorkItem(db.Model):
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
+    name = db.Column(db.String(120), nullable=False, unique=True)
 
     def __init__(self, name: str):
         self.name = name

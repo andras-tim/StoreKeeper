@@ -26,3 +26,4 @@ Endpoints
    users
    vendors
    units
+   customers

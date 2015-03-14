@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 from wtforms_alchemy import model_form_factory
 
 from app.server import db
-from app.models import User, Vendor, Unit
+from app.models import User, Vendor, Unit, Customer
 
 
 BaseModelForm = model_form_factory(Form)
@@ -52,6 +52,18 @@ class UnitCreateForm(ModelForm):
 class UnitUpdateForm(ModelForm):
     class Meta(object):
         model = Unit
+        all_fields_optional = True
+        assign_required = False
+
+
+class CustomerCreateForm(ModelForm):
+    class Meta(object):
+        model = Customer
+
+
+class CustomerUpdateForm(ModelForm):
+    class Meta(object):
+        model = Customer
         all_fields_optional = True
         assign_required = False
 

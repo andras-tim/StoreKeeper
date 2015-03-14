@@ -65,3 +65,10 @@ class ExampleUnits(object):
                            getters={"id": 1})
     UNIT2 = FilterableDict(commons={"unit": "pcs"},
                            getters={"id": 2})
+
+
+class ExampleCustomers(object):
+    CUSTOMER1 = FilterableDict(commons={"name": "Big Customer Ltd."},
+                               getters={"id": 1})
+    CUSTOMER2 = FilterableDict(commons={"name": "Buy Everything Co."},
+                               getters={"id": 2})

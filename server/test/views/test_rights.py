@@ -1,4 +1,5 @@
-from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units
+from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units, \
+    ExampleCustomers as Customers
 from test.views import CommonRightsTest, rights_data_provider
 
 
@@ -99,5 +100,31 @@ class TestUnitRights(CommonRightsTest):
             "post": [("unit2", True)],
             "put": [("unit1", True)],
             "delete": [("unit1", True)],
+        },
+    }
+
+
+@rights_data_provider("/customers")
+class TestCustomerRights(CommonRightsTest):
+    INIT_PUSH = {"/customers": [Customers.CUSTOMER1]}
+    DATA_MAP = {"customer1": Customers.CUSTOMER1, "customer2": Customers.CUSTOMER2}
+    RIGHTS = {
+        "anonymous": {
+            "get": [False, ("customer1", False)],
+            "post": [("customer2", False)],
+            "put": [("customer1", False)],
+            "delete": [("customer1", False)],
+        },
+        "admin": {
+            "get": [True, ("customer1", True)],
+            "post": [("customer2", True)],
+            "put": [("customer1", True)],
+            "delete": [("customer1", True)],
+        },
+        "user1": {
+            "get": [True, ("customer1", True)],
+            "post": [("customer2", True)],
+            "put": [("customer1", True)],
+            "delete": [("customer1", True)],
         },
     }

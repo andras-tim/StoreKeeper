@@ -14,3 +14,8 @@ class VendorSerializer(Serializer):
 class UnitSerializer(Serializer):
     class Meta:
         fields = ("id", "unit")
+
+
+class CustomerSerializer(Serializer):
+    class Meta:
+        fields = ("id", "name")
