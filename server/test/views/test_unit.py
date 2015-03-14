@@ -51,7 +51,7 @@ class TestUnitWithPreFilledDb(CommonApiTest):
 
     def test_update_vendor(self):
         request = Units.UNIT2.set(change={"unit": "foo2"})
-        response = Units.UNIT2.get(change={"unit": "foo2"})
+        response = Units.UNIT2.get(change={"unit": request["unit"]})
 
         self.assertRequest("put", "/units/%d" % Units.UNIT2["id"], data=request, expected_data=response)
         self.assertRequest("get", "/units", expected_data=[Units.UNIT1.get(), response])

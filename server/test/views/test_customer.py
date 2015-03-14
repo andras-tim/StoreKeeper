@@ -54,7 +54,7 @@ class TestUserWithPreFilledDb(CommonApiTest):
 
     def test_update_customer(self):
         request = Customers.CUSTOMER2.set(change={"name": "foo2"})
-        response = Customers.CUSTOMER2.get(change={"name": "foo2"})
+        response = Customers.CUSTOMER2.get(change={"name": request["name"]})
 
         self.assertRequest("put", "/customers/%d" % Customers.CUSTOMER2["id"], data=request, expected_data=response)
         self.assertRequest("get", "/customers", expected_data=[Customers.CUSTOMER1.get(), response])
