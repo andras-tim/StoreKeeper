@@ -48,34 +48,26 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
     def assertRequest(self, command: str, url: str, data: (dict, None)=None,
                       expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
 
-        response = getattr(self.client, command)("/%s/api%s" % (config.App.NAME, url), data=data)
-
+        response = self.__call_api(command, data, url)
         if expected_data is not None:
             self.assertResponseData(expected_data, response)
+        self.assertStatusCode(expected_status_codes, response)
+
+    def assertResponseData(self, expected_data: (str, list, dict, None), response: Response):
+        response_string = response.data.decode("utf-8")
+        try:
+            data_json = json.loads(response_string)
+        except Exception as e:
+            assert False, "Can not parse received data as JSON; data=%r, error=%r" % (response_string, e)
+        assert expected_data == data_json
+
+    def assertStatusCode(self, expected_status_codes: (int, list), response: Response):
         if type(expected_status_codes) != list:
             expected_status_codes = [expected_status_codes]
-        self.assertIn(response.status_code, expected_status_codes,
-                      msg="request=%r, response=%r" % (data, response.data.decode("utf-8")))
+        assert response.status_code in expected_status_codes
 
-    def assertResponseData(self, expected_data: (str, list, dict), r: Response):
-        data_string = r.data.decode("utf-8")
-
-        if type(expected_data) == str:
-            self.assertEqual(expected_data.strip(), data_string.strip())
-            return
-
-        try:
-            data_json = json.loads(data_string)
-        except Exception as e:
-            self.assertTrue(False, msg="Can not parse received data as JSON; data=%r, error=%r" % (data_string, e))
-            return
-        if data_json is None:
-            return
-
-        if type(expected_data) == list:
-            self.assertListEqual(expected_data, data_json)
-        elif type(expected_data) == dict:
-            self.assertDictEqual(expected_data, data_json)
+    def __call_api(self, command, data, url):
+        return getattr(self.client, command)("/%s/api%s" % (config.App.NAME, url), data=data)
 
 
 class CommonSessionTest(CommonApiTest):
