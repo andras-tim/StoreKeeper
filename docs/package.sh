@@ -15,6 +15,12 @@ function do_clear()
     purge '_build'
 }
 
+function do_reinstall()
+{
+    do_clear
+    do_install
+}
+
 
 cd "$(dirname "$0")"
 source ../.main.sh

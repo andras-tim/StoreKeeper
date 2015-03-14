@@ -1,7 +1,9 @@
 .. StoreKeeper documentation
 
-Unit
-====
+Units
+=====
+
+Units endpoint of RPC API.
 
 ``/api/units``
 --------------

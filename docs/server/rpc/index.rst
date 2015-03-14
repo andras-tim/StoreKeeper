@@ -3,8 +3,11 @@
 RPC API
 =======
 
-**StoreKeeper** uses `HATEOAS`_ RCP API for communicate server and client side each
+.. index:: api
+
+**StoreKeeper** uses `HATEOAS`_ :index:`RCP API` for communicate server and client side each
 other. The URLs are prefixed with name of application what you can customize in ``server/config.yml``.
+
 
 .. _HATEOAS: http://en.wikipedia.org/wiki/HATEOAS
 
@@ -13,12 +16,13 @@ other. The URLs are prefixed with name of application what you can customize in 
     ``http://localhost:8000/<name>/api/<command>``
 
 
-Contents:
+Endpoints
+---------
 
 .. toctree::
    :maxdepth: 2
 
-   session
-   user
-   vendor
-   unit
+   sessions
+   users
+   vendors
+   units

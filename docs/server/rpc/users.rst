@@ -1,7 +1,9 @@
 .. StoreKeeper documentation
 
-User
-====
+Users
+=====
+
+Users endpoint of RPC API.
 
 ``/api/users``
 --------------

@@ -3,10 +3,10 @@
 Server
 ======
 
-Contents:
+.. index:: server
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    sql_model
    rpc/index

@@ -1,7 +1,9 @@
 .. StoreKeeper documentation
 
-Vendor
-======
+Vendors
+=======
+
+Vendors endpoint of RPC API.
 
 ``/api/vendors``
 ----------------
