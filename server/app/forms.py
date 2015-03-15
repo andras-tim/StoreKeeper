@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 from wtforms_alchemy import model_form_factory
 
 from app.server import db
-from app.models import User, Vendor, Unit, Customer, Acquisition
+from app.models import User, Vendor, Unit, Customer, Acquisition, Stocktaking
 
 
 BaseModelForm = model_form_factory(Form)
@@ -77,6 +77,20 @@ class AcquisitionCreateForm(ModelForm):
 class AcquisitionUpdateForm(ModelForm):
     class Meta(object):
         model = Acquisition
+        exclude = ["timestamp"]
+        all_fields_optional = True
+        assign_required = False
+
+
+class StocktakingCreateForm(ModelForm):
+    class Meta(object):
+        model = Stocktaking
+        exclude = ["timestamp"]
+
+
+class StocktakingUpdateForm(ModelForm):
+    class Meta(object):
+        model = Stocktaking
         exclude = ["timestamp"]
         all_fields_optional = True
         assign_required = False

@@ -28,3 +28,4 @@ Endpoints
    units
    customers
    acquisitions
+   stocktakings

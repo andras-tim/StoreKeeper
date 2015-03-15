@@ -27,3 +27,11 @@ class AcquisitionSerializer(Serializer):
 
     class Meta:
         fields = ("id", "timestamp", "comment")
+
+
+class StocktakingSerializer(Serializer):
+    comment = fields.Str()
+    # TODO: items = fields.Nested(StocktakingItemSerializer)
+
+    class Meta:
+        fields = ("id", "timestamp", "comment")

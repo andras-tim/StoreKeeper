@@ -89,3 +89,9 @@ class ExampleAcquisitions(object):
     ACQUISITION1 = FilterableDict(commons={"comment": "Maybe missing some items"},
                                   getters={"id": 1, "timestamp": ExampleTimestamp.utcnow()})
     ACQUISITION2 = FilterableDict(getters={"id": 2, "comment": "", "timestamp": ExampleTimestamp.utcnow()})
+
+
+class ExampleStocktakings(object):
+    STOCKTAKING1 = FilterableDict(commons={"comment": "Maybe missing some items"},
+                                  getters={"id": 1, "timestamp": ExampleTimestamp.utcnow()})
+    STOCKTAKING2 = FilterableDict(getters={"id": 2, "comment": "", "timestamp": ExampleTimestamp.utcnow()})
