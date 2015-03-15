@@ -32,6 +32,11 @@ class UserUpdateForm(ModelForm):
     password = StringField('password')
 
 
+class SessionCreateForm(Form):
+    username = StringField('username', validators=[DataRequired()])
+    password = StringField('password', validators=[DataRequired()])
+
+
 class VendorCreateForm(ModelForm):
     class Meta(object):
         model = Vendor
@@ -94,8 +99,3 @@ class StocktakingUpdateForm(ModelForm):
         exclude = ["timestamp"]
         all_fields_optional = True
         assign_required = False
-
-
-class SessionCreateForm(Form):
-    username = StringField('username', validators=[DataRequired()])
-    password = StringField('password', validators=[DataRequired()])
