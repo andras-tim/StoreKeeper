@@ -64,6 +64,7 @@ class UserView(restful.Resource):
         form = UserUpdateForm(obj=user)
         if not form.validate_on_submit():
             abort(422, message=form.errors)
+        user.set_password(form.password.data)
 
         form.populate_obj(user)
         db.session.add(user)

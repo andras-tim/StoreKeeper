@@ -86,3 +86,18 @@ class TestDisabledUser(CommonSessionTest):
         self.assertRequest("put", "/users/%d" % Users.USER2["id"],
                            data=Users.USER2.set(change={"disabled": True}))
         self.assertRequest("get", "/sessions", expected_status_codes=401)
+
+
+class UserCanChangeItsPassword(CommonSessionTest):
+    def setUp(self):
+        super().setUp()
+        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
+        self.assertRequest("post", "/sessions", data=Users.USER1.login(), expected_status_codes=201)
+
+    def test_login_after_update_password(self):
+        request = Users.USER1.set(change={"password": "new_pw"})
+        response = Users.USER1.get()
+
+        self.assertRequest("put", "/users/%d" % Users.USER1["id"], data=request, expected_data=response)
+        self.assertRequest("post", "/sessions", data=Users.USER1.login(password=request["password"]),
+                           expected_status_codes=201)

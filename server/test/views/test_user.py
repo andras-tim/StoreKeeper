@@ -102,3 +102,9 @@ class TestUserWithPreFilledDb(CommonApiTest):
         request = Users.USER2.set(change={"username": Users.USER1["username"]})
 
         self.assertRequest("put", "/users/%d" % Users.USER2["id"], data=request, expected_status_codes=422)
+
+    def test_update_password(self):
+        request = Users.USER1.set(change={"password": "new_pw"})
+        response = Users.USER1.get()
+
+        self.assertRequest("put", "/users/%d" % Users.USER1["id"], data=request, expected_data=response)
