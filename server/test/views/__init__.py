@@ -46,7 +46,11 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
 
     def setUp(self):
         super().setUp()
-        db.session.add(User(Users.ADMIN["username"], Users.ADMIN["password"], email=Users.ADMIN["email"], admin=True))
+
+        admin = User(username=Users.ADMIN["username"], email=Users.ADMIN["email"], admin=True)
+        admin.set_password(Users.ADMIN["password"])
+
+        db.session.add(admin)
         db.session.commit()
         self.client = app.test_client()
 

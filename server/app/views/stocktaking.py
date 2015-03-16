@@ -25,7 +25,7 @@ class StocktakingListView(restful.Resource):
         if not form.validate_on_submit():
             abort(422, message=form.errors)
 
-        stocktaking = Stocktaking(form.comment.data)
+        stocktaking = Stocktaking(comment=form.comment.data)
         db.session.add(stocktaking)
         db.session.commit()
         return StocktakingSerializer(stocktaking).data

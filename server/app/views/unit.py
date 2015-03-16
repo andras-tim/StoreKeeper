@@ -25,7 +25,7 @@ class UnitListView(restful.Resource):
         if not form.validate_on_submit():
             abort(422, message=form.errors)
 
-        unit = Unit(form.unit.data)
+        unit = Unit(unit=form.unit.data)
         db.session.add(unit)
         db.session.commit()
         return UnitSerializer(unit).data
