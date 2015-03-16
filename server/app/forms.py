@@ -76,13 +76,13 @@ class CustomerUpdateForm(ModelForm):
 class AcquisitionCreateForm(ModelForm):
     class Meta(object):
         model = Acquisition
-        exclude = ["timestamp"]
+        # exclude = ["timestamp"] - excluded by default
 
 
 class AcquisitionUpdateForm(ModelForm):
     class Meta(object):
         model = Acquisition
-        exclude = ["timestamp"]
+        # exclude = ["timestamp"] - excluded by default
         all_fields_optional = True
         assign_required = False
 
@@ -90,12 +90,12 @@ class AcquisitionUpdateForm(ModelForm):
 class StocktakingCreateForm(ModelForm):
     class Meta(object):
         model = Stocktaking
-        exclude = ["timestamp"]
+        # exclude = ["timestamp"] - excluded by default
 
 
 class StocktakingUpdateForm(ModelForm):
     class Meta(object):
         model = Stocktaking
-        exclude = ["timestamp"]
+        # exclude = ["timestamp"] - excluded by default
         all_fields_optional = True
         assign_required = False
