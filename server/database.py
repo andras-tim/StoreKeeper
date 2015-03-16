@@ -24,7 +24,11 @@ def main():
     args = parse_arguments()
     if args.create:
         DatabaseMaintenance.create()
-        db.session.add(User(username="admin", password="admin", email="admin@localhost", admin=True))
+
+        user = User(username="admin", email="admin@localhost", admin=True)
+        user.set_password("admin")
+
+        db.session.add(user)
         db.session.commit()
         print("Done")
 

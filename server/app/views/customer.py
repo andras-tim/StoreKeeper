@@ -25,7 +25,7 @@ class CustomerListView(restful.Resource):
         if not form.validate_on_submit():
             abort(422, message=form.errors)
 
-        customer = Customer(form.name.data)
+        customer = Customer(name=form.name.data)
         db.session.add(customer)
         db.session.commit()
         return CustomerSerializer(customer).data

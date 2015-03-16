@@ -34,6 +34,10 @@ api = restful.Api(app)
 # flask-bcrypt
 bcrypt = Bcrypt(app)
 
-
-# Init views (must be the last)
+# Init views (must be after common resources)
 from app.views import *
+
+# flask-admin
+if config.App.ADMIN_PAGE:
+    from app import admin
+    admin.initialize(app, db, config)

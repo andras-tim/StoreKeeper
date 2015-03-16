@@ -13,7 +13,8 @@ class TestUser(unittest.TestCase):
     _EMAIL = "foo@bar.com"
 
     def setUp(self):
-        self.user = User(TestUser._USER, TestUser._PASSWORD, TestUser._EMAIL)
+        self.user = User(username=TestUser._USER, email=TestUser._EMAIL)
+        self.user.set_password(TestUser._PASSWORD)
 
     def test_password_is_not_stored_plain_text(self):
         self.assertNotEqual(TestUser._PASSWORD, self.user.password_hash)

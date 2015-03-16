@@ -4,6 +4,9 @@ USED_CONFIG: DevelopmentConfig
 DefaultConfig:
   App:
     NAME: "storekeeper"
+    TITLE: "StoreKeeper"
+
+    ADMIN_PAGE: False
     MIGRATE_REPO_PATH: "$BASEDIR/db_repository"
 
   Flask:
@@ -25,6 +28,9 @@ ProductionConfig:
 
 DevelopmentConfig:
   Base: DefaultConfig
+
+  App:
+    ADMIN_PAGE: True
 
   Flask:
     WTF_CSRF_ENABLED: False
