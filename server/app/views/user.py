@@ -28,7 +28,8 @@ class UserListView(restful.Resource):
         if not form.validate_on_submit():
             abort(422, message=form.errors)
 
-        user = User(username=form.username.data, email=form.email.data, admin=form.admin.data)
+        user = User()
+        form.populate_obj(user)
         user.set_password(form.password.data)
 
         db.session.add(user)
@@ -67,6 +68,7 @@ class UserView(restful.Resource):
         user.set_password(form.password.data)
 
         form.populate_obj(user)
+
         db.session.add(user)
         db.session.commit()
         return UserSerializer(user).data

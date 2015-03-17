@@ -13,5 +13,5 @@ pytest>=2.6.4
 pytest-cov>=1.8.1
 sphinx>=1.2.3
 git+git://github.com/andras-tim/sphinxcontrib-httpdomain
-WTForms>=2.0.1
+git+git://github.com/andras-tim/wtforms
 WTForms-Alchemy>=0.13.0

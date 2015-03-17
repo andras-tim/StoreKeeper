@@ -25,7 +25,9 @@ class AcquisitionListView(restful.Resource):
         if not form.validate_on_submit():
             abort(422, message=form.errors)
 
-        acquisition = Acquisition(comment=form.comment.data)
+        acquisition = Acquisition()
+        form.populate_obj(acquisition)
+
         db.session.add(acquisition)
         db.session.commit()
         return AcquisitionSerializer(acquisition).data
@@ -57,6 +59,7 @@ class AcquisitionView(restful.Resource):
             abort(422, message=form.errors)
 
         form.populate_obj(acquisition)
+
         db.session.add(acquisition)
         db.session.commit()
         return AcquisitionSerializer(acquisition).data

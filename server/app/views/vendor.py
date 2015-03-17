@@ -25,7 +25,9 @@ class VendorListView(restful.Resource):
         if not form.validate_on_submit():
             abort(422, message=form.errors)
 
-        vendor = Vendor(name=form.name.data)
+        vendor = Vendor()
+        form.populate_obj(vendor)
+
         db.session.add(vendor)
         db.session.commit()
         return VendorSerializer(vendor).data
@@ -57,6 +59,7 @@ class VendorView(restful.Resource):
             abort(422, message=form.errors)
     
         form.populate_obj(vendor)
+
         db.session.add(vendor)
         db.session.commit()
         return VendorSerializer(vendor).data
