@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField
+from wtforms.fields import StringField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import model_form_factory
 
@@ -20,7 +20,7 @@ class UserCreateForm(ModelForm):
     class Meta(object):
         model = User
         exclude = ["password_hash"]
-    password = StringField('password', validators=[DataRequired()])
+    password = StringField(validators=[DataRequired()])
 
 
 class UserUpdateForm(ModelForm):
@@ -29,12 +29,12 @@ class UserUpdateForm(ModelForm):
         exclude = ["password_hash"]
         all_fields_optional = True
         assign_required = False
-    password = StringField('password')
+    password = StringField()
 
 
 class SessionCreateForm(Form):
-    username = StringField('username', validators=[DataRequired()])
-    password = StringField('password', validators=[DataRequired()])
+    username = StringField(validators=[DataRequired()])
+    password = StringField(validators=[DataRequired()])
 
 
 class VendorCreateForm(ModelForm):
