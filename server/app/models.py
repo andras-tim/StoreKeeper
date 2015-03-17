@@ -16,8 +16,8 @@ class User(db.Model):
         return '%s [admin=%r disabled=%r]' % (self.username, self.admin, self.disabled)
 
     @classmethod
-    def get_user(cls, username: str) -> "User":
-        return User.query.filter_by(username=username).first()
+    def get(cls, username: str) -> "User":
+        return cls.query.filter_by(username=username).first()
 
     def set_password(self, password: str):
         self.password_hash = bcrypt.generate_password_hash(password)
@@ -57,6 +57,10 @@ class Item(db.Model):
     def __repr__(self)-> str:
         return "%s" % self.name
 
+    @classmethod
+    def get(cls, id: int) -> "Item":
+        return cls.query.filter_by(id=id).first()
+
 
 class Barcode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -70,6 +74,10 @@ class Barcode(db.Model):
     def __repr__(self)-> str:
         return "%s [quantity=%r]" % (self.barcode, self.quantity)
 
+    @classmethod
+    def get(cls, id: int) -> "Barcode":
+        return cls.query.filter_by(id=id).first()
+
 
 class Vendor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -80,6 +88,10 @@ class Vendor(db.Model):
     def __repr__(self)-> str:
         return "%s" % self.name
 
+    @classmethod
+    def get(cls, id: int) -> "Vendor":
+        return cls.query.filter_by(id=id).first()
+
 
 class Unit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -87,6 +99,10 @@ class Unit(db.Model):
 
     def __repr__(self)-> str:
         return "%s" % self.unit
+
+    @classmethod
+    def get(cls, id: int) -> "Unit":
+        return cls.query.filter_by(id=id).first()
 
 
 class Work(db.Model):
@@ -106,6 +122,10 @@ class Work(db.Model):
     def __repr__(self)-> str:
         return "%s [%r]" % (self.id, self.customer)
 
+    @classmethod
+    def get(cls, id: int) -> "Work":
+        return cls.query.filter_by(id=id).first()
+
 
 class WorkItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -120,6 +140,10 @@ class WorkItem(db.Model):
     def __repr__(self)-> str:
         return "%s [-%s, +%s]" % (self.item, self.outbound_quantity, self.return_quantity)
 
+    @classmethod
+    def get(cls, id: int) -> "WorkItem":
+        return cls.query.filter_by(id=id).first()
+
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -127,6 +151,10 @@ class Customer(db.Model):
 
     def __repr__(self)-> str:
         return "%s" % self.name
+
+    @classmethod
+    def get(cls, id: int) -> "Customer":
+        return cls.query.filter_by(id=id).first()
 
 
 class Acquisition(db.Model):
@@ -138,6 +166,10 @@ class Acquisition(db.Model):
 
     def __repr__(self)-> str:
         return "%s [%s]" % (self.id, self.timestamp)
+
+    @classmethod
+    def get(cls, id: int) -> "Acquisition":
+        return cls.query.filter_by(id=id).first()
 
 
 class AcquisitionItem(db.Model):
@@ -152,6 +184,10 @@ class AcquisitionItem(db.Model):
     def __repr__(self)-> str:
         return "%s [%r]" % (self.id, self.item)
 
+    @classmethod
+    def get(cls, id: int) -> "AcquisitionItem":
+        return cls.query.filter_by(id=id).first()
+
 
 class Stocktaking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -162,6 +198,10 @@ class Stocktaking(db.Model):
 
     def __repr__(self)-> str:
         return "%s [%s]" % (self.id, self.timestamp)
+
+    @classmethod
+    def get(cls, id: int) -> "Stocktaking":
+        return cls.query.filter_by(id=id).first()
 
 
 class StocktakingItem(db.Model):
@@ -175,3 +215,7 @@ class StocktakingItem(db.Model):
 
     def __repr__(self)-> str:
         return "%s [%r]" % (self.id, self.item)
+
+    @classmethod
+    def get(cls, id: int) -> "StocktakingItem":
+        return cls.query.filter_by(id=id).first()
