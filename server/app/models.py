@@ -49,7 +49,10 @@ class Item(db.Model):
     article_number = db.Column(db.Integer)
     quantity = db.Column(db.Integer, nullable=False)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
-    barcodes = db.relationship('Barcode', backref='item', lazy='dynamic')
+
+    vendor = db.relationship('Vendor')
+    unit = db.relationship('Unit')
+    barcodes = db.relationship('Barcode', lazy='dynamic')
 
     def __repr__(self)-> str:
         return "%s" % self.name
@@ -62,6 +65,8 @@ class Barcode(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     main = db.Column(db.Boolean, default=False)
 
+    item = db.relationship('Item')
+
     def __repr__(self)-> str:
         return "%s [quantity=%r]" % (self.barcode, self.quantity)
 
@@ -69,6 +74,8 @@ class Barcode(db.Model):
 class Vendor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
+
+    items = db.relationship('Item', lazy='dynamic')
 
     def __repr__(self)-> str:
         return "%s" % self.name
@@ -90,10 +97,14 @@ class Work(db.Model):
     outbound_close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     return_close_timestamp = db.Column(db.DateTime)
     return_close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    work_items = db.relationship('WorkItem', backref='work', lazy='dynamic')
+
+    customer = db.relationship('Customer')
+    outbound_close_user = db.relationship('User', foreign_keys=[outbound_close_user_id])
+    return_close_user = db.relationship('User', foreign_keys=[return_close_user_id])
+    work_items = db.relationship('WorkItem', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return "%s" % self.id
+        return "%s [%r]" % (self.id, self.customer)
 
 
 class WorkItem(db.Model):
@@ -103,8 +114,11 @@ class WorkItem(db.Model):
     outbound_quantity = db.Column(db.Integer, nullable=False)
     return_quantity = db.Column(db.Integer)
 
+    work = db.relationship('Work')
+    item = db.relationship('Item')
+
     def __repr__(self)-> str:
-        return "%s" % self.id
+        return "%s [-%s, +%s]" % (self.item, self.outbound_quantity, self.return_quantity)
 
 
 class Customer(db.Model):
@@ -119,10 +133,11 @@ class Acquisition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     comment = db.Column(db.Text)
-    items = db.relationship('AcquisitionItem', backref='acquisition', lazy='dynamic')
+
+    items = db.relationship('AcquisitionItem', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return "%s" % self.id
+        return "%s [%s]" % (self.id, self.timestamp)
 
 
 class AcquisitionItem(db.Model):
@@ -131,18 +146,22 @@ class AcquisitionItem(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
+    acquisition = db.relationship('Acquisition')
+    item = db.relationship('Item')
+
     def __repr__(self)-> str:
-        return "%s" % self.id
+        return "%s [%r]" % (self.id, self.item)
 
 
 class Stocktaking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     comment = db.Column(db.Text)
-    items = db.relationship('StocktakingItem', backref='stocktaking', lazy='dynamic')
+
+    items = db.relationship('StocktakingItem', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return "%s" % self.id
+        return "%s [%s]" % (self.id, self.timestamp)
 
 
 class StocktakingItem(db.Model):
@@ -151,5 +170,8 @@ class StocktakingItem(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
+    stocktaking = db.relationship('Stocktaking')
+    item = db.relationship('Item')
+
     def __repr__(self)-> str:
-        return "%s" % self.id
+        return "%s [%r]" % (self.id, self.item)
