@@ -5,7 +5,7 @@ from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 
-from app import basedir, test_mode
+from app import basedir, test_mode, doc_mode
 from app.modules.config import Config
 
 
@@ -38,6 +38,6 @@ bcrypt = Bcrypt(app)
 from app.views import *
 
 # flask-admin
-if config.App.ADMIN_PAGE:
+if config.App.ADMIN_PAGE and not (test_mode or doc_mode):
     from app import admin
     admin.initialize(app, db, config)
