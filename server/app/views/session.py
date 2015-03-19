@@ -15,7 +15,7 @@ class SessionView(restful.Resource):
     @api_func("Get current session", url_tail="sessions",
               response=ExampleUsers.ADMIN.get())
     def get(self):
-        user = User.get_user(g.user.username)
+        user = User.get(username=g.user.username)
         return UserSerializer(user).data
 
     @api_func("Login user", url_tail="sessions",
@@ -29,7 +29,7 @@ class SessionView(restful.Resource):
         if not form.validate_on_submit():
             abort(422, message=form.errors)
 
-        user = User.get_user(form.username.data)
+        user = User.get(username=form.username.data)
         if not user or not user.check_password(form.password.data):
             abort(401)
         if not login_user(user):

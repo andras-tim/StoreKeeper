@@ -39,7 +39,7 @@ class AcquisitionView(restful.Resource):
               queries={"id": "ID of selected acquisition for change"},
               status_codes={404: "there is no acquisition"})
     def get(self, id: int):
-        acquisition = Acquisition.query.filter_by(id=id).first()
+        acquisition = Acquisition.get(id=id)
         if not acquisition:
             abort(404)
 
@@ -50,7 +50,7 @@ class AcquisitionView(restful.Resource):
               response=ExampleAcquisitions.ACQUISITION1.get(change={"comment": "A box has been damaged"}),
               queries={"id": "ID of selected acquisition for change"})
     def put(self, id: int):
-        acquisition = Acquisition.query.filter_by(id=id).first()
+        acquisition = Acquisition.get(id=id)
         if not acquisition:
             abort(404)
 
@@ -69,7 +69,7 @@ class AcquisitionView(restful.Resource):
               queries={"id": "ID of selected acquisition for change"},
               status_codes={404: "there is no acquisition"})
     def delete(self, id: int):
-        acquisition = Acquisition.query.filter_by(id=id).first()
+        acquisition = Acquisition.get(id=id)
         if not acquisition:
             abort(404)
 

@@ -39,7 +39,7 @@ class CustomerView(restful.Resource):
               queries={"id": "ID of selected customer for change"},
               status_codes={404: "there is no customer"})
     def get(self, id: int):
-        customer = Customer.query.filter_by(id=id).first()
+        customer = Customer.get(id=id)
         if not customer:
             abort(404)
 
@@ -50,7 +50,7 @@ class CustomerView(restful.Resource):
               response=ExampleCustomers.CUSTOMER1.get(change={"name": "new_foo"}),
               queries={"id": "ID of selected customer for change"})
     def put(self, id: int):
-        customer = Customer.query.filter_by(id=id).first()
+        customer = Customer.get(id=id)
         if not customer:
             abort(404)
 
@@ -69,7 +69,7 @@ class CustomerView(restful.Resource):
               queries={"id": "ID of selected customer for change"},
               status_codes={404: "there is no customer"})
     def delete(self, id: int):
-        customer = Customer.query.filter_by(id=id).first()
+        customer = Customer.get(id=id)
         if not customer:
             abort(404)
 

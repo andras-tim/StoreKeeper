@@ -39,7 +39,7 @@ class VendorView(restful.Resource):
               queries={"id": "ID of selected vendor for change"},
               status_codes={404: "there is no vendor"})
     def get(self, id: int):
-        vendor = Vendor.query.filter_by(id=id).first()
+        vendor = Vendor.get(id=id)
         if not vendor:
             abort(404)
 
@@ -50,7 +50,7 @@ class VendorView(restful.Resource):
               response=ExampleVendors.VENDOR1.get(change={"name": "new_foo"}),
               queries={"id": "ID of selected vendor for change"})
     def put(self, id: int):
-        vendor = Vendor.query.filter_by(id=id).first()
+        vendor = Vendor.get(id=id)
         if not vendor:
             abort(404)
     
@@ -69,7 +69,7 @@ class VendorView(restful.Resource):
               queries={"id": "ID of selected vendor for change"},
               status_codes={404: "there is no vendor"})
     def delete(self, id: int):
-        vendor = Vendor.query.filter_by(id=id).first()
+        vendor = Vendor.get(id=id)
         if not vendor:
             abort(404)
 

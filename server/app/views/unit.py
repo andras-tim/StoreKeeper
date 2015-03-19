@@ -39,7 +39,7 @@ class UnitView(restful.Resource):
               queries={"id": "ID of selected unit for change"},
               status_codes={404: "there is no unit"})
     def get(self, id: int):
-        unit = Unit.query.filter_by(id=id).first()
+        unit = Unit.get(id=id)
         if not unit:
             abort(404)
 
@@ -50,7 +50,7 @@ class UnitView(restful.Resource):
               response=ExampleUnits.UNIT1.get(change={"unit": "dl"}),
               queries={"id": "ID of selected unit for change"})
     def put(self, id: int):
-        unit = Unit.query.filter_by(id=id).first()
+        unit = Unit.get(id=id)
         if not unit:
             abort(404)
     
@@ -69,7 +69,7 @@ class UnitView(restful.Resource):
               queries={"id": "ID of selected unit for change"},
               status_codes={404: "there is no unit"})
     def delete(self, id: int):
-        unit = Unit.query.filter_by(id=id).first()
+        unit = Unit.get(id=id)
         if not unit:
             abort(404)
 

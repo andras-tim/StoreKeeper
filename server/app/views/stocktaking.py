@@ -39,7 +39,7 @@ class StocktakingView(restful.Resource):
               queries={"id": "ID of selected stocktaking for change"},
               status_codes={404: "there is no stocktaking"})
     def get(self, id: int):
-        stocktaking = Stocktaking.query.filter_by(id=id).first()
+        stocktaking = Stocktaking.get(id=id)
         if not stocktaking:
             abort(404)
 
@@ -50,7 +50,7 @@ class StocktakingView(restful.Resource):
               response=ExampleStocktakings.STOCKTAKING1.get(change={"comment": "A box has been damaged"}),
               queries={"id": "ID of selected stocktaking for change"})
     def put(self, id: int):
-        stocktaking = Stocktaking.query.filter_by(id=id).first()
+        stocktaking = Stocktaking.get(id=id)
         if not stocktaking:
             abort(404)
 
@@ -69,7 +69,7 @@ class StocktakingView(restful.Resource):
               queries={"id": "ID of selected stocktaking for change"},
               status_codes={404: "there is no stocktaking"})
     def delete(self, id: int):
-        stocktaking = Stocktaking.query.filter_by(id=id).first()
+        stocktaking = Stocktaking.get(id=id)
         if not stocktaking:
             abort(404)
 

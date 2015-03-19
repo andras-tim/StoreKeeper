@@ -2,8 +2,10 @@ from datetime import datetime
 
 from app import validators
 from app.server import db, bcrypt
+from app.modules.model_helper import common_model
 
 
+@common_model()
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False, unique=True, info={'validators': validators.username})
@@ -14,10 +16,6 @@ class User(db.Model):
 
     def __repr__(self)-> str:
         return '%s [admin=%r disabled=%r]' % (self.username, self.admin, self.disabled)
-
-    @classmethod
-    def get(cls, username: str) -> "User":
-        return cls.query.filter_by(username=username).first()
 
     def set_password(self, password: str):
         self.password_hash = bcrypt.generate_password_hash(password)
@@ -42,6 +40,7 @@ class User(db.Model):
         return str(self.id)
 
 
+@common_model()
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
@@ -57,11 +56,8 @@ class Item(db.Model):
     def __repr__(self)-> str:
         return "%s" % self.name
 
-    @classmethod
-    def get(cls, id: int) -> "Item":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class Barcode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     barcode = db.Column(db.String(15), nullable=False)
@@ -74,11 +70,8 @@ class Barcode(db.Model):
     def __repr__(self)-> str:
         return "%s [quantity=%r]" % (self.barcode, self.quantity)
 
-    @classmethod
-    def get(cls, id: int) -> "Barcode":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class Vendor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
@@ -88,11 +81,8 @@ class Vendor(db.Model):
     def __repr__(self)-> str:
         return "%s" % self.name
 
-    @classmethod
-    def get(cls, id: int) -> "Vendor":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class Unit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     unit = db.Column(db.String(20), nullable=False, unique=True)
@@ -100,11 +90,8 @@ class Unit(db.Model):
     def __repr__(self)-> str:
         return "%s" % self.unit
 
-    @classmethod
-    def get(cls, id: int) -> "Unit":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class Work(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
@@ -122,11 +109,8 @@ class Work(db.Model):
     def __repr__(self)-> str:
         return "%s [%r]" % (self.id, self.customer)
 
-    @classmethod
-    def get(cls, id: int) -> "Work":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class WorkItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     work_id = db.Column(db.Integer, db.ForeignKey('work.id'), nullable=False)
@@ -140,11 +124,8 @@ class WorkItem(db.Model):
     def __repr__(self)-> str:
         return "%s [-%s, +%s]" % (self.item, self.outbound_quantity, self.return_quantity)
 
-    @classmethod
-    def get(cls, id: int) -> "WorkItem":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False, unique=True)
@@ -152,11 +133,8 @@ class Customer(db.Model):
     def __repr__(self)-> str:
         return "%s" % self.name
 
-    @classmethod
-    def get(cls, id: int) -> "Customer":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class Acquisition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -167,11 +145,8 @@ class Acquisition(db.Model):
     def __repr__(self)-> str:
         return "%s [%s]" % (self.id, self.timestamp)
 
-    @classmethod
-    def get(cls, id: int) -> "Acquisition":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class AcquisitionItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     acquisition_id = db.Column(db.Integer, db.ForeignKey('acquisition.id'), nullable=False)
@@ -184,11 +159,8 @@ class AcquisitionItem(db.Model):
     def __repr__(self)-> str:
         return "%s [%r]" % (self.id, self.item)
 
-    @classmethod
-    def get(cls, id: int) -> "AcquisitionItem":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class Stocktaking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -199,11 +171,8 @@ class Stocktaking(db.Model):
     def __repr__(self)-> str:
         return "%s [%s]" % (self.id, self.timestamp)
 
-    @classmethod
-    def get(cls, id: int) -> "Stocktaking":
-        return cls.query.filter_by(id=id).first()
 
-
+@common_model()
 class StocktakingItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     stocktaking_id = db.Column(db.Integer, db.ForeignKey('stocktaking.id'), nullable=False)
@@ -215,7 +184,3 @@ class StocktakingItem(db.Model):
 
     def __repr__(self)-> str:
         return "%s [%r]" % (self.id, self.item)
-
-    @classmethod
-    def get(cls, id: int) -> "StocktakingItem":
-        return cls.query.filter_by(id=id).first()

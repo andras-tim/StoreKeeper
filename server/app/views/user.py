@@ -43,7 +43,7 @@ class UserView(restful.Resource):
               queries={"id": "ID of selected user"},
               status_codes={404: "there is no user"})
     def get(self, id: int):
-        user = User.query.filter_by(id=id).first()
+        user = User.get(id=id)
         if not user:
             abort(404)
 
@@ -58,7 +58,7 @@ class UserView(restful.Resource):
         if not g.user.admin and id != g.user.id:
             abort(403)
 
-        user = User.query.filter_by(id=id).first()
+        user = User.get(id=id)
         if not user:
             abort(404)
 
@@ -82,7 +82,7 @@ class UserView(restful.Resource):
         if id == g.user.id:
             abort(422, message="User can not remove itself")
 
-        user = User.query.filter_by(id=id).first()
+        user = User.get(id=id)
         if not user:
             abort(404)
 
