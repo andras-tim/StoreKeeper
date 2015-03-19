@@ -41,37 +41,6 @@ class User(db.Model):
 
 
 @common_model()
-class Item(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False, unique=True)
-    vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
-    article_number = db.Column(db.Integer)
-    quantity = db.Column(db.Integer, nullable=False)
-    unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
-
-    vendor = db.relationship('Vendor')
-    unit = db.relationship('Unit')
-    barcodes = db.relationship('Barcode', lazy='dynamic')
-
-    def __repr__(self)-> str:
-        return "%s" % self.name
-
-
-@common_model()
-class Barcode(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    barcode = db.Column(db.String(15), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False, default=1)
-    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-    main = db.Column(db.Boolean, default=False)
-
-    item = db.relationship('Item')
-
-    def __repr__(self)-> str:
-        return "%s [quantity=%r]" % (self.barcode, self.quantity)
-
-
-@common_model()
 class Vendor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
@@ -91,7 +60,47 @@ class Unit(db.Model):
         return "%s" % self.unit
 
 
+@common_model(nested_fields={"vendor": Vendor, "unit": Unit})
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False, unique=True)
+    vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
+    article_number = db.Column(db.Integer)
+    quantity = db.Column(db.Integer, nullable=False)
+    unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
+
+    vendor = db.relationship('Vendor')
+    unit = db.relationship('Unit')
+    barcodes = db.relationship('Barcode', lazy='dynamic')
+
+    def __repr__(self)-> str:
+        return "%s" % self.name
+
+
+@common_model(nested_fields={"item": Item})
+class Barcode(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    barcode = db.Column(db.String(15), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False, default=1)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+    main = db.Column(db.Boolean, default=False)
+
+    item = db.relationship('Item')
+
+    def __repr__(self)-> str:
+        return "%s [quantity=%r]" % (self.barcode, self.quantity)
+
+
 @common_model()
+class Customer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False, unique=True)
+
+    def __repr__(self)-> str:
+        return "%s" % self.name
+
+
+@common_model(nested_fields={"customer": Customer, "outbound_close_user": User, "return_close_user": User})
 class Work(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
@@ -110,7 +119,7 @@ class Work(db.Model):
         return "%s [%r]" % (self.id, self.customer)
 
 
-@common_model()
+@common_model(nested_fields={"work": Work, "item": Item})
 class WorkItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     work_id = db.Column(db.Integer, db.ForeignKey('work.id'), nullable=False)
@@ -126,15 +135,6 @@ class WorkItem(db.Model):
 
 
 @common_model()
-class Customer(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False, unique=True)
-
-    def __repr__(self)-> str:
-        return "%s" % self.name
-
-
-@common_model()
 class Acquisition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -146,7 +146,7 @@ class Acquisition(db.Model):
         return "%s [%s]" % (self.id, self.timestamp)
 
 
-@common_model()
+@common_model(nested_fields={"acquisition": Acquisition, "item": Item})
 class AcquisitionItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     acquisition_id = db.Column(db.Integer, db.ForeignKey('acquisition.id'), nullable=False)
@@ -172,7 +172,7 @@ class Stocktaking(db.Model):
         return "%s [%s]" % (self.id, self.timestamp)
 
 
-@common_model()
+@common_model(nested_fields={"stocktaking": Stocktaking, "item": Item})
 class StocktakingItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     stocktaking_id = db.Column(db.Integer, db.ForeignKey('stocktaking.id'), nullable=False)
