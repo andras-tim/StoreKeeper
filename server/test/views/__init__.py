@@ -56,8 +56,7 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
 
     def assertRequest(self, command: str, url: str, data: (dict, None)=None,
                       expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
-
-        response = self.__call_api(command, data, url)
+        response = self.__call_api(command, json.dumps(data), url)
         if expected_data is not None:
             self.assertResponseData(expected_data, response)
         self.assertStatusCode(expected_status_codes, response)
@@ -76,8 +75,9 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
             expected_status_codes = [expected_status_codes]
         assert response.status_code in expected_status_codes
 
-    def __call_api(self, command, data, url):
-        return getattr(self.client, command)("/%s/api%s" % (config.App.NAME, url), data=data)
+    def __call_api(self, command: str, data: str, url: str):
+        return getattr(self.client, command)("/%s/api%s" % (config.App.NAME, url),
+                                             content_type="application/json", data=data)
 
     def __make_testable_data(self, data: (str, list, dict)) -> (str, list, dict):
         data_type = type(data)
