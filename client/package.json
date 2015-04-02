@@ -1,0 +1,11 @@
+{
+  "name": "storekeeper",
+  "description": "StoreKeeper",
+  "version": "0.1.0",
+  "private": true,
+  "repository": "https://github.com/andras-tim/StoreKeeper.git",
+  "engine": "node >= 0.10.25",
+  "dependencies": {
+    "bower": "^1.3.1"
+  }
+}

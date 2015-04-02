@@ -1,0 +1,4 @@
+# Distribution / packaging
+bower_components/
+node_modules/
+!.gitkeep
