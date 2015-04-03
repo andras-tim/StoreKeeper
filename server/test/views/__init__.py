@@ -23,6 +23,7 @@ class CommonTestWithDatabaseSupport(unittest.TestCase):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 
     def setUp(self):
+        db.drop_all()
         db.create_all()
 
     def tearDown(self):
