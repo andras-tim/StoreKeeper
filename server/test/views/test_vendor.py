@@ -19,10 +19,10 @@ class TestVendorWithBrandNewDb(CommonApiTest):
 
     def test_can_not_add_vendor_with_missing_name(self):
         self.assertRequest("post", "/vendors", data={},
-                           expected_data={"message": {"name": ["This field is required."]}},
+                           expected_data={"message": {"name": ["Missing data for required field."]}},
                            expected_status_codes=422)
         self.assertRequest("post", "/vendors", data={"name": ""},
-                           expected_data={"message": {"name": ["This field is required."]}},
+                           expected_data={"message": {"name": ["Missing data for required field."]}},
                            expected_status_codes=422)
 
 

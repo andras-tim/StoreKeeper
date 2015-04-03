@@ -22,10 +22,10 @@ class TestCustomerWithBrandNewDb(CommonApiTest):
 
     def test_can_not_add_customer_with_missing_name(self):
         self.assertRequest("post", "/customers", data={},
-                           expected_data={"message": {"name": ["This field is required."]}},
+                           expected_data={"message": {"name": ["Missing data for required field."]}},
                            expected_status_codes=422)
         self.assertRequest("post", "/customers", data={"name": ""},
-                           expected_data={"message": {"name": ["This field is required."]}},
+                           expected_data={"message": {"name": ["Missing data for required field."]}},
                            expected_status_codes=422)
 
 

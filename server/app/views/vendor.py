@@ -1,82 +1,55 @@
-from flask.ext import restful
-from flask.ext.restful import abort
-
-from app.forms import VendorCreateForm, VendorUpdateForm
 from app.models import Vendor
+from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleVendors
-from app.serializers import VendorSerializer
-from app.server import db, config, api
+from app.serializers import VendorSerializer, VendorDeserializer
+from app.server import config, api
 from app.views.common import api_func
 
 
-class VendorListView(restful.Resource):
+class VendorModelListView(BaseModelListView):
+    _model = Vendor
+    _serializer = VendorSerializer
+    _deserializer = VendorDeserializer
+
     @api_func("List vendors", url_tail="vendors",
               response=[ExampleVendors.VENDOR1.get(), ExampleVendors.VENDOR2.get()])
     def get(self):
-        vendors = Vendor.query.all()
-        return VendorSerializer(vendors, many=True).data
+        return self._get()
 
     @api_func("Create vendor", url_tail="vendors",
               request=ExampleVendors.VENDOR1.set(),
               response=ExampleVendors.VENDOR1.get(),
               status_codes={422: "there is wrong type / missing field, or vendor is already exist"})
     def post(self):
-        form = VendorCreateForm()
-        if not form.validate_on_submit():
-            abort(422, message=form.errors)
-
-        vendor = Vendor()
-        form.populate_obj(vendor)
-
-        db.session.add(vendor)
-        db.session.commit()
-        return VendorSerializer(vendor).data
+        return self._post()
 
 
-class VendorView(restful.Resource):
+class VendorView(BaseView):
+    _model = Vendor
+    _serializer = VendorSerializer
+    _deserializer = VendorDeserializer
+
     @api_func("Get vendor", url_tail="vendors/1",
               response=ExampleVendors.VENDOR1.get(),
               queries={"id": "ID of selected vendor for change"},
               status_codes={404: "there is no vendor"})
     def get(self, id: int):
-        vendor = Vendor.get(id=id)
-        if not vendor:
-            abort(404)
-
-        return VendorSerializer(vendor).data
+        return self._get(id)
     
     @api_func("Update vendor", url_tail="vendors/1",
               request=ExampleVendors.VENDOR1.set(change={"name": "new_foo"}),
               response=ExampleVendors.VENDOR1.get(change={"name": "new_foo"}),
               queries={"id": "ID of selected vendor for change"})
     def put(self, id: int):
-        vendor = Vendor.get(id=id)
-        if not vendor:
-            abort(404)
-    
-        form = VendorUpdateForm(obj=vendor)
-        if not form.validate_on_submit():
-            abort(422, message=form.errors)
-    
-        form.populate_obj(vendor)
-
-        db.session.add(vendor)
-        db.session.commit()
-        return VendorSerializer(vendor).data
+        return self._put(id)
 
     @api_func("Delete vendor", url_tail="vendors/1",
               response=None,
               queries={"id": "ID of selected vendor for change"},
               status_codes={404: "there is no vendor"})
     def delete(self, id: int):
-        vendor = Vendor.get(id=id)
-        if not vendor:
-            abort(404)
-
-        db.session.delete(vendor)
-        db.session.commit()
-        return
+        return self._delete(id)
 
 
-api.add_resource(VendorListView, '/%s/api/vendors' % config.App.NAME, endpoint='vendors')
+api.add_resource(VendorModelListView, '/%s/api/vendors' % config.App.NAME, endpoint='vendors')
 api.add_resource(VendorView, '/%s/api/vendors/<int:id>' % config.App.NAME, endpoint='vendor')

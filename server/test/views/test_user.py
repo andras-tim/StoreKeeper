@@ -20,48 +20,50 @@ class TestUserWithBrandNewDb(CommonApiTest):
 
     def test_can_not_add_user_with_missing_fields(self):
         self.assertRequest("post", "/users", data={"username": "foo", "password": "a"},
-                           expected_data={"message": {"email": ["This field is required."]}},
+                           expected_data={"message": {"email": ["Missing data for required field."]}},
                            expected_status_codes=422)
 
         self.assertRequest("post", "/users", data={"username": "foo", "email": "foo@bar.com"},
-                           expected_data={"message": {"password": ["This field is required."]}},
+                           expected_data={"message": {"password": ["Missing data for required field."]}},
                            expected_status_codes=422)
 
         self.assertRequest("post", "/users", data={"password": "a", "email": "foo@bar.com"},
-                           expected_data={"message": {"username": ["This field is required."]}},
+                           expected_data={"message": {"username": ["Missing data for required field."]}},
                            expected_status_codes=422)
 
         self.assertRequest("post", "/users", data={"email": "foo@bar.com"},
-                           expected_data={"message": {"username": ["This field is required."],
-                                                      "password": ["This field is required."]}},
+                           expected_data={"message": {"username": ["Missing data for required field."],
+                                                      "password": ["Missing data for required field."]}},
                            expected_status_codes=422)
 
         self.assertRequest("post", "/users", data={},
-                           expected_data={"message": {"username": ["This field is required."],
-                                                      "password": ["This field is required."],
-                                                      "email": ["This field is required."]}},
+                           expected_data={"message": {"username": ["Missing data for required field."],
+                                                      "password": ["Missing data for required field."],
+                                                      "email": ["Missing data for required field."]}},
                            expected_status_codes=422)
 
-        self.assertRequest("post", "/users", data={"username": "", "password": "", "email": ""},
-                           expected_data={"message": {"username": ["This field is required."],
-                                                      "password": ["This field is required."],
-                                                      "email": ["This field is required."]}},
+        self.assertRequest("post", "/users", data={"username": "", "password": "", "email": "foo@bar.com"},
+                           expected_data={"message": {"username": ["String does not match expected pattern."],
+                                                      "password": ["Missing data for required field."]}},
+                           expected_status_codes=422)
+
+        self.assertRequest("post", "/users", data={"username": "foo", "password": "a", "email": ""},
+                           expected_data={"message": {"email": ['"" is not a valid email address.']}},
                            expected_status_codes=422)
 
     def test_can_not_add_user_with_bad_username(self):
         bad_usernames = ["_foo",
                          "foo_",
-                         "fo__o",
                          "Foo"]
 
         for username in bad_usernames:
             self.assertRequest("post", "/users", data={"username": username, "password": "a", "email": "foo@bar.com"},
-                               expected_data={"message": {'username': ['Invalid input.']}},
+                               expected_data={"message": {'username': ['String does not match expected pattern.']}},
                                expected_status_codes=422)
 
     def test_can_not_add_user_with_bad_email(self):
         self.assertRequest("post", "/users", data=Users.USER1.set(change={"email": "foo.bar"}),
-                           expected_data={"message": {'email': ['Invalid email address.']}},
+                           expected_data={"message": {'email': ['"foo.bar" is not a valid email address.']}},
                            expected_status_codes=422)
 
 

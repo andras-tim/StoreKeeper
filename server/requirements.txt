@@ -3,7 +3,6 @@ Flask-Bcrypt>=0.6.0
 Flask-Login>=0.2.11
 Flask-RESTful>=0.3.1
 Flask-SQLAlchemy>=2.0
-Flask-WTF>=0.10.0
 git+git://github.com/andras-tim/sqlalchemy-migrate
 Jinja2>=2.7.3
 marshmallow>=0.7.0
@@ -13,5 +12,3 @@ pytest>=2.6.4
 pytest-cov>=1.8.1
 sphinx>=1.2.3
 git+git://github.com/andras-tim/sphinxcontrib-httpdomain
-git+git://github.com/andras-tim/wtforms
-WTForms-Alchemy>=0.13.0

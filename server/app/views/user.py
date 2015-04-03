@@ -1,22 +1,27 @@
-from flask import g
-from flask.ext import restful
-from flask.ext.restful import abort
-
-from app.forms import UserCreateForm, UserUpdateForm
 from app.models import User
+from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleUsers
-from app.serializers import UserSerializer
-from app.server import db, config, api
+from app.serializers import UserSerializer, UserDeserializer
+from app.server import config, api
 from app.views.common import api_func
 
 
-class UserListView(restful.Resource):
+def _set_password(user: User):
+    if hasattr(user, "password"):
+        user.set_password(user.password)
+    return user
+
+
+class UserModelListView(BaseModelListView):
+    _model = User
+    _serializer = UserSerializer
+    _deserializer = UserDeserializer
+
     @api_func("List users", url_tail="users",
               admin_required=True,
               response=[ExampleUsers.ADMIN.get(), ExampleUsers.USER1.get()])
     def get(self):
-        users = User.query.all()
-        return UserSerializer(users, many=True).data
+        return self._get()
 
     @api_func("Create user", url_tail="users",
               admin_required=True,
@@ -24,30 +29,22 @@ class UserListView(restful.Resource):
               response=ExampleUsers.USER1.get(),
               status_codes={422: "there is wrong type / missing field, or user is already exist"})
     def post(self):
-        form = UserCreateForm()
-        if not form.validate_on_submit():
-            abort(422, message=form.errors)
-
-        user = User()
-        form.populate_obj(user)
-        user.set_password(form.password.data)
-
-        db.session.add(user)
-        db.session.commit()
-        return UserSerializer(user).data
+        user = self._post_populate()
+        _set_password(user)
+        return self._post_save(user)
 
 
-class UserView(restful.Resource):
+class UserView(BaseView):
+    _model = User
+    _serializer = UserSerializer
+    _deserializer = UserDeserializer
+
     @api_func("Get user", url_tail="users/2",
               response=ExampleUsers.USER1.get(),
               queries={"id": "ID of selected user"},
               status_codes={404: "there is no user"})
     def get(self, id: int):
-        user = User.get(id=id)
-        if not user:
-            abort(404)
-
-        return UserSerializer(user).data
+        return self._get(id)
 
     @api_func("Update user", url_tail="users/2",
               request=ExampleUsers.USER1.set(change={"username": "new_foo"}),
@@ -55,23 +52,9 @@ class UserView(restful.Resource):
               queries={"id": "ID of selected user for change"},
               status_codes={403: "user can not modify another users", 404: "there is no user"})
     def put(self, id: int):
-        if not g.user.admin and id != g.user.id:
-            abort(403)
-
-        user = User.get(id=id)
-        if not user:
-            abort(404)
-
-        form = UserUpdateForm(obj=user)
-        if not form.validate_on_submit():
-            abort(422, message=form.errors)
-        user.set_password(form.password.data)
-
-        form.populate_obj(user)
-
-        db.session.add(user)
-        db.session.commit()
-        return UserSerializer(user).data
+        user = self._put_populate(id)
+        _set_password(user)
+        return self._put_save(user)
 
     @api_func("Delete user", url_tail="users/2",
               admin_required=True,
@@ -79,17 +62,8 @@ class UserView(restful.Resource):
               queries={"id": "ID of selected user for delete"},
               status_codes={404: "there is no user", 422: "user can not remove itself"})
     def delete(self, id: int):
-        if id == g.user.id:
-            abort(422, message="User can not remove itself")
-
-        user = User.get(id=id)
-        if not user:
-            abort(404)
-
-        db.session.delete(user)
-        db.session.commit()
-        return
+        return self._delete(id)
 
 
-api.add_resource(UserListView, '/%s/api/users' % config.App.NAME, endpoint='users')
+api.add_resource(UserModelListView, '/%s/api/users' % config.App.NAME, endpoint='users')
 api.add_resource(UserView, '/%s/api/users/<int:id>' % config.App.NAME, endpoint='user')

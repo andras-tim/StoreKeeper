@@ -2,17 +2,19 @@ from flask import g, request
 from flask.ext.restful import abort
 from flask.ext.login import current_user, login_required as login_required_decorator, logout_user
 from functools import wraps
+from sqlalchemy.exc import IntegrityError
 
 from app import doc_mode, test_mode
 from app.models import User
 from app.modules.doc_helper import ApiDoc
+from app.modules.view_helper import SqlErrorParser
 from app.server import app, db, lm
 
 
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
-    abort(500)
+    abort(500, message=str(error))
 
 
 @lm.user_loader
@@ -104,3 +106,11 @@ def api_func(title: str, url_tail: str, request: (list, dict, None)=None, respon
         return new_status_codes
 
     return wrapper
+
+
+def commit_with_error_handling(db):
+    try:
+        db.session.commit()
+    except IntegrityError as e:
+        db.session.rollback()
+        abort(422, message=SqlErrorParser.parse(e))

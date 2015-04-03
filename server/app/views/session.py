@@ -3,10 +3,10 @@ from flask.ext import restful
 from flask.ext.restful import abort
 from flask.ext.login import login_user, logout_user
 
-from app.forms import SessionCreateForm
 from app.models import User
 from app.modules.example_data import ExampleUsers
-from app.serializers import UserSerializer
+from app.modules.view_helper import get_validated_request, RequestProcessingError
+from app.serializers import UserSerializer, SessionDeserializer
 from app.server import config, api
 from app.views.common import api_func
 
@@ -15,7 +15,7 @@ class SessionView(restful.Resource):
     @api_func("Get current session", url_tail="sessions",
               response=ExampleUsers.ADMIN.get())
     def get(self):
-        user = User.get(username=g.user.username)
+        user = User.query.filter_by(username=g.user.username).first()
         return UserSerializer(user).data
 
     @api_func("Login user", url_tail="sessions",
@@ -25,12 +25,13 @@ class SessionView(restful.Resource):
               status_codes={401: "bad authentication data or user is disabled",
                             422: "there is wrong type / missing field"})
     def post(self):
-        form = SessionCreateForm()
-        if not form.validate_on_submit():
-            abort(422, message=form.errors)
+        try:
+            data = get_validated_request(SessionDeserializer())
+        except RequestProcessingError as e:
+            abort(422, message=e.message)
 
-        user = User.get(username=form.username.data)
-        if not user or not user.check_password(form.password.data):
+        user = User.query.filter_by(username=data["username"]).first()
+        if not user or not user.check_password(data["password"]):
             abort(401)
         if not login_user(user):
             abort(401)
