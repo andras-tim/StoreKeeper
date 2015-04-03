@@ -76,7 +76,10 @@ class PopulateModelOnSubmit(object):
 
 class SqlErrorParser(object):
     integrity_error_template = re.compile(r"^\(IntegrityError\) (?P<message>.*)$")
-    unique_integrity_error_template = re.compile(r"^UNIQUE constraint failed: (?P<table_field>.*)$")
+    unique_integrity_error_templates = [
+        re.compile(r"^UNIQUE constraint failed: (?P<table_field>.*)$"),
+        re.compile(r"^column (?P<table_field>.*) is not unique$"),
+    ]
     field_name_template = re.compile(r"^[^.]*\.(?P<field>.*)$")
 
     @classmethod
@@ -88,7 +91,11 @@ class SqlErrorParser(object):
             return "Can not commit changes; error=%r" % raw_message
         integrity_error = matches.group("message")
 
-        matches = cls.unique_integrity_error_template.search(integrity_error)
+        matches = None
+        for unique_integrity_error_template in cls.unique_integrity_error_templates:
+            matches = unique_integrity_error_template.search(integrity_error)
+            if matches:
+                break
         if not matches:
             return "Can not commit changes; error=%r" % integrity_error
         table_field = matches.group("table_field")
