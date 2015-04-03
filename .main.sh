@@ -54,6 +54,17 @@ function purge()
     fi
 }
 
+function find_and_purge()
+{
+    find . "$@" | while read rm_path
+    do
+        if [ -e "${rm_path}" ]
+        then
+            purge "${rm_path}"
+        fi
+    done
+}
+
 # Init
 cmd=
 export GLOBAL_INSTALL=${GLOBAL_INSTALL:-false}
