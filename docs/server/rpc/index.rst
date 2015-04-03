@@ -29,3 +29,4 @@ Endpoints
    customers
    acquisitions
    stocktakings
+   items

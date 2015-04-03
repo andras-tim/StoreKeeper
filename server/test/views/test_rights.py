@@ -1,5 +1,6 @@
 from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units, \
-    ExampleCustomers as Customers, ExampleAcquisitions as Acquisitions, ExampleStocktakings as Stocktakings
+    ExampleCustomers as Customers, ExampleAcquisitions as Acquisitions, ExampleStocktakings as Stocktakings, \
+    ExampleItems as Items
 from test.views import CommonRightsTest, rights_data_provider
 
 
@@ -178,5 +179,35 @@ class TestStocktakingRights(CommonRightsTest):
             "post": [("stocktaking2", True)],
             "put": [("stocktaking1", True)],
             "delete": [("stocktaking1", True)],
+        },
+    }
+
+
+@rights_data_provider("/items")
+class TestItemRights(CommonRightsTest):
+    INIT_PUSH = {
+        "/items": [Items.ITEM1],
+        "/vendors": [Vendors.VENDOR1, Vendors.VENDOR2],
+        "/units": [Units.UNIT1, Units.UNIT2],
+    }
+    DATA_MAP = {"item1": Items.ITEM1, "item2": Items.ITEM2}
+    RIGHTS = {
+        "anonymous": {
+            "get": [False, ("item1", False)],
+            "post": [("item2", False)],
+            "put": [("item1", False)],
+            "delete": [("item1", False)],
+        },
+        "admin": {
+            "get": [True, ("item1", True)],
+            "post": [("item2", True)],
+            "put": [("item1", True)],
+            "delete": [("item1", True)],
+        },
+        "user1": {
+            "get": [True, ("item1", True)],
+            "post": [("item2", True)],
+            "put": [("item1", True)],
+            "delete": [("item1", True)],
         },
     }
