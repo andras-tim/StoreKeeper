@@ -6,7 +6,7 @@ from test.views import CommonRightsTest, rights_data_provider
 
 @rights_data_provider("/sessions")
 class TestSessionsRights(CommonRightsTest):
-    INIT_PUSH = {"/users": [Users.USER2]}
+    INIT_PUSH = [("/users", [Users.USER2])]
     DATA_MAP = {"admin": Users.ADMIN, "user1": Users.USER1, "user2": Users.USER2}
     RIGHTS = {
         "anonymous": {
@@ -29,7 +29,7 @@ class TestSessionsRights(CommonRightsTest):
 
 @rights_data_provider("/users")
 class TestUsersRights(CommonRightsTest):
-    INIT_PUSH = {"/users": [Users.USER2]}
+    INIT_PUSH = [("/users", [Users.USER2])]
     DATA_MAP = {"admin": Users.ADMIN, "user1": Users.USER1, "user2": Users.USER2, "user3": Users.USER3}
     RIGHTS = {
         "anonymous": {
@@ -55,7 +55,7 @@ class TestUsersRights(CommonRightsTest):
 
 @rights_data_provider("/vendors")
 class TestVendorRights(CommonRightsTest):
-    INIT_PUSH = {"/vendors": [Vendors.VENDOR1]}
+    INIT_PUSH = [("/vendors", [Vendors.VENDOR1])]
     DATA_MAP = {"vendor1": Vendors.VENDOR1, "vendor2": Vendors.VENDOR2}
     RIGHTS = {
         "anonymous": {
@@ -81,7 +81,7 @@ class TestVendorRights(CommonRightsTest):
 
 @rights_data_provider("/units")
 class TestUnitRights(CommonRightsTest):
-    INIT_PUSH = {"/units": [Units.UNIT1]}
+    INIT_PUSH = [("/units", [Units.UNIT1])]
     DATA_MAP = {"unit1": Units.UNIT1, "unit2": Units.UNIT2}
     RIGHTS = {
         "anonymous": {
@@ -107,7 +107,7 @@ class TestUnitRights(CommonRightsTest):
 
 @rights_data_provider("/customers")
 class TestCustomerRights(CommonRightsTest):
-    INIT_PUSH = {"/customers": [Customers.CUSTOMER1]}
+    INIT_PUSH = [("/customers", [Customers.CUSTOMER1])]
     DATA_MAP = {"customer1": Customers.CUSTOMER1, "customer2": Customers.CUSTOMER2}
     RIGHTS = {
         "anonymous": {
@@ -133,7 +133,7 @@ class TestCustomerRights(CommonRightsTest):
 
 @rights_data_provider("/acquisitions")
 class TestAcquisitionRights(CommonRightsTest):
-    INIT_PUSH = {"/acquisitions": [Acquisitions.ACQUISITION1]}
+    INIT_PUSH = [("/acquisitions", [Acquisitions.ACQUISITION1])]
     DATA_MAP = {"acquisition1": Acquisitions.ACQUISITION1, "acquisition2": Acquisitions.ACQUISITION2}
     RIGHTS = {
         "anonymous": {
@@ -159,7 +159,7 @@ class TestAcquisitionRights(CommonRightsTest):
 
 @rights_data_provider("/stocktakings")
 class TestStocktakingRights(CommonRightsTest):
-    INIT_PUSH = {"/stocktakings": [Stocktakings.STOCKTAKING1]}
+    INIT_PUSH = [("/stocktakings", [Stocktakings.STOCKTAKING1])]
     DATA_MAP = {"stocktaking1": Stocktakings.STOCKTAKING1, "stocktaking2": Stocktakings.STOCKTAKING2}
     RIGHTS = {
         "anonymous": {
@@ -185,11 +185,11 @@ class TestStocktakingRights(CommonRightsTest):
 
 @rights_data_provider("/items")
 class TestItemRights(CommonRightsTest):
-    INIT_PUSH = {
-        "/items": [Items.ITEM1],
-        "/vendors": [Vendors.VENDOR1, Vendors.VENDOR2],
-        "/units": [Units.UNIT1, Units.UNIT2],
-    }
+    INIT_PUSH = [
+        ("/vendors", [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ("/units", [Units.UNIT1, Units.UNIT2]),
+        ("/items", [Items.ITEM1]),
+    ]
     DATA_MAP = {"item1": Items.ITEM1, "item2": Items.ITEM2}
     RIGHTS = {
         "anonymous": {

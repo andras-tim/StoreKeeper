@@ -189,7 +189,7 @@ class CommonRightsTest(CommonSessionTest):
     def setUp(self):
         super().setUp()
         self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
-        for endpoint, push_objects in self.INIT_PUSH.items():
+        for endpoint, push_objects in self.INIT_PUSH:
             for push_object in push_objects:
                 self.assertRequestAsAdmin("post", endpoint, data=push_object.set())
 
