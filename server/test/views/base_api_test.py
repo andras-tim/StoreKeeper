@@ -7,11 +7,11 @@ app.test_mode = True
 
 from app.server import config, app, db
 from app.models import User
-from app.modules.example_data import ExampleUsers as Users
+from app.modules.example_data import ExampleUsers as Users, FilterableDict
 from test.views.base_database_test import CommonTestWithDatabaseSupport
 
 
-class CommonApiTest(CommonTestWithDatabaseSupport):
+class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
     """
     Super class of API based tests
 
@@ -30,8 +30,8 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
         db.session.commit()
         self.client = app.test_client()
 
-    def assertRequest(self, command: str, url: str, data: (dict, None)=None,
-                      expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+    def assertApiRequest(self, command: str, url: str, data: (dict, None)=None,
+                         expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
         response = self.__call_api(command, json.dumps(data), url)
         if expected_data is not None:
             self.__assert_response_data(expected_data, response)
@@ -49,7 +49,7 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
     def __assert_status_code(self, expected_status_codes: (int, list), response: Response):
         if type(expected_status_codes) != list:
             expected_status_codes = [expected_status_codes]
-        assert response.status_code in expected_status_codes
+        assert response.status_code in expected_status_codes, "response: %r" % response.data.decode("utf-8")
 
     def __call_api(self, command: str, data: str, url: str):
         return getattr(self.client, command)("/%s/api%s" % (config.App.NAME, url),
@@ -65,3 +65,109 @@ class CommonApiTest(CommonTestWithDatabaseSupport):
         if not data_type == str:
             data = json.loads(data)
         return data
+
+
+class CommonApiTest(LowLevelCommonApiTest):
+    ENDPOINT = ""
+    INIT_PUSH = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.ENDPOINT:
+            raise ValueError("ENDPOINT class variable was not set")
+
+    def setUp(self):
+        super().setUp()
+        self._fill_up(self.INIT_PUSH)
+
+    def assertApiGet(self, id: (int, None)=None, endpoint: (str, None)=None, expected_data: (list, dict,  None)=None,
+                     expected_status_codes: (int, list)=200):
+        self.assertApiRequest("get", self.__get_url(endpoint, id),
+                              expected_data=self.__extract_data(expected_data, "get"),
+                              expected_status_codes=expected_status_codes)
+
+    def assertApiPost(self, data: dict, endpoint: (str, None)=None, expected_data: (str, list, dict, None)=None,
+                      expected_status_codes: (int, list)=200):
+        self.assertApiRequest("post", self.__get_url(endpoint), data=self.__extract_data(data, "set"),
+                              expected_data=self.__extract_data(expected_data, "get"),
+                              expected_status_codes=expected_status_codes)
+
+    def assertApiPut(self, id: int, data: dict, endpoint: (str, None)=None, expected_data: (str, list, dict, None)=None,
+                     expected_status_codes: (int, list)=200):
+        self.assertApiRequest("put", self.__get_url(endpoint, id), data=data,
+                              expected_data=self.__extract_data(expected_data, "get"),
+                              expected_status_codes=expected_status_codes)
+
+    def assertApiDelete(self, id: int, endpoint: (str, None)=None, expected_data: (str, list, dict, None)=None,
+                        expected_status_codes: (int, list)=200):
+        self.assertApiRequest("delete", self.__get_url(endpoint, id),
+                              expected_data=self.__extract_data(expected_data, "get"),
+                              expected_status_codes=expected_status_codes)
+
+    def _fill_up(self, list_of_endpoint_and_objects: list):
+        for endpoint, push_objects in list_of_endpoint_and_objects:
+            for push_object in push_objects:
+                self.assertApiPost(data=push_object, endpoint=endpoint)
+
+    def __extract_data(self, data: (dict, FilterableDict, list, None), function: str) -> (list, dict, None):
+        if type(data) not in (tuple, list):
+            return self.__extract_item(data, function)
+        data = [self.__extract_item(item, function) for item in data]
+        return data
+
+    def __extract_item(self, item, function: callable):
+        if item is None:
+            return None
+
+        if isinstance(item, FilterableDict):
+            return getattr(item, function)()
+
+        return item
+
+    def __get_url(self, endpoint: (str, None), id: (int, None)=None):
+        endpoint = endpoint or self.ENDPOINT
+
+        url_suffix = ""
+        if id is not None:
+            url_suffix = "/%d" % id
+
+        return "%s%s" % (endpoint, url_suffix)
+
+
+def append_mandatory_field_tests(item_name: str, base_item: FilterableDict, mandatory_fields: list):
+    """
+    Append mandatory field tests decorator
+
+    Example:
+    >>> @append_mandatory_field_tests(item_name="unit")
+    ... class TestUnitWithBrandNewDb(CommonApiTest):
+    ...     ENDPOINT = "/units"
+    ...     MANDATORY_FIELDS = {...}
+    """
+    def decorator(test_class: "CommonApiTest"):
+        if len(mandatory_fields) > 0:
+            append_test(test_class, test_can_not_add_xxx_with_missing_one_mandatory_field)
+        if len(mandatory_fields) > 1:
+            append_test(test_class, test_can_not_add_xxx_with_missing_all_mandatory_fields)
+        return test_class
+
+    def append_test(test_class: "CommonApiTest", func: callable):
+        name = func.__name__.replace("xxx", item_name)
+        setattr(test_class, name, func)
+
+    def test_can_not_add_xxx_with_missing_one_mandatory_field(self):
+        for field_name in mandatory_fields:
+            request = base_item.set()
+            del request[field_name]
+            expected = {"message": {field_name: ["Missing data for required field."]}}
+            self.assertApiPost(data=request, expected_data=expected, expected_status_codes=422)
+
+    def test_can_not_add_xxx_with_missing_all_mandatory_fields(self):
+        request = base_item.set()
+        for field_name in mandatory_fields:
+            del request[field_name]
+        expected = {"message": dict((field_name, ["Missing data for required field."])
+                                    for field_name in mandatory_fields)}
+        self.assertApiPost(data=request, expected_data=expected, expected_status_codes=422)
+
+    return decorator

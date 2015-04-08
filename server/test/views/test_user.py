@@ -1,54 +1,25 @@
 from app.modules.example_data import ExampleUsers as Users
-from test.views.base_api_test import CommonApiTest
+from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
+@append_mandatory_field_tests(item_name="user", base_item=Users.USER1,
+                              mandatory_fields=["username", "password", "email"])
 class TestUserWithBrandNewDb(CommonApiTest):
+    ENDPOINT = "/users"
+
     def test_new_db(self):
-        self.assertRequest("get", "/users", expected_data=[Users.ADMIN.get()])
-        self.assertRequest("get", "/users/1", expected_data=Users.ADMIN.get())
-        self.assertRequest("get", "/users/2", expected_status_codes=404)
+        self.assertApiGet(expected_data=[Users.ADMIN])
+        self.assertApiGet(1, expected_data=Users.ADMIN)
+        self.assertApiGet(2, expected_status_codes=404)
 
     def test_adding_new_users(self):
-        self.assertRequest("post", "/users", data=Users.USER1.set(), expected_data=Users.USER1.get())
-        self.assertRequest("post", "/users", data=Users.USER2.set(), expected_data=Users.USER2.get())
+        self.assertApiPost(data=Users.USER1, expected_data=Users.USER1)
+        self.assertApiPost(data=Users.USER2, expected_data=Users.USER2)
 
     def test_can_not_add_user_with_same_username(self):
-        self.assertRequest("post", "/users", data=Users.USER1.set())
-        self.assertRequest("post", "/users", data=Users.USER2.set(change={"username": Users.USER1["username"]}),
+        self.assertApiPost(data=Users.USER1)
+        self.assertApiPost(data=Users.USER2.set(change={"username": Users.USER1["username"]}),
                            expected_data={'message': {'username': ['Already exists.']}},
-                           expected_status_codes=422)
-
-    def test_can_not_add_user_with_missing_fields(self):
-        self.assertRequest("post", "/users", data={"username": "foo", "password": "a"},
-                           expected_data={"message": {"email": ["Missing data for required field."]}},
-                           expected_status_codes=422)
-
-        self.assertRequest("post", "/users", data={"username": "foo", "email": "foo@bar.com"},
-                           expected_data={"message": {"password": ["Missing data for required field."]}},
-                           expected_status_codes=422)
-
-        self.assertRequest("post", "/users", data={"password": "a", "email": "foo@bar.com"},
-                           expected_data={"message": {"username": ["Missing data for required field."]}},
-                           expected_status_codes=422)
-
-        self.assertRequest("post", "/users", data={"email": "foo@bar.com"},
-                           expected_data={"message": {"username": ["Missing data for required field."],
-                                                      "password": ["Missing data for required field."]}},
-                           expected_status_codes=422)
-
-        self.assertRequest("post", "/users", data={},
-                           expected_data={"message": {"username": ["Missing data for required field."],
-                                                      "password": ["Missing data for required field."],
-                                                      "email": ["Missing data for required field."]}},
-                           expected_status_codes=422)
-
-        self.assertRequest("post", "/users", data={"username": "", "password": "", "email": "foo@bar.com"},
-                           expected_data={"message": {"username": ["String does not match expected pattern."],
-                                                      "password": ["Missing data for required field."]}},
-                           expected_status_codes=422)
-
-        self.assertRequest("post", "/users", data={"username": "foo", "password": "a", "email": ""},
-                           expected_data={"message": {"email": ['"" is not a valid email address.']}},
                            expected_status_codes=422)
 
     def test_can_not_add_user_with_bad_username(self):
@@ -57,56 +28,58 @@ class TestUserWithBrandNewDb(CommonApiTest):
                          "Foo"]
 
         for username in bad_usernames:
-            self.assertRequest("post", "/users", data={"username": username, "password": "a", "email": "foo@bar.com"},
+            self.assertApiPost(data={"username": username, "password": "a", "email": "foo@bar.com"},
                                expected_data={"message": {'username': ['String does not match expected pattern.']}},
                                expected_status_codes=422)
 
     def test_can_not_add_user_with_bad_email(self):
-        self.assertRequest("post", "/users", data=Users.USER1.set(change={"email": "foo.bar"}),
+        self.assertApiPost(data=Users.USER1.set(change={"email": "foo.bar"}),
                            expected_data={"message": {'email': ['"foo.bar" is not a valid email address.']}},
                            expected_status_codes=422)
 
 
 class TestUserWithPreFilledDb(CommonApiTest):
-    def setUp(self):
-        super().setUp()
-        self.assertRequest("post", "/users", data=Users.USER1.set())
-        self.assertRequest("post", "/users", data=Users.USER2.set())
+    ENDPOINT = "/users"
+    INIT_PUSH = [
+        (ENDPOINT, [Users.USER1, Users.USER2])
+    ]
 
     def test_list_users(self):
-        self.assertRequest("get", "/users", expected_data=[Users.ADMIN.get(),
-                                                           Users.USER1.get(),
-                                                           Users.USER2.get()])
+        self.assertApiGet(expected_data=[Users.ADMIN,
+                                         Users.USER1,
+                                         Users.USER2])
 
     def test_get_user(self):
-        self.assertRequest("get", "/users/3", expected_data=Users.USER2.get())
-        self.assertRequest("get", "/users/2", expected_data=Users.USER1.get())
+        self.assertApiGet(3, expected_data=Users.USER2)
+        self.assertApiGet(2, expected_data=Users.USER1)
 
     def test_remove_user(self):
-        self.assertRequest("delete", "/users/2")
-        self.assertRequest("get", "/users", expected_data=[Users.ADMIN.get(),
-                                                           Users.USER2.get()])
+        self.assertApiDelete(2)
+        self.assertApiGet(expected_data=[Users.ADMIN,
+                                         Users.USER2])
 
     def test_can_not_remove_non_existed_user(self):
-        self.assertRequest("delete", "/users/4", expected_status_codes=404)
-        self.assertRequest("get", "/users", expected_data=[Users.ADMIN.get(),
-                                                           Users.USER1.get(),
-                                                           Users.USER2.get()])
+        self.assertApiDelete(4, expected_status_codes=404)
+        self.assertApiGet(expected_data=[Users.ADMIN,
+                                         Users.USER1,
+                                         Users.USER2])
 
     def test_update_user(self):
         request = Users.USER2.set(change={"username": "foo2", "email": "new_foo2@bar.com"})
         response = Users.USER2.get(change={"username": request["username"], "email": request["email"]})
 
-        self.assertRequest("put", "/users/%d" % Users.USER2["id"], data=request, expected_data=response)
-        self.assertRequest("get", "/users", expected_data=[Users.ADMIN.get(), Users.USER1.get(), response])
+        self.assertApiPut(Users.USER2["id"], data=request, expected_data=response)
+        self.assertApiGet(expected_data=[Users.ADMIN,
+                                         Users.USER1,
+                                         response])
 
     def test_update_username_to_name_of_another_user(self):
         request = Users.USER2.set(change={"username": Users.USER1["username"]})
 
-        self.assertRequest("put", "/users/%d" % Users.USER2["id"], data=request, expected_status_codes=422)
+        self.assertApiPut(Users.USER2["id"], data=request, expected_status_codes=422)
 
     def test_update_password(self):
         request = Users.USER1.set(change={"password": "new_pw"})
-        response = Users.USER1.get()
+        response = Users.USER1
 
-        self.assertRequest("put", "/users/%d" % Users.USER1["id"], data=request, expected_data=response)
+        self.assertApiPut(Users.USER1["id"], data=request, expected_data=response)

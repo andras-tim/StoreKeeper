@@ -3,10 +3,10 @@ app.test_mode = True
 
 from app.server import app, lm
 from app.modules.example_data import ExampleUsers as Users
-from test.views.base_api_test import CommonApiTest
+from test.views.base_api_test import LowLevelCommonApiTest
 
 
-class CommonSessionTest(CommonApiTest):
+class CommonSessionTest(LowLevelCommonApiTest):
     """
     Super class of Session tests
 
@@ -34,14 +34,14 @@ class CommonSessionTest(CommonApiTest):
 
     def assertRequest(self, *args, **kwargs):
         if self.admin_is_authenticated:
-            super().assertRequest("delete", "/sessions")
+            super().assertApiRequest("delete", "/sessions")
             self.admin_is_authenticated = False
-        super().assertRequest(*args, **kwargs)
+        super().assertApiRequest(*args, **kwargs)
 
     def assertRequestAsAdmin(self, *args, **kwargs):
         if not self.admin_is_authenticated:
-            super().assertRequest("post", "/sessions", data=Users.ADMIN.login(),
+            super().assertApiRequest("post", "/sessions", data=Users.ADMIN.login(),
                                   expected_data=Users.ADMIN.get(),
                                   expected_status_codes=201)
             self.admin_is_authenticated = True
-        super().assertRequest(*args, **kwargs)
+        super().assertApiRequest(*args, **kwargs)
