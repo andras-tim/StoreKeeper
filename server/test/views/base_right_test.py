@@ -62,10 +62,10 @@ class CommonRightsTest(CommonSessionTest):
 
     def setUp(self):
         super().setUp()
-        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
+        self.assertApiRequestAsAdmin("post", "/users", data=Users.USER1.set())
         for endpoint, push_objects in self.INIT_PUSH:
             for push_object in push_objects:
-                self.assertRequestAsAdmin("post", endpoint, data=push_object.set())
+                self.assertApiRequestAsAdmin("post", endpoint, data=push_object.set())
 
     def check_right(self, actor: str, command: str, expected: bool, data=None):
         url = self.ENDPOINT
@@ -81,11 +81,11 @@ class CommonRightsTest(CommonSessionTest):
             elif actor == "user1":
                 actor = Users.USER1
 
-            self.assertRequest("post", "/sessions", data=actor.login(),
-                               expected_data=actor.get(),
-                               expected_status_codes=201)
+            self.assertApiRequest("post", "/sessions", data=actor.login(),
+                                  expected_data=actor.get(),
+                                  expected_status_codes=201)
 
         expected_status_codes = [200, 201]
         if not expected:
             expected_status_codes = [401, 403]
-        self.assertRequest(command, url, data=data, expected_status_codes=expected_status_codes)
+        self.assertApiRequest(command, url, data=data, expected_status_codes=expected_status_codes)

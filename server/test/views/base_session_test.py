@@ -32,16 +32,16 @@ class CommonSessionTest(LowLevelCommonApiTest):
         app.config["TESTING"] = enable
         lm.init_app(app)
 
-    def assertRequest(self, *args, **kwargs):
+    def assertApiRequest(self, *args, **kwargs):
         if self.admin_is_authenticated:
             super().assertApiRequest("delete", "/sessions")
             self.admin_is_authenticated = False
         super().assertApiRequest(*args, **kwargs)
 
-    def assertRequestAsAdmin(self, *args, **kwargs):
+    def assertApiRequestAsAdmin(self, *args, **kwargs):
         if not self.admin_is_authenticated:
             super().assertApiRequest("post", "/sessions", data=Users.ADMIN.login(),
-                                  expected_data=Users.ADMIN.get(),
-                                  expected_status_codes=201)
+                                     expected_data=Users.ADMIN.get(),
+                                     expected_status_codes=201)
             self.admin_is_authenticated = True
         super().assertApiRequest(*args, **kwargs)
