@@ -1,5 +1,5 @@
 from app.modules.example_data import ExampleUnits as Units
-from test.views import CommonApiTest
+from test.views.base_api_test import CommonApiTest
 
 
 class TestUnitWithBrandNewDb(CommonApiTest):

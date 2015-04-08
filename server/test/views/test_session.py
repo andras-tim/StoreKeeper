@@ -1,5 +1,5 @@
 from app.modules.example_data import ExampleUsers as Users
-from test.views import CommonSessionTest
+from test.views.base_session_test import CommonSessionTest
 
 
 class TestAdminCanLogin(CommonSessionTest):

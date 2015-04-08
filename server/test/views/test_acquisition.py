@@ -1,5 +1,5 @@
 from app.modules.example_data import ExampleAcquisitions as Acquisitions
-from test.views import CommonApiTest
+from test.views.base_api_test import CommonApiTest
 
 
 class TestAcquisitionWithBrandNewDb(CommonApiTest):

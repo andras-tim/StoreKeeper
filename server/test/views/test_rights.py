@@ -1,7 +1,7 @@
 from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units, \
     ExampleCustomers as Customers, ExampleAcquisitions as Acquisitions, ExampleStocktakings as Stocktakings, \
     ExampleItems as Items
-from test.views import CommonRightsTest, rights_data_provider
+from test.views.base_right_test import CommonRightsTest, rights_data_provider
 
 
 @rights_data_provider("/sessions")
