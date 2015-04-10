@@ -36,6 +36,11 @@ function get_count_of_cpu_cores()
     getconf _NPROCESSORS_ONLN
 }
 
+function get_parallel_run_options()
+{
+    echo "-n $[$(get_count_of_cpu_cores) - 1]"
+}
+
 
 # Main
 FAST=false
@@ -57,10 +62,10 @@ fi
 
 if [ "${FAST}" == 'true' ]
 then
-    run_test_with_coverage -m 'not single_threaded' -n $[$(get_count_of_cpu_cores) + 1] "$@"
+    run_test_with_coverage -m 'not single_threaded' $(get_parallel_run_options) "$@"
 elif [ "${QUICK}" == 'true' ]
 then
-    run_test_with_coverage -m 'not single_threaded and not rights_test' -n $[$(get_count_of_cpu_cores) + 1] "$@"
+    run_test_with_coverage -m 'not single_threaded and not rights_test' $(get_parallel_run_options) "$@"
 else
     run_test_with_coverage -v --pdb "$@"
 fi
