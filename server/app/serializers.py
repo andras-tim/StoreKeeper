@@ -90,3 +90,10 @@ class AcquisitionItemSerializer(Serializer):
     acquisition = fields.Nested(AcquisitionSerializer, required=True)
     item = fields.Nested(ItemSerializer, required=True)
     quantity = fields.Int(required=True)
+
+
+class StocktakingItemSerializer(Serializer):
+    id = fields.Int()
+    stocktaking = fields.Nested(StocktakingSerializer, required=True)
+    item = fields.Nested(ItemSerializer, required=True)
+    quantity = fields.Int(required=True)

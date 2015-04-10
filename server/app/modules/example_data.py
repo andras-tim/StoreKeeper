@@ -113,3 +113,12 @@ class ExampleAcquisitionItems:
     ITEM2 = FilterableDict(commons={'acquisition': ExampleAcquisitions.ACQUISITION2.get(),
                                     'item': ExampleItems.ITEM1.get(), 'quantity': 32},
                            getters={'id': 2})
+
+
+class ExampleStocktakingItems:
+    ITEM1 = FilterableDict(commons={'stocktaking': ExampleStocktakings.STOCKTAKING1.get(),
+                                    'item': ExampleItems.ITEM2.get(), 'quantity': 132},
+                           getters={'id': 1})
+    ITEM2 = FilterableDict(commons={'stocktaking': ExampleStocktakings.STOCKTAKING2.get(),
+                                    'item': ExampleItems.ITEM1.get(), 'quantity': 32},
+                           getters={'id': 2})

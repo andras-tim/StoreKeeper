@@ -30,4 +30,5 @@ Endpoints
    acquisitions
    acquisition_items
    stocktakings
+   stocktaking_items
    items
