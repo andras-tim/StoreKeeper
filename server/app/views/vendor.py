@@ -11,15 +11,15 @@ class VendorModelListView(BaseModelListView):
     _serializer = VendorSerializer
     _deserializer = VendorDeserializer
 
-    @api_func("List vendors", url_tail="vendors",
+    @api_func('List vendors', url_tail='vendors',
               response=[ExampleVendors.VENDOR1.get(), ExampleVendors.VENDOR2.get()])
     def get(self):
         return self._get()
 
-    @api_func("Create vendor", url_tail="vendors",
+    @api_func('Create vendor', url_tail='vendors',
               request=ExampleVendors.VENDOR1.set(),
               response=ExampleVendors.VENDOR1.get(),
-              status_codes={422: "there is wrong type / missing field, or vendor is already exist"})
+              status_codes={422: 'there is wrong type / missing field, or vendor is already exist'})
     def post(self):
         return self._post()
 
@@ -29,24 +29,24 @@ class VendorView(BaseView):
     _serializer = VendorSerializer
     _deserializer = VendorDeserializer
 
-    @api_func("Get vendor", url_tail="vendors/1",
+    @api_func('Get vendor', url_tail='vendors/1',
               response=ExampleVendors.VENDOR1.get(),
-              queries={"id": "ID of selected vendor for change"},
-              status_codes={404: "there is no vendor"})
+              queries={'id': 'ID of selected vendor for change'},
+              status_codes={404: 'there is no vendor'})
     def get(self, id: int):
         return self._get(id)
     
-    @api_func("Update vendor", url_tail="vendors/1",
-              request=ExampleVendors.VENDOR1.set(change={"name": "new_foo"}),
-              response=ExampleVendors.VENDOR1.get(change={"name": "new_foo"}),
-              queries={"id": "ID of selected vendor for change"})
+    @api_func('Update vendor', url_tail='vendors/1',
+              request=ExampleVendors.VENDOR1.set(change={'name': 'new_foo'}),
+              response=ExampleVendors.VENDOR1.get(change={'name': 'new_foo'}),
+              queries={'id': 'ID of selected vendor for change'})
     def put(self, id: int):
         return self._put(id)
 
-    @api_func("Delete vendor", url_tail="vendors/1",
+    @api_func('Delete vendor', url_tail='vendors/1',
               response=None,
-              queries={"id": "ID of selected vendor for change"},
-              status_codes={404: "there is no vendor"})
+              queries={'id': 'ID of selected vendor for change'},
+              status_codes={404: 'there is no vendor'})
     def delete(self, id: int):
         return self._delete(id)
 

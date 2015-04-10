@@ -45,7 +45,7 @@ class Vendor(db.Model):
     items = db.relationship('Item', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return "%s" % self.name
+        return '%s' % self.name
 
 
 class Unit(db.Model):
@@ -53,7 +53,7 @@ class Unit(db.Model):
     unit = db.Column(db.String(20), nullable=False, unique=True)
 
     def __repr__(self)-> str:
-        return "%s" % self.unit
+        return '%s' % self.unit
 
 
 class Customer(db.Model):
@@ -61,7 +61,7 @@ class Customer(db.Model):
     name = db.Column(db.String(120), nullable=False, unique=True)
 
     def __repr__(self)-> str:
-        return "%s" % self.name
+        return '%s' % self.name
 
 
 @nested_fields(vendor=Vendor, unit=Unit)
@@ -78,7 +78,7 @@ class Item(db.Model):
     barcodes = db.relationship('Barcode', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return "%s" % self.name
+        return '%s' % self.name
 
 
 @nested_fields(item=Item)
@@ -92,7 +92,7 @@ class Barcode(db.Model):
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return "%s [quantity=%r]" % (self.barcode, self.quantity)
+        return '%s [quantity=%r]' % (self.barcode, self.quantity)
 
 
 @nested_fields(customer=Customer, outbound_close_user=User, return_close_user=User)
@@ -111,7 +111,7 @@ class Work(db.Model):
     work_items = db.relationship('WorkItem', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return "%s [%r]" % (self.id, self.customer)
+        return '%s [%r]' % (self.id, self.customer)
 
 
 @nested_fields(work=Work, item=Item)
@@ -126,7 +126,7 @@ class WorkItem(db.Model):
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return "%s [-%s, +%s]" % (self.item, self.outbound_quantity, self.return_quantity)
+        return '%s [-%s, +%s]' % (self.item, self.outbound_quantity, self.return_quantity)
 
 
 class Acquisition(db.Model):
@@ -137,7 +137,7 @@ class Acquisition(db.Model):
     items = db.relationship('AcquisitionItem', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return "%s [%s]" % (self.id, self.timestamp)
+        return '%s [%s]' % (self.id, self.timestamp)
 
 
 @nested_fields(acquisition=Acquisition, item=Item)
@@ -151,7 +151,7 @@ class AcquisitionItem(db.Model):
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return "%s [%r]" % (self.id, self.item)
+        return '%s [%r]' % (self.id, self.item)
 
 
 class Stocktaking(db.Model):
@@ -162,7 +162,7 @@ class Stocktaking(db.Model):
     items = db.relationship('StocktakingItem', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return "%s [%s]" % (self.id, self.timestamp)
+        return '%s [%s]' % (self.id, self.timestamp)
 
 
 @nested_fields(stocktaking=Stocktaking, item=Item)
@@ -176,4 +176,4 @@ class StocktakingItem(db.Model):
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return "%s [%r]" % (self.id, self.item)
+        return '%s [%r]' % (self.id, self.item)

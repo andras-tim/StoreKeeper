@@ -14,7 +14,7 @@ class ConfigObject:
 
     def __check(self, name: str):
         if name not in self.__config.keys():
-            raise AttributeError("'%s' object has no attribute '%s'" % (self.__class__.__name__, name))
+            raise AttributeError('%r object has no attribute %r' % (self.__class__.__name__, name))
 
     def __getattr__(self, name: str):
         self.__check(name)
@@ -46,21 +46,21 @@ class Config:
 
         raw_config = config_reader(self.__yaml_config_path)
         substituted_config = self.__substitute_config(raw_config)
-        if "CLoader" in dir(yaml):
+        if 'CLoader' in dir(yaml):
             parsed_yaml = yaml.load(substituted_config, Loader=yaml.CLoader)
         else:
-            print("YAML file parsing may be sub-optimal. Please, make available yaml.CLoader with package.sh install!",
+            print('YAML file parsing may be sub-optimal. Please, make available yaml.CLoader with package.sh install!',
                   file=sys.stderr)
             parsed_yaml = yaml.load(substituted_config)
 
-        used_config = used_config or parsed_yaml["USED_CONFIG"]
+        used_config = used_config or parsed_yaml['USED_CONFIG']
         inherited_config = self.__inherit_config(parsed_yaml, used_config)
 
         return ConfigObject(inherited_config[used_config])
 
     @classmethod
     def __read_file(cls, yaml_config_path: str)-> str:
-        with open(yaml_config_path, "r") as fd:
+        with open(yaml_config_path, 'r') as fd:
             raw_config = fd.read()
         return raw_config
 
@@ -76,15 +76,15 @@ class Config:
         parent_stack.append(config_name)
 
         # Has it base?
-        if "Base" not in parsed_yaml[config_name].keys():
+        if 'Base' not in parsed_yaml[config_name].keys():
             return parsed_yaml
 
         # Skipping circular-dependency
-        base_config_name = parsed_yaml[config_name]["Base"]
+        base_config_name = parsed_yaml[config_name]['Base']
         if base_config_name in parent_stack:
-            raise CircularDependencyError("Circular dependency detected in config! callstack=%s" %
-                                     str(parent_stack + [base_config_name]))
-        del parsed_yaml[config_name]["Base"]
+            raise CircularDependencyError('Circular dependency detected in config! callstack=%s' %
+                                          str(parent_stack + [base_config_name]))
+        del parsed_yaml[config_name]['Base']
 
         # Get full config with inherited base config
         parsed_yaml = cls.__inherit_config(parsed_yaml, base_config_name, parent_stack)

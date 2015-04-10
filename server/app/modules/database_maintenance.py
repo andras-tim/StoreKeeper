@@ -31,7 +31,7 @@ class DatabaseMaintenance:
             cls.__database_uri, cls.__migrate_repo_path,
             tmp_module.meta, db.metadata
         )
-        with open(migration, "wt") as fd:
+        with open(migration, 'wt') as fd:
             fd.write(script)
         api.upgrade(cls.__database_uri, cls.__migrate_repo_path)
 

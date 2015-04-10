@@ -3,7 +3,7 @@ from test.views.base_api_test import CommonApiTest
 
 
 class TestStocktakingWithBrandNewDb(CommonApiTest):
-    ENDPOINT = "/stocktakings"
+    ENDPOINT = '/stocktakings'
 
     def test_new_db(self):
         self.assertApiGet(expected_data=[])
@@ -16,11 +16,11 @@ class TestStocktakingWithBrandNewDb(CommonApiTest):
     def test_can_add_stocktaking_with_same_comment(self):
         self.assertApiPost(data=Stocktakings.STOCKTAKING1)
         self.assertApiPost(data=Stocktakings.STOCKTAKING2.set(
-            change={"comment": Stocktakings.STOCKTAKING1["comment"]}))
+            change={'comment': Stocktakings.STOCKTAKING1['comment']}))
 
 
 class TestUserWithPreFilledDb(CommonApiTest):
-    ENDPOINT = "/stocktakings"
+    ENDPOINT = '/stocktakings'
     INIT_PUSH = [
         (ENDPOINT, [Stocktakings.STOCKTAKING1, Stocktakings.STOCKTAKING2])
     ]
@@ -43,14 +43,14 @@ class TestUserWithPreFilledDb(CommonApiTest):
                                          Stocktakings.STOCKTAKING2])
 
     def test_update_stocktaking(self):
-        request = Stocktakings.STOCKTAKING2.set(change={"comment": "A box has been damaged"})
-        response = Stocktakings.STOCKTAKING2.get(change={"comment": request["comment"]})
+        request = Stocktakings.STOCKTAKING2.set(change={'comment': 'A box has been damaged'})
+        response = Stocktakings.STOCKTAKING2.get(change={'comment': request['comment']})
 
-        self.assertApiPut(Stocktakings.STOCKTAKING2["id"], data=request, expected_data=response)
+        self.assertApiPut(Stocktakings.STOCKTAKING2['id'], data=request, expected_data=response)
         self.assertApiGet(expected_data=[Stocktakings.STOCKTAKING1,
                                          response])
 
     def test_update_name_to_name_of_another_stocktaking(self):
-        request = Stocktakings.STOCKTAKING2.set(change={"comment": Stocktakings.STOCKTAKING1["comment"]})
+        request = Stocktakings.STOCKTAKING2.set(change={'comment': Stocktakings.STOCKTAKING1['comment']})
 
-        self.assertApiPut(Stocktakings.STOCKTAKING2["id"], data=request)
+        self.assertApiPut(Stocktakings.STOCKTAKING2['id'], data=request)

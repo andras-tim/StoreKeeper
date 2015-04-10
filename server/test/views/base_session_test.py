@@ -39,20 +39,20 @@ class CommonSessionTest(CommonApiTest):
                        expected_status_codes: (int, list)=201):
         if isinstance(credential, ExampleUser):
             credential = credential.login()
-        self.assertApiPost(data=credential, endpoint="/sessions",
+        self.assertApiPost(data=credential, endpoint='/sessions',
                            expected_data=expected_data, expected_status_codes=expected_status_codes)
         self.authenticated_user = credential
 
     def assertApiLogout(self, expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
-        self.assertApiDelete(expected_data=expected_data, endpoint="/sessions",
+        self.assertApiDelete(expected_data=expected_data, endpoint='/sessions',
                              expected_status_codes=expected_status_codes)
         self.authenticated_user = None
 
     def assertApiSession(self, expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
-        self.assertApiGet(expected_data=expected_data, endpoint="/sessions",
+        self.assertApiGet(expected_data=expected_data, endpoint='/sessions',
                           expected_status_codes=expected_status_codes)
 
     @classmethod
     def __set_testing_mode(cls, enable: bool):
-        app.config["TESTING"] = enable
+        app.config['TESTING'] = enable
         lm.init_app(app)

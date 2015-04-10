@@ -1,7 +1,7 @@
 
 
 class ConfigMock:
-    def __init__(self, used_config: str="ProductionConfig"):
+    def __init__(self, used_config: str='ProductionConfig'):
         self.used_config = used_config
 
     def config_reader(self, *args, **kwargs)-> str:

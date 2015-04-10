@@ -4,7 +4,7 @@ from app.modules.doc_helper import ApiDoc
 
 class TestApiDoc(ApiDocTestCase):
     def test_minimal_case(self):
-        results = ApiDoc.get_doc(title="Test command", command="delete", url_tail="foo")
+        results = ApiDoc.get_doc(title='Test command', command='delete', url_tail='foo')
         self.assertApiDoc(results, """
         Test command
 
@@ -27,11 +27,11 @@ class TestApiDoc(ApiDocTestCase):
         """)
 
     def test_full_case_with_auto_filled_status_code(self):
-        results = ApiDoc.get_doc(title="Test command", command="push", url_tail="foobar/2",
-                                 request=[{"apple": 1, "banana": {"small": 2, "big": 3}}, {"tree": 1}],
-                                 response=[{"orange": 4}, 5], response_status=201,
-                                 queries={"foobar_id": "Foobar selector"},
-                                 status_codes={201: "", 404: "something is missing"})
+        results = ApiDoc.get_doc(title='Test command', command='push', url_tail='foobar/2',
+                                 request=[{'apple': 1, 'banana': {'small': 2, 'big': 3}}, {'tree': 1}],
+                                 response=[{'orange': 4}, 5], response_status=201,
+                                 queries={'foobar_id': 'Foobar selector'},
+                                 status_codes={201: '', 404: 'something is missing'})
         self.assertApiDoc(results, """
         Test command
 
