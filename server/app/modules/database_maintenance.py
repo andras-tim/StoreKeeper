@@ -5,7 +5,7 @@ from migrate.versioning import api
 from app.server import db, config
 
 
-class DatabaseMaintenance(object):
+class DatabaseMaintenance:
     __database_uri = config.Flask.SQLALCHEMY_DATABASE_URI
     __migrate_repo_path = config.App.MIGRATE_REPO_PATH
 

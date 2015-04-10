@@ -1,6 +1,6 @@
 
 
-class ConfigMock(object):
+class ConfigMock:
     def __init__(self, used_config: str="ProductionConfig"):
         self.used_config = used_config
 

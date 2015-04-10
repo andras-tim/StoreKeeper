@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-class FilterableDict(object):
+class FilterableDict:
     def __init__(self, commons: (dict, None)=None, getters: (dict, None)=None, setters: (dict, None)=None):
         self.__commons = commons or {}
         self.__getters = getters or {}
@@ -38,7 +38,7 @@ class ExampleUser(FilterableDict):
         return {"username": username or self["username"], "password": password or self["password"]}
 
 
-class ExampleTimestamp(object):
+class ExampleTimestamp:
     REST_API_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%f+00:00"
 
     @classmethod
@@ -46,7 +46,7 @@ class ExampleTimestamp(object):
         return datetime.utcnow().strftime(cls.REST_API_DATE_FORMAT)
 
 
-class ExampleUsers(object):
+class ExampleUsers:
     ADMIN = ExampleUser(commons={"username": "admin", "email": "admin@test.com"},
                         setters={"password": "secret"},
                         getters={"admin": True, "id": 1, "disabled": False})
@@ -64,40 +64,40 @@ class ExampleUsers(object):
                         getters={"admin": False, "id": 4, "disabled": False})
 
 
-class ExampleVendors(object):
+class ExampleVendors:
     VENDOR1 = FilterableDict(commons={"name": "Heavy Duty Ltd."},
                              getters={"id": 1})
     VENDOR2 = FilterableDict(commons={"name": "Star Shop Ltd."},
                              getters={"id": 2})
 
 
-class ExampleUnits(object):
+class ExampleUnits:
     UNIT1 = FilterableDict(commons={"unit": "m"},
                            getters={"id": 1})
     UNIT2 = FilterableDict(commons={"unit": "pcs"},
                            getters={"id": 2})
 
 
-class ExampleCustomers(object):
+class ExampleCustomers:
     CUSTOMER1 = FilterableDict(commons={"name": "Big Customer Ltd."},
                                getters={"id": 1})
     CUSTOMER2 = FilterableDict(commons={"name": "Buy Everything Co."},
                                getters={"id": 2})
 
 
-class ExampleAcquisitions(object):
+class ExampleAcquisitions:
     ACQUISITION1 = FilterableDict(commons={"comment": "Maybe missing some items"},
                                   getters={"id": 1, "timestamp": ExampleTimestamp.utcnow()})
     ACQUISITION2 = FilterableDict(getters={"id": 2, "comment": "", "timestamp": ExampleTimestamp.utcnow()})
 
 
-class ExampleStocktakings(object):
+class ExampleStocktakings:
     STOCKTAKING1 = FilterableDict(commons={"comment": "Maybe missing some items"},
                                   getters={"id": 1, "timestamp": ExampleTimestamp.utcnow()})
     STOCKTAKING2 = FilterableDict(getters={"id": 2, "comment": "", "timestamp": ExampleTimestamp.utcnow()})
 
 
-class ExampleItems(object):
+class ExampleItems:
     ITEM1 = FilterableDict(commons={"name": "Spray", "vendor": ExampleVendors.VENDOR1.get(), "article_number": 132465,
                                     "quantity": 132, "unit": ExampleUnits.UNIT2.get()},
                            getters={"id": 1})

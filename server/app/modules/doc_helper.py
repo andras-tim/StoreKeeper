@@ -6,7 +6,7 @@ from jinja2 import Template
 from app.server import config
 
 
-class ApiDoc(object):
+class ApiDoc:
     __API_CALL_TEMPLATE = Template("""
     {{ title }}
     {% for query in queries %}

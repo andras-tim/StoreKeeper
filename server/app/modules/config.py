@@ -8,7 +8,7 @@ class CircularDependencyError(Exception):
     pass
 
 
-class ConfigObject(object):
+class ConfigObject:
     def __init__(self, config_dict: dict):
         self.__config = config_dict
 
@@ -35,7 +35,7 @@ class ConfigObject(object):
         return self.__config
 
 
-class Config(object):
+class Config:
     def __init__(self, yaml_config_path: str, config_variables: dict=None):
         self.__yaml_config_path = yaml_config_path
         self.__config_variables = config_variables or {}

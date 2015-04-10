@@ -20,7 +20,7 @@ class RequestProcessingError(Exception):
         self.message = message
 
 
-class PopulateModelOnSubmit(object):
+class PopulateModelOnSubmit:
     def __init__(self, item, deserializer: Serializer):
         self.__item = item
         self.__deserializer = deserializer
@@ -74,7 +74,7 @@ class PopulateModelOnSubmit(object):
         return
 
 
-class SqlErrorParser(object):
+class SqlErrorParser:
     integrity_error_template = re.compile(r"^\(IntegrityError\) (?P<message>.*)$")
     unique_integrity_error_templates = [
         re.compile(r"^UNIQUE constraint failed: (?P<table_field>.*)$"),
