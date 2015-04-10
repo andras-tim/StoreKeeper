@@ -80,7 +80,7 @@ class CommonApiTest(LowLevelCommonApiTest):
         super().setUp()
         self._fill_up(self.INIT_PUSH)
 
-    def assertApiGet(self, id: (int, None)=None, endpoint: (str, None)=None, expected_data: (list, dict,  None)=None,
+    def assertApiGet(self, id: (int, None)=None, endpoint: (str, None)=None, expected_data: (list, dict, None)=None,
                      expected_status_codes: (int, list)=200):
         self.assertApiRequest('get', self.__get_url(endpoint, id),
                               expected_data=self.__extract_data(expected_data, 'get'),

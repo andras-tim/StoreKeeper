@@ -35,7 +35,7 @@ class UnitView(BaseView):
               status_codes={404: 'there is no unit'})
     def get(self, id: int):
         return self._get(id)
-    
+
     @api_func('Update unit', url_tail='units/1',
               request=ExampleUnits.UNIT1.set(change={'unit': 'dl'}),
               response=ExampleUnits.UNIT1.get(change={'unit': 'dl'}),

@@ -35,7 +35,7 @@ class VendorView(BaseView):
               status_codes={404: 'there is no vendor'})
     def get(self, id: int):
         return self._get(id)
-    
+
     @api_func('Update vendor', url_tail='vendors/1',
               request=ExampleVendors.VENDOR1.set(change={'name': 'new_foo'}),
               response=ExampleVendors.VENDOR1.get(change={'name': 'new_foo'}),

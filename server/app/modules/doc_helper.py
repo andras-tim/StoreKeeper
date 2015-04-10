@@ -41,7 +41,7 @@ class ApiDoc:
         403: ['FORBIDDEN', 'user has not enough rights'],
         404: ['NOT FOUND', ''],
         422: ['UNPROCESSABLE ENTITY', 'there is missing field'],
-        }
+    }
 
     @classmethod
     def get_doc(cls, title: str, command: str, url_tail: str, request: (list, dict, None)=None,
