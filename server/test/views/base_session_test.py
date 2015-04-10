@@ -2,11 +2,11 @@ import app
 app.test_mode = True
 
 from app.server import app, lm
-from app.modules.example_data import ExampleUsers as Users
-from test.views.base_api_test import LowLevelCommonApiTest
+from app.modules.example_data import ExampleUsers as Users, ExampleUser
+from test.views.base_api_test import CommonApiTest
 
 
-class CommonSessionTest(LowLevelCommonApiTest):
+class CommonSessionTest(CommonApiTest):
     """
     Super class of Session tests
 
@@ -16,7 +16,7 @@ class CommonSessionTest(LowLevelCommonApiTest):
     def setUp(self):
         CommonSessionTest.__set_testing_mode(False)
         super().setUp()
-        self.admin_is_authenticated = False
+        self.authenticated_user = None
 
     def tearDown(self):
         super().tearDown()
@@ -27,21 +27,32 @@ class CommonSessionTest(LowLevelCommonApiTest):
         super().tearDownClass()
         cls.__set_testing_mode(True)
 
+    def _fill_up(self, list_of_endpoint_and_objects: list):
+        if not self.INIT_PUSH:
+            return
+
+        self.assertApiLogin(Users.ADMIN)
+        super()._fill_up(list_of_endpoint_and_objects)
+        self.assertApiLogout()
+
+    def assertApiLogin(self, credential: (dict, ExampleUser), expected_data: (str, list, dict, None)=None,
+                       expected_status_codes: (int, list)=201):
+        if isinstance(credential, ExampleUser):
+            credential = credential.login()
+        self.assertApiPost(data=credential, endpoint="/sessions",
+                           expected_data=expected_data, expected_status_codes=expected_status_codes)
+        self.authenticated_user = credential
+
+    def assertApiLogout(self, expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+        self.assertApiDelete(expected_data=expected_data, endpoint="/sessions",
+                             expected_status_codes=expected_status_codes)
+        self.authenticated_user = None
+
+    def assertApiSession(self, expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+        self.assertApiGet(expected_data=expected_data, endpoint="/sessions",
+                          expected_status_codes=expected_status_codes)
+
     @classmethod
     def __set_testing_mode(cls, enable: bool):
         app.config["TESTING"] = enable
         lm.init_app(app)
-
-    def assertApiRequest(self, *args, **kwargs):
-        if self.admin_is_authenticated:
-            super().assertApiRequest("delete", "/sessions")
-            self.admin_is_authenticated = False
-        super().assertApiRequest(*args, **kwargs)
-
-    def assertApiRequestAsAdmin(self, *args, **kwargs):
-        if not self.admin_is_authenticated:
-            super().assertApiRequest("post", "/sessions", data=Users.ADMIN.login(),
-                                     expected_data=Users.ADMIN.get(),
-                                     expected_status_codes=201)
-            self.admin_is_authenticated = True
-        super().assertApiRequest(*args, **kwargs)

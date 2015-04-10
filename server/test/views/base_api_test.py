@@ -98,8 +98,8 @@ class CommonApiTest(LowLevelCommonApiTest):
                               expected_data=self.__extract_data(expected_data, "get"),
                               expected_status_codes=expected_status_codes)
 
-    def assertApiDelete(self, id: int, endpoint: (str, None)=None, expected_data: (str, list, dict, None)=None,
-                        expected_status_codes: (int, list)=200):
+    def assertApiDelete(self, id: (int, None)=None, endpoint: (str, None)=None,
+                        expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
         self.assertApiRequest("delete", self.__get_url(endpoint, id),
                               expected_data=self.__extract_data(expected_data, "get"),
                               expected_status_codes=expected_status_codes)
