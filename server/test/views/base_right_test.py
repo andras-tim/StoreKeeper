@@ -44,6 +44,7 @@ def rights_data_provider(endpoint: str):
     return decorator
 
 
+@pytest.mark.rights_test
 class CommonRightsTest(CommonSessionTest):
     DATA_MAP = {}
     RIGHTS = ()
