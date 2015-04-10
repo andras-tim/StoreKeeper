@@ -8,6 +8,16 @@ from test.views.base_session_test import CommonSessionTest
 
 
 def rights_data_provider(endpoint: str):
+    """
+    Data provider decorator for rights
+
+    Example:
+    >>> @rights_data_provider("/unit")
+    ... class TestAcquisitionRights(CommonRightsTest):
+    ...     INIT_PUSH = [...]
+    ...     DATA_MAP = {...}
+    ...     RIGHTS = {...}
+    """
     def decorator(test_class):
         setattr(test_class, "ENDPOINT", endpoint)
         for right in test_class.iterate_rights(test_class.RIGHTS):
@@ -34,10 +44,7 @@ def rights_data_provider(endpoint: str):
     return decorator
 
 
-@pytest.mark.single_threaded
 class CommonRightsTest(CommonSessionTest):
-    ENDPOINT = ""  # Use rights_data_provider() decorator
-    INIT_PUSH = {}
     DATA_MAP = {}
     RIGHTS = ()
 
@@ -60,12 +67,13 @@ class CommonRightsTest(CommonSessionTest):
             data, exp = expected
             yield {"actor": actor, "command": command, "data": data, "expected": exp}
 
-    def setUp(self):
-        super().setUp()
-        self.assertApiRequestAsAdmin("post", "/users", data=Users.USER1.set())
-        for endpoint, push_objects in self.INIT_PUSH:
-            for push_object in push_objects:
-                self.assertApiRequestAsAdmin("post", endpoint, data=push_object.set())
+    def _fill_up(self, list_of_endpoint_and_objects: list):
+        new_list = [
+            ("/users", [Users.USER1]),
+        ]
+        new_list.extend(list_of_endpoint_and_objects)
+
+        super()._fill_up(new_list)
 
     def check_right(self, actor: str, command: str, expected: bool, data=None):
         url = self.ENDPOINT
@@ -81,11 +89,11 @@ class CommonRightsTest(CommonSessionTest):
             elif actor == "user1":
                 actor = Users.USER1
 
-            self.assertApiRequest("post", "/sessions", data=actor.login(),
-                                  expected_data=actor.get(),
-                                  expected_status_codes=201)
+            self.assertApiLogin(credential=actor,
+                                expected_data=actor)
 
         expected_status_codes = [200, 201]
         if not expected:
             expected_status_codes = [401, 403]
-        self.assertApiRequest(command, url, data=data, expected_status_codes=expected_status_codes)
+        self.assertApiRequest(command, url, data=data,
+                              expected_status_codes=expected_status_codes)
