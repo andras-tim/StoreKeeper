@@ -83,3 +83,10 @@ class ItemSerializer(Serializer):
     article_number = fields.Int(default=None)
     quantity = fields.Int(required=True)
     unit = fields.Nested(UnitSerializer, required=True)
+
+
+class AcquisitionItemSerializer(Serializer):
+    id = fields.Int()
+    acquisition = fields.Nested(AcquisitionSerializer, required=True)
+    item = fields.Nested(ItemSerializer, required=True)
+    quantity = fields.Int(required=True)

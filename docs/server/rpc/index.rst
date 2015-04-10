@@ -28,5 +28,6 @@ Endpoints
    units
    customers
    acquisitions
+   acquisition_items
    stocktakings
    items

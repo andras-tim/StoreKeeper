@@ -1,6 +1,6 @@
 from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units, \
     ExampleCustomers as Customers, ExampleAcquisitions as Acquisitions, ExampleStocktakings as Stocktakings, \
-    ExampleItems as Items
+    ExampleItems as Items, ExampleAcquisitionItems as AcquisitionItems
 from test.views.base_right_test import CommonRightsTest, rights_data_provider
 
 
@@ -191,6 +191,38 @@ class TestItemRights(CommonRightsTest):
         ('/items', [Items.ITEM1]),
     ]
     DATA_MAP = {'item1': Items.ITEM1, 'item2': Items.ITEM2}
+    RIGHTS = {
+        'anonymous': {
+            'get': [False, ('item1', False)],
+            'post': [('item2', False)],
+            'put': [('item1', False)],
+            'delete': [('item1', False)],
+        },
+        'admin': {
+            'get': [True, ('item1', True)],
+            'post': [('item2', True)],
+            'put': [('item1', True)],
+            'delete': [('item1', True)],
+        },
+        'user1': {
+            'get': [True, ('item1', True)],
+            'post': [('item2', True)],
+            'put': [('item1', True)],
+            'delete': [('item1', True)],
+        },
+    }
+
+
+@rights_data_provider('/acquisition-items')
+class TestAcquisitionItemRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/acquisitions', [Acquisitions.ACQUISITION1, Acquisitions.ACQUISITION2]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1, Items.ITEM2]),
+        ('/acquisition-items', [AcquisitionItems.ITEM1]),
+    ]
+    DATA_MAP = {'item1': AcquisitionItems.ITEM1, 'item2': AcquisitionItems.ITEM2}
     RIGHTS = {
         'anonymous': {
             'get': [False, ('item1', False)],
