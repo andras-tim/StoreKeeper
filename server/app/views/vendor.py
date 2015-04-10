@@ -6,7 +6,7 @@ from app.server import config, api
 from app.views.common import api_func
 
 
-class VendorModelListView(BaseModelListView):
+class VendorListView(BaseModelListView):
     _model = Vendor
     _serializer = VendorSerializer
     _deserializer = VendorDeserializer
@@ -51,5 +51,5 @@ class VendorView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(VendorModelListView, '/{!s}/api/vendors'.format(config.App.NAME), endpoint='vendors')
+api.add_resource(VendorListView, '/{!s}/api/vendors'.format(config.App.NAME), endpoint='vendors')
 api.add_resource(VendorView, '/{!s}/api/vendors/<int:id>'.format(config.App.NAME), endpoint='vendor')

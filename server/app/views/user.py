@@ -12,7 +12,7 @@ def _set_password(user: User):
     return user
 
 
-class UserModelListView(BaseModelListView):
+class UserListView(BaseModelListView):
     _model = User
     _serializer = UserSerializer
     _deserializer = UserDeserializer
@@ -65,5 +65,5 @@ class UserView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(UserModelListView, '/{!s}/api/users'.format(config.App.NAME), endpoint='users')
+api.add_resource(UserListView, '/{!s}/api/users'.format(config.App.NAME), endpoint='users')
 api.add_resource(UserView, '/{!s}/api/users/<int:id>'.format(config.App.NAME), endpoint='user')

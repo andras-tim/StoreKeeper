@@ -6,7 +6,7 @@ from app.server import config, api
 from app.views.common import api_func
 
 
-class UnitModelListView(BaseModelListView):
+class UnitListView(BaseModelListView):
     _model = Unit
     _serializer = UnitSerializer
     _deserializer = UnitDeserializer
@@ -51,5 +51,5 @@ class UnitView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(UnitModelListView, '/{!s}/api/units'.format(config.App.NAME), endpoint='units')
+api.add_resource(UnitListView, '/{!s}/api/units'.format(config.App.NAME), endpoint='units')
 api.add_resource(UnitView, '/{!s}/api/units/<int:id>'.format(config.App.NAME), endpoint='unit')

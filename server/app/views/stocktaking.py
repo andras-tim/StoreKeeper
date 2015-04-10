@@ -6,7 +6,7 @@ from app.server import config, api
 from app.views.common import api_func
 
 
-class StocktakingModelListView(BaseModelListView):
+class StocktakingListView(BaseModelListView):
     _model = Stocktaking
     _serializer = StocktakingSerializer
     _deserializer = StocktakingDeserializer
@@ -51,5 +51,5 @@ class StocktakingView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(StocktakingModelListView, '/{!s}/api/stocktakings'.format(config.App.NAME), endpoint='stocktakings')
+api.add_resource(StocktakingListView, '/{!s}/api/stocktakings'.format(config.App.NAME), endpoint='stocktakings')
 api.add_resource(StocktakingView, '/{!s}/api/stocktakings/<int:id>'.format(config.App.NAME), endpoint='stocktaking')

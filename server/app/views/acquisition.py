@@ -6,7 +6,7 @@ from app.server import config, api
 from app.views.common import api_func
 
 
-class AcquisitionModelListView(BaseModelListView):
+class AcquisitionListView(BaseModelListView):
     _model = Acquisition
     _serializer = AcquisitionSerializer
     _deserializer = AcquisitionDeserializer
@@ -51,5 +51,5 @@ class AcquisitionView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(AcquisitionModelListView, '/{!s}/api/acquisitions'.format(config.App.NAME), endpoint='acquisitions')
+api.add_resource(AcquisitionListView, '/{!s}/api/acquisitions'.format(config.App.NAME), endpoint='acquisitions')
 api.add_resource(AcquisitionView, '/{!s}/api/acquisitions/<int:id>'.format(config.App.NAME), endpoint='acquisition')
