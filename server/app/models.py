@@ -13,7 +13,7 @@ class User(db.Model):
     disabled = db.Column(db.Boolean, nullable=False, default=False)
 
     def __repr__(self)-> str:
-        return '%s [admin=%r disabled=%r]' % (self.username, self.admin, self.disabled)
+        return '{!s} [admin={!r} disabled={!r}]'.format(self.username, self.admin, self.disabled)
 
     def set_password(self, password: str):
         self.password_hash = bcrypt.generate_password_hash(password)
@@ -45,7 +45,7 @@ class Vendor(db.Model):
     items = db.relationship('Item', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return '%s' % self.name
+        return '{!s}'.format(self.name)
 
 
 class Unit(db.Model):
@@ -53,7 +53,7 @@ class Unit(db.Model):
     unit = db.Column(db.String(20), nullable=False, unique=True)
 
     def __repr__(self)-> str:
-        return '%s' % self.unit
+        return '{!s}'.format(self.unit)
 
 
 class Customer(db.Model):
@@ -61,7 +61,7 @@ class Customer(db.Model):
     name = db.Column(db.String(120), nullable=False, unique=True)
 
     def __repr__(self)-> str:
-        return '%s' % self.name
+        return '{!s}'.format(self.name)
 
 
 @nested_fields(vendor=Vendor, unit=Unit)
@@ -78,7 +78,7 @@ class Item(db.Model):
     barcodes = db.relationship('Barcode', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return '%s' % self.name
+        return '{!s}'.format(self.name)
 
 
 @nested_fields(item=Item)
@@ -92,7 +92,7 @@ class Barcode(db.Model):
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return '%s [quantity=%r]' % (self.barcode, self.quantity)
+        return '{!s} [quantity={!r}]'.format(self.barcode, self.quantity)
 
 
 @nested_fields(customer=Customer, outbound_close_user=User, return_close_user=User)
@@ -111,7 +111,7 @@ class Work(db.Model):
     work_items = db.relationship('WorkItem', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return '%s [%r]' % (self.id, self.customer)
+        return '{!s} [{!r}]'.format(self.id, self.customer)
 
 
 @nested_fields(work=Work, item=Item)
@@ -126,7 +126,7 @@ class WorkItem(db.Model):
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return '%s [-%s, +%s]' % (self.item, self.outbound_quantity, self.return_quantity)
+        return '{!s} [-{!s}, +{!s}]'.format(self.item, self.outbound_quantity, self.return_quantity)
 
 
 class Acquisition(db.Model):
@@ -137,7 +137,7 @@ class Acquisition(db.Model):
     items = db.relationship('AcquisitionItem', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return '%s [%s]' % (self.id, self.timestamp)
+        return '{!s} [{!s}]'.format(self.id, self.timestamp)
 
 
 @nested_fields(acquisition=Acquisition, item=Item)
@@ -151,7 +151,7 @@ class AcquisitionItem(db.Model):
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return '%s [%r]' % (self.id, self.item)
+        return '{!s} [{!r}]'.format(self.id, self.item)
 
 
 class Stocktaking(db.Model):
@@ -162,7 +162,7 @@ class Stocktaking(db.Model):
     items = db.relationship('StocktakingItem', lazy='dynamic')
 
     def __repr__(self)-> str:
-        return '%s [%s]' % (self.id, self.timestamp)
+        return '{!s} [{!s}]'.format(self.id, self.timestamp)
 
 
 @nested_fields(stocktaking=Stocktaking, item=Item)
@@ -176,4 +176,4 @@ class StocktakingItem(db.Model):
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return '%s [%r]' % (self.id, self.item)
+        return '{!s} [{!r}]'.format(self.id, self.item)

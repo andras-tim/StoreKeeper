@@ -14,7 +14,7 @@ class ConfigObject:
 
     def __check(self, name: str):
         if name not in self.__config.keys():
-            raise AttributeError('%r object has no attribute %r' % (self.__class__.__name__, name))
+            raise AttributeError('{!r} object has no attribute {!r}'.format(self.__class__.__name__, name))
 
     def __getattr__(self, name: str):
         self.__check(name)
@@ -82,8 +82,8 @@ class Config:
         # Skipping circular-dependency
         base_config_name = parsed_yaml[config_name]['Base']
         if base_config_name in parent_stack:
-            raise CircularDependencyError('Circular dependency detected in config! callstack=%s' %
-                                          str(parent_stack + [base_config_name]))
+            raise CircularDependencyError('Circular dependency detected in config! callstack={!s}'.format(
+                                          str(parent_stack + [base_config_name])))
         del parsed_yaml[config_name]['Base']
 
         # Get full config with inherited base config

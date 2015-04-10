@@ -88,7 +88,7 @@ class ApiDoc:
 
     @classmethod
     def __format_response_status(cls, response_status: int) -> str:
-        return '%d %s' % (response_status, cls.__STATUSES[response_status][0])
+        return '{:d} {!s}'.format(response_status, cls.__STATUSES[response_status][0])
 
     @classmethod
     def __json_dump_to_lines(cls, data: (list, dict, None)) -> list:

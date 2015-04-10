@@ -51,5 +51,5 @@ class UnitView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(UnitModelListView, '/%s/api/units' % config.App.NAME, endpoint='units')
-api.add_resource(UnitView, '/%s/api/units/<int:id>' % config.App.NAME, endpoint='unit')
+api.add_resource(UnitModelListView, '/{!s}/api/units'.format(config.App.NAME), endpoint='units')
+api.add_resource(UnitView, '/{!s}/api/units/<int:id>'.format(config.App.NAME), endpoint='unit')

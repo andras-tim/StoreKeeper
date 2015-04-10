@@ -51,5 +51,5 @@ class StocktakingView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(StocktakingModelListView, '/%s/api/stocktakings' % config.App.NAME, endpoint='stocktakings')
-api.add_resource(StocktakingView, '/%s/api/stocktakings/<int:id>' % config.App.NAME, endpoint='stocktaking')
+api.add_resource(StocktakingModelListView, '/{!s}/api/stocktakings'.format(config.App.NAME), endpoint='stocktakings')
+api.add_resource(StocktakingView, '/{!s}/api/stocktakings/<int:id>'.format(config.App.NAME), endpoint='stocktaking')

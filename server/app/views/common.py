@@ -19,7 +19,7 @@ def internal_error(error):
 
 @lm.user_loader
 def load_user(unique_id):
-    app.logger.debug('load_user: %s' % unique_id)
+    app.logger.debug('load_user: {!s}'.format(unique_id))
     return User.query.get(int(unique_id))
 
 
@@ -31,14 +31,14 @@ def before_request():
 
     if g.user.is_authenticated() and not g.user.is_active():
         logout_user()
-        app.logger.debug('before_request: user: %s\nlogged out because is not active' % str(g.user))
+        app.logger.debug('before_request: user: {!r}\nlogged out because is not active'.format(g.user))
 
     if g.user.is_authenticated():
-        app.logger.debug('before_request: user: %s\nauthenticated' % str(g.user))
+        app.logger.debug('before_request: user: {!r}\nauthenticated'.format(g.user))
     else:
         g.user.id = None
         g.user.admin = app.config['TESTING']
-        app.logger.debug('before_request: user: %s\nnot authenticated' % str(g.user))
+        app.logger.debug('before_request: user: {!r}\nnot authenticated'.format(g.user))
 
 
 def admin_login_required(func: callable):
@@ -84,7 +84,7 @@ def api_func(title: str, url_tail: str, request: (list, dict, None)=None, respon
     def __get_title() -> str:
         if not admin_required:
             return title
-        return '%s *(for administrators only)*' % title
+        return '{!s} *(for administrators only)*'.format(title)
 
     def __get_response_status(func: callable) -> int:
         if func.__name__ == 'post':

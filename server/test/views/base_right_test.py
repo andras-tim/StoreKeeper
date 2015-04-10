@@ -79,7 +79,7 @@ class CommonRightsTest(CommonSessionTest):
     def check_right(self, actor: str, command: str, expected: bool, data=None):
         url = self.ENDPOINT
         if data is not None and command != 'post':
-            url += '/%d' % self.DATA_MAP[data].get()['id']
+            url += '/{:d}'.format(self.DATA_MAP[data].get()['id'])
 
         if data is not None:
             data = self.DATA_MAP[data].set()

@@ -21,7 +21,7 @@ class DatabaseMaintenance:
     @classmethod
     def migrate(cls):
         db_version = cls.get_version()
-        migration = '%s/versions/%03d_migration.py' % (cls.__migrate_repo_path, db_version + 1)
+        migration = '{!s}/versions/{:0>3d}_migration.py'.format(cls.__migrate_repo_path, db_version + 1)
 
         tmp_module = imp.new_module('old_model')
         old_model = api.create_model(cls.__database_uri, cls.__migrate_repo_path)

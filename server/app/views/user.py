@@ -65,5 +65,5 @@ class UserView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(UserModelListView, '/%s/api/users' % config.App.NAME, endpoint='users')
-api.add_resource(UserView, '/%s/api/users/<int:id>' % config.App.NAME, endpoint='user')
+api.add_resource(UserModelListView, '/{!s}/api/users'.format(config.App.NAME), endpoint='users')
+api.add_resource(UserView, '/{!s}/api/users/<int:id>'.format(config.App.NAME), endpoint='user')

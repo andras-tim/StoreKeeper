@@ -44,4 +44,4 @@ class SessionView(restful.Resource):
         return
 
 
-api.add_resource(SessionView, '/%s/api/sessions' % config.App.NAME, endpoint='sessions')
+api.add_resource(SessionView, '/{!s}/api/sessions'.format(config.App.NAME), endpoint='sessions')

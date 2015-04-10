@@ -14,7 +14,7 @@ class TestAdminCanLogin(CommonSessionTest):
         self.assertApiSession(expected_data=Users.ADMIN)
 
     def test_logging_in_with_admin_with_bad_password(self):
-        self.assertApiLogin(credential=Users.ADMIN.login(password='bad_%s' % Users.ADMIN['password']),
+        self.assertApiLogin(credential=Users.ADMIN.login(password='bad_{!s}'.format(Users.ADMIN['password'])),
                             expected_data={'message': 'login error'}, expected_status_codes=401)
 
 
@@ -37,7 +37,7 @@ class TestLoginWithoutActiveSession(CommonSessionTest):
                             expected_status_codes=401)
 
     def test_logging_in_with_existed_user_with_bad_password(self):
-        self.assertApiLogin(credential=Users.USER1.login(password='bad_%s' % Users.USER1['password']),
+        self.assertApiLogin(credential=Users.USER1.login(password='bad_{!s}'.format(Users.USER1['password'])),
                             expected_status_codes=401)
 
     def test_logging_cant_happen_without_active_session(self):

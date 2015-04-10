@@ -51,5 +51,5 @@ class CustomerView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(CustomerModelListView, '/%s/api/customers' % config.App.NAME, endpoint='customers')
-api.add_resource(CustomerView, '/%s/api/customers/<int:id>' % config.App.NAME, endpoint='customer')
+api.add_resource(CustomerModelListView, '/{!s}/api/customers'.format(config.App.NAME), endpoint='customers')
+api.add_resource(CustomerView, '/{!s}/api/customers/<int:id>'.format(config.App.NAME), endpoint='customer')

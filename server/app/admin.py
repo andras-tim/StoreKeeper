@@ -12,7 +12,7 @@ from app.modules.config import ConfigObject
 def initialize(app: Flask, db: SQLAlchemy, config: ConfigObject):
     admin = Admin(app, name=config.App.TITLE)
     __import_models(db, admin)
-    app.logger.info('Admin page available: %s' % admin.url)
+    app.logger.info('Admin page available: {!s}'.format(admin.url))
 
 
 def __import_models(db: SQLAlchemy, admin: Admin):

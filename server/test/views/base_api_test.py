@@ -43,16 +43,16 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
         try:
             data_json = json.loads(response_string)
         except Exception as e:
-            assert False, 'Can not parse received data as JSON; data=%r, error=%r' % (response_string, e)
+            assert False, 'Can not parse received data as JSON; data={!r}, error={!r}'.format(response_string, e)
         assert expected_data == data_json
 
     def __assert_status_code(self, expected_status_codes: (int, list), response: Response):
         if type(expected_status_codes) != list:
             expected_status_codes = [expected_status_codes]
-        assert response.status_code in expected_status_codes, 'response: %r' % response.data.decode('utf-8')
+        assert response.status_code in expected_status_codes, 'response: {!r}'.format(response.data.decode('utf-8'))
 
     def __call_api(self, command: str, data: str, url: str):
-        return getattr(self.client, command)('/%s/api%s' % (config.App.NAME, url),
+        return getattr(self.client, command)('/{!s}/api{!s}'.format(config.App.NAME, url),
                                              content_type='application/json', data=data)
 
     def __make_testable_data(self, data: (str, list, dict)) -> (str, list, dict):
@@ -129,9 +129,9 @@ class CommonApiTest(LowLevelCommonApiTest):
 
         url_suffix = ''
         if id is not None:
-            url_suffix = '/%d' % id
+            url_suffix = '/{:d}'.format(id)
 
-        return '%s%s' % (endpoint, url_suffix)
+        return '{!s}{!s}'.format(endpoint, url_suffix)
 
 
 def append_mandatory_field_tests(item_name: str, base_item: FilterableDict, mandatory_fields: list):

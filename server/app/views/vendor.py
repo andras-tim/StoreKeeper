@@ -51,5 +51,5 @@ class VendorView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(VendorModelListView, '/%s/api/vendors' % config.App.NAME, endpoint='vendors')
-api.add_resource(VendorView, '/%s/api/vendors/<int:id>' % config.App.NAME, endpoint='vendor')
+api.add_resource(VendorModelListView, '/{!s}/api/vendors'.format(config.App.NAME), endpoint='vendors')
+api.add_resource(VendorView, '/{!s}/api/vendors/<int:id>'.format(config.App.NAME), endpoint='vendor')

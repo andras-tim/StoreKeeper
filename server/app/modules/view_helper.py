@@ -88,7 +88,7 @@ class SqlErrorParser:
 
         matches = cls.integrity_error_template.search(raw_message)
         if not matches:
-            return 'Can not commit changes; error=%r' % raw_message
+            return 'Can not commit changes; error={!r}'.format(raw_message)
         integrity_error = matches.group('message')
 
         matches = None
@@ -97,7 +97,7 @@ class SqlErrorParser:
             if matches:
                 break
         if not matches:
-            return 'Can not commit changes; error=%r' % integrity_error
+            return 'Can not commit changes; error={!r}'.format(integrity_error)
         table_field = matches.group('table_field')
 
         matches = cls.field_name_template.search(table_field)

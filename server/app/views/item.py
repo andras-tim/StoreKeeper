@@ -51,5 +51,5 @@ class ItemView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(ItemModelListView, '/%s/api/items' % config.App.NAME, endpoint='items')
-api.add_resource(ItemView, '/%s/api/items/<int:id>' % config.App.NAME, endpoint='item')
+api.add_resource(ItemModelListView, '/{!s}/api/items'.format(config.App.NAME), endpoint='items')
+api.add_resource(ItemView, '/{!s}/api/items/<int:id>'.format(config.App.NAME), endpoint='item')

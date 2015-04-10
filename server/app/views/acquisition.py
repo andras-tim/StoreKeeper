@@ -51,5 +51,5 @@ class AcquisitionView(BaseView):
         return self._delete(id)
 
 
-api.add_resource(AcquisitionModelListView, '/%s/api/acquisitions' % config.App.NAME, endpoint='acquisitions')
-api.add_resource(AcquisitionView, '/%s/api/acquisitions/<int:id>' % config.App.NAME, endpoint='acquisition')
+api.add_resource(AcquisitionModelListView, '/{!s}/api/acquisitions'.format(config.App.NAME), endpoint='acquisitions')
+api.add_resource(AcquisitionView, '/{!s}/api/acquisitions/<int:id>'.format(config.App.NAME), endpoint='acquisition')
