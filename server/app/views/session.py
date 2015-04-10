@@ -32,9 +32,9 @@ class SessionView(restful.Resource):
 
         user = User.query.filter_by(username=data["username"]).first()
         if not user or not user.check_password(data["password"]):
-            abort(401)
+            abort(401, message="login error")
         if not login_user(user):
-            abort(401)
+            abort(401, message="login error")
         return UserSerializer(user).data, 201
 
     @api_func("Logout user", url_tail="sessions",

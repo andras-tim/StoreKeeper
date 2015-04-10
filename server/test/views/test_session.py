@@ -1,103 +1,106 @@
 from app.modules.example_data import ExampleUsers as Users
-from test.views import CommonSessionTest
+from test.views.base_session_test import CommonSessionTest
 
 
 class TestAdminCanLogin(CommonSessionTest):
+    ENDPOINT = "/sessions"
+
     def test_no_sessions(self):
-        self.assertRequest("get", "/sessions", expected_status_codes=401)
+        self.assertApiGet(expected_status_codes=401)
 
     def test_logging_in_with_admin(self):
-        self.assertRequest("post", "/sessions", data=Users.ADMIN.login(),
-                           expected_data=Users.ADMIN.get(),
-                           expected_status_codes=201)
-
-        self.assertRequest("get", "/sessions", expected_data=Users.ADMIN.get())
+        self.assertApiLogin(credential=Users.ADMIN,
+                            expected_data=Users.ADMIN)
+        self.assertApiSession(expected_data=Users.ADMIN)
 
     def test_logging_in_with_admin_with_bad_password(self):
-        self.assertRequest("post", "/sessions",
-                           data=Users.ADMIN.login(password="bad_%s" % Users.ADMIN["password"]),
-                           expected_status_codes=401)
+        self.assertApiLogin(credential=Users.ADMIN.login(password="bad_%s" % Users.ADMIN["password"]),
+                            expected_data={"message": "login error"}, expected_status_codes=401)
 
 
 class TestLoginWithoutActiveSession(CommonSessionTest):
-    def setUp(self):
-        super().setUp()
-        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
-        self.assertRequestAsAdmin("post", "/users", data=Users.USER2.set())
+    ENDPOINT = "/sessions"
+    INIT_PUSH = [
+        ("/users", [Users.USER1, Users.USER2]),
+    ]
 
     def test_no_sessions(self):
-        self.assertRequest("get", "/sessions", expected_status_codes=401)
+        self.assertApiSession(expected_status_codes=401)
 
     def test_logging_in_with_existed_user(self):
-        self.assertRequest("post", "/sessions", data=Users.USER1.login(),
-                           expected_data=Users.USER1.get(),
-                           expected_status_codes=201)
-
-        self.assertRequest("get", "/sessions", expected_data=Users.USER1.get())
+        self.assertApiLogin(credential=Users.USER1,
+                            expected_data=Users.USER1, expected_status_codes=201)
+        self.assertApiSession(expected_data=Users.USER1)
 
     def test_logging_in_with_non_existed_user(self):
-        self.assertRequest("post", "/sessions", data={"username": "not_exist",
-                                                      "password": "orange"},
-                           expected_status_codes=401)
+        self.assertApiLogin(credential={"username": "not_exist", "password": "orange"},
+                            expected_status_codes=401)
 
     def test_logging_in_with_existed_user_with_bad_password(self):
-        self.assertRequest("post", "/sessions",
-                           data=Users.USER1.login(password="bad_%s" % Users.USER1["password"]),
-                           expected_status_codes=401)
+        self.assertApiLogin(credential=Users.USER1.login(password="bad_%s" % Users.USER1["password"]),
+                            expected_status_codes=401)
 
     def test_logging_cant_happen_without_active_session(self):
-        self.assertRequest("delete", "/sessions", expected_status_codes=401)
+        self.assertApiLogout(expected_status_codes=401)
 
 
 class TestLoginWithActiveSession(CommonSessionTest):
+    ENDPOINT = "/sessions"
+    INIT_PUSH = [
+        ("/users", [Users.USER1, Users.USER2]),
+    ]
+
     def setUp(self):
         super().setUp()
-        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
-        self.assertRequestAsAdmin("post", "/users", data=Users.USER2.set())
-        self.assertRequest("post", "/sessions", data=Users.USER1.login(), expected_status_codes=201)
+        self.assertApiLogin(credential=Users.USER1)
 
     def test_re_login_with_different_user(self):
-        self.assertRequest("post", "/sessions", data=Users.USER2.login(),
-                           expected_data=Users.USER2.get(),
-                           expected_status_codes=201)
+        self.assertApiLogin(credential=Users.USER2,
+                            expected_data=Users.USER2)
 
-        self.assertRequest("get", "/sessions", expected_data=Users.USER2.get())
+        self.assertApiSession(expected_data=Users.USER2)
 
     def test_logout(self):
-        self.assertRequest("delete", "/sessions")
-        self.assertRequest("get", "/sessions", expected_status_codes=401)
+        self.assertApiLogout()
+        self.assertApiSession(expected_status_codes=401)
 
 
 class TestDisabledUser(CommonSessionTest):
+    ENDPOINT = "/sessions"
+    INIT_PUSH = [
+        ("/users", [Users.USER1, Users.USER2]),
+    ]
+
     def setUp(self):
         super().setUp()
-        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
-        self.assertRequestAsAdmin("put", "/users/%d" % Users.USER1["id"],
-                                  data=Users.USER1.set(change={"disabled": True}))
-        self.assertRequestAsAdmin("post", "/users", data=Users.USER2.set())
+        self.assertApiLogin(credential=Users.ADMIN)
+        self.assertApiPut(Users.USER1["id"], endpoint="/users", data=Users.USER1.set(change={"disabled": True}))
+        self.assertApiLogout()
 
     def test_logging_in_with_disabled_user(self):
-        self.assertRequest("post", "/sessions", data=Users.USER1.login(),
-                           expected_status_codes=401)
+        self.assertApiLogin(credential=Users.USER1,
+                            expected_status_codes=401)
 
     def test_logging_out_recently_disabled_user(self):
-        self.assertRequest("post", "/sessions", data=Users.USER2.login(),
-                           expected_status_codes=201)
-        self.assertRequest("put", "/users/%d" % Users.USER2["id"],
-                           data=Users.USER2.set(change={"disabled": True}))
-        self.assertRequest("get", "/sessions", expected_status_codes=401)
+        self.assertApiLogin(credential=Users.USER2)
+        self.assertApiPut(Users.USER2["id"], endpoint="/users", data=Users.USER2.set(change={"disabled": True}))
+        self.assertApiSession(expected_status_codes=401)
 
 
 class UserCanChangeItsPassword(CommonSessionTest):
+    ENDPOINT = "/sessions"
+    INIT_PUSH = [
+        ("/users", [Users.USER1]),
+    ]
+
     def setUp(self):
         super().setUp()
-        self.assertRequestAsAdmin("post", "/users", data=Users.USER1.set())
-        self.assertRequest("post", "/sessions", data=Users.USER1.login(), expected_status_codes=201)
+        self.assertApiLogin(credential=Users.USER1)
 
     def test_login_after_update_password(self):
         request = Users.USER1.set(change={"password": "new_pw"})
         response = Users.USER1.get()
 
-        self.assertRequest("put", "/users/%d" % Users.USER1["id"], data=request, expected_data=response)
-        self.assertRequest("post", "/sessions", data=Users.USER1.login(password=request["password"]),
-                           expected_status_codes=201)
+        self.assertApiPut(response["id"], endpoint="/users", data=request, expected_data=response)
+        self.assertApiLogin(credential=Users.USER1, expected_status_codes=401)
+        self.assertApiLogin(credential=Users.USER1.login(password=request["password"]))

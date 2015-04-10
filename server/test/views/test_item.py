@@ -1,77 +1,55 @@
 from app.modules.example_data import ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units
-from test.views import CommonApiTest
+from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
+@append_mandatory_field_tests(item_name="item", base_item=Items.ITEM1,
+                              mandatory_fields=["name", "vendor", "quantity", "unit"])
 class TestItemWithBrandNewDb(CommonApiTest):
-    MANDATORY_FIELDS = ["name", "vendor", "quantity", "unit"]
-
-    def setUp(self):
-        super().setUp()
-        self.assertRequest("post", "/vendors", data=Vendors.VENDOR1.set())
-        self.assertRequest("post", "/vendors", data=Vendors.VENDOR2.set())
-        self.assertRequest("post", "/units", data=Units.UNIT1.set())
-        self.assertRequest("post", "/units", data=Units.UNIT2.set())
+    ENDPOINT = "/items"
+    INIT_PUSH = [
+        ("/vendors", [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ("/units", [Units.UNIT1, Units.UNIT2]),
+    ]
 
     def test_new_db(self):
-        self.assertRequest("get", "/items", expected_data=[])
-        self.assertRequest("get", "/items/1", expected_status_codes=404)
+        self.assertApiGet(expected_data=[])
+        self.assertApiGet(1, expected_status_codes=404)
 
     def test_adding_new_items(self):
-        self.assertRequest("post", "/items", data=Items.ITEM1.set(), expected_data=Items.ITEM1.get())
-        self.assertRequest("post", "/items", data=Items.ITEM2.set(), expected_data=Items.ITEM2.get())
+        self.assertApiPost(data=Items.ITEM1, expected_data=Items.ITEM1)
+        self.assertApiPost(data=Items.ITEM2, expected_data=Items.ITEM2)
 
     def test_can_not_add_item_with_same_name(self):
-        self.assertRequest("post", "/items", data=Items.ITEM1.set())
-        self.assertRequest("post", "/items", data=Items.ITEM2.set(change={"name": Items.ITEM1["name"]}),
+        self.assertApiPost(data=Items.ITEM1)
+        self.assertApiPost(data=Items.ITEM2.set(change={"name": Items.ITEM1["name"]}),
                            expected_data={'message': {'name': ['Already exists.']}},
-                           expected_status_codes=422)
-
-    def test_can_not_add_item_with_missing_one_mandatory_field(self):
-        for field_name in self.MANDATORY_FIELDS:
-            request = Items.ITEM1.set()
-            del request[field_name]
-
-            self.assertRequest("post", "/items", data=request,
-                               expected_data={"message": {field_name: ["Missing data for required field."]}},
-                               expected_status_codes=422)
-
-    def test_can_not_add_item_with_missing_all_mandatory_fields(self):
-        request = Items.ITEM1.set()
-        for field_name in self.MANDATORY_FIELDS:
-            del request[field_name]
-
-        self.assertRequest("post", "/items", data=request,
-                           expected_data={"message": dict((field_name, ["Missing data for required field."])
-                                                          for field_name in self.MANDATORY_FIELDS)},
                            expected_status_codes=422)
 
 
 class TestItemWithPreFilledDb(CommonApiTest):
-    def setUp(self):
-        super().setUp()
-        self.assertRequest("post", "/vendors", data=Vendors.VENDOR1.set())
-        self.assertRequest("post", "/vendors", data=Vendors.VENDOR2.set())
-        self.assertRequest("post", "/units", data=Units.UNIT1.set())
-        self.assertRequest("post", "/units", data=Units.UNIT2.set())
-        self.assertRequest("post", "/items", data=Items.ITEM1.set())
-        self.assertRequest("post", "/items", data=Items.ITEM2.set())
+    ENDPOINT = "/items"
+    INIT_PUSH = [
+        ("/vendors", [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ("/units", [Units.UNIT1, Units.UNIT2]),
+        (ENDPOINT, [Items.ITEM1, Items.ITEM2]),
+    ]
 
     def test_list_items(self):
-        self.assertRequest("get", "/items", expected_data=[Items.ITEM1.get(),
-                                                           Items.ITEM2.get()])
+        self.assertApiGet(expected_data=[Items.ITEM1,
+                                         Items.ITEM2])
 
     def test_get_item(self):
-        self.assertRequest("get", "/items/2", expected_data=Items.ITEM2.get())
-        self.assertRequest("get", "/items/1", expected_data=Items.ITEM1.get())
+        self.assertApiGet(2, expected_data=Items.ITEM2)
+        self.assertApiGet(1, expected_data=Items.ITEM1)
 
     def test_remove_item(self):
-        self.assertRequest("delete", "/items/1")
-        self.assertRequest("get", "/items", expected_data=[Items.ITEM2.get()])
+        self.assertApiDelete(1)
+        self.assertApiGet(expected_data=[Items.ITEM2])
 
     def test_can_not_remove_non_existed_item(self):
-        self.assertRequest("delete", "/items/4", expected_status_codes=404)
-        self.assertRequest("get", "/items", expected_data=[Items.ITEM1.get(),
-                                                           Items.ITEM2.get()])
+        self.assertApiDelete(4, expected_status_codes=404)
+        self.assertApiGet(expected_data=[Items.ITEM1,
+                                         Items.ITEM2])
 
     def test_update_item(self):
         request = Items.ITEM2.set(change={"name": "Spray222", "vendor": Vendors.VENDOR1.get(), "article_number": 222,
@@ -80,10 +58,10 @@ class TestItemWithPreFilledDb(CommonApiTest):
                                            "article_number": request["article_number"], "quantity": request["quantity"],
                                            "unit": request["unit"]})
 
-        self.assertRequest("put", "/items/%d" % Items.ITEM2["id"], data=request, expected_data=response)
-        self.assertRequest("get", "/items", expected_data=[Items.ITEM1.get(), response])
+        self.assertApiPut(Items.ITEM2["id"], data=request, expected_data=response)
+        self.assertApiGet(expected_data=[Items.ITEM1, response])
 
     def test_update_name_to_name_of_another_item(self):
         request = Items.ITEM2.set(change={"name": Items.ITEM1["name"]})
 
-        self.assertRequest("put", "/items/%d" % Items.ITEM2["id"], data=request, expected_status_codes=422)
+        self.assertApiPut(Items.ITEM2["id"], data=request, expected_status_codes=422)
