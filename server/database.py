@@ -34,7 +34,7 @@ def main():
 
     elif args.migrate:
         migration = DatabaseMaintenance.migrate()
-        print('New migration saved as %s' % migration)
+        print('New migration saved as {!s}'.format(migration))
 
     elif args.downgrade:
         DatabaseMaintenance.downgrade()
@@ -45,7 +45,7 @@ def main():
     elif args.version:
         pass
 
-    print('Current database version: %d' % DatabaseMaintenance.get_version())
+    print('Current database version: {:d}'.format(DatabaseMaintenance.get_version()))
     return 0
 
 

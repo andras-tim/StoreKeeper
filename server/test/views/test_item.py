@@ -2,13 +2,13 @@ from app.modules.example_data import ExampleItems as Items, ExampleVendors as Ve
 from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
-@append_mandatory_field_tests(item_name="item", base_item=Items.ITEM1,
-                              mandatory_fields=["name", "vendor", "quantity", "unit"])
+@append_mandatory_field_tests(item_name='item', base_item=Items.ITEM1,
+                              mandatory_fields=['name', 'vendor', 'quantity', 'unit'])
 class TestItemWithBrandNewDb(CommonApiTest):
-    ENDPOINT = "/items"
+    ENDPOINT = '/items'
     INIT_PUSH = [
-        ("/vendors", [Vendors.VENDOR1, Vendors.VENDOR2]),
-        ("/units", [Units.UNIT1, Units.UNIT2]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
     ]
 
     def test_new_db(self):
@@ -21,16 +21,16 @@ class TestItemWithBrandNewDb(CommonApiTest):
 
     def test_can_not_add_item_with_same_name(self):
         self.assertApiPost(data=Items.ITEM1)
-        self.assertApiPost(data=Items.ITEM2.set(change={"name": Items.ITEM1["name"]}),
+        self.assertApiPost(data=Items.ITEM2.set(change={'name': Items.ITEM1['name']}),
                            expected_data={'message': {'name': ['Already exists.']}},
                            expected_status_codes=422)
 
 
 class TestItemWithPreFilledDb(CommonApiTest):
-    ENDPOINT = "/items"
+    ENDPOINT = '/items'
     INIT_PUSH = [
-        ("/vendors", [Vendors.VENDOR1, Vendors.VENDOR2]),
-        ("/units", [Units.UNIT1, Units.UNIT2]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
         (ENDPOINT, [Items.ITEM1, Items.ITEM2]),
     ]
 
@@ -52,16 +52,16 @@ class TestItemWithPreFilledDb(CommonApiTest):
                                          Items.ITEM2])
 
     def test_update_item(self):
-        request = Items.ITEM2.set(change={"name": "Spray222", "vendor": Vendors.VENDOR1.get(), "article_number": 222,
-                                          "quantity": 222, "unit": Units.UNIT2.get()})
-        response = Items.ITEM2.get(change={"name": request["name"], "vendor": request["vendor"],
-                                           "article_number": request["article_number"], "quantity": request["quantity"],
-                                           "unit": request["unit"]})
+        request = Items.ITEM2.set(change={'name': 'Spray222', 'vendor': Vendors.VENDOR1.get(), 'article_number': 222,
+                                          'quantity': 222, 'unit': Units.UNIT2.get()})
+        response = Items.ITEM2.get(change={'name': request['name'], 'vendor': request['vendor'],
+                                           'article_number': request['article_number'], 'quantity': request['quantity'],
+                                           'unit': request['unit']})
 
-        self.assertApiPut(Items.ITEM2["id"], data=request, expected_data=response)
+        self.assertApiPut(Items.ITEM2['id'], data=request, expected_data=response)
         self.assertApiGet(expected_data=[Items.ITEM1, response])
 
     def test_update_name_to_name_of_another_item(self):
-        request = Items.ITEM2.set(change={"name": Items.ITEM1["name"]})
+        request = Items.ITEM2.set(change={'name': Items.ITEM1['name']})
 
-        self.assertApiPut(Items.ITEM2["id"], data=request, expected_status_codes=422)
+        self.assertApiPut(Items.ITEM2['id'], data=request, expected_status_codes=422)

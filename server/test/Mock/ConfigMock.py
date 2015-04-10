@@ -1,11 +1,11 @@
 
 
-class ConfigMock(object):
-    def __init__(self, used_config: str="ProductionConfig"):
+class ConfigMock:
+    def __init__(self, used_config: str='ProductionConfig'):
         self.used_config = used_config
 
     def config_reader(self, *args, **kwargs)-> str:
-        config = """USED_CONFIG: %s
+        config = """USED_CONFIG: {!s}
 
 
 DefaultConfig:
@@ -95,4 +95,4 @@ MultiCircularConfigBottom:
   DebugId: MultiCircularBottom
 
 """
-        return config % self.used_config
+        return config.format(self.used_config)

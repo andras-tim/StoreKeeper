@@ -26,7 +26,7 @@ class CommonDatabaseMaintenanceTest(unittest.TestCase):
     @classmethod
     def _cleanup_db_and_migrate_repo(cls):
         db_path = re.sub(r'^[^:]+:///(.+)$', r'\1', config.Flask.SQLALCHEMY_DATABASE_URI)
-        if db_path != ":memory:" and os.path.exists(db_path):
+        if db_path != ':memory:' and os.path.exists(db_path):
             os.remove(db_path)
 
         dir_path_of_db = os.path.dirname(db_path)

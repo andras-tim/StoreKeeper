@@ -36,14 +36,14 @@ class BaseModelListView(_BaseModelResource):
     >>>         return self._post_save(foo)
     """
 
-    def _get(self) -> "RPC response":
+    def _get(self) -> 'RPC response':
         """
         List items
         """
         items = self._model.query.all()
         return self._serializer(items, many=True).data
 
-    def _post_populate(self) -> "item":
+    def _post_populate(self) -> 'item':
         """
         Populate new object
         """
@@ -51,7 +51,7 @@ class BaseModelListView(_BaseModelResource):
         self._populate_item(item)
         return item
 
-    def _post_save(self, item) -> "RPC response":
+    def _post_save(self, item) -> 'RPC response':
         """
         Save new object
         """
@@ -59,7 +59,7 @@ class BaseModelListView(_BaseModelResource):
         commit_with_error_handling(db)
         return self._serializer(item).data
 
-    def _post(self) -> "RPC response":
+    def _post(self) -> 'RPC response':
         """
         Save new item (populate & save wrapper)
         """
@@ -89,14 +89,14 @@ class BaseView(_BaseModelResource):
     >>>         return self._delete(id)
     """
 
-    def _get(self, id: int) -> "RPC response":
+    def _get(self, id: int) -> 'RPC response':
         """
         Single item getter
         """
         item = self.__get_item(id)
         return self._serializer(item).data
 
-    def _put_populate(self, id: int) -> "item":
+    def _put_populate(self, id: int) -> 'item':
         """
         Populate change object
         """
@@ -104,21 +104,21 @@ class BaseView(_BaseModelResource):
         self._populate_item(item)
         return item
 
-    def _put_save(self, item) -> "RPC response":
+    def _put_save(self, item) -> 'RPC response':
         """
         Save change object
         """
         commit_with_error_handling(db)
         return self._serializer(item).data
 
-    def _put(self, id: int) -> "RPC response":
+    def _put(self, id: int) -> 'RPC response':
         """
         Change single item (populate & save wrapper)
         """
         item = self._put_populate(id)
         return self._put_save(item)
 
-    def _delete(self, id: int) -> "RPC response":
+    def _delete(self, id: int) -> 'RPC response':
         """
         Delete single item
         """
@@ -128,7 +128,7 @@ class BaseView(_BaseModelResource):
         commit_with_error_handling(db)
         return None
 
-    def __get_item(self, id: int) -> "item":
+    def __get_item(self, id: int) -> 'item':
         item = self._model.query.get(id)
         if not item:
             abort(404)

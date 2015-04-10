@@ -3,7 +3,7 @@ from test.views.base_api_test import CommonApiTest
 
 
 class TestAcquisitionWithBrandNewDb(CommonApiTest):
-    ENDPOINT = "/acquisitions"
+    ENDPOINT = '/acquisitions'
 
     def test_new_db(self):
         self.assertApiGet(expected_data=[])
@@ -18,11 +18,11 @@ class TestAcquisitionWithBrandNewDb(CommonApiTest):
     def test_can_add_acquisition_with_same_comment(self):
         self.assertApiPost(data=Acquisitions.ACQUISITION1)
         self.assertApiPost(data=Acquisitions.ACQUISITION2.set(
-            change={"comment": Acquisitions.ACQUISITION1["comment"]}))
+            change={'comment': Acquisitions.ACQUISITION1['comment']}))
 
 
 class TestUserWithPreFilledDb(CommonApiTest):
-    ENDPOINT = "/acquisitions"
+    ENDPOINT = '/acquisitions'
     INIT_PUSH = [
         (ENDPOINT, [Acquisitions.ACQUISITION1, Acquisitions.ACQUISITION2]),
     ]
@@ -45,14 +45,14 @@ class TestUserWithPreFilledDb(CommonApiTest):
                                          Acquisitions.ACQUISITION2])
 
     def test_update_acquisition(self):
-        request = Acquisitions.ACQUISITION2.set(change={"comment": "A box has been damaged"})
-        response = Acquisitions.ACQUISITION2.get(change={"comment": request["comment"]})
+        request = Acquisitions.ACQUISITION2.set(change={'comment': 'A box has been damaged'})
+        response = Acquisitions.ACQUISITION2.get(change={'comment': request['comment']})
 
-        self.assertApiPut(Acquisitions.ACQUISITION2["id"], data=request, expected_data=response)
+        self.assertApiPut(Acquisitions.ACQUISITION2['id'], data=request, expected_data=response)
         self.assertApiGet(expected_data=[Acquisitions.ACQUISITION1,
                                          response])
 
     def test_update_name_to_name_of_another_acquisition(self):
-        request = Acquisitions.ACQUISITION2.set(change={"comment": Acquisitions.ACQUISITION1["comment"]})
+        request = Acquisitions.ACQUISITION2.set(change={'comment': Acquisitions.ACQUISITION1['comment']})
 
-        self.assertApiPut(Acquisitions.ACQUISITION2["id"], data=request)
+        self.assertApiPut(Acquisitions.ACQUISITION2['id'], data=request)

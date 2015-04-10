@@ -2,10 +2,10 @@ from app.modules.example_data import ExampleVendors as Vendors
 from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
-@append_mandatory_field_tests(item_name="vendor", base_item=Vendors.VENDOR1,
-                              mandatory_fields=["name"])
+@append_mandatory_field_tests(item_name='vendor', base_item=Vendors.VENDOR1,
+                              mandatory_fields=['name'])
 class TestVendorWithBrandNewDb(CommonApiTest):
-    ENDPOINT = "/vendors"
+    ENDPOINT = '/vendors'
 
     def test_new_db(self):
         self.assertApiGet(expected_data=[])
@@ -17,13 +17,13 @@ class TestVendorWithBrandNewDb(CommonApiTest):
 
     def test_can_not_add_vendor_with_same_name(self):
         self.assertApiPost(data=Vendors.VENDOR1)
-        self.assertApiPost(data=Vendors.VENDOR2.set(change={"name": Vendors.VENDOR1["name"]}),
+        self.assertApiPost(data=Vendors.VENDOR2.set(change={'name': Vendors.VENDOR1['name']}),
                            expected_data={'message': {'name': ['Already exists.']}},
                            expected_status_codes=422)
 
 
 class TestUserWithPreFilledDb(CommonApiTest):
-    ENDPOINT = "/vendors"
+    ENDPOINT = '/vendors'
     INIT_PUSH = [
         (ENDPOINT, [Vendors.VENDOR1, Vendors.VENDOR2]),
     ]
@@ -46,14 +46,14 @@ class TestUserWithPreFilledDb(CommonApiTest):
                                          Vendors.VENDOR2])
 
     def test_update_vendor(self):
-        request = Vendors.VENDOR2.set(change={"name": "foo2"})
-        response = Vendors.VENDOR2.get(change={"name": request["name"]})
+        request = Vendors.VENDOR2.set(change={'name': 'foo2'})
+        response = Vendors.VENDOR2.get(change={'name': request['name']})
 
-        self.assertApiPut(Vendors.VENDOR2["id"], data=request, expected_data=response)
+        self.assertApiPut(Vendors.VENDOR2['id'], data=request, expected_data=response)
         self.assertApiGet(expected_data=[Vendors.VENDOR1,
                                          response])
 
     def test_update_name_to_name_of_another_vendor(self):
-        request = Vendors.VENDOR2.set(change={"name": Vendors.VENDOR1["name"]})
+        request = Vendors.VENDOR2.set(change={'name': Vendors.VENDOR1['name']})
 
-        self.assertApiPut(Vendors.VENDOR2["id"], data=request, expected_status_codes=422)
+        self.assertApiPut(Vendors.VENDOR2['id'], data=request, expected_status_codes=422)

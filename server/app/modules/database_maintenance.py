@@ -5,7 +5,7 @@ from migrate.versioning import api
 from app.server import db, config
 
 
-class DatabaseMaintenance(object):
+class DatabaseMaintenance:
     __database_uri = config.Flask.SQLALCHEMY_DATABASE_URI
     __migrate_repo_path = config.App.MIGRATE_REPO_PATH
 
@@ -21,7 +21,7 @@ class DatabaseMaintenance(object):
     @classmethod
     def migrate(cls):
         db_version = cls.get_version()
-        migration = '%s/versions/%03d_migration.py' % (cls.__migrate_repo_path, db_version + 1)
+        migration = '{!s}/versions/{:0>3d}_migration.py'.format(cls.__migrate_repo_path, db_version + 1)
 
         tmp_module = imp.new_module('old_model')
         old_model = api.create_model(cls.__database_uri, cls.__migrate_repo_path)
@@ -31,7 +31,7 @@ class DatabaseMaintenance(object):
             cls.__database_uri, cls.__migrate_repo_path,
             tmp_module.meta, db.metadata
         )
-        with open(migration, "wt") as fd:
+        with open(migration, 'wt') as fd:
             fd.write(script)
         api.upgrade(cls.__database_uri, cls.__migrate_repo_path)
 

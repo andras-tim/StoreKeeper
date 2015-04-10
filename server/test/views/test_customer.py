@@ -2,10 +2,10 @@ from app.modules.example_data import ExampleCustomers as Customers
 from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
-@append_mandatory_field_tests(item_name="customer", base_item=Customers.CUSTOMER1,
-                              mandatory_fields=["name"])
+@append_mandatory_field_tests(item_name='customer', base_item=Customers.CUSTOMER1,
+                              mandatory_fields=['name'])
 class TestCustomerWithBrandNewDb(CommonApiTest):
-    ENDPOINT = "/customers"
+    ENDPOINT = '/customers'
 
     def test_new_db(self):
         self.assertApiGet(expected_data=[])
@@ -17,13 +17,13 @@ class TestCustomerWithBrandNewDb(CommonApiTest):
 
     def test_can_not_add_customer_with_same_name(self):
         self.assertApiPost(data=Customers.CUSTOMER1)
-        self.assertApiPost(data=Customers.CUSTOMER2.set(change={"name": Customers.CUSTOMER1["name"]}),
+        self.assertApiPost(data=Customers.CUSTOMER2.set(change={'name': Customers.CUSTOMER1['name']}),
                            expected_data={'message': {'name': ['Already exists.']}},
                            expected_status_codes=422)
 
 
 class TestUserWithPreFilledDb(CommonApiTest):
-    ENDPOINT = "/customers"
+    ENDPOINT = '/customers'
     INIT_PUSH = [
         (ENDPOINT, [Customers.CUSTOMER1, Customers.CUSTOMER2]),
     ]
@@ -46,14 +46,14 @@ class TestUserWithPreFilledDb(CommonApiTest):
                                          Customers.CUSTOMER2])
 
     def test_update_customer(self):
-        request = Customers.CUSTOMER2.set(change={"name": "foo2"})
-        response = Customers.CUSTOMER2.get(change={"name": request["name"]})
+        request = Customers.CUSTOMER2.set(change={'name': 'foo2'})
+        response = Customers.CUSTOMER2.get(change={'name': request['name']})
 
-        self.assertApiPut(Customers.CUSTOMER2["id"], data=request, expected_data=response)
+        self.assertApiPut(Customers.CUSTOMER2['id'], data=request, expected_data=response)
         self.assertApiGet(expected_data=[Customers.CUSTOMER1,
                                          response])
 
     def test_update_name_to_name_of_another_customer(self):
-        request = Customers.CUSTOMER2.set(change={"name": Customers.CUSTOMER1["name"]})
+        request = Customers.CUSTOMER2.set(change={'name': Customers.CUSTOMER1['name']})
 
-        self.assertApiPut(Customers.CUSTOMER2["id"], data=request, expected_status_codes=422)
+        self.assertApiPut(Customers.CUSTOMER2['id'], data=request, expected_status_codes=422)

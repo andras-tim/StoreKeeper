@@ -6,16 +6,16 @@ from app.models import *
 
 def _not_blank(data):
     if not data:
-        raise ValidationError("Missing data for required field.")
+        raise ValidationError('Missing data for required field.')
 
 
 class UserSerializer(Serializer):
     class Meta:
-        fields = ("id", "username", "email", "admin", "disabled")
+        fields = ('id', 'username', 'email', 'admin', 'disabled')
 
 
 class UserDeserializer(Serializer):
-    username = fields.Str(required=True, validate=Regexp(r"^[a-z0-9][a-z0-9_.-]*[a-z0-9]$"))
+    username = fields.Str(required=True, validate=Regexp(r'^[a-z0-9][a-z0-9_.-]*[a-z0-9]$'))
     password = fields.Str(required=True, validate=_not_blank)
     email = fields.Email(required=True)
     admin = fields.Bool()
@@ -24,12 +24,12 @@ class UserDeserializer(Serializer):
 
 class SessionDeserializer(UserDeserializer):
     class Meta:
-        fields = ("username", "password")
+        fields = ('username', 'password')
 
 
 class VendorSerializer(Serializer):
     class Meta:
-        fields = ("id", "name")
+        fields = ('id', 'name')
 
 
 class VendorDeserializer(Serializer):
@@ -38,7 +38,7 @@ class VendorDeserializer(Serializer):
 
 class UnitSerializer(Serializer):
     class Meta:
-        fields = ("id", "unit")
+        fields = ('id', 'unit')
 
 
 class UnitDeserializer(Serializer):
@@ -47,7 +47,7 @@ class UnitDeserializer(Serializer):
 
 class CustomerSerializer(Serializer):
     class Meta:
-        fields = ("id", "name")
+        fields = ('id', 'name')
 
 
 class CustomerDeserializer(Serializer):
@@ -58,7 +58,7 @@ class AcquisitionSerializer(Serializer):
     comment = fields.Str()
 
     class Meta:
-        fields = ("id", "timestamp", "comment")
+        fields = ('id', 'timestamp', 'comment')
 
 
 class AcquisitionDeserializer(Serializer):
@@ -69,7 +69,7 @@ class StocktakingSerializer(Serializer):
     comment = fields.Str()
 
     class Meta:
-        fields = ("id", "timestamp", "comment")
+        fields = ('id', 'timestamp', 'comment')
 
 
 class StocktakingDeserializer(Serializer):

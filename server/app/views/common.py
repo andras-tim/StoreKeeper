@@ -19,7 +19,7 @@ def internal_error(error):
 
 @lm.user_loader
 def load_user(unique_id):
-    app.logger.debug("load_user: %s" % unique_id)
+    app.logger.debug('load_user: {!s}'.format(unique_id))
     return User.query.get(int(unique_id))
 
 
@@ -31,20 +31,20 @@ def before_request():
 
     if g.user.is_authenticated() and not g.user.is_active():
         logout_user()
-        app.logger.debug("before_request: user: %s\nlogged out because is not active" % str(g.user))
+        app.logger.debug('before_request: user: {!r}\nlogged out because is not active'.format(g.user))
 
     if g.user.is_authenticated():
-        app.logger.debug("before_request: user: %s\nauthenticated" % str(g.user))
+        app.logger.debug('before_request: user: {!r}\nauthenticated'.format(g.user))
     else:
         g.user.id = None
-        g.user.admin = app.config["TESTING"]
-        app.logger.debug("before_request: user: %s\nnot authenticated" % str(g.user))
+        g.user.admin = app.config['TESTING']
+        app.logger.debug('before_request: user: {!r}\nnot authenticated'.format(g.user))
 
 
 def admin_login_required(func: callable):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if not app.config["TESTING"]:
+        if not app.config['TESTING']:
             if not g.user.is_authenticated():
                 abort(401)
             if not g.user.admin:
@@ -84,10 +84,10 @@ def api_func(title: str, url_tail: str, request: (list, dict, None)=None, respon
     def __get_title() -> str:
         if not admin_required:
             return title
-        return "%s *(for administrators only)*" % title
+        return '{!s} *(for administrators only)*'.format(title)
 
     def __get_response_status(func: callable) -> int:
-        if func.__name__ == "post":
+        if func.__name__ == 'post':
             return response_status or 201
         return response_status or 200
 
@@ -95,13 +95,13 @@ def api_func(title: str, url_tail: str, request: (list, dict, None)=None, respon
         new_status_codes = status_codes or {}
 
         if response_status not in new_status_codes.keys():
-            new_status_codes[response_status] = ""
+            new_status_codes[response_status] = ''
         if login_required and 401 not in new_status_codes.keys():
-            new_status_codes[401] = ""
+            new_status_codes[401] = ''
         if admin_required and 403 not in new_status_codes.keys():
-            new_status_codes[403] = ""
-        if func.__name__ == "post" and 422 not in new_status_codes.keys():
-            new_status_codes[422] = ""
+            new_status_codes[403] = ''
+        if func.__name__ == 'post' and 422 not in new_status_codes.keys():
+            new_status_codes[422] = ''
 
         return new_status_codes
 

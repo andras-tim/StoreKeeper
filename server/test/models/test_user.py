@@ -8,9 +8,9 @@ from app.models import User
 
 
 class TestUser(unittest.TestCase):
-    _USER = "foo"
-    _PASSWORD = "secret_pass"
-    _EMAIL = "foo@bar.com"
+    _USER = 'foo'
+    _PASSWORD = 'secret_pass'
+    _EMAIL = 'foo@bar.com'
 
     def setUp(self):
         self.user = User(username=TestUser._USER, email=TestUser._EMAIL)

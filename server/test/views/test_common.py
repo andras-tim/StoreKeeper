@@ -4,7 +4,7 @@ from app.views.common import api_func
 
 class TestApiDocDecorator(ApiDocTestCase):
     def test_minimal_get(self):
-        @api_func("Test command", url_tail="foo")
+        @api_func('Test command', url_tail='foo')
         def get():
             pass
 
@@ -33,7 +33,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         """)
 
     def test_minimal_post(self):
-        @api_func("Test command", url_tail="foo")
+        @api_func('Test command', url_tail='foo')
         def post():
             pass
 
@@ -63,7 +63,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         """)
 
     def test_minimal_put(self):
-        @api_func("Test command", url_tail="foo")
+        @api_func('Test command', url_tail='foo')
         def put():
             pass
 
@@ -92,7 +92,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         """)
 
     def test_minimal_delete(self):
-        @api_func("Test command", url_tail="foo")
+        @api_func('Test command', url_tail='foo')
         def delete():
             pass
 
@@ -121,7 +121,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         """)
 
     def test_override_default_response_status(self):
-        @api_func("Test command", url_tail="foo", response_status=403)
+        @api_func('Test command', url_tail='foo', response_status=403)
         def get():
             pass
 
@@ -150,7 +150,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         """)
 
     def test_extend_status_codes(self):
-        @api_func("Test command", url_tail="foo", status_codes={600: "foo bar"})
+        @api_func('Test command', url_tail='foo', status_codes={600: 'foo bar'})
         def get():
             pass
 
@@ -180,7 +180,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         """)
 
     def test_override_default_status(self):
-        @api_func("Test command", url_tail="foo", status_codes={200: "foo bar"})
+        @api_func('Test command', url_tail='foo', status_codes={200: 'foo bar'})
         def get():
             pass
 
@@ -209,7 +209,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         """)
 
     def test_login_required(self):
-        @api_func("Test command", url_tail="foo", login_required=True)
+        @api_func('Test command', url_tail='foo', login_required=True)
         def get():
             pass
 
@@ -238,7 +238,7 @@ class TestApiDocDecorator(ApiDocTestCase):
         """)
 
     def test_admin_required(self):
-        @api_func("Test command", url_tail="foo", admin_required=True)
+        @api_func('Test command', url_tail='foo', admin_required=True)
         def get():
             pass
 

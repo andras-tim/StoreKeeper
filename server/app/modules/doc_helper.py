@@ -6,13 +6,13 @@ from jinja2 import Template
 from app.server import config
 
 
-class ApiDoc(object):
+class ApiDoc:
     __API_CALL_TEMPLATE = Template("""
     {{ title }}
     {% for query in queries %}
-    :query {{ query["name"] }}: {{ query["description"] }}{% endfor %}
+    :query {{ query['name'] }}: {{ query['description'] }}{% endfor %}
     {% for status in statuses %}
-    :statuscode {{ status["code"] }}: {{ status["description"] }}{% endfor %}
+    :statuscode {{ status['code'] }}: {{ status['description'] }}{% endfor %}
 
     **Example request**:
 
@@ -35,13 +35,13 @@ class ApiDoc(object):
     """)
 
     __STATUSES = {
-        200: ["OK", "no error"],
-        201: ["CREATED", "no error"],
-        401: ["UNAUTHORIZED", "user was not logged in"],
-        403: ["FORBIDDEN", "user has not enough rights"],
-        404: ["NOT FOUND", ""],
-        422: ["UNPROCESSABLE ENTITY", "there is missing field"],
-        }
+        200: ['OK', 'no error'],
+        201: ['CREATED', 'no error'],
+        401: ['UNAUTHORIZED', 'user was not logged in'],
+        403: ['FORBIDDEN', 'user has not enough rights'],
+        404: ['NOT FOUND', ''],
+        422: ['UNPROCESSABLE ENTITY', 'there is missing field'],
+    }
 
     @classmethod
     def get_doc(cls, title: str, command: str, url_tail: str, request: (list, dict, None)=None,
@@ -63,7 +63,7 @@ class ApiDoc(object):
     @classmethod
     def __format_queries(cls, queries: (dict, None)) -> list:
         queries = queries or {}
-        lines = [{"name": name, "description": description} for name, description in queries.items()]
+        lines = [{'name': name, 'description': description} for name, description in queries.items()]
         return sorted(lines, key=itemgetter('name'))
 
     @classmethod
@@ -73,7 +73,7 @@ class ApiDoc(object):
         for code, description in status_codes.items():
             if not description:
                 description = cls.__STATUSES[code][1]
-            lines.append({"code": code, "description": description})
+            lines.append({'code': code, 'description': description})
         return sorted(lines, key=itemgetter('code'))
 
     @classmethod
@@ -88,7 +88,7 @@ class ApiDoc(object):
 
     @classmethod
     def __format_response_status(cls, response_status: int) -> str:
-        return "%d %s" % (response_status, cls.__STATUSES[response_status][0])
+        return '{:d} {!s}'.format(response_status, cls.__STATUSES[response_status][0])
 
     @classmethod
     def __json_dump_to_lines(cls, data: (list, dict, None)) -> list:
@@ -96,8 +96,8 @@ class ApiDoc(object):
 
     @classmethod
     def __rstrip_lines(cls, text: str) -> str:
-        return "\n".join([line.rstrip() for line in text.splitlines()])
+        return '\n'.join([line.rstrip() for line in text.splitlines()])
 
     @classmethod
     def __remove_double_blank_lines(cls, text: str) -> str:
-        return re.sub(r"\n{2,}", r"\n\n", text)
+        return re.sub(r'\n{2,}', r'\n\n', text)

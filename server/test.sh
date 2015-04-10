@@ -11,6 +11,11 @@ function run_test_with_coverage()
     run_test --cov "${BASEDIR}/app" --cov-config "${BASEDIR}/.coveragerc" --cov-report=term-missing "$@"
 }
 
+function run_pep8_check()
+{
+    "${BASEDIR}/flask/bin/python3" -m pep8 --max-line-length=120 --ignore=E402 "${BASEDIR}/app" "${BASEDIR}/test"
+}
+
 function show_help()
 {
     cat - << EOF
@@ -59,4 +64,10 @@ then
 else
     run_test_with_coverage -v --pdb "$@"
 fi
+
+echo -e "\nChecking PEP8 compliance..."
+run_pep8_check
+echo "passed"
+
+echo -e "\nAll done"
 exit 0
