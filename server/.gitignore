@@ -2,3 +2,4 @@ app.sqlite
 db_repository/
 flask/
 tmp/
+.pytest/failed
