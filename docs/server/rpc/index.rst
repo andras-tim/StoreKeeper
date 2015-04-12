@@ -22,14 +22,14 @@ Endpoints
 .. toctree::
    :maxdepth: 2
 
+   acquisition_items
+   acquisitions
+   barcodes
+   customers
+   items
    sessions
+   stocktaking_items
+   stocktakings
+   units
    users
    vendors
-   units
-   customers
-   acquisitions
-   acquisition_items
-   stocktakings
-   stocktaking_items
-   items
-   barcodes
