@@ -77,10 +77,10 @@ class PopulateModelOnSubmit:
 class SqlErrorParser:
     integrity_error_template = re.compile(r'^\(IntegrityError\) (?P<message>.*)$')
     unique_integrity_error_templates = [
-        re.compile(r'^UNIQUE constraint failed: (?P<table_field>.*)$'),
-        re.compile(r'^column (?P<table_field>.*) is not unique$'),
+        re.compile(r'^UNIQUE constraint failed: (?P<table_fields>.*)$'),
+        re.compile(r'^columns? (?P<table_fields>.*) (is|are) not unique$'),
     ]
-    field_name_template = re.compile(r'^[^.]*\.(?P<field>.*)$')
+    field_name_template = re.compile(r'[^.]+\.([^,]+)(,|$)')
 
     @classmethod
     def parse(cls, err: Exception) -> (str, dict):
@@ -98,14 +98,14 @@ class SqlErrorParser:
                 break
         if not matches:
             return 'Can not commit changes; error={!r}'.format(integrity_error)
-        table_field = matches.group('table_field')
+        table_fields = matches.group('table_fields')
 
-        matches = cls.field_name_template.search(table_field)
-        field = table_field
-        if matches:
-            field = matches.group('field')
+        results = cls.field_name_template.findall(table_fields)
+        fields = table_fields
+        if results:
+            fields = ", ".join(sorted([name for name, separator in results]))
 
-        return {field: ['Already exists.']}
+        return {fields: ['Already exists.']}
 
 
 def get_validated_request(deserializer: Serializer) -> (dict, list, None):
