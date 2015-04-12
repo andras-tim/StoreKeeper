@@ -18,8 +18,7 @@ class ItemListView(BaseModelListView):
 
     @api_func('Create item', url_tail='items',
               request=ExampleItems.ITEM1.set(),
-              response=ExampleItems.ITEM1.get(),
-              status_codes={422: 'there is wrong type / missing field'})
+              response=ExampleItems.ITEM1.get())
     def post(self):
         return self._post()
 
@@ -29,24 +28,19 @@ class ItemView(BaseView):
     _serializer = ItemSerializer
     _deserializer = ItemSerializer
 
-    @api_func('Get item', url_tail='items/1',
-              response=ExampleItems.ITEM1.get(),
-              queries={'id': 'ID of selected item for change'},
-              status_codes={404: 'there is no item'})
+    @api_func('Get item', item_name='item', url_tail='items/1',
+              response=ExampleItems.ITEM1.get())
     def get(self, id: int):
         return self._get(id)
 
-    @api_func('Update item', url_tail='items/1',
+    @api_func('Update item', item_name='item', url_tail='items/1',
               request=ExampleItems.ITEM1.set(),
-              response=ExampleItems.ITEM1.get(),
-              queries={'id': 'ID of selected item for change'})
+              response=ExampleItems.ITEM1.get())
     def put(self, id: int):
         return self._put(id)
 
-    @api_func('Delete item', url_tail='items/1',
-              response=None,
-              queries={'id': 'ID of selected item for change'},
-              status_codes={404: 'there is no item'})
+    @api_func('Delete item', item_name='item', url_tail='items/1',
+              response=None)
     def delete(self, id: int):
         return self._delete(id)
 

@@ -42,7 +42,7 @@ class TestApiDocDecorator(ApiDocTestCase):
 
         :statuscode 201: no error
         :statuscode 401: user was not logged in
-        :statuscode 422: there is missing field
+        :statuscode 422: there is wrong type / missing field
 
         **Example request**:
 
@@ -72,6 +72,7 @@ class TestApiDocDecorator(ApiDocTestCase):
 
         :statuscode 200: no error
         :statuscode 401: user was not logged in
+        :statuscode 422: there is wrong type / missing field
 
         **Example request**:
 

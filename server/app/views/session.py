@@ -22,8 +22,7 @@ class SessionView(restful.Resource):
               login_required=False,
               request=ExampleUsers.ADMIN.set(['username', 'password']),
               response=ExampleUsers.ADMIN.get(),
-              status_codes={401: 'bad authentication data or user is disabled',
-                            422: 'there is wrong type / missing field'})
+              status_codes={401: 'bad authentication data or user is disabled'})
     def post(self):
         try:
             data = get_validated_request(SessionDeserializer())

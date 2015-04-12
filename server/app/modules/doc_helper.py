@@ -40,7 +40,7 @@ class ApiDoc:
         401: ['UNAUTHORIZED', 'user was not logged in'],
         403: ['FORBIDDEN', 'user has not enough rights'],
         404: ['NOT FOUND', ''],
-        422: ['UNPROCESSABLE ENTITY', 'there is missing field'],
+        422: ['UNPROCESSABLE ENTITY', 'there is wrong type / missing field'],
     }
 
     @classmethod
@@ -72,7 +72,11 @@ class ApiDoc:
         lines = []
         for code, description in status_codes.items():
             if not description:
-                description = cls.__STATUSES[code][1]
+                description = '{{ original }}'
+            original = ''
+            if code in cls.__STATUSES.keys():
+                original = cls.__STATUSES[code][1]
+            description = Template(description).render(original=original)
             lines.append({'code': code, 'description': description})
         return sorted(lines, key=itemgetter('code'))
 

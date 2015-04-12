@@ -19,7 +19,7 @@ class StocktakingItemListView(BaseModelListView):
     @api_func('Create stocktaking item', url_tail='stocktaking-items',
               request=ExampleStocktakingItems.ITEM1.set(),
               response=ExampleStocktakingItems.ITEM1.get(),
-              status_codes={422: 'there is wrong type / missing field'})
+              status_codes={422: '{{ original }} / can not add one item twice'})
     def post(self):
         return self._post()
 
@@ -29,24 +29,20 @@ class StocktakingItemView(BaseView):
     _serializer = StocktakingItemSerializer
     _deserializer = StocktakingItemSerializer
 
-    @api_func('Get stocktaking item', url_tail='stocktaking-items/1',
-              response=ExampleStocktakingItems.ITEM1.get(),
-              queries={'id': 'ID of selected stocktaking item for change'},
-              status_codes={404: 'there is no item'})
+    @api_func('Get stocktaking item', item_name='stocktaking item', url_tail='stocktaking-items/1',
+              response=ExampleStocktakingItems.ITEM1.get())
     def get(self, id: int):
         return self._get(id)
 
-    @api_func('Update stocktaking item', url_tail='stocktaking-items/1',
+    @api_func('Update stocktaking item', item_name='stocktaking item', url_tail='stocktaking-items/1',
               request=ExampleStocktakingItems.ITEM1.set(),
               response=ExampleStocktakingItems.ITEM1.get(),
-              queries={'id': 'ID of selected stocktaking item for change'})
+              status_codes={422: '{{ original }} / can not add one item twice'})
     def put(self, id: int):
         return self._put(id)
 
-    @api_func('Delete stocktaking item', url_tail='stocktaking-items/1',
-              response=None,
-              queries={'id': 'ID of selected stocktaking item for change'},
-              status_codes={404: 'there is no item'})
+    @api_func('Delete stocktaking item', item_name='stocktaking item', url_tail='stocktaking-items/1',
+              response=None)
     def delete(self, id: int):
         return self._delete(id)
 
