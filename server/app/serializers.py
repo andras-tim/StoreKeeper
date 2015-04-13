@@ -9,6 +9,11 @@ def _not_blank(data):
         raise ValidationError('Missing data for required field.')
 
 
+def _greater_than_zero(number: int):
+    if not number > 0:
+        raise ValidationError('Must be greater than 0.')
+
+
 class UserSerializer(Serializer):
     class Meta:
         fields = ('id', 'username', 'email', 'admin', 'disabled')
@@ -89,7 +94,7 @@ class AcquisitionItemSerializer(Serializer):
     id = fields.Int()
     acquisition = fields.Nested(AcquisitionSerializer, required=True)
     item = fields.Nested(ItemSerializer, required=True)
-    quantity = fields.Int(required=True)
+    quantity = fields.Int(required=True, validate=_greater_than_zero)
 
 
 class StocktakingItemSerializer(Serializer):

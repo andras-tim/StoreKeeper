@@ -19,6 +19,10 @@ class TestItemWithBrandNewDb(CommonApiTest):
         self.assertApiPost(data=Items.ITEM1, expected_data=Items.ITEM1)
         self.assertApiPost(data=Items.ITEM2, expected_data=Items.ITEM2)
 
+    def test_can_add_item_with_negative_and_zero_quantity(self):
+        self.assertApiPost(data=Items.ITEM1.set(change={'quantity': -1}))
+        self.assertApiPost(data=Items.ITEM2.set(change={'quantity': 0}))
+
     def test_can_not_add_item_with_same_name(self):
         self.assertApiPost(data=Items.ITEM1)
         self.assertApiPost(data=Items.ITEM2.set(change={'name': Items.ITEM1['name']}),

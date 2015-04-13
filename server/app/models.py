@@ -150,6 +150,10 @@ class AcquisitionItem(db.Model):
     acquisition = db.relationship('Acquisition')
     item = db.relationship('Item')
 
+    __table_args__ = (
+        db.Index('acquisition_item__can_not_add_one_item_twice', 'acquisition_id', 'item_id', unique=True),
+    )
+
     def __repr__(self)-> str:
         return '{!s} [{!r}]'.format(self.id, self.item)
 
@@ -174,6 +178,10 @@ class StocktakingItem(db.Model):
 
     stocktaking = db.relationship('Stocktaking')
     item = db.relationship('Item')
+
+    __table_args__ = (
+        db.Index('stocktaking_item__can_not_add_one_item_twice', 'stocktaking_id', 'item_id', unique=True),
+    )
 
     def __repr__(self)-> str:
         return '{!s} [{!r}]'.format(self.id, self.item)

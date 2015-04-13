@@ -18,9 +18,25 @@ class TestAcquisitionItemWithBrandNewDb(CommonApiTest):
         self.assertApiGet(expected_data=[])
         self.assertApiGet(1, expected_status_codes=404)
 
-    def test_adding_new_items(self):
+    def test_adding_new_acquisition_items(self):
         self.assertApiPost(data=AcquisitionItems.ITEM1, expected_data=AcquisitionItems.ITEM1)
         self.assertApiPost(data=AcquisitionItems.ITEM2, expected_data=AcquisitionItems.ITEM2)
+
+    def test_can_not_add_acquisition_item_with_lower_than_one_quantity(self):
+        self.assertApiPost(data=AcquisitionItems.ITEM1.set(change={'quantity': 0}),
+                           expected_data={'message': {'quantity': ['Must be greater than 0.']}},
+                           expected_status_codes=422)
+        self.assertApiPost(data=AcquisitionItems.ITEM1.set(change={'quantity': -1}),
+                           expected_data={'message': {'quantity': ['Must be greater than 0.']}},
+                           expected_status_codes=422)
+
+    def test_can_not_add_more_than_once_an_item_to_an_acquisition(self):
+        self.assertApiPost(data=AcquisitionItems.ITEM1)
+        self.assertApiPost(data=AcquisitionItems.ITEM2.set(change={'acquisition': AcquisitionItems.ITEM1['acquisition'],
+                                                                   'item': AcquisitionItems.ITEM1['item']}),
+                           expected_data={
+                               'message': {'acquisition_id, item_id': ['Already exists.']}},
+                           expected_status_codes=422)
 
 
 class TestAcquisitionItemWithPreFilledDb(CommonApiTest):

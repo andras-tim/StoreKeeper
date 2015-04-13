@@ -18,9 +18,21 @@ class TestStocktakingItemWithBrandNewDb(CommonApiTest):
         self.assertApiGet(expected_data=[])
         self.assertApiGet(1, expected_status_codes=404)
 
-    def test_adding_new_items(self):
+    def test_adding_new_stocktaking_items(self):
         self.assertApiPost(data=StocktakingItems.ITEM1, expected_data=StocktakingItems.ITEM1)
         self.assertApiPost(data=StocktakingItems.ITEM2, expected_data=StocktakingItems.ITEM2)
+
+    def test_can_add_stocktaking_item_with_negative_and_zero_quantity(self):
+        self.assertApiPost(data=StocktakingItems.ITEM1.set(change={'quantity': -1}))
+        self.assertApiPost(data=StocktakingItems.ITEM2.set(change={'quantity': 0}))
+
+    def test_can_not_add_more_than_once_an_item_to_a_stocktaking(self):
+        self.assertApiPost(data=StocktakingItems.ITEM1)
+        self.assertApiPost(data=StocktakingItems.ITEM2.set(change={'stocktaking': StocktakingItems.ITEM1['stocktaking'],
+                                                                   'item': StocktakingItems.ITEM1['item']}),
+                           expected_data={
+                               'message': {'item_id, stocktaking_id': ['Already exists.']}},
+                           expected_status_codes=422)
 
 
 class TestStocktakingItemWithPreFilledDb(CommonApiTest):
