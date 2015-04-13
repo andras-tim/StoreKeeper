@@ -84,7 +84,7 @@ class Item(db.Model):
 @nested_fields(item=Item)
 class Barcode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    barcode = db.Column(db.String(15), nullable=False)
+    barcode = db.Column(db.String(15), nullable=False, unique=True)
     quantity = db.Column(db.Integer, nullable=False, default=1)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     main = db.Column(db.Boolean, default=False)

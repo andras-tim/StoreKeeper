@@ -32,3 +32,4 @@ Endpoints
    stocktakings
    stocktaking_items
    items
+   barcodes

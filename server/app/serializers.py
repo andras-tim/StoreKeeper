@@ -102,3 +102,11 @@ class StocktakingItemSerializer(Serializer):
     stocktaking = fields.Nested(StocktakingSerializer, required=True)
     item = fields.Nested(ItemSerializer, required=True)
     quantity = fields.Int(required=True)
+
+
+class BarcodeSerializer(Serializer):
+    id = fields.Int()
+    barcode = fields.Str(required=True, validate=_not_blank)
+    quantity = fields.Int(validate=_greater_than_zero)
+    item = fields.Nested(ItemSerializer, required=True)
+    main = fields.Bool()
