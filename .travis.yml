@@ -3,8 +3,10 @@ python:
   - 3.4
 install:
   - pip install -r server/requirements.txt
+  - pip install -r server/requirements-dev.txt
   - pip install coveralls
 script:
-  - py.test --cov server/app --cov-config server/.coveragerc --cov-report=term-missing server/test
+  - py.test --cov server/app --cov-config server/.coveragerc --cov-report=term-missing --durations=3 server/test
+  - python3 -m pep8 --max-line-length=120 --ignore=E402 server/app server/test
 after_success:
   - coveralls --rcfile server/.coveragerc

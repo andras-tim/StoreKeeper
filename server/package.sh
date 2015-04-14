@@ -57,6 +57,9 @@ function do_clear()
     # Remove virtualenv
     purge 'flask'
 
+    # Clear py.test cache
+    purge test/.cache
+
     # Clear Python cache
     find_and_purge -name '__pycache__'
 }
