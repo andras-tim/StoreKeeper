@@ -80,27 +80,28 @@ class CommonApiTest(LowLevelCommonApiTest):
         super().setUp()
         self._fill_up(self.INIT_PUSH)
 
-    def assertApiGet(self, id: (int, None)=None, endpoint: (str, None)=None, expected_data: (list, dict, None)=None,
-                     expected_status_codes: (int, list)=200):
-        self.assertApiRequest('get', self.__get_url(endpoint, id),
+    def assertApiGet(self, id: (int, None)=None, endpoint: (str, None)=None, url_suffix: str='',
+                     expected_data: (list, dict, None)=None, expected_status_codes: (int, list)=200):
+        self.assertApiRequest('get', self.__get_url(endpoint, id, url_suffix),
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
 
-    def assertApiPost(self, data: dict, endpoint: (str, None)=None, expected_data: (str, list, dict, None)=None,
-                      expected_status_codes: (int, list)=200):
-        self.assertApiRequest('post', self.__get_url(endpoint), data=self.__extract_data(data, 'set'),
+    def assertApiPost(self, data: dict, endpoint: (str, None)=None, url_suffix: str='',
+                      expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+        self.assertApiRequest('post', self.__get_url(endpoint, url_suffix=url_suffix),
+                              data=self.__extract_data(data, 'set'),
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
 
-    def assertApiPut(self, id: int, data: dict, endpoint: (str, None)=None, expected_data: (str, list, dict, None)=None,
-                     expected_status_codes: (int, list)=200):
-        self.assertApiRequest('put', self.__get_url(endpoint, id), data=data,
+    def assertApiPut(self, id: int, data: (dict, None)=None, endpoint: (str, None)=None, url_suffix: str='',
+                     expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+        self.assertApiRequest('put', self.__get_url(endpoint, id, url_suffix), data=data,
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
 
-    def assertApiDelete(self, id: (int, None)=None, endpoint: (str, None)=None,
+    def assertApiDelete(self, id: (int, None)=None, endpoint: (str, None)=None, url_suffix: str='',
                         expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
-        self.assertApiRequest('delete', self.__get_url(endpoint, id),
+        self.assertApiRequest('delete', self.__get_url(endpoint, id, url_suffix),
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
 
@@ -124,12 +125,11 @@ class CommonApiTest(LowLevelCommonApiTest):
 
         return item
 
-    def __get_url(self, endpoint: (str, None), id: (int, None)=None):
+    def __get_url(self, endpoint: (str, None), id: (int, None)=None, url_suffix: str=''):
         endpoint = endpoint or self.ENDPOINT
 
-        url_suffix = ''
         if id is not None:
-            url_suffix = '/{:d}'.format(id)
+            url_suffix = '/{:d}{:s}'.format(id, url_suffix)
 
         return '{!s}{!s}'.format(endpoint, url_suffix)
 

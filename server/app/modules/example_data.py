@@ -19,6 +19,19 @@ class FilterableDict:
     def set(self, fields_in_result: (list, None)=None, change: (dict, None)=None) -> dict:
         return self.__get_results(self.__setters, fields_in_result, change)
 
+    def get_changed(self, commons: (dict, None)=None, getters: (dict, None)=None,
+                    setters: (dict, None)=None) -> 'FilterableDict':
+        new_commons = dict(self.__commons)
+        new_commons.update(commons or {})
+
+        new_getters = dict(self.__getters)
+        new_getters.update(getters or {})
+
+        new_setters = dict(self.__setters)
+        new_setters.update(setters or {})
+
+        return FilterableDict(commons=new_commons, getters=new_getters, setters=new_setters)
+
     def __get_results(self, call_specific_data: dict, fields_in_result: (list, None),
                       changed_fields: (dict, None)) -> dict:
         result = dict(self.__commons)

@@ -93,14 +93,14 @@ class BaseView(_BaseModelResource):
         """
         Single item getter
         """
-        item = self.__get_item(id)
+        item = self._get_item(id)
         return self._serializer(item).data
 
     def _put_populate(self, id: int) -> 'item':
         """
         Populate change object
         """
-        item = self.__get_item(id)
+        item = self._get_item(id)
         self._populate_item(item)
         return item
 
@@ -122,13 +122,16 @@ class BaseView(_BaseModelResource):
         """
         Delete single item
         """
-        item = self.__get_item(id)
+        item = self._get_item(id)
 
         db.session.delete(item)
         commit_with_error_handling(db)
         return None
 
-    def __get_item(self, id: int) -> 'item':
+    def _get_item(self, id: int) -> 'item':
+        """
+        Single object getter
+        """
         item = self._model.query.get(id)
         if not item:
             abort(404)
