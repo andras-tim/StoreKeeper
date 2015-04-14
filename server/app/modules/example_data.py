@@ -167,3 +167,12 @@ class ExampleWorks:
     WORK1_RETURNED_CLOSED = WORK1_OUTBOUND_CLOSED.get_changed(
         getters={'returned_close_timestamp': ExampleTimestamp.utcnow(),
                  'returned_close_user': ExampleUsers.USER1.get()})
+
+
+class ExampleWorkItems:
+    ITEM1 = FilterableDict(commons={'work': ExampleWorks.WORK1.get(),
+                                    'item': ExampleItems.ITEM2.get(), 'outbound_quantity': 132},
+                           getters={'id': 1, 'returned_quantity': None})
+    ITEM2 = FilterableDict(commons={'work': ExampleWorks.WORK2.get(),
+                                    'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 32, 'returned_quantity': 0},
+                           getters={'id': 2})

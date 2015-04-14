@@ -14,6 +14,11 @@ def _greater_than_zero(number: int):
         raise ValidationError('Must be greater than 0.')
 
 
+def _greater_than_or_equal_zero(number: int):
+    if not number >= 0:
+        raise ValidationError('Must be greater than or equal 0.')
+
+
 class UserSerializer(Serializer):
     class Meta:
         fields = ('id', 'username', 'email', 'admin', 'disabled')
@@ -126,3 +131,11 @@ class WorkSerializer(Serializer):
 class WorkDeserializer(Serializer):
     customer = fields.Nested(CustomerSerializer, required=True)
     comment = fields.Str()
+
+
+class WorkItemSerializer(Serializer):
+    id = fields.Int()
+    work = fields.Nested(WorkSerializer, required=True)
+    item = fields.Nested(ItemSerializer, required=True)
+    outbound_quantity = fields.Int(required=True, validate=_greater_than_zero)
+    returned_quantity = fields.Int(default=None, validate=_greater_than_or_equal_zero)

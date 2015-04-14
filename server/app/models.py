@@ -134,13 +134,17 @@ class WorkItem(db.Model):
     work_id = db.Column(db.Integer, db.ForeignKey('work.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     outbound_quantity = db.Column(db.Integer, nullable=False)
-    return_quantity = db.Column(db.Integer)
+    returned_quantity = db.Column(db.Integer)
 
     work = db.relationship('Work')
     item = db.relationship('Item')
 
+    __table_args__ = (
+        db.Index('work_item__can_not_add_one_item_twice', 'work_id', 'item_id', unique=True),
+    )
+
     def __repr__(self)-> str:
-        return '{!s} [-{!s}, +{!s}]'.format(self.item, self.outbound_quantity, self.return_quantity)
+        return '{!s} [-{!s}, +{!s}]'.format(self.item, self.outbound_quantity, self.returned_quantity)
 
 
 class Acquisition(db.Model):
