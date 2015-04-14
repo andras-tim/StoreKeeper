@@ -20,7 +20,7 @@ Endpoints
 ---------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    acquisition_items
    acquisitions
