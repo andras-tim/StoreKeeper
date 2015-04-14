@@ -76,6 +76,8 @@ class ExampleUsers:
                         setters={'password': 'pw3'},
                         getters={'admin': False, 'id': 4, 'disabled': False})
 
+    NONE_USER = ExampleUser(getters={'id': None, 'username': None, 'email': None, 'admin': None, 'disabled': None})
+
 
 class ExampleVendors:
     VENDOR1 = FilterableDict(commons={'name': 'Heavy Duty Ltd.'},
@@ -144,3 +146,24 @@ class ExampleBarcodes:
     BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1, 'item': ExampleItems.ITEM1.get(),
                                        'main': False},
                               getters={'id': 2})
+
+
+class ExampleWorks:
+    WORK1 = FilterableDict(commons={'customer': ExampleCustomers.CUSTOMER1.get(), 'comment': 'First work'},
+                           getters={'id': 1, 'outbound_close_timestamp': None,
+                                    'outbound_close_user': ExampleUsers.NONE_USER.get(),
+                                    'returned_close_timestamp': None,
+                                    'returned_close_user': ExampleUsers.NONE_USER.get()})
+    WORK2 = FilterableDict(commons={'customer': ExampleCustomers.CUSTOMER2.get()},
+                           getters={'id': 2, 'comment': '', 'outbound_close_timestamp': None,
+                                    'outbound_close_user': ExampleUsers.NONE_USER.get(),
+                                    'returned_close_timestamp': None,
+                                    'returned_close_user': ExampleUsers.NONE_USER.get()})
+
+    WORK1_OUTBOUND_CLOSED = WORK1.get_changed(
+        getters={'outbound_close_timestamp': ExampleTimestamp.utcnow(),
+                 'outbound_close_user': ExampleUsers.USER1.get()})
+
+    WORK1_RETURNED_CLOSED = WORK1_OUTBOUND_CLOSED.get_changed(
+        getters={'returned_close_timestamp': ExampleTimestamp.utcnow(),
+                 'returned_close_user': ExampleUsers.USER1.get()})

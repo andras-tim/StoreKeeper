@@ -102,16 +102,30 @@ class Work(db.Model):
     comment = db.Column(db.Text)
     outbound_close_timestamp = db.Column(db.DateTime)
     outbound_close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    return_close_timestamp = db.Column(db.DateTime)
-    return_close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    returned_close_timestamp = db.Column(db.DateTime)
+    returned_close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     customer = db.relationship('Customer')
     outbound_close_user = db.relationship('User', foreign_keys=[outbound_close_user_id])
-    return_close_user = db.relationship('User', foreign_keys=[return_close_user_id])
+    returned_close_user = db.relationship('User', foreign_keys=[returned_close_user_id])
     work_items = db.relationship('WorkItem', lazy='dynamic')
 
     def __repr__(self)-> str:
         return '{!s} [{!r}]'.format(self.id, self.customer)
+
+    def close_outbound_items(self, user: User):
+        if self.outbound_close_user_id:
+            raise RuntimeError("Outbound items have been closed.")
+        self.outbound_close_user_id = user.id
+        self.outbound_close_timestamp = datetime.utcnow()
+
+    def close_returned_items(self, user: User):
+        if not self.outbound_close_user_id:
+            raise RuntimeError("Outbound items have not been closed.")
+        if self.returned_close_user_id:
+            raise RuntimeError("Returned items have been closed.")
+        self.returned_close_user_id = user.id
+        self.returned_close_timestamp = datetime.utcnow()
 
 
 @nested_fields(work=Work, item=Item)

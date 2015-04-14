@@ -110,3 +110,19 @@ class BarcodeSerializer(Serializer):
     quantity = fields.Int(validate=_greater_than_zero)
     item = fields.Nested(ItemSerializer, required=True)
     main = fields.Bool()
+
+
+class WorkSerializer(Serializer):
+    customer = fields.Nested(CustomerSerializer, required=True)
+    comment = fields.Str()
+    outbound_close_user = fields.Nested(UserSerializer)
+    returned_close_user = fields.Nested(UserSerializer)
+
+    class Meta:
+        fields = ('id', 'customer', 'comment', 'outbound_close_timestamp', 'outbound_close_user',
+                  'returned_close_timestamp', 'returned_close_user')
+
+
+class WorkDeserializer(Serializer):
+    customer = fields.Nested(CustomerSerializer, required=True)
+    comment = fields.Str()

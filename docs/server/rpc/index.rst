@@ -33,3 +33,4 @@ Endpoints
    units
    users
    vendors
+   works
