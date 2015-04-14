@@ -95,7 +95,8 @@ class CommonApiTest(LowLevelCommonApiTest):
 
     def assertApiPut(self, id: int, data: (dict, None)=None, endpoint: (str, None)=None, url_suffix: str='',
                      expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
-        self.assertApiRequest('put', self.__get_url(endpoint, id, url_suffix), data=data,
+        self.assertApiRequest('put', self.__get_url(endpoint, id, url_suffix),
+                              data=self.__extract_data(data, 'set'),
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
 
