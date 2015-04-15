@@ -1,7 +1,7 @@
 from flask.ext import restful
 from flask.ext.restful import abort
 
-from app.modules.view_helper import PopulateModelOnSubmit
+from app.modules.view_helper import PopulateModelOnSubmit, ModelDataDiffer
 from app.server import db
 from app.views.common import commit_with_error_handling
 
@@ -136,3 +136,13 @@ class BaseView(_BaseModelResource):
         if not item:
             abort(404)
         return item
+
+
+class BaseViewWithDiff(BaseView):
+    __differ = ModelDataDiffer()
+
+    def _save_original_before_populate(self, id: int):
+        self.__differ.save_state(self._get_item(id))
+
+    def _get_populate_diff(self, item) -> dict:
+        return self.__differ.get_diff(item)

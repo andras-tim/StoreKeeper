@@ -1,8 +1,10 @@
 import re
-
 from flask import request
 from marshmallow import Serializer
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.inspection import inspect
+
+from app.server import db
 
 
 def nested_fields(**names_classes):
@@ -58,7 +60,7 @@ class PopulateModelOnSubmit:
 
     def __populate_nested_field(self, field_name: str, posted_data, nested_class: type, errors: dict):
         """
-        Update nested field by its ids
+        Update nested field by its id
         """
         if type(posted_data) is not dict or 'id' not in posted_data.keys():
             errors[field_name] = {'id': 'This field is required.'}
@@ -118,3 +120,48 @@ def get_validated_request(deserializer: Serializer) -> (dict, list, None):
             raise RequestProcessingError(errors)
 
         return data
+
+
+class ModelDataDiffer:
+    """
+    Tool for checking changes of the specified fields
+    """
+    def __init__(self):
+        self.__nested_fields = {}
+        self.__original_values = {}
+
+    def save_state(self, model: db.Model):
+        self.__initial_enumerate_nested_fields(model)
+
+        self.__original_values = {}
+        for column in model.__table__.columns:
+            self.__original_values[column.name] = self.__get_field_value(model, column.name)
+
+    def get_diff(self, model: db.Model) -> dict:
+        diff = {}
+
+        for column in model.__table__.columns:
+            original = self.__original_values[column.name]
+            current = self.__get_field_value(model, column.name)
+            if original != current:
+                diff[column.name] = {'original': original, 'current': current}
+
+        return diff
+
+    def __initial_enumerate_nested_fields(self, model: db.Model):
+        if self.__nested_fields:
+            return
+
+        relationships = inspect(model.__class__).relationships
+        for relationship in relationships:
+            nested_field_name = relationship.key
+            for local_field, remote_field in relationship.local_remote_pairs:
+                self.__nested_fields[local_field.name] = [nested_field_name, remote_field.name]
+
+    def __get_field_value(self, model: db.Model, name: str):
+        if name not in self.__nested_fields.keys():
+            return getattr(model, name)
+
+        nested_field_name, remote_field_name = self.__nested_fields[name]
+        nested_field = getattr(model, nested_field_name)
+        return getattr(nested_field, remote_field_name)
