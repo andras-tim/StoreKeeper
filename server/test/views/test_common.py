@@ -1,5 +1,5 @@
-from test.modules import ApiDocTestCase
 from app.views.common import api_func
+from test.modules.base_doc_test import ApiDocTestCase
 
 
 class TestApiDocDecorator(ApiDocTestCase):
