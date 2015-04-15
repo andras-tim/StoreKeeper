@@ -39,12 +39,17 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
 
     def __assert_response_data(self, expected_data: (str, list, dict, None), response: Response):
         response_string = self.__make_testable_data(response.data.decode('utf-8'))
+        response = self.__get_parsed_response(response_string)
         expected_data = self.__make_testable_data(expected_data)
+
+        assert expected_data == response
+
+    def __get_parsed_response(self, response_string: str) -> (str, list, dict, None):
         try:
             data_json = json.loads(response_string)
         except Exception as e:
             assert False, 'Can not parse received data as JSON; data={!r}, error={!r}'.format(response_string, e)
-        assert expected_data == data_json
+        return data_json
 
     def __assert_status_code(self, expected_status_codes: (int, list), response: Response):
         if type(expected_status_codes) != list:
