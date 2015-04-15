@@ -10,8 +10,12 @@ StoreKeeper is an open source, multilingual warehouse/store management software
 
 
 ## Features
-* Manage users, and login-logout via API
-* *Others will be soon*
+The following features are only available via API now.
+
+* Manage users, sessions (login, logout), handle permissions
+* Manage items and its barcodes, units, vendors
+* Can make acquisition, amd stocktaking
+* Can crate works and its customers (handle outbound, returned items)
 
 
 ## Prepare & Run
