@@ -1,8 +1,6 @@
 from marshmallow import Serializer, fields, ValidationError
 from marshmallow.validate import Regexp
 
-from app.models import *
-
 
 def _not_blank(data):
     if not data:
