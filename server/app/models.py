@@ -113,6 +113,15 @@ class Work(db.Model):
     def __repr__(self)-> str:
         return '{!s} [{!r}]'.format(self.id, self.customer)
 
+    def are_items_frozen(self) -> bool:
+        return self.are_outbound_items_closed()
+
+    def are_outbound_items_closed(self) -> bool:
+        return self.outbound_close_user_id is not None
+
+    def are_returned_items_closed(self) -> bool:
+        return self.returned_close_user_id is not None
+
     def close_outbound_items(self, user: User):
         if self.outbound_close_user_id:
             raise RuntimeError("Outbound items have been closed.")

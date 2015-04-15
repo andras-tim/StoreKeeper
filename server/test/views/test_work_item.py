@@ -1,6 +1,8 @@
 from app.modules.example_data import ExampleWorkItems as WorkItems, ExampleWorks as Works, \
-    ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units, ExampleCustomers as Customers
+    ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units, ExampleCustomers as Customers, \
+    ExampleUsers as Users
 from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
+from test.views.base_session_test import CommonSessionTest
 
 
 @append_mandatory_field_tests(item_name='work_item', base_item=WorkItems.ITEM1,
@@ -82,3 +84,39 @@ class TestWorkItemWithPreFilledDb(CommonApiTest):
 
         self.assertApiPut(WorkItems.ITEM2['id'], data=request, expected_data=response)
         self.assertApiGet(expected_data=[WorkItems.ITEM1, response])
+
+
+class TesCloseOutboundOftWork(CommonSessionTest):
+    ENDPOINT = '/work-items'
+    INIT_PUSH = [
+        ('/users', [Users.USER1]),
+        ('/customers', [Customers.CUSTOMER1, Customers.CUSTOMER2]),
+        ('/works', [Works.WORK1, Works.WORK2]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1, Items.ITEM2]),
+        (ENDPOINT, [WorkItems.ITEM1]),
+    ]
+
+    def setUp(self):
+        super().setUp()
+        self.assertApiLogin(Users.USER1)
+        self.assertApiPut(Works.WORK1['id'], endpoint='/works', url_suffix='/close-outbound')
+
+    def test_can_not_add_new_work_item_after_outbound_items_are_closed(self):
+        self.assertApiPost(data=WorkItems.ITEM2.set(change={'work': Works.WORK1.get()}),
+                           expected_data={'message': 'Can not add new item.'}, expected_status_codes=403)
+
+    def test_can_not_change_work_of_work_item(self):
+        request = WorkItems.ITEM1.set(change={'work': Works.WORK2.get()})
+        self.assertApiPut(1, data=request,
+                          expected_data={'message': 'Can not change work.'}, expected_status_codes=403)
+
+    def test_can_not_change_outbound_work_item_after_outbound_items_are_closed(self):
+        request = WorkItems.ITEM1.set(change={'item': Items.ITEM1.get()})
+        self.assertApiPut(1, data=request,
+                          expected_data={'message': 'Work item was closed.'}, expected_status_codes=403)
+
+        request = WorkItems.ITEM1.set(change={'outbound_quantity': WorkItems.ITEM1['outbound_quantity'] + 1})
+        self.assertApiPut(1, data=request,
+                          expected_data={'message': 'Work item was closed.'}, expected_status_codes=403)
