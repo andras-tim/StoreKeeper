@@ -8,6 +8,7 @@ DefaultConfig:
 
     ADMIN_PAGE: False
     MIGRATE_REPO_PATH: "$BASEDIR/db_repository"
+    SHARE_STATIC: True
 
   Flask:
     # http://flask.pocoo.org/docs/0.10/config/
@@ -21,6 +22,9 @@ DefaultConfig:
 
 ProductionConfig:
   Base: DefaultConfig
+
+  App:
+    SHARE_STATIC: False
 
   Flask:
     SQLALCHEMY_DATABASE_URI: "mysql+pymysql://storekeeper:StoreKeeper@localhost/storekeeper"
