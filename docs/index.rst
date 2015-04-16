@@ -30,6 +30,7 @@ The Guide
    :maxdepth: 2
 
    setup
+   client/index
    server/index
 
 
