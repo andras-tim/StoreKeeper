@@ -1,4 +1,5 @@
-# StoreKeeper
+![alt tag](https://raw.githubusercontent.com/andras-tim/StoreKeeper/master/client/app/img/logo.png)
+
 [![Build Status](https://travis-ci.org/andras-tim/StoreKeeper.svg?branch=master)](https://travis-ci.org/andras-tim/StoreKeeper)
 [![Coverage Status](https://coveralls.io/repos/andras-tim/StoreKeeper/badge.svg?branch=master)](https://coveralls.io/r/andras-tim/StoreKeeper?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/storekeeper/badge/?version=latest)](https://readthedocs.org/projects/storekeeper/?badge=latest)

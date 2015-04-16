@@ -1,0 +1,22 @@
+{% extends admin_base_template %}
+
+{% block head_css %}
+  {{ super() }}
+  <style>
+    .navbar-brand {
+      padding: 8px 15px;
+    }
+    .navbar-brand img {
+      display: inline;
+      max-height: 35px;
+      vertical-align: -10px;
+      margin-right: 0.5em;
+    }
+  </style>
+{% endblock %}
+
+{% block brand %}
+  <a class="navbar-brand" href="#">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt=""> {{ admin_view.admin.name }}
+  </a>
+{% endblock %}

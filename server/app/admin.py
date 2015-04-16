@@ -11,7 +11,10 @@ from app.modules.config import ConfigObject
 
 
 def initialize(app: Flask, db: SQLAlchemy, config: ConfigObject):
-    admin = Admin(app, name=config.App.TITLE)
+    url = '/{!s}/admin'.format(config.App.NAME)
+    title = 'Admin'
+
+    admin = Admin(app, url=url, name=title, template_mode='bootstrap3')
     __import_models(db, admin)
     __add_file_managers(app, admin)
 
