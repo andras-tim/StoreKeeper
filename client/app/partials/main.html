@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      <!--Sidebar content-->
+
+      <div class="form-group">
+        <label ng-bind="'Search:' | translate"></label>
+        <input type="text" class="form-control" placeholder="{{'Enter search query' | translate}}" ng-model="query" />
+      </div>
+    </div>
+
+    <div class="col-md-10">
+      <!--Body content-->
+      <h2 ng-bind="'Welcome!' | translate"></h2>
+
+      <pre>session = {{session | json}}</pre>
+
+      <button type="button" class="btn btn-lg" ng-click="loginTest()" ng-bind="'Auth check' | translate"></button>
+      <button type="button" class="btn btn-lg" ng-click="logout()" ng-bind="'LogOut' | translate"></button>
+    </div>
+  </div>
+</div>

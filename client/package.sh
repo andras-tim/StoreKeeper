@@ -23,14 +23,8 @@ function do_postinstall()
 
 function do_clear()
 {
-    if [ -e app/bower_components ]
-    then
-        rm -rf app/bower_components
-    fi
-    if [ -e node_modules ]
-    then
-        rm -rf node_modules
-    fi
+    purge node_modules
+    purge app/bower_components
 }
 
 

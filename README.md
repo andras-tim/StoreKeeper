@@ -28,7 +28,7 @@ All commands can run with `package.sh` scripts what you want. All of these scrip
 3. Prepare database: `./server/database.py --create`
 4. Start server: `./package.sh start`
 
-Now, you can manage server via RPC API on [http://localhost:8000/storekeeper](http://localhost:8000/storekeeper)
+Now, you can open the WebUI: [http://localhost:8000/storekeeper](http://localhost:8000/storekeeper)
 
 
 ## Documentation

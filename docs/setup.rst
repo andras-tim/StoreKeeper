@@ -16,7 +16,7 @@ available getting some info about the current module.
    3. Prepare database: ``./server/database.py --create``
    4. Start server: ``./package.sh start``
 
-Now, you can manage server via RPC API on http://localhost:8000/storekeeper
+Now, you can open the WebUI: http://localhost:8000/storekeeper
 
 
 Details

@@ -1,11 +1,37 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="storekeeperApp">
 <head>
   <meta charset="utf-8">
   <title>StoreKeeper</title>
+
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="bower_components/bootstrap-additions/dist/bootstrap-additions.css">
+  <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css">
 </head>
-<body>
-    <h1><img id="logo" src="img/logo.png" alt=""></h1>
-    <a href="https://github.com/andras-tim/StoreKeeper">https://github.com/andras-tim/StoreKeeper</a>
+<body ng-controller="CommonCtrl">
+  <h1><img id="logo" src="img/logo.png" alt="Logo"></h1>
+  <hr />
+
+  <div ng-view></div>
+
+  <button type="button" class="btn btn-lg" ng-click="changeLanguage('hu');">HU</button>
+  <button type="button" class="btn btn-lg" ng-click="changeLanguage('en');">EN</button>
+
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/lodash/dist/lodash.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/restangular/dist/restangular.js"></script>
+  <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+  <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+  <script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
+
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/translations.js"></script>
 </body>
 </html>
