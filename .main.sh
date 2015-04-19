@@ -38,8 +38,20 @@ Available arguments:
   -h, --help            Show this help
   -g, --global          Install/make all changes on system
   -p, --production      Prepare environment for production use
+  -f, --force           Do not ask anything
 
 EOF
+}
+
+function apt_get_install()
+{
+    args=
+    if [ "${FORCE}" == true ]
+    then
+        args='-y'
+    fi
+
+    sudo apt-get install ${args} "$@"
 }
 
 function purge()
@@ -69,6 +81,7 @@ function find_and_purge()
 cmd=
 export GLOBAL_INSTALL=${GLOBAL_INSTALL:-false}
 export PRODUCTION=${PRODUCTION:-false}
+export FORCE=${FORCE:-false}
 while [ $# -gt 0 ]
 do
     case "$1" in
@@ -78,6 +91,8 @@ do
         --global|-g)        export GLOBAL_INSTALL=true
                             ;;
         --production|-p)    export PRODUCTION=true
+                            ;;
+        --force|-f)         export FORCE=true
                             ;;
         *)                  if [ "${cmd}" == '' ]
                             then

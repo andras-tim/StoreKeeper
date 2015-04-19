@@ -2,13 +2,13 @@
 
 function do_preinstall()
 {
-    sudo apt-get install wget
+    apt_get_install wget
 
     if [ ! -e '/etc/apt/sources.list.d/nodesource.list' ]
     then
         wget -q 'https://deb.nodesource.com/setup' -O - | sudo bash -
     fi
-    sudo apt-get install nodejs
+    apt_get_install nodejs
 }
 
 function do_postinstall()

@@ -26,7 +26,7 @@ function do_preinstall()
     else
         packages="${packages} python-virtualenv"
     fi
-    sudo apt-get install ${packages}
+    apt_get_install ${packages}
 }
 
 function do_postinstall()
