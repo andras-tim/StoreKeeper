@@ -2,6 +2,8 @@
 
 function do_preinstall()
 {
+    sudo apt-get install wget
+
     if [ ! -e '/etc/apt/sources.list.d/nodesource.list' ]
     then
         wget -q 'https://deb.nodesource.com/setup' -O - | sudo bash -

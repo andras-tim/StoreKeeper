@@ -1,5 +1,5 @@
-#@IgnoreInspection AddShebangLine
 ### Main ###
+set -e
 
 function get_commands()
 {
