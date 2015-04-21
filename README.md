@@ -31,6 +31,13 @@ All commands can run with `package.sh` scripts what you want. All of these scrip
 Now, you can open the WebUI: [http://localhost:8000/storekeeper](http://localhost:8000/storekeeper)
 
 
+## Demo site
+You can test the latest development version on our demo server: <br />
+ [http://storekeeper-demo.dras.hu/storekeeper](http://storekeeper-demo.dras.hu/storekeeper)
+
+Default username and password: **admin** / **admin**
+
+
 ## Documentation
 You can read more details in documentation. It's available in online and offline format too:
 

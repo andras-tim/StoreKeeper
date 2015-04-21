@@ -23,6 +23,14 @@ The following features are only available via API now.
 * Can crate works and its customers (handle outbound, returned items)
 
 
+Demo site
+---------
+You can test the latest development version on our demo server:
+ http://storekeeper-demo.dras.hu/storekeeper
+
+Default username and password: **admin** / **admin**
+
+
 The Guide
 =========
 

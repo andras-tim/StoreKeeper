@@ -12,7 +12,7 @@ PROD_USER_HOME='/var/run/storekeeper'
 HOST='localhost'
 PORT=8000
 URL='/storekeeper'
-CONFIG='DevelopmentConfig'
+CONFIG='DemoConfig'
 
 
 function chr()
