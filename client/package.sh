@@ -11,14 +11,13 @@ function do_preinstall()
     apt_get_install nodejs
 }
 
-function do_postinstall()
+function do_install()
 {
     if [ "${PRODUCTION}" == true ]
     then
         npm install --production
     else
         npm install
-        npm run update-webdriver
     fi
     node_modules/bower/bin/bower install
 }

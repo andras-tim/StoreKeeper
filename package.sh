@@ -5,10 +5,8 @@ function do_install()
     server/package.sh preinstall
     client/package.sh preinstall
 
-    server/package.sh postinstall
-    client/package.sh postinstall
-
-    docs/package.sh install
+    server/package.sh install
+    client/package.sh install
 
     echo -e "\nAll Done!"
 }
@@ -25,8 +23,14 @@ function do_clear()
     docs/package.sh clear
 }
 
+function do_test()
+{
+    server/package.sh test "$@"
+}
+
 function do_docs()
 {
+    docs/package.sh rebuild
     docs/package.sh start
 }
 

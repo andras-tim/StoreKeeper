@@ -79,6 +79,7 @@ function find_and_purge()
 
 # Init
 cmd=
+args=
 export GLOBAL_INSTALL=${GLOBAL_INSTALL:-false}
 export PRODUCTION=${PRODUCTION:-false}
 export FORCE=${FORCE:-false}
@@ -104,8 +105,7 @@ do
                                     exit 1
                                 fi
                             else
-                                echo "Unknown parameter: $1" >&2
-                                exit 1
+                                args="${args} $1"
                             fi
                             ;;
     esac
@@ -122,5 +122,5 @@ fi
 # Start
 eval "$(get_code_of_init)"
 show_title
-do_${cmd}
+do_${cmd} ${args}
 exit 0

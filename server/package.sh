@@ -3,16 +3,16 @@ PYTHON_VERSION=3.4
 
 function init()
 {
-    PIP='sudo pip3'
-    if [ "${GLOBAL_INSTALL}" == false ]
-    then
-        PIP='flask/bin/pip'
-    fi
-
     PYTHON="python${PYTHON_VERSION}"
     if [ "${GLOBAL_INSTALL}" == false ]
     then
         PYTHON='flask/bin/python'
+    fi
+
+    PIP='sudo pip3'
+    if [ "${GLOBAL_INSTALL}" == false ]
+    then
+        PIP="${PYTHON} -m pip"
     fi
 }
 
@@ -27,10 +27,7 @@ function do_preinstall()
         packages="${packages} python-virtualenv"
     fi
     apt_get_install ${packages}
-}
 
-function do_postinstall()
-{
     if [ "${GLOBAL_INSTALL}" == false ]
     then
         # Install virtualenv
@@ -39,39 +36,36 @@ function do_postinstall()
             virtualenv -p python${PYTHON_VERSION} flask
         fi
     fi
+    ${PIP} install --upgrade pip setuptools
+}
 
-    # Update Python packages
-    "${PIP}" install --upgrade pip setuptools
-    "${PIP}" install -r requirements.txt --upgrade
+function do_install()
+{
+    ${PIP} install -r requirements.txt --upgrade
     if [ "${PRODUCTION}" == false ]
     then
-        "${PIP}" install -r requirements-dev.txt --upgrade
+        ${PIP} install -r requirements-dev.txt --upgrade
     fi
+
+    mkdir -p tmp
 }
 
 function do_clear()
 {
-    # Remove directories
-    purge 'tmp'
-
-    # Remove virtualenv
-    purge 'flask'
-
-    # Clear py.test cache
+    purge tmp
+    purge flask
     purge test/.cache
-
-    # Clear Python cache
-    find_and_purge -name '__pycache__'
+    find_and_purge -name __pycache__
 }
 
 function do_start()
 {
-    "${PYTHON}" run.py
+    ${PYTHON} run.py
 }
 
 function do_test()
 {
-    "${PYTHON}" test.sh
+    ./test.sh "$@"
 }
 
 
