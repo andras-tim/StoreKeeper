@@ -30,13 +30,6 @@ ProductionConfig:
     SQLALCHEMY_DATABASE_URI: "mysql+pymysql://storekeeper:StoreKeeper@localhost/storekeeper"
 
 
-DemoConfig:
-  Base: DefaultConfig
-
-  App:
-    SHARE_STATIC: False
-
-
 DevelopmentConfig:
   Base: DefaultConfig
 

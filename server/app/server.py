@@ -1,22 +1,14 @@
-import os
 from flask import Flask
 from flask.ext import restful
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 
-from app import basedir, test_mode, doc_mode
-from app.modules.config import Config, ConfigObject
+from app import test_mode, doc_mode
+from app.config import get_config
 
 
-def __get_config() -> ConfigObject:
-    config_reader = Config(os.path.join(basedir, 'config.yml'), config_variables={'BASEDIR': basedir})
-    if test_mode:
-        return config_reader.read(used_config='TestingConfig')
-    return config_reader.read()
-
-
-config = __get_config()
+config = get_config()
 flask_args = {}
 
 # static sharing

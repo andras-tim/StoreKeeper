@@ -3,3 +3,4 @@ db_repository/
 flask/
 tmp/
 .pytest/failed
+config.yml
