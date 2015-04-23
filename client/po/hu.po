@@ -28,11 +28,11 @@ msgstr "Kijelentkezés"
 msgid "Login"
 msgstr "Bejelentkezés"
 
-#: app/partials/login.html:22 app/partials/login.html:24
+#: app/partials/login.html:20 app/partials/login.html:22
 msgid "Password"
 msgstr "Jelszó"
 
-#: app/partials/login.html:32
+#: app/partials/login.html:30
 msgid "Remember me"
 msgstr "Emlékezz rám"
 
@@ -40,25 +40,17 @@ msgstr "Emlékezz rám"
 msgid "Search:"
 msgstr "Keresés:"
 
-#: app/partials/login.html:39
+#: app/partials/login.html:37
 msgid "Sign in"
 msgstr "Bejelentkezés"
 
-#: app/partials/login.html:25
+#: app/partials/login.html:23
 msgid "The user's password is required"
 msgstr "A jelszót kötelező megadni"
 
-#: app/partials/login.html:16
-msgid "The user's username is required"
-msgstr "Az email címet kötelező megadni"
-
-#: app/partials/login.html:17
-msgid "The username address is invalid"
-msgstr "Az email cím nem megfelelő"
-
 #: app/partials/login.html:15
-msgid "This field should not be left blank."
-msgstr "Ez a mező nem maradhat üresen."
+msgid "The user's username is required"
+msgstr "A felhasználónevet kötelező megadni"
 
 #: app/partials/login.html:12 app/partials/login.html:14
 msgid "Username"
