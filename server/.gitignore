@@ -1,6 +1,6 @@
 app.sqlite
+config.yml
 db_repository/
 flask/
+test/.cache/
 tmp/
-.pytest/failed
-config.yml
