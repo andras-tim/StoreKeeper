@@ -23,7 +23,7 @@ class UserSerializer(Serializer):
 
 
 class UserDeserializer(Serializer):
-    username = fields.Str(required=True, validate=Regexp(r'^[a-z0-9][a-z0-9_.-]*[a-z0-9]$'))
+    username = fields.Str(required=True, validate=Regexp(r'^[a-z0-9](|[a-z0-9_.-]*[a-z0-9])$'))
     password = fields.Str(required=True, validate=_not_blank)
     email = fields.Email(required=True)
     admin = fields.Bool()
