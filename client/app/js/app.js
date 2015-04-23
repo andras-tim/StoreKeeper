@@ -45,6 +45,7 @@ storekeeperApp.config(['RestangularProvider',
 
 
 storekeeperApp.run(function (gettextCatalog) {
-  gettextCatalog.currentLanguage = 'en';
+  var language = window.navigator.userLanguage || window.navigator.language; // "en" or "en-US"
+  gettextCatalog.currentLanguage = language.split("-")[0];
   gettextCatalog.debug = true;
 });
