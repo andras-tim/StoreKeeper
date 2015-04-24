@@ -50,6 +50,11 @@ class CommonRightsTest(CommonSessionTest):
     RIGHTS = ()
 
     @classmethod
+    def setUpClass(cls):
+        cls.INIT_PUSH = [('/users', [Users.USER1])] + cls.INIT_PUSH
+        CommonSessionTest.setUpClass()
+
+    @classmethod
     def iterate_rights(cls, rights: dict):
         for actor, per_command_rights in rights.items():
             for command, expected in per_command_rights.items():
@@ -67,14 +72,6 @@ class CommonRightsTest(CommonSessionTest):
         elif type(expected) == tuple:
             data, exp = expected
             yield {'actor': actor, 'command': command, 'data': data, 'expected': exp}
-
-    def _fill_up(self, list_of_endpoint_and_objects: list):
-        new_list = [
-            ('/users', [Users.USER1]),
-        ]
-        new_list.extend(list_of_endpoint_and_objects)
-
-        super()._fill_up(new_list)
 
     def check_right(self, actor: str, command: str, expected: bool, data=None):
         url = self.ENDPOINT
