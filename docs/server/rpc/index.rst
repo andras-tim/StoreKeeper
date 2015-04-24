@@ -22,6 +22,7 @@ Endpoints
    acquisition_items
    acquisitions
    barcodes
+   configs
    customers
    items
    sessions

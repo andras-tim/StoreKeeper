@@ -176,3 +176,7 @@ class ExampleWorkItems:
     ITEM2 = FilterableDict(commons={'work': ExampleWorks.WORK2.get(),
                                     'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 32, 'returned_quantity': 0},
                            getters={'id': 2})
+
+
+class ExampleConfigs:
+    CONFIG1 = FilterableDict(getters={'app_name': 'storekeeper', 'app_title': 'StoreKeeper'})

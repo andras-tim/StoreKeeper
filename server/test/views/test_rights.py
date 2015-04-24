@@ -275,3 +275,18 @@ class TestStocktakingItemRights(CommonRightsTest):
             'delete': [('item1', True)],
         },
     }
+
+
+@rights_data_provider('/configs')
+class TestConfigRights(CommonRightsTest):
+    RIGHTS = {
+        'anonymous': {
+            'get': True,
+        },
+        'admin': {
+            'get': True,
+        },
+        'user1': {
+            'get': True,
+        },
+    }
