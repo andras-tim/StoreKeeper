@@ -7,12 +7,12 @@ from app.modules.example_data import ExampleUsers as Users
 from test.views.base_session_test import CommonSessionTest
 
 
-def rights_data_provider(endpoint: str):
+def use_as_rights_data_provider(endpoint: str):
     """
     Data provider decorator for rights
 
     Example:
-    >>> @rights_data_provider('/unit')
+    >>> @use_as_rights_data_provider('/unit')
     ... class TestAcquisitionRights(CommonRightsTest):
     ...     INIT_PUSH = [...]
     ...     DATA_MAP = {...}

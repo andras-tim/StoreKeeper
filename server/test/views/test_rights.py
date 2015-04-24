@@ -1,10 +1,10 @@
 from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units, \
     ExampleCustomers as Customers, ExampleAcquisitions as Acquisitions, ExampleStocktakings as Stocktakings, \
     ExampleItems as Items, ExampleAcquisitionItems as AcquisitionItems, ExampleStocktakingItems as StocktakingItems
-from test.views.base_right_test import CommonRightsTest, rights_data_provider
+from test.views.base_right_test import CommonRightsTest, use_as_rights_data_provider
 
 
-@rights_data_provider('/sessions')
+@use_as_rights_data_provider('/sessions')
 class TestSessionsRights(CommonRightsTest):
     INIT_PUSH = [('/users', [Users.USER2])]
     DATA_MAP = {'admin': Users.ADMIN, 'user1': Users.USER1, 'user2': Users.USER2}
@@ -27,7 +27,7 @@ class TestSessionsRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/users')
+@use_as_rights_data_provider('/users')
 class TestUsersRights(CommonRightsTest):
     INIT_PUSH = [('/users', [Users.USER2])]
     DATA_MAP = {'admin': Users.ADMIN, 'user1': Users.USER1, 'user2': Users.USER2, 'user3': Users.USER3}
@@ -53,7 +53,7 @@ class TestUsersRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/vendors')
+@use_as_rights_data_provider('/vendors')
 class TestVendorRights(CommonRightsTest):
     INIT_PUSH = [('/vendors', [Vendors.VENDOR1])]
     DATA_MAP = {'vendor1': Vendors.VENDOR1, 'vendor2': Vendors.VENDOR2}
@@ -79,7 +79,7 @@ class TestVendorRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/units')
+@use_as_rights_data_provider('/units')
 class TestUnitRights(CommonRightsTest):
     INIT_PUSH = [('/units', [Units.UNIT1])]
     DATA_MAP = {'unit1': Units.UNIT1, 'unit2': Units.UNIT2}
@@ -105,7 +105,7 @@ class TestUnitRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/customers')
+@use_as_rights_data_provider('/customers')
 class TestCustomerRights(CommonRightsTest):
     INIT_PUSH = [('/customers', [Customers.CUSTOMER1])]
     DATA_MAP = {'customer1': Customers.CUSTOMER1, 'customer2': Customers.CUSTOMER2}
@@ -131,7 +131,7 @@ class TestCustomerRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/acquisitions')
+@use_as_rights_data_provider('/acquisitions')
 class TestAcquisitionRights(CommonRightsTest):
     INIT_PUSH = [('/acquisitions', [Acquisitions.ACQUISITION1])]
     DATA_MAP = {'acquisition1': Acquisitions.ACQUISITION1, 'acquisition2': Acquisitions.ACQUISITION2}
@@ -157,7 +157,7 @@ class TestAcquisitionRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/stocktakings')
+@use_as_rights_data_provider('/stocktakings')
 class TestStocktakingRights(CommonRightsTest):
     INIT_PUSH = [('/stocktakings', [Stocktakings.STOCKTAKING1])]
     DATA_MAP = {'stocktaking1': Stocktakings.STOCKTAKING1, 'stocktaking2': Stocktakings.STOCKTAKING2}
@@ -183,7 +183,7 @@ class TestStocktakingRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/items')
+@use_as_rights_data_provider('/items')
 class TestItemRights(CommonRightsTest):
     INIT_PUSH = [
         ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
@@ -213,7 +213,7 @@ class TestItemRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/acquisition-items')
+@use_as_rights_data_provider('/acquisition-items')
 class TestAcquisitionItemRights(CommonRightsTest):
     INIT_PUSH = [
         ('/acquisitions', [Acquisitions.ACQUISITION1, Acquisitions.ACQUISITION2]),
@@ -245,7 +245,7 @@ class TestAcquisitionItemRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/stocktaking-items')
+@use_as_rights_data_provider('/stocktaking-items')
 class TestStocktakingItemRights(CommonRightsTest):
     INIT_PUSH = [
         ('/stocktakings', [Stocktakings.STOCKTAKING1, Stocktakings.STOCKTAKING2]),
@@ -277,7 +277,7 @@ class TestStocktakingItemRights(CommonRightsTest):
     }
 
 
-@rights_data_provider('/configs')
+@use_as_rights_data_provider('/configs')
 class TestConfigRights(CommonRightsTest):
     RIGHTS = {
         'anonymous': {
