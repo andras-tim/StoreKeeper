@@ -33,7 +33,7 @@ api = restful.Api(app)
 bcrypt = Bcrypt(app)
 
 # Init views (must be after common resources)
-from app.views import *
+import app.views as views
 
 # static sharing
 if config.App.SHARE_STATIC:
