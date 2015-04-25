@@ -7,7 +7,7 @@ appControllers.controller('CommonController', function ($scope, Restangular, $al
     Restangular.setErrorInterceptor(function (resp) {
         console.debug(resp);
         $alert({
-            title: "Error " + resp.status,
+            title: gettextCatalog.getString("Error {{status}}", {status: resp.status}),
             content: resp.statusText + "<br />" + resp.data,
             container: "body",
             placement: "top-right",
@@ -49,7 +49,7 @@ appControllers.controller('LoginController', function ($scope, $location, Sessio
 });
 
 
-appControllers.controller('MainController', function ($scope, $location, SessionService) {
+appControllers.controller('MainController', function ($scope, $location, Restangular, SessionService) {
     $scope.loginTest = function () {
         SessionService.one().get().then(function (resp) {
             console.debug(resp);
@@ -63,5 +63,8 @@ appControllers.controller('MainController', function ($scope, $location, Session
         });
     };
 
-    $scope.session = SessionService.one().get().$object;
+    $scope.session = '';
+    SessionService.one().get().then(function (resp) {
+        $scope.session = Restangular.stripRestangular(resp);
+    });
 });

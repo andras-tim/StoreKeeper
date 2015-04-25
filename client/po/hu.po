@@ -20,6 +20,10 @@ msgstr "Bejelentkezés ellenőrzése"
 msgid "Enter search query"
 msgstr "Keresési kifejetés"
 
+#: app/js/controllers.js:10
+msgid "Error {{status}}"
+msgstr "Hiba {{status}}"
+
 #: app/partials/main.html:19
 msgid "LogOut"
 msgstr "Kijelentkezés"
@@ -57,5 +61,5 @@ msgid "Username"
 msgstr "Felhasználónév"
 
 #: app/partials/main.html:14
-msgid "Welcome!"
-msgstr "Üdvözöllek!"
+msgid "Welcome {{session.username}}!"
+msgstr "Üdvözöllek {{session.username}}!"
