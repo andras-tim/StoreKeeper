@@ -6,7 +6,7 @@
     <div class="col-md-10">
       <!--Body content-->
 
-      <h2 translate>Login</h2>
+      <h2 ng-bind="'Login' | translate | setTitle">Login</h2>
       <form name="userForm" class="form-horizontal">
         <div class="form-group" show-errors>
           <label for="inputUsername" class="col-sm-2 control-label" translate>Username</label>

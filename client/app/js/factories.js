@@ -20,3 +20,25 @@ appFactories.factory('ConfigFactory', function (ConfigService) {
         }
     }
 });
+
+
+appFactories.factory('PageFactory', function (ConfigFactory) {
+    var appTitle = ConfigFactory.getConfig().appTitle;
+    var windowTitle = appTitle;
+
+    function getTitleSuffix(pageTitle) {
+        if (pageTitle == undefined) {
+            return '';
+        }
+        return ' - ' + pageTitle;
+    }
+
+    return {
+        getWindowTitle: function () {
+            return windowTitle
+        },
+        setPageTitle: function (newPageTitle) {
+            windowTitle = appTitle + getTitleSuffix(newPageTitle);
+        }
+    };
+});

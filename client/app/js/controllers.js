@@ -3,7 +3,8 @@
 var appControllers = angular.module('appControllers', []);
 
 
-appControllers.controller('CommonController', function ($scope, Restangular, $alert, gettextCatalog, ConfigFactory) {
+appControllers.controller('CommonController', function ($scope, Restangular, $alert, gettextCatalog, ConfigFactory,
+                                                        PageFactory) {
     Restangular.setErrorInterceptor(function (resp) {
         console.debug(resp);
         $alert({
@@ -21,6 +22,7 @@ appControllers.controller('CommonController', function ($scope, Restangular, $al
         gettextCatalog.setCurrentLanguage(lang);
     };
 
+    $scope.getWindowTitle = PageFactory.getWindowTitle;
     $scope.appTitle = ConfigFactory.getConfig().appTitle;
 });
 

@@ -12,25 +12,29 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: ../\n"
 
-#: app/partials/main.html:18
+#: app/partials/main.html:20
 msgid "Auth check"
 msgstr "Bejelentkezés ellenőrzése"
 
-#: app/partials/main.html:8
+#: app/partials/main.html:10
 msgid "Enter search query"
 msgstr "Keresési kifejetés"
 
-#: app/js/controllers.js:10
+#: app/js/controllers.js:11
 msgid "Error {{status}}"
 msgstr "Hiba {{status}}"
 
-#: app/partials/main.html:19
+#: app/partials/main.html:21
 msgid "LogOut"
 msgstr "Kijelentkezés"
 
 #: app/partials/login.html:9
 msgid "Login"
 msgstr "Bejelentkezés"
+
+#: app/partials/main.html:1
+msgid "Main"
+msgstr "Főoldal"
 
 #: app/partials/login.html:20 app/partials/login.html:22
 msgid "Password"
@@ -40,7 +44,7 @@ msgstr "Jelszó"
 msgid "Remember me"
 msgstr "Emlékezz rám"
 
-#: app/partials/main.html:7
+#: app/partials/main.html:9
 msgid "Search:"
 msgstr "Keresés:"
 
@@ -60,6 +64,6 @@ msgstr "A felhasználónevet kötelező megadni"
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: app/partials/main.html:14
+#: app/partials/main.html:16
 msgid "Welcome {{session.username}}!"
 msgstr "Üdvözöllek {{session.username}}!"
