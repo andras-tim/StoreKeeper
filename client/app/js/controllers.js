@@ -1,10 +1,9 @@
 'use strict';
 
-/* Controllers */
-
 var appControllers = angular.module('appControllers', []);
 
-appControllers.controller('CommonCtrl', function ($scope, Restangular, $alert, gettextCatalog) {
+
+appControllers.controller('CommonController', function ($scope, Restangular, $alert, gettextCatalog) {
     Restangular.setErrorInterceptor(function (resp) {
         console.debug(resp);
         $alert({
@@ -18,19 +17,17 @@ appControllers.controller('CommonCtrl', function ($scope, Restangular, $alert, g
         });
     });
 
-
     $scope.changeLanguage = function (lang) {
         gettextCatalog.currentLanguage = lang;
     };
 });
 
-appControllers.controller('LoginCtrl', function ($scope, $location, Restangular, Session) {
-    //$scope.is_authenticated = false;
 
+appControllers.controller('LoginController', function ($scope, $location, SessionService) {
     $scope.login = function () {
         $scope.$broadcast('show-errors-check-validity');
         if ($scope.userForm.$valid) {
-            Session.post({username: $scope.user.username, password: $scope.user.password}).then(function (resp) {
+            SessionService.post({username: $scope.user.username, password: $scope.user.password}).then(function (resp) {
                 console.debug("OK");
                 console.debug(resp);
                 $scope.reset();
@@ -40,6 +37,7 @@ appControllers.controller('LoginCtrl', function ($scope, $location, Restangular,
             });
         }
     };
+
     $scope.reset = function () {
         $scope.$broadcast('show-errors-reset');
         $scope.user = {username: '', password: ''}
@@ -48,19 +46,20 @@ appControllers.controller('LoginCtrl', function ($scope, $location, Restangular,
     $scope.reset();
 });
 
-appControllers.controller('MainCtrl', function ($scope, $location, Session) {
-    $scope.session = Session.one().get().$object;
 
+appControllers.controller('MainController', function ($scope, $location, SessionService) {
     $scope.loginTest = function () {
-        Session.one().get().then(function (resp) {
+        SessionService.one().get().then(function (resp) {
             console.debug(resp);
         });
     };
 
     $scope.logout = function () {
-        Session.one().remove().then(function (resp) {
+        SessionService.one().remove().then(function (resp) {
             console.debug(resp);
             $location.path('/login');
         });
     };
+
+    $scope.session = SessionService.one().get().$object;
 });

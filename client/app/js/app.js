@@ -1,7 +1,5 @@
 'use strict';
 
-/* App Module */
-
 var storekeeperApp = angular.module('storekeeperApp', [
     'mgcrea.ngStrap',
     'ngSanitize',
@@ -13,35 +11,33 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appServices'
 ]);
 
-storekeeperApp.config(['$modalProvider',
-    function ($modalProvider) {
-        angular.extend($modalProvider.defaults, {
-            html: true
+
+storekeeperApp.config(function ($modalProvider) {
+    angular.extend($modalProvider.defaults, {
+        html: true
+    });
+});
+
+
+storekeeperApp.config(function ($routeProvider) {
+    $routeProvider.
+        when('/login', {
+            templateUrl: 'partials/login.html',
+            controller: 'LoginController'
+        }).
+        when('/main', {
+            templateUrl: 'partials/main.html',
+            controller: 'MainController'
+        }).
+        otherwise({
+            redirectTo: '/login'
         });
-    }]);
+});
 
 
-storekeeperApp.config(['$routeProvider',
-    function ($routeProvider) {
-        $routeProvider.
-            when('/login', {
-                templateUrl: 'partials/login.html',
-                controller: 'LoginCtrl'
-            }).
-            when('/main', {
-                templateUrl: 'partials/main.html',
-                controller: 'MainCtrl'
-            }).
-            otherwise({
-                redirectTo: '/login'
-            });
-    }]);
-
-
-storekeeperApp.config(['RestangularProvider',
-    function (RestangularProvider) {
-        RestangularProvider.setBaseUrl('api');
-    }]);
+storekeeperApp.config(function (RestangularProvider) {
+    RestangularProvider.setBaseUrl('api');
+});
 
 
 storekeeperApp.run(function (gettextCatalog) {
