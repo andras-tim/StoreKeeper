@@ -18,7 +18,7 @@ appControllers.controller('CommonController', function ($scope, Restangular, $al
     });
 
     $scope.changeLanguage = function (lang) {
-        gettextCatalog.currentLanguage = lang;
+        gettextCatalog.setCurrentLanguage(lang);
     };
 });
 
