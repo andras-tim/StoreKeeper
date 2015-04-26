@@ -25,3 +25,8 @@ Commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
      :endpoints: work_close_outbound
+
+``/api/works/<id>/close-returned``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: work_close_returned
