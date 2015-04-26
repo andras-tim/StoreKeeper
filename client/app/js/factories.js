@@ -17,7 +17,7 @@ appFactories.factory('HelperFactory', function ($alert, gettextCatalog, ConfigFa
     }
 
     function printToConsole(data) {
-        if (ConfigFactory.getConfig().debug) {
+        if (ConfigFactory.getDebug()) {
             console.debug(data);
         }
     }
@@ -35,30 +35,49 @@ appFactories.factory('HelperFactory', function ($alert, gettextCatalog, ConfigFa
 });
 
 
-appFactories.factory('ConfigFactory', function (ConfigService) {
+appFactories.factory('ConfigFactory', function ($q, Restangular, ConfigService) {
     var config = {
-        appName: undefined,
-        appTitle: 'StoreKeeper',
+        app_name: undefined,
+        app_title: undefined,
         debug: false
     };
 
-    ConfigService.one().get().then(function (resp) {
-        config.appName = resp.app_name;
-        config.appTitle = resp.app_title;
-        config.debug = resp.debug;
-    });
+    function getConfig() {
+        var result = $q.defer();
+
+        if (config.app_name != undefined) {
+            result.resolve(config);
+        } else {
+            ConfigService.one().get().then(function (resp) {
+                config = Restangular.stripRestangular(resp);
+                result.resolve(config);
+            }, function (resp) {
+                HelperFactory.showResponseError(resp);
+                result.reject(config);
+            });
+        }
+
+        return result.promise;
+    }
 
     return {
-        getConfig: function () {
-            return config;
+        getConfig: getConfig,
+        getAppName: function () {
+            return config.app_name;
+        },
+        getAppTitle: function () {
+            return config.app_title;
+        },
+        getDebug: function () {
+            return config.debug;
         }
     }
 });
 
 
 appFactories.factory('PageFactory', function (ConfigFactory) {
-    var appTitle = ConfigFactory.getConfig().appTitle;
-    var windowTitle = appTitle;
+    var appTitle;
+    var windowTitle;
 
     function getTitleSuffix(pageTitle) {
         if (pageTitle == undefined) {
@@ -67,13 +86,20 @@ appFactories.factory('PageFactory', function (ConfigFactory) {
         return ' - ' + pageTitle;
     }
 
-    return {
-        getWindowTitle: function () {
-            return windowTitle
-        },
-        setPageTitle: function (newPageTitle) {
+    function setPageTitle(newPageTitle) {
+        if (appTitle != undefined) {
             windowTitle = appTitle + getTitleSuffix(newPageTitle);
+            return
         }
+        ConfigFactory.getConfig().then(function (config) {
+            appTitle = config.app_title;
+            windowTitle = appTitle + getTitleSuffix(newPageTitle);
+        });
+    }
+
+    return {
+        getWindowTitle: function () { return windowTitle },
+        setPageTitle: setPageTitle
     };
 });
 

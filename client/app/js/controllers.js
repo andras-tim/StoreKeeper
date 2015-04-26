@@ -8,8 +8,10 @@ appControllers.controller('CommonController', function ($scope, gettextCatalog, 
         gettextCatalog.setCurrentLanguage(lang);
     };
 
+    ConfigFactory.getConfig().then(function (config) {
+        $scope.appTitle = config.app_title;
+    });
     $scope.getWindowTitle = PageFactory.getWindowTitle;
-    $scope.appTitle = ConfigFactory.getConfig().appTitle;
 });
 
 
