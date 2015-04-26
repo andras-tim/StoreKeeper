@@ -32,17 +32,22 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
 
     def assertApiRequest(self, command: str, url: str, data: (dict, None)=None,
                          expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
-        response = self.__call_api(command, json.dumps(data), url)
+        request = {'command': command, 'url': url, 'data': json.dumps(data)}
+        response = self.__call_api(**request)
         if expected_data is not None:
-            self.__assert_response_data(expected_data, response)
-        self.__assert_status_code(expected_status_codes, response)
+            self.__assert_response_data(expected_data, response, request=request)
+        self.__assert_status_code(expected_status_codes, response, request=request)
 
-    def __assert_response_data(self, expected_data: (str, list, dict, None), response: Response):
+    def __assert_response_data(self, expected_data: (str, list, dict, None), response: Response, request: dict):
+        """
+        "request" parameter will be shown on assertion error
+        """
         response_string = self.__make_testable_data(response.data.decode('utf-8'))
-        response = self.__get_parsed_response(response_string)
+        parsed_response = self.__get_parsed_response(response_string)
         expected_data = self.__make_testable_data(expected_data)
 
-        assert expected_data == response
+        assert expected_data == parsed_response, \
+            'Not expected response; request={!r} status_code={}'.format(request, response.status_code)
 
     def __get_parsed_response(self, response_string: str) -> (str, list, dict, None):
         try:
@@ -51,10 +56,11 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
             assert False, 'Can not parse received data as JSON; data={!r}, error={!r}'.format(response_string, e)
         return data_json
 
-    def __assert_status_code(self, expected_status_codes: (int, list), response: Response):
+    def __assert_status_code(self, expected_status_codes: (int, list), response: Response, request: dict):
         if type(expected_status_codes) != list:
             expected_status_codes = [expected_status_codes]
-        assert response.status_code in expected_status_codes, 'response: {!r}'.format(response.data.decode('utf-8'))
+        assert response.status_code in expected_status_codes, \
+            'Not expected status code; request={!r} response={!r}'.format(request, response.data.decode('utf-8'))
 
     def __call_api(self, command: str, data: str, url: str):
         return getattr(self.client, command)('/{!s}/api{!s}'.format(config.App.NAME, url),
