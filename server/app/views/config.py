@@ -14,5 +14,6 @@ class ConfigView(restful.Resource):
         client_related_config = {
             'app_name': config.App.NAME,
             'app_title': config.App.TITLE,
+            'debug': config.Flask.DEBUG,
         }
         return ConfigSerializer(client_related_config).data

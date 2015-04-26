@@ -179,4 +179,4 @@ class ExampleWorkItems:
 
 
 class ExampleConfigs:
-    CONFIG1 = FilterableDict(getters={'app_name': 'storekeeper', 'app_title': 'StoreKeeper'})
+    CONFIG1 = FilterableDict(getters={'app_name': 'storekeeper', 'app_title': 'StoreKeeper', 'debug': False})

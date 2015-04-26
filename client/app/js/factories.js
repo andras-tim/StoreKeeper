@@ -39,13 +39,13 @@ appFactories.factory('ConfigFactory', function (ConfigService) {
     var config = {
         appName: undefined,
         appTitle: 'StoreKeeper',
-        debug: true// set false after made it server side
+        debug: false
     };
 
     ConfigService.one().get().then(function (resp) {
         config.appName = resp.app_name;
         config.appTitle = resp.app_title;
-        // FIXME: make it server side config.debug = resp.debug;
+        config.debug = resp.debug;
     });
 
     return {

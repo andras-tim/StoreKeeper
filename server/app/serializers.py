@@ -142,3 +142,4 @@ class WorkItemSerializer(Serializer):
 class ConfigSerializer(Serializer):
     app_name = fields.Str()
     app_title = fields.Str()
+    debug = fields.Bool()
