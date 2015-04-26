@@ -1,5 +1,5 @@
 Flask>=0.10.1
-Flask-Admin>=1.1.0
+git+git://github.com/andras-tim/flask-admin
 Flask-Bcrypt>=0.6.0
 Flask-Login>=0.2.11
 Flask-RESTful>=0.3.1
