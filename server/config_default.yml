@@ -19,6 +19,8 @@ DefaultConfig:
     # https://pythonhosted.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_DATABASE_URI: "sqlite:///$BASEDIR/app.sqlite"
 
+    ALLOW_API_SIMPLE_AUTH: False
+
 
 ProductionConfig:
   Base: DefaultConfig
