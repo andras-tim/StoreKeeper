@@ -73,6 +73,10 @@ class CommonRightsTest(CommonSessionTest):
             data, exp = expected
             yield {'actor': actor, 'command': command, 'data': data, 'expected': exp}
 
+        else:
+            raise ValueError('Test case error: Unsupported data type used as expected; '
+                             'type={}'.format(type(expected).__name__))
+
     def check_right(self, actor: str, command: str, expected: bool, data=None):
         url = self.ENDPOINT
         if data is not None and command != 'post':

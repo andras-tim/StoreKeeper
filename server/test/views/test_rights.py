@@ -166,15 +166,15 @@ class TestUserRights(CommonRightsTest):
         },
         'admin': {
             'get': [True, ('admin', True), ('user1', True)],
-            'post': {'user3': True},
-            'put': {'admin': True, 'user1': True},
-            'delete': {'admin': False, 'user1': True}
+            'post': [('user3', True)],
+            'put': [('admin', True), ('user1', True)],
+            'delete': [('admin', False), ('user1', True)]
         },
         'user1': {
             'get': [False, ('admin', True), ('user1', True), ('user2', True)],
-            'post': {'user3': False},
-            'put': {'admin': False, 'user1': True, 'user2': False},
-            'delete': {'admin': False, 'user1': False, 'user2': False},
+            'post': [('user3', False)],
+            'put': [('admin', False), ('user1', True), ('user2', False)],
+            'delete': [('admin', False), ('user1', False), ('user2', False)],
         },
     }
 
