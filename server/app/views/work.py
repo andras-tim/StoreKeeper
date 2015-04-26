@@ -55,12 +55,12 @@ class WorkCloseOutboundView(BaseView):
     @api_func('Close outbound items on work', item_name='work', url_tail='works/1/close-outbound',
               response=ExampleWorks.WORK1_OUTBOUND_CLOSED.get())
     def put(self, id: int):
-        work = self._get_item(id)
+        work = self._get_item_by_id(id)
         try:
             work.close_outbound_items(g.user)
         except RuntimeError as e:
             abort(422, message=e.args[0])
-        return self._put_save(work)
+        return self._put_commit(work)
 
 
 class WorkCloseReturnedView(BaseView):
@@ -71,9 +71,9 @@ class WorkCloseReturnedView(BaseView):
     @api_func('Close returned items on work', item_name='work', url_tail='works/1/close-returned',
               response=ExampleWorks.WORK1_RETURNED_CLOSED.get())
     def put(self, id: int):
-        work = self._get_item(id)
+        work = self._get_item_by_id(id)
         try:
             work.close_returned_items(g.user)
         except RuntimeError as e:
             abort(422, message=e.args[0])
-        return self._put_save(work)
+        return self._put_commit(work)

@@ -30,7 +30,7 @@ class WorkItemListView(BaseModelListView):
         if work.are_items_frozen():
             abort(403, message='Can not add new item.')
 
-        return self._post_save(work_item)
+        return self._post_commit(work_item)
 
 
 class WorkItemView(BaseViewWithDiff):
@@ -49,7 +49,7 @@ class WorkItemView(BaseViewWithDiff):
               status_codes={403: 'can not change work item after outbound/returned items was closed',
                             422: '{{ original }} / can not add one item twice'})
     def put(self, id: int):
-        work = Work.query.get(self._get_item(id).work_id)
+        work = Work.query.get(self._get_item_by_id(id).work_id)
 
         self._save_original_before_populate(id)
         work_item = self._put_populate(id)
@@ -61,7 +61,7 @@ class WorkItemView(BaseViewWithDiff):
         if self.__is_tried_to_change_closed(work, changed_fields):
             abort(403, message='Work item was closed.')
 
-        return self._put_save(work_item)
+        return self._put_commit(work_item)
 
     @api_func('Delete work item', item_name='work item', url_tail='work-items/1',
               response=None)

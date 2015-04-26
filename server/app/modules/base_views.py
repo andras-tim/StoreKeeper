@@ -33,7 +33,7 @@ class BaseModelListView(_BaseModelResource):
     >>>     def post(self):
     >>>         foo = self._post_populate()
     >>>         # custom changes on object
-    >>>         return self._post_save(foo)
+    >>>         return self._post_commit(foo)
     """
 
     def _get(self) -> 'RPC response':
@@ -43,28 +43,32 @@ class BaseModelListView(_BaseModelResource):
         items = self._model.query.all()
         return self._serializer(items, many=True).data
 
+    def _post(self) -> 'RPC response':
+        """
+        Save new item in one command
+
+        Same as:
+        >>> item = self._post_populate()
+        >>> return self._post_commit(item)
+        """
+        item = self._post_populate()
+        return self._post_commit(item)
+
     def _post_populate(self) -> 'item':
         """
-        Populate new object
+        Populate a new object
         """
         item = self._model()
         self._populate_item(item)
         return item
 
-    def _post_save(self, item) -> 'RPC response':
+    def _post_commit(self, item) -> 'RPC response':
         """
-        Save new object
+        Save the new object
         """
         db.session.add(item)
         commit_with_error_handling(db)
         return self._serializer(item).data
-
-    def _post(self) -> 'RPC response':
-        """
-        Save new item (populate & save wrapper)
-        """
-        item = self._post_populate()
-        return self._post_save(item)
 
 
 class BaseView(_BaseModelResource):
@@ -83,7 +87,7 @@ class BaseView(_BaseModelResource):
     >>>     def put(self, id: int):
     >>>         foo = self._put_populate(id)
     >>>         # custom changes on object
-    >>>         return self._put_save(foo)
+    >>>         return self._put_commit(foo)
     >>>
     >>>     def delete(self, id: int):
     >>>         return self._delete(id)
@@ -93,45 +97,64 @@ class BaseView(_BaseModelResource):
         """
         Single item getter
         """
-        item = self._get_item(id)
+        item = self._get_item_by_id(id)
         return self._serializer(item).data
+
+    def _put(self, id: int) -> 'RPC response':
+        """
+        Change single item in one command
+
+        Same as:
+        >>> item = self._put_populate()
+        >>> return self._put_commit(item)
+        """
+        item = self._put_populate(id)
+        return self._put_commit(item)
+
+    def _delete(self, id: int) -> 'RPC response':
+        """
+        Delete single item in one command
+
+        Same as:
+        >>> item = self._delete_get_item()
+        >>> return self._delete_commit(item)
+        """
+        item = self._get_item_by_id(id)
+
+        db.session.delete(item)
+        commit_with_error_handling(db)
+        return None
 
     def _put_populate(self, id: int) -> 'item':
         """
         Populate change object
         """
-        item = self._get_item(id)
+        item = self._get_item_by_id(id)
         self._populate_item(item)
         return item
 
-    def _put_save(self, item) -> 'RPC response':
+    def _put_commit(self, item) -> 'RPC response':
         """
         Save change object
         """
         commit_with_error_handling(db)
         return self._serializer(item).data
 
-    def _put(self, id: int) -> 'RPC response':
+    def _delete_get_item(self, id: int) -> 'item':
         """
-        Change single item (populate & save wrapper)
+        Getting object for delete
         """
-        item = self._put_populate(id)
-        return self._put_save(item)
+        return self._get_item_by_id(id)
 
-    def _delete(self, id: int) -> 'RPC response':
+    def _delete_commit(self, item) -> None:
         """
-        Delete single item
+        Commit item delete
         """
-        item = self._get_item(id)
-
         db.session.delete(item)
         commit_with_error_handling(db)
         return None
 
-    def _get_item(self, id: int) -> 'item':
-        """
-        Single object getter
-        """
+    def _get_item_by_id(self, id: int) -> 'item':
         item = self._model.query.get(id)
         if not item:
             abort(404)
@@ -142,7 +165,7 @@ class BaseViewWithDiff(BaseView):
     __differ = ModelDataDiffer()
 
     def _save_original_before_populate(self, id: int):
-        self.__differ.save_state(self._get_item(id))
+        self.__differ.save_state(self._get_item_by_id(id))
 
     def _get_populate_diff(self, item) -> dict:
         return self.__differ.get_diff(item)

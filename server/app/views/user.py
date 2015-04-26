@@ -30,7 +30,7 @@ class UserListView(BaseModelListView):
     def post(self):
         user = self._post_populate()
         _set_password(user)
-        return self._post_save(user)
+        return self._post_commit(user)
 
 
 class UserView(BaseView):
@@ -50,7 +50,7 @@ class UserView(BaseView):
     def put(self, id: int):
         user = self._put_populate(id)
         _set_password(user)
-        return self._put_save(user)
+        return self._put_commit(user)
 
     @api_func('Delete user', item_name='user', url_tail='users/2',
               admin_required=True,

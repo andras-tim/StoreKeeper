@@ -33,7 +33,7 @@ class BarcodeListView(BaseModelListView):
     def post(self):
         barcode = self._post_populate()
         _check_only_one_main_barcode_per_item(barcode)
-        return self._post_save(barcode)
+        return self._post_commit(barcode)
 
 
 class BarcodeView(BaseView):
@@ -53,7 +53,7 @@ class BarcodeView(BaseView):
     def put(self, id: int):
         barcode = self._put_populate(id)
         _check_only_one_main_barcode_per_item(barcode)
-        return self._put_save(barcode)
+        return self._put_commit(barcode)
 
     @api_func('Delete stocktaking item', url_tail='barcodes/1',
               response=None)
