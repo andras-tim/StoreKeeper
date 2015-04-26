@@ -3,21 +3,7 @@
 var appControllers = angular.module('appControllers', []);
 
 
-appControllers.controller('CommonController', function ($scope, Restangular, $alert, gettextCatalog, ConfigFactory,
-                                                        PageFactory) {
-    Restangular.setErrorInterceptor(function (resp) {
-        console.debug(resp);
-        $alert({
-            title: gettextCatalog.getString("Error {{status}}", {status: resp.status}),
-            content: resp.statusText + "<br />" + resp.data,
-            container: "body",
-            placement: "top-right",
-            type: "danger",
-            duration: 10,
-            show: true
-        });
-    });
-
+appControllers.controller('CommonController', function ($scope, gettextCatalog, ConfigFactory, PageFactory) {
     $scope.changeLanguage = function (lang) {
         gettextCatalog.setCurrentLanguage(lang);
     };
@@ -27,46 +13,30 @@ appControllers.controller('CommonController', function ($scope, Restangular, $al
 });
 
 
-appControllers.controller('LoginController', function ($scope, $location, SessionService) {
+appControllers.controller('LoginController', function ($scope, $location, SessionFactory) {
     $scope.login = function () {
         $scope.$broadcast('show-errors-check-validity');
-        if ($scope.userForm.$valid) {
-            SessionService.post({username: $scope.user.username, password: $scope.user.password}).then(function (resp) {
-                console.debug("OK");
-                console.debug(resp);
-                $scope.reset();
-                $location.path('/main');
-            }, function (resp) {
-                console.debug(resp.status + " " + resp.statusText + ": " + JSON.stringify(resp.data));
-            });
+        if (!$scope.userForm.$valid) {
+            return;
         }
-    };
-
-    $scope.reset = function () {
-        $scope.$broadcast('show-errors-reset');
-        $scope.user = {username: '', password: ''}
-    };
-
-    $scope.reset();
-});
-
-
-appControllers.controller('MainController', function ($scope, $location, Restangular, SessionService) {
-    $scope.loginTest = function () {
-        SessionService.one().get().then(function (resp) {
-            console.debug(resp);
+        SessionFactory.login($scope.user.username, $scope.user.password).then(function () {
+            $scope.userForm.$setPristine();
+            $location.path('/main');
         });
     };
 
+    $scope.user = { username: '', password: '' };
+});
+
+
+appControllers.controller('MainController', function ($scope, $location, SessionFactory) {
     $scope.logout = function () {
-        SessionService.one().remove().then(function (resp) {
-            console.debug(resp);
+        SessionFactory.logout().then(function () {
             $location.path('/login');
         });
     };
 
-    $scope.session = '';
-    SessionService.one().get().then(function (resp) {
-        $scope.session = Restangular.stripRestangular(resp);
+    SessionFactory.getSession().then(function (session) {
+        $scope.session = session;
     });
 });

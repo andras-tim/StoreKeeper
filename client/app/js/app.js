@@ -32,8 +32,23 @@ storekeeperApp.config(function ($routeProvider) {
             controller: 'MainController'
         }).
         otherwise({
-            redirectTo: '/login'
+            redirectTo: '/main'
         });
+});
+
+
+storekeeperApp.run(function ($rootScope, $location, SessionFactory) {
+    $rootScope.$on('$routeChangeStart', function (event, next, current) {
+        if (!next.$$route) {
+            return
+        }
+        SessionFactory.getSession().then(null, function () {
+            if (next.$$route.originalPath != '/login') {
+                event.preventDefault();
+                $location.path('/login');
+            }
+        });
+    })
 });
 
 
