@@ -4,10 +4,10 @@ var appServices = angular.module('appServices', []);
 
 
 appServices.factory('SessionService', function (Restangular) {
-    return Restangular.service('sessions');
+    return Restangular.service('session');
 });
 
 
 appServices.factory('ConfigService', function (Restangular) {
-    return Restangular.service('configs');
+    return Restangular.service('config');
 });

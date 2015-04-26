@@ -3,7 +3,7 @@
 Acquisition Items
 =================
 
-Acquisition-items endpoint of RPC API.
+API endpoint for manage items of acquisition.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/acquisition-items``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: acquisition_items
+     :endpoints: acquisition_item_list
 
 ``/api/acquisition-items/<id>``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

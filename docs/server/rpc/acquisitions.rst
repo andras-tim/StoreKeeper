@@ -3,7 +3,7 @@
 Acquisitions
 ============
 
-Acquisitions endpoint of RPC API.
+API endpoint for manage acquisitions.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/acquisitions``
 ^^^^^^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: acquisitions
+     :endpoints: acquisition_list
 
 ``/api/acquisitions/<id>``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

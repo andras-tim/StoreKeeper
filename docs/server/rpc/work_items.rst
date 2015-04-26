@@ -3,7 +3,7 @@
 Work Items
 ==========
 
-Work-items endpoint of RPC API.
+API endpoint for manage items of work.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/work-items``
 ^^^^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: work_items
+     :endpoints: work_item_list
 
 ``/api/work-items/<id>``
 ^^^^^^^^^^^^^^^^^^^^^^^^

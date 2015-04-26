@@ -22,10 +22,10 @@ Endpoints
    acquisition_items
    acquisitions
    barcodes
-   configs
+   config
    customers
    items
-   sessions
+   session
    stocktaking_items
    stocktakings
    units

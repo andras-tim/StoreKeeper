@@ -3,7 +3,7 @@ from test.views.base_session_test import CommonSessionTest
 
 
 class TestAdminCanLogin(CommonSessionTest):
-    ENDPOINT = '/sessions'
+    ENDPOINT = '/session'
 
     def test_no_sessions(self):
         self.assertApiGet(expected_status_codes=401)
@@ -19,7 +19,7 @@ class TestAdminCanLogin(CommonSessionTest):
 
 
 class TestLoginWithoutActiveSession(CommonSessionTest):
-    ENDPOINT = '/sessions'
+    ENDPOINT = '/session'
     INIT_PUSH = [
         ('/users', [Users.USER1, Users.USER2]),
     ]
@@ -45,7 +45,7 @@ class TestLoginWithoutActiveSession(CommonSessionTest):
 
 
 class TestLoginWithActiveSession(CommonSessionTest):
-    ENDPOINT = '/sessions'
+    ENDPOINT = '/session'
     INIT_PUSH = [
         ('/users', [Users.USER1, Users.USER2]),
     ]
@@ -66,7 +66,7 @@ class TestLoginWithActiveSession(CommonSessionTest):
 
 
 class TestDisabledUser(CommonSessionTest):
-    ENDPOINT = '/sessions'
+    ENDPOINT = '/session'
     INIT_PUSH = [
         ('/users', [Users.USER1, Users.USER2]),
     ]
@@ -88,7 +88,7 @@ class TestDisabledUser(CommonSessionTest):
 
 
 class UserCanChangeItsPassword(CommonSessionTest):
-    ENDPOINT = '/sessions'
+    ENDPOINT = '/session'
     INIT_PUSH = [
         ('/users', [Users.USER1]),
     ]

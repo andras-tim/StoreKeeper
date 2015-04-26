@@ -153,7 +153,7 @@ def append_mandatory_field_tests(item_name: str, base_item: FilterableDict, mand
     Example:
     >>> @append_mandatory_field_tests(item_name='unit')
     ... class TestUnitWithBrandNewDb(CommonApiTest):
-    ...     ENDPOINT = '/units'
+    ...     ENDPOINT = '/unit'
     ...     MANDATORY_FIELDS = {...}
     """
     def decorator(test_class: 'CommonApiTest'):

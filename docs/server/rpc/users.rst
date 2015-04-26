@@ -3,7 +3,7 @@
 Users
 =====
 
-Users endpoint of RPC API.
+API endpoint for manage users.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/users``
 ^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: users
+     :endpoints: user_list
 
 ``/api/users/<id>``
 ^^^^^^^^^^^^^^^^^^^

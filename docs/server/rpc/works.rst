@@ -3,7 +3,7 @@
 Works
 =====
 
-Works endpoint of RPC API.
+API endpoint for manage works.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/works``
 ^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: works
+     :endpoints: work_list
 
 ``/api/works/<id>``
 ^^^^^^^^^^^^^^^^^^^

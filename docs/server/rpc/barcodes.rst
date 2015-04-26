@@ -3,7 +3,7 @@
 Barcodes
 ========
 
-Barcodes endpoint of RPC API.
+API endpoint for manage barcodes.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/barcodes``
 ^^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: barcodes
+     :endpoints: barcode_list
 
 ``/api/barcodes/<id>``
 ^^^^^^^^^^^^^^^^^^^^^^

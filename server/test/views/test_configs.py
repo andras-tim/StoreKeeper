@@ -3,7 +3,7 @@ from test.views.base_api_test import CommonApiTest
 
 
 class TestConfig(CommonApiTest):
-    ENDPOINT = '/configs'
+    ENDPOINT = '/config'
 
     def test_config_values(self):
         self.assertApiGet(expected_data=Configs.CONFIG1)

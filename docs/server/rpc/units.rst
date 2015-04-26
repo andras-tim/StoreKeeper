@@ -3,7 +3,7 @@
 Units
 =====
 
-Units endpoint of RPC API.
+API endpoint for manage units.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/units``
 ^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: units
+     :endpoints: unit_list
 
 ``/api/units/<id>``
 ^^^^^^^^^^^^^^^^^^^

@@ -3,7 +3,7 @@
 Vendors
 =======
 
-Vendors endpoint of RPC API.
+API endpoint for manage vendors.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/vendors``
 ^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: vendors
+     :endpoints: vendor_list
 
 ``/api/vendors/<id>``
 ^^^^^^^^^^^^^^^^^^^^^

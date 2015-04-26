@@ -3,7 +3,7 @@
 Stocktakings
 ============
 
-Stocktakings endpoint of RPC API.
+API endpoint for manage stocktaking results.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/stocktakings``
 ^^^^^^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: stocktakings
+     :endpoints: stocktaking_list
 
 ``/api/stocktakings/<id>``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

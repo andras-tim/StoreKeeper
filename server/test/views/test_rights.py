@@ -59,7 +59,7 @@ class TestAcquisitionItemRights(CommonRightsTest):
 
 
 @use_as_rights_data_provider('/barcodes')
-class TestBarcodesRights(CommonRightsTest):
+class TestBarcodeRights(CommonRightsTest):
     INIT_PUSH = [
         ('/vendors', [Vendors.VENDOR1]),
         ('/units', [Units.UNIT1, Units.UNIT2]),
@@ -70,7 +70,7 @@ class TestBarcodesRights(CommonRightsTest):
     RIGHTS = _get_all_rights_for_logged_in_users('barcode1', 'barcode2')
 
 
-@use_as_rights_data_provider('/configs')
+@use_as_rights_data_provider('/config')
 class TestConfigRights(CommonRightsTest):
     RIGHTS = {
         'anonymous': {
@@ -103,8 +103,8 @@ class TestItemRights(CommonRightsTest):
     RIGHTS = _get_all_rights_for_logged_in_users('item1', 'item2')
 
 
-@use_as_rights_data_provider('/sessions')
-class TestSessionsRights(CommonRightsTest):
+@use_as_rights_data_provider('/session')
+class TestSessionRights(CommonRightsTest):
     INIT_PUSH = [('/users', [Users.USER2])]
     DATA_MAP = {'admin': Users.ADMIN, 'user1': Users.USER1, 'user2': Users.USER2}
     RIGHTS = {
@@ -154,7 +154,7 @@ class TestUnitRights(CommonRightsTest):
 
 
 @use_as_rights_data_provider('/users')
-class TestUsersRights(CommonRightsTest):
+class TestUserRights(CommonRightsTest):
     INIT_PUSH = [('/users', [Users.USER2])]
     DATA_MAP = {'admin': Users.ADMIN, 'user1': Users.USER1, 'user2': Users.USER2, 'user3': Users.USER3}
     RIGHTS = {
@@ -187,7 +187,7 @@ class TestVendorRights(CommonRightsTest):
 
 
 @use_as_rights_data_provider('/works')
-class TestWorksRights(CommonRightsTest):
+class TestWorkRights(CommonRightsTest):
     INIT_PUSH = [
         ('/customers', [Customers.CUSTOMER1, Customers.CUSTOMER2]),
         ('/works', [Works.WORK1]),
@@ -197,7 +197,7 @@ class TestWorksRights(CommonRightsTest):
 
 
 @use_as_rights_data_provider('/work-items')
-class TestWorkItemsRights(CommonRightsTest):
+class TestWorkItemRights(CommonRightsTest):
     INIT_PUSH = [
         ('/customers', [Customers.CUSTOMER1, Customers.CUSTOMER2]),
         ('/works', [Works.WORK1, Works.WORK2]),

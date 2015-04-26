@@ -7,46 +7,46 @@ from app.views import common, acquisition, acquisition_item, barcode, config, cu
 
 def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleAuth):
     views = {
-        'acquisitions': (acquisition.AcquisitionListView, '/acquisitions'),
+        'acquisition_list': (acquisition.AcquisitionListView, '/acquisitions'),
         'acquisition': (acquisition.AcquisitionView, '/acquisitions/<int:id>'),
 
-        'acquisition_items': (acquisition_item.AcquisitionItemListView, '/acquisition-items'),
+        'acquisition_item_list': (acquisition_item.AcquisitionItemListView, '/acquisition-items'),
         'acquisition_item': (acquisition_item.AcquisitionItemView, '/acquisition-items/<int:id>'),
 
-        'barcodes': (barcode.BarcodeListView, '/barcodes'),
+        'barcode_list': (barcode.BarcodeListView, '/barcodes'),
         'barcode': (barcode.BarcodeView, '/barcodes/<int:id>'),
 
-        'configs': (config.ConfigView, '/configs'),
+        'config': (config.ConfigView, '/config'),
 
-        'customers': (customer.CustomerListView, '/customers'),
+        'customer_list': (customer.CustomerListView, '/customers'),
         'customer': (customer.CustomerView, '/customers/<int:id>'),
 
-        'items': (item.ItemListView, '/items'),
+        'item_list': (item.ItemListView, '/items'),
         'item': (item.ItemView, '/items/<int:id>'),
 
-        'sessions': (session.SessionView, '/sessions'),
+        'session': (session.SessionView, '/session'),
 
-        'stocktakings': (stocktaking.StocktakingListView, '/stocktakings'),
+        'stocktaking_list': (stocktaking.StocktakingListView, '/stocktakings'),
         'stocktaking': (stocktaking.StocktakingView, '/stocktakings/<int:id>'),
 
-        'stocktaking_items': (stocktaking_item.StocktakingItemListView, '/stocktaking-items'),
+        'stocktaking_item_list': (stocktaking_item.StocktakingItemListView, '/stocktaking-items'),
         'stocktaking_item': (stocktaking_item.StocktakingItemView, '/stocktaking-items/<int:id>'),
 
-        'units': (unit.UnitListView, '/units'),
+        'unit_list': (unit.UnitListView, '/units'),
         'unit': (unit.UnitView, '/units/<int:id>'),
 
-        'users': (user.UserListView, '/users'),
+        'user_list': (user.UserListView, '/users'),
         'user': (user.UserView, '/users/<int:id>'),
 
-        'vendors': (vendor.VendorListView, '/vendors'),
+        'vendor_list': (vendor.VendorListView, '/vendors'),
         'vendor': (vendor.VendorView, '/vendors/<int:id>'),
 
-        'works': (work.WorkListView, '/works'),
+        'work_list': (work.WorkListView, '/works'),
         'work': (work.WorkView, '/works/<int:id>'),
         'work_close_outbound': (work.WorkCloseOutboundView, '/works/<int:id>/close-outbound'),
         'work_close_returned': (work.WorkCloseReturnedView, '/works/<int:id>/close-returned'),
 
-        'work_items': (work_item.WorkItemListView, '/work-items'),
+        'work_item_list': (work_item.WorkItemListView, '/work-items'),
         'work_item': (work_item.WorkItemView, '/work-items/<int:id>'),
     }
 

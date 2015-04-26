@@ -3,7 +3,7 @@
 Items
 =====
 
-Items endpoint of RPC API.
+API endpoint for manage items.
 
 Data management
 ---------------
@@ -11,7 +11,7 @@ Data management
 ``/api/items``
 ^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
-     :endpoints: items
+     :endpoints: item_list
 
 ``/api/items/<id>``
 ^^^^^^^^^^^^^^^^^^^
