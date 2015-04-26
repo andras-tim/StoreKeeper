@@ -3,7 +3,7 @@ BASEDIR="$(dirname "$0")"
 
 function run_test()
 {
-    "${BASEDIR}/flask/bin/py.test" --durations=3 --ff "$@" "${BASEDIR}/test"
+    "${BASEDIR}/flask/bin/py.test" --durations=3 --ff --showlocals "$@" "${BASEDIR}/test"
 }
 
 function run_test_with_coverage()
