@@ -1,7 +1,144 @@
-from app.modules.example_data import ExampleUsers as Users, ExampleVendors as Vendors, ExampleUnits as Units, \
-    ExampleCustomers as Customers, ExampleAcquisitions as Acquisitions, ExampleStocktakings as Stocktakings, \
-    ExampleItems as Items, ExampleAcquisitionItems as AcquisitionItems, ExampleStocktakingItems as StocktakingItems
+from app.modules.example_data import (
+    ExampleAcquisitions as Acquisitions,
+    ExampleAcquisitionItems as AcquisitionItems,
+    ExampleCustomers as Customers,
+    ExampleItems as Items,
+    ExampleUnits as Units,
+    ExampleStocktakings as Stocktakings,
+    ExampleStocktakingItems as StocktakingItems,
+    ExampleUsers as Users,
+    ExampleVendors as Vendors,
+)
 from test.views.base_right_test import CommonRightsTest, use_as_rights_data_provider
+
+
+@use_as_rights_data_provider('/acquisitions')
+class TestAcquisitionRights(CommonRightsTest):
+    INIT_PUSH = [('/acquisitions', [Acquisitions.ACQUISITION1])]
+    DATA_MAP = {'acquisition1': Acquisitions.ACQUISITION1, 'acquisition2': Acquisitions.ACQUISITION2}
+    RIGHTS = {
+        'anonymous': {
+            'get': [False, ('acquisition1', False)],
+            'post': [('acquisition2', False)],
+            'put': [('acquisition1', False)],
+            'delete': [('acquisition1', False)],
+        },
+        'admin': {
+            'get': [True, ('acquisition1', True)],
+            'post': [('acquisition2', True)],
+            'put': [('acquisition1', True)],
+            'delete': [('acquisition1', True)],
+        },
+        'user1': {
+            'get': [True, ('acquisition1', True)],
+            'post': [('acquisition2', True)],
+            'put': [('acquisition1', True)],
+            'delete': [('acquisition1', True)],
+        },
+    }
+
+
+@use_as_rights_data_provider('/acquisition-items')
+class TestAcquisitionItemRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/acquisitions', [Acquisitions.ACQUISITION1, Acquisitions.ACQUISITION2]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1, Items.ITEM2]),
+        ('/acquisition-items', [AcquisitionItems.ITEM1]),
+    ]
+    DATA_MAP = {'item1': AcquisitionItems.ITEM1, 'item2': AcquisitionItems.ITEM2}
+    RIGHTS = {
+        'anonymous': {
+            'get': [False, ('item1', False)],
+            'post': [('item2', False)],
+            'put': [('item1', False)],
+            'delete': [('item1', False)],
+        },
+        'admin': {
+            'get': [True, ('item1', True)],
+            'post': [('item2', True)],
+            'put': [('item1', True)],
+            'delete': [('item1', True)],
+        },
+        'user1': {
+            'get': [True, ('item1', True)],
+            'post': [('item2', True)],
+            'put': [('item1', True)],
+            'delete': [('item1', True)],
+        },
+    }
+
+
+@use_as_rights_data_provider('/configs')
+class TestConfigRights(CommonRightsTest):
+    RIGHTS = {
+        'anonymous': {
+            'get': True,
+        },
+        'admin': {
+            'get': True,
+        },
+        'user1': {
+            'get': True,
+        },
+    }
+
+
+@use_as_rights_data_provider('/customers')
+class TestCustomerRights(CommonRightsTest):
+    INIT_PUSH = [('/customers', [Customers.CUSTOMER1])]
+    DATA_MAP = {'customer1': Customers.CUSTOMER1, 'customer2': Customers.CUSTOMER2}
+    RIGHTS = {
+        'anonymous': {
+            'get': [False, ('customer1', False)],
+            'post': [('customer2', False)],
+            'put': [('customer1', False)],
+            'delete': [('customer1', False)],
+        },
+        'admin': {
+            'get': [True, ('customer1', True)],
+            'post': [('customer2', True)],
+            'put': [('customer1', True)],
+            'delete': [('customer1', True)],
+        },
+        'user1': {
+            'get': [True, ('customer1', True)],
+            'post': [('customer2', True)],
+            'put': [('customer1', True)],
+            'delete': [('customer1', True)],
+        },
+    }
+
+
+@use_as_rights_data_provider('/items')
+class TestItemRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1]),
+    ]
+    DATA_MAP = {'item1': Items.ITEM1, 'item2': Items.ITEM2}
+    RIGHTS = {
+        'anonymous': {
+            'get': [False, ('item1', False)],
+            'post': [('item2', False)],
+            'put': [('item1', False)],
+            'delete': [('item1', False)],
+        },
+        'admin': {
+            'get': [True, ('item1', True)],
+            'post': [('item2', True)],
+            'put': [('item1', True)],
+            'delete': [('item1', True)],
+        },
+        'user1': {
+            'get': [True, ('item1', True)],
+            'post': [('item2', True)],
+            'put': [('item1', True)],
+            'delete': [('item1', True)],
+        },
+    }
 
 
 @use_as_rights_data_provider('/sessions')
@@ -23,6 +160,90 @@ class TestSessionsRights(CommonRightsTest):
             'get': True,
             'post': [('admin', True), ('user1', True), ('user2', True)],
             'delete': True,
+        },
+    }
+
+
+@use_as_rights_data_provider('/stocktakings')
+class TestStocktakingRights(CommonRightsTest):
+    INIT_PUSH = [('/stocktakings', [Stocktakings.STOCKTAKING1])]
+    DATA_MAP = {'stocktaking1': Stocktakings.STOCKTAKING1, 'stocktaking2': Stocktakings.STOCKTAKING2}
+    RIGHTS = {
+        'anonymous': {
+            'get': [False, ('stocktaking1', False)],
+            'post': [('stocktaking2', False)],
+            'put': [('stocktaking1', False)],
+            'delete': [('stocktaking1', False)],
+        },
+        'admin': {
+            'get': [True, ('stocktaking1', True)],
+            'post': [('stocktaking2', True)],
+            'put': [('stocktaking1', True)],
+            'delete': [('stocktaking1', True)],
+        },
+        'user1': {
+            'get': [True, ('stocktaking1', True)],
+            'post': [('stocktaking2', True)],
+            'put': [('stocktaking1', True)],
+            'delete': [('stocktaking1', True)],
+        },
+    }
+
+
+@use_as_rights_data_provider('/stocktaking-items')
+class TestStocktakingItemRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/stocktakings', [Stocktakings.STOCKTAKING1, Stocktakings.STOCKTAKING2]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1, Items.ITEM2]),
+        ('/stocktaking-items', [StocktakingItems.ITEM1]),
+    ]
+    DATA_MAP = {'item1': StocktakingItems.ITEM1, 'item2': StocktakingItems.ITEM2}
+    RIGHTS = {
+        'anonymous': {
+            'get': [False, ('item1', False)],
+            'post': [('item2', False)],
+            'put': [('item1', False)],
+            'delete': [('item1', False)],
+        },
+        'admin': {
+            'get': [True, ('item1', True)],
+            'post': [('item2', True)],
+            'put': [('item1', True)],
+            'delete': [('item1', True)],
+        },
+        'user1': {
+            'get': [True, ('item1', True)],
+            'post': [('item2', True)],
+            'put': [('item1', True)],
+            'delete': [('item1', True)],
+        },
+    }
+
+
+@use_as_rights_data_provider('/units')
+class TestUnitRights(CommonRightsTest):
+    INIT_PUSH = [('/units', [Units.UNIT1])]
+    DATA_MAP = {'unit1': Units.UNIT1, 'unit2': Units.UNIT2}
+    RIGHTS = {
+        'anonymous': {
+            'get': [False, ('unit1', False)],
+            'post': [('unit2', False)],
+            'put': [('unit1', False)],
+            'delete': [('unit1', False)],
+        },
+        'admin': {
+            'get': [True, ('unit1', True)],
+            'post': [('unit2', True)],
+            'put': [('unit1', True)],
+            'delete': [('unit1', True)],
+        },
+        'user1': {
+            'get': [True, ('unit1', True)],
+            'post': [('unit2', True)],
+            'put': [('unit1', True)],
+            'delete': [('unit1', True)],
         },
     }
 
@@ -75,218 +296,5 @@ class TestVendorRights(CommonRightsTest):
             'post': [('vendor2', True)],
             'put': [('vendor1', True)],
             'delete': [('vendor1', True)],
-        },
-    }
-
-
-@use_as_rights_data_provider('/units')
-class TestUnitRights(CommonRightsTest):
-    INIT_PUSH = [('/units', [Units.UNIT1])]
-    DATA_MAP = {'unit1': Units.UNIT1, 'unit2': Units.UNIT2}
-    RIGHTS = {
-        'anonymous': {
-            'get': [False, ('unit1', False)],
-            'post': [('unit2', False)],
-            'put': [('unit1', False)],
-            'delete': [('unit1', False)],
-        },
-        'admin': {
-            'get': [True, ('unit1', True)],
-            'post': [('unit2', True)],
-            'put': [('unit1', True)],
-            'delete': [('unit1', True)],
-        },
-        'user1': {
-            'get': [True, ('unit1', True)],
-            'post': [('unit2', True)],
-            'put': [('unit1', True)],
-            'delete': [('unit1', True)],
-        },
-    }
-
-
-@use_as_rights_data_provider('/customers')
-class TestCustomerRights(CommonRightsTest):
-    INIT_PUSH = [('/customers', [Customers.CUSTOMER1])]
-    DATA_MAP = {'customer1': Customers.CUSTOMER1, 'customer2': Customers.CUSTOMER2}
-    RIGHTS = {
-        'anonymous': {
-            'get': [False, ('customer1', False)],
-            'post': [('customer2', False)],
-            'put': [('customer1', False)],
-            'delete': [('customer1', False)],
-        },
-        'admin': {
-            'get': [True, ('customer1', True)],
-            'post': [('customer2', True)],
-            'put': [('customer1', True)],
-            'delete': [('customer1', True)],
-        },
-        'user1': {
-            'get': [True, ('customer1', True)],
-            'post': [('customer2', True)],
-            'put': [('customer1', True)],
-            'delete': [('customer1', True)],
-        },
-    }
-
-
-@use_as_rights_data_provider('/acquisitions')
-class TestAcquisitionRights(CommonRightsTest):
-    INIT_PUSH = [('/acquisitions', [Acquisitions.ACQUISITION1])]
-    DATA_MAP = {'acquisition1': Acquisitions.ACQUISITION1, 'acquisition2': Acquisitions.ACQUISITION2}
-    RIGHTS = {
-        'anonymous': {
-            'get': [False, ('acquisition1', False)],
-            'post': [('acquisition2', False)],
-            'put': [('acquisition1', False)],
-            'delete': [('acquisition1', False)],
-        },
-        'admin': {
-            'get': [True, ('acquisition1', True)],
-            'post': [('acquisition2', True)],
-            'put': [('acquisition1', True)],
-            'delete': [('acquisition1', True)],
-        },
-        'user1': {
-            'get': [True, ('acquisition1', True)],
-            'post': [('acquisition2', True)],
-            'put': [('acquisition1', True)],
-            'delete': [('acquisition1', True)],
-        },
-    }
-
-
-@use_as_rights_data_provider('/stocktakings')
-class TestStocktakingRights(CommonRightsTest):
-    INIT_PUSH = [('/stocktakings', [Stocktakings.STOCKTAKING1])]
-    DATA_MAP = {'stocktaking1': Stocktakings.STOCKTAKING1, 'stocktaking2': Stocktakings.STOCKTAKING2}
-    RIGHTS = {
-        'anonymous': {
-            'get': [False, ('stocktaking1', False)],
-            'post': [('stocktaking2', False)],
-            'put': [('stocktaking1', False)],
-            'delete': [('stocktaking1', False)],
-        },
-        'admin': {
-            'get': [True, ('stocktaking1', True)],
-            'post': [('stocktaking2', True)],
-            'put': [('stocktaking1', True)],
-            'delete': [('stocktaking1', True)],
-        },
-        'user1': {
-            'get': [True, ('stocktaking1', True)],
-            'post': [('stocktaking2', True)],
-            'put': [('stocktaking1', True)],
-            'delete': [('stocktaking1', True)],
-        },
-    }
-
-
-@use_as_rights_data_provider('/items')
-class TestItemRights(CommonRightsTest):
-    INIT_PUSH = [
-        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
-        ('/units', [Units.UNIT1, Units.UNIT2]),
-        ('/items', [Items.ITEM1]),
-    ]
-    DATA_MAP = {'item1': Items.ITEM1, 'item2': Items.ITEM2}
-    RIGHTS = {
-        'anonymous': {
-            'get': [False, ('item1', False)],
-            'post': [('item2', False)],
-            'put': [('item1', False)],
-            'delete': [('item1', False)],
-        },
-        'admin': {
-            'get': [True, ('item1', True)],
-            'post': [('item2', True)],
-            'put': [('item1', True)],
-            'delete': [('item1', True)],
-        },
-        'user1': {
-            'get': [True, ('item1', True)],
-            'post': [('item2', True)],
-            'put': [('item1', True)],
-            'delete': [('item1', True)],
-        },
-    }
-
-
-@use_as_rights_data_provider('/acquisition-items')
-class TestAcquisitionItemRights(CommonRightsTest):
-    INIT_PUSH = [
-        ('/acquisitions', [Acquisitions.ACQUISITION1, Acquisitions.ACQUISITION2]),
-        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
-        ('/units', [Units.UNIT1, Units.UNIT2]),
-        ('/items', [Items.ITEM1, Items.ITEM2]),
-        ('/acquisition-items', [AcquisitionItems.ITEM1]),
-    ]
-    DATA_MAP = {'item1': AcquisitionItems.ITEM1, 'item2': AcquisitionItems.ITEM2}
-    RIGHTS = {
-        'anonymous': {
-            'get': [False, ('item1', False)],
-            'post': [('item2', False)],
-            'put': [('item1', False)],
-            'delete': [('item1', False)],
-        },
-        'admin': {
-            'get': [True, ('item1', True)],
-            'post': [('item2', True)],
-            'put': [('item1', True)],
-            'delete': [('item1', True)],
-        },
-        'user1': {
-            'get': [True, ('item1', True)],
-            'post': [('item2', True)],
-            'put': [('item1', True)],
-            'delete': [('item1', True)],
-        },
-    }
-
-
-@use_as_rights_data_provider('/stocktaking-items')
-class TestStocktakingItemRights(CommonRightsTest):
-    INIT_PUSH = [
-        ('/stocktakings', [Stocktakings.STOCKTAKING1, Stocktakings.STOCKTAKING2]),
-        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
-        ('/units', [Units.UNIT1, Units.UNIT2]),
-        ('/items', [Items.ITEM1, Items.ITEM2]),
-        ('/stocktaking-items', [StocktakingItems.ITEM1]),
-    ]
-    DATA_MAP = {'item1': StocktakingItems.ITEM1, 'item2': StocktakingItems.ITEM2}
-    RIGHTS = {
-        'anonymous': {
-            'get': [False, ('item1', False)],
-            'post': [('item2', False)],
-            'put': [('item1', False)],
-            'delete': [('item1', False)],
-        },
-        'admin': {
-            'get': [True, ('item1', True)],
-            'post': [('item2', True)],
-            'put': [('item1', True)],
-            'delete': [('item1', True)],
-        },
-        'user1': {
-            'get': [True, ('item1', True)],
-            'post': [('item2', True)],
-            'put': [('item1', True)],
-            'delete': [('item1', True)],
-        },
-    }
-
-
-@use_as_rights_data_provider('/configs')
-class TestConfigRights(CommonRightsTest):
-    RIGHTS = {
-        'anonymous': {
-            'get': True,
-        },
-        'admin': {
-            'get': True,
-        },
-        'user1': {
-            'get': True,
         },
     }
