@@ -139,6 +139,6 @@ class WorkItemSerializer(Serializer):
     returned_quantity = fields.Int(default=None, validate=_greater_than_or_equal_zero)
 
 
-class ConfigsSerializer(Serializer):
+class ConfigSerializer(Serializer):
     app_name = fields.Str()
     app_title = fields.Str()
