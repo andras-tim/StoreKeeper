@@ -1,6 +1,7 @@
 from app.modules.example_data import (
     ExampleAcquisitions as Acquisitions,
     ExampleAcquisitionItems as AcquisitionItems,
+    ExampleBarcodes as Barcodes,
     ExampleCustomers as Customers,
     ExampleItems as Items,
     ExampleUnits as Units,
@@ -8,6 +9,8 @@ from app.modules.example_data import (
     ExampleStocktakingItems as StocktakingItems,
     ExampleUsers as Users,
     ExampleVendors as Vendors,
+    ExampleWorks as Works,
+    ExampleWorkItems as WorkItems,
 )
 from test.views.base_right_test import CommonRightsTest, use_as_rights_data_provider
 
@@ -53,6 +56,18 @@ class TestAcquisitionItemRights(CommonRightsTest):
     ]
     DATA_MAP = {'item1': AcquisitionItems.ITEM1, 'item2': AcquisitionItems.ITEM2}
     RIGHTS = _get_all_rights_for_logged_in_users('item1', 'item2')
+
+
+@use_as_rights_data_provider('/barcodes')
+class TestBarcodesRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/vendors', [Vendors.VENDOR1]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1]),
+        ('/barcodes', [Barcodes.BARCODE1]),
+    ]
+    DATA_MAP = {'barcode1': Barcodes.BARCODE1, 'barcode2': Barcodes.BARCODE2}
+    RIGHTS = _get_all_rights_for_logged_in_users('barcode1', 'barcode2')
 
 
 @use_as_rights_data_provider('/configs')
@@ -169,3 +184,27 @@ class TestVendorRights(CommonRightsTest):
     INIT_PUSH = [('/vendors', [Vendors.VENDOR1])]
     DATA_MAP = {'vendor1': Vendors.VENDOR1, 'vendor2': Vendors.VENDOR2}
     RIGHTS = _get_all_rights_for_logged_in_users('vendor1', 'vendor2')
+
+
+@use_as_rights_data_provider('/works')
+class TestWorksRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/customers', [Customers.CUSTOMER1, Customers.CUSTOMER2]),
+        ('/works', [Works.WORK1]),
+    ]
+    DATA_MAP = {'work1': Works.WORK1, 'work2': Works.WORK2}
+    RIGHTS = _get_all_rights_for_logged_in_users('work1', 'work2')
+
+
+@use_as_rights_data_provider('/work-items')
+class TestWorkItemsRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/customers', [Customers.CUSTOMER1, Customers.CUSTOMER2]),
+        ('/works', [Works.WORK1, Works.WORK2]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1, Items.ITEM2]),
+        ('/work-items', [WorkItems.ITEM1]),
+    ]
+    DATA_MAP = {'item1': WorkItems.ITEM1, 'item2': WorkItems.ITEM2}
+    RIGHTS = _get_all_rights_for_logged_in_users('item1', 'item2')
