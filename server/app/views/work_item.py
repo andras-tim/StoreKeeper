@@ -5,7 +5,6 @@ from app.modules.base_views import BaseModelListView, BaseViewWithDiff
 from app.modules.common_helper import any_in
 from app.modules.example_data import ExampleWorkItems
 from app.serializers import WorkItemSerializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -77,7 +76,3 @@ class WorkItemView(BaseViewWithDiff):
             return True
 
         return False
-
-
-api.add_resource(WorkItemListView, '/{!s}/api/work-items'.format(config.App.NAME), endpoint='work_items')
-api.add_resource(WorkItemView, '/{!s}/api/work-items/<int:id>'.format(config.App.NAME), endpoint='work_item')

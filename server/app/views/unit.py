@@ -2,7 +2,6 @@ from app.models import Unit
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleUnits
 from app.serializers import UnitSerializer, UnitDeserializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -45,7 +44,3 @@ class UnitView(BaseView):
               response=None)
     def delete(self, id: int):
         return self._delete(id)
-
-
-api.add_resource(UnitListView, '/{!s}/api/units'.format(config.App.NAME), endpoint='units')
-api.add_resource(UnitView, '/{!s}/api/units/<int:id>'.format(config.App.NAME), endpoint='unit')

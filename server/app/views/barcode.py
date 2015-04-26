@@ -4,7 +4,6 @@ from app.models import Barcode
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleBarcodes
 from app.serializers import BarcodeSerializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -60,7 +59,3 @@ class BarcodeView(BaseView):
               response=None)
     def delete(self, id: int):
         return self._delete(id)
-
-
-api.add_resource(BarcodeListView, '/{!s}/api/barcodes'.format(config.App.NAME), endpoint='barcodes')
-api.add_resource(BarcodeView, '/{!s}/api/barcodes/<int:id>'.format(config.App.NAME), endpoint='barcode')

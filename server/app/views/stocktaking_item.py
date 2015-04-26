@@ -2,7 +2,6 @@ from app.models import StocktakingItem
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleStocktakingItems
 from app.serializers import StocktakingItemSerializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -45,9 +44,3 @@ class StocktakingItemView(BaseView):
               response=None)
     def delete(self, id: int):
         return self._delete(id)
-
-
-api.add_resource(StocktakingItemListView, '/{!s}/api/stocktaking-items'.format(config.App.NAME),
-                 endpoint='stocktaking_items')
-api.add_resource(StocktakingItemView, '/{!s}/api/stocktaking-items/<int:id>'.format(config.App.NAME),
-                 endpoint='stocktaking_item')

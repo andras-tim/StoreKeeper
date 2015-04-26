@@ -34,6 +34,7 @@ bcrypt = Bcrypt(app)
 
 # Init views (must be after common resources)
 import app.views as views
+views.initialize_endpoints(config, api)
 
 # static sharing
 if config.App.SHARE_STATIC:

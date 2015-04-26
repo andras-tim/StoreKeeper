@@ -5,7 +5,6 @@ from app.models import Work
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleWorks
 from app.serializers import WorkSerializer, WorkDeserializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -78,11 +77,3 @@ class WorkCloseReturnedView(BaseView):
         except RuntimeError as e:
             abort(422, message=e.args[0])
         return self._put_save(work)
-
-
-api.add_resource(WorkListView, '/{!s}/api/works'.format(config.App.NAME), endpoint='works')
-api.add_resource(WorkView, '/{!s}/api/works/<int:id>'.format(config.App.NAME), endpoint='work')
-api.add_resource(WorkCloseOutboundView, '/{!s}/api/works/<int:id>/close-outbound'.format(config.App.NAME),
-                 endpoint='work_close_outbound')
-api.add_resource(WorkCloseReturnedView, '/{!s}/api/works/<int:id>/close-returned'.format(config.App.NAME),
-                 endpoint='work_close_returned')

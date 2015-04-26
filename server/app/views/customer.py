@@ -2,7 +2,6 @@ from app.models import Customer
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleCustomers
 from app.serializers import CustomerSerializer, CustomerDeserializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -45,7 +44,3 @@ class CustomerView(BaseView):
               response=None)
     def delete(self, id: int):
         return self._delete(id)
-
-
-api.add_resource(CustomerListView, '/{!s}/api/customers'.format(config.App.NAME), endpoint='customers')
-api.add_resource(CustomerView, '/{!s}/api/customers/<int:id>'.format(config.App.NAME), endpoint='customer')

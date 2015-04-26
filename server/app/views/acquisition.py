@@ -2,7 +2,6 @@ from app.models import Acquisition
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleAcquisitions
 from app.serializers import AcquisitionSerializer, AcquisitionDeserializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -43,7 +42,3 @@ class AcquisitionView(BaseView):
               response=None)
     def delete(self, id: int):
         return self._delete(id)
-
-
-api.add_resource(AcquisitionListView, '/{!s}/api/acquisitions'.format(config.App.NAME), endpoint='acquisitions')
-api.add_resource(AcquisitionView, '/{!s}/api/acquisitions/<int:id>'.format(config.App.NAME), endpoint='acquisition')

@@ -2,7 +2,7 @@ from flask.ext import restful
 
 from app.modules.example_data import ExampleConfigs
 from app.serializers import ConfigSerializer
-from app.server import config, api
+from app.server import config
 from app.views.common import api_func
 
 
@@ -16,6 +16,3 @@ class ConfigView(restful.Resource):
             'app_title': config.App.TITLE,
         }
         return ConfigSerializer(client_related_config).data
-
-
-api.add_resource(ConfigView, '/{!s}/api/configs'.format(config.App.NAME), endpoint='configs')

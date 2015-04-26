@@ -2,7 +2,6 @@ from app.models import User
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleUsers
 from app.serializers import UserSerializer, UserDeserializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -59,7 +58,3 @@ class UserView(BaseView):
               status_codes={422: 'user can not remove itself'})
     def delete(self, id: int):
         return self._delete(id)
-
-
-api.add_resource(UserListView, '/{!s}/api/users'.format(config.App.NAME), endpoint='users')
-api.add_resource(UserView, '/{!s}/api/users/<int:id>'.format(config.App.NAME), endpoint='user')

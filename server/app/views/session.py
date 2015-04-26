@@ -7,7 +7,6 @@ from app.models import User
 from app.modules.example_data import ExampleUsers
 from app.modules.view_helper import get_validated_request, RequestProcessingError
 from app.serializers import UserSerializer, SessionDeserializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -41,6 +40,3 @@ class SessionView(restful.Resource):
     def delete(self):
         logout_user()
         return
-
-
-api.add_resource(SessionView, '/{!s}/api/sessions'.format(config.App.NAME), endpoint='sessions')

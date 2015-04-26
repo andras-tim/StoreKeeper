@@ -2,7 +2,6 @@ from app.models import Vendor
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleVendors
 from app.serializers import VendorSerializer, VendorDeserializer
-from app.server import config, api
 from app.views.common import api_func
 
 
@@ -45,7 +44,3 @@ class VendorView(BaseView):
               response=None)
     def delete(self, id: int):
         return self._delete(id)
-
-
-api.add_resource(VendorListView, '/{!s}/api/vendors'.format(config.App.NAME), endpoint='vendors')
-api.add_resource(VendorView, '/{!s}/api/vendors/<int:id>'.format(config.App.NAME), endpoint='vendor')
