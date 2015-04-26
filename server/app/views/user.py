@@ -1,3 +1,6 @@
+from flask import g
+from flask.ext.restful import abort
+
 from app.models import User
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleUsers
@@ -46,15 +49,21 @@ class UserView(BaseView):
     @api_func('Update user', item_name='user', url_tail='users/2',
               request=ExampleUsers.USER1.set(change={'username': 'new_foo'}),
               response=ExampleUsers.USER1.get(change={'username': 'new_foo'}),
-              status_codes={403: 'user can not modify another users', 422: '{original} / user is already exist'})
+              status_codes={403: 'user can not modify other users', 422: '{original} / user is already exist'})
     def put(self, id: int):
         user = self._put_populate(id)
+        if not g.user.admin and not user.id == g.user.id:
+            abort(403, message="Can not modify another user")
+
         _set_password(user)
         return self._put_commit(user)
 
     @api_func('Delete user', item_name='user', url_tail='users/2',
               admin_required=True,
               response=None,
-              status_codes={422: 'user can not remove itself'})
+              status_codes={403: 'user can not remove itself'})
     def delete(self, id: int):
-        return self._delete(id)
+        user = self._delete_get_item(id)
+        if user.id == g.user.id:
+            abort(403, message="User can not remove itself")
+        return self._delete_commit(user)
