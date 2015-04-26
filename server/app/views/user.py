@@ -19,13 +19,13 @@ class UserListView(BaseModelListView):
     _serializer = UserSerializer
     _deserializer = UserDeserializer
 
-    @api_func('List users', url_tail='users',
+    @api_func('List users', url_tail='/users',
               admin_required=True,
               response=[ExampleUsers.ADMIN.get(), ExampleUsers.USER1.get()])
     def get(self):
         return self._get()
 
-    @api_func('Create user', url_tail='users',
+    @api_func('Create user', url_tail='/users',
               admin_required=True,
               request=ExampleUsers.USER1.set(),
               response=ExampleUsers.USER1.get(),
@@ -41,12 +41,12 @@ class UserView(BaseView):
     _serializer = UserSerializer
     _deserializer = UserDeserializer
 
-    @api_func('Get user', item_name='user', url_tail='users/2',
+    @api_func('Get user', item_name='user', url_tail='/users/2',
               response=ExampleUsers.USER1.get())
     def get(self, id: int):
         return self._get(id)
 
-    @api_func('Update user', item_name='user', url_tail='users/2',
+    @api_func('Update user', item_name='user', url_tail='/users/2',
               request=ExampleUsers.USER1.set(change={'username': 'new_foo'}),
               response=ExampleUsers.USER1.get(change={'username': 'new_foo'}),
               status_codes={403: 'user can not modify other users', 422: '{original} / user is already exist'})
@@ -58,7 +58,7 @@ class UserView(BaseView):
         _set_password(user)
         return self._put_commit(user)
 
-    @api_func('Delete user', item_name='user', url_tail='users/2',
+    @api_func('Delete user', item_name='user', url_tail='/users/2',
               admin_required=True,
               response=None,
               status_codes={403: 'user can not remove itself'})

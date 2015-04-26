@@ -10,12 +10,12 @@ class CustomerListView(BaseModelListView):
     _serializer = CustomerSerializer
     _deserializer = CustomerDeserializer
 
-    @api_func('List customers', url_tail='customers',
+    @api_func('List customers', url_tail='/customers',
               response=[ExampleCustomers.CUSTOMER1.get(), ExampleCustomers.CUSTOMER2.get()])
     def get(self):
         return self._get()
 
-    @api_func('Create customer', url_tail='customers',
+    @api_func('Create customer', url_tail='/customers',
               request=ExampleCustomers.CUSTOMER1.set(),
               response=ExampleCustomers.CUSTOMER1.get(),
               status_codes={422: '{{ original }} / customer is already exist'})
@@ -28,19 +28,19 @@ class CustomerView(BaseView):
     _serializer = CustomerSerializer
     _deserializer = CustomerDeserializer
 
-    @api_func('Get customer', item_name='customer', url_tail='customers/1',
+    @api_func('Get customer', item_name='customer', url_tail='/customers/1',
               response=ExampleCustomers.CUSTOMER1.get())
     def get(self, id: int):
         return self._get(id)
 
-    @api_func('Update customer', item_name='customer', url_tail='customers/1',
+    @api_func('Update customer', item_name='customer', url_tail='/customers/1',
               request=ExampleCustomers.CUSTOMER1.set(change={'name': 'new_foo'}),
               response=ExampleCustomers.CUSTOMER1.get(change={'name': 'new_foo'}),
               status_codes={422: '{{ original }} / customer is already exist'})
     def put(self, id: int):
         return self._put(id)
 
-    @api_func('Delete customer', item_name='customer', url_tail='customers/1',
+    @api_func('Delete customer', item_name='customer', url_tail='/customers/1',
               response=None)
     def delete(self, id: int):
         return self._delete(id)

@@ -11,13 +11,13 @@ from app.views.common import api_func
 
 
 class SessionView(restful.Resource):
-    @api_func('Get current session', url_tail='session',
+    @api_func('Get current session', url_tail='/session',
               response=ExampleUsers.ADMIN.get())
     def get(self):
         user = User.query.filter_by(username=g.user.username).first()
         return UserSerializer(user).data
 
-    @api_func('Login user', url_tail='session',
+    @api_func('Login user', url_tail='/session',
               login_required=False,
               request=ExampleUsers.ADMIN.set(['username', 'password']),
               response=ExampleUsers.ADMIN.get(),
@@ -35,7 +35,7 @@ class SessionView(restful.Resource):
             abort(401, message='login error')
         return UserSerializer(user).data, 201
 
-    @api_func('Logout user', url_tail='session',
+    @api_func('Logout user', url_tail='/session',
               response=None)
     def delete(self):
         logout_user()

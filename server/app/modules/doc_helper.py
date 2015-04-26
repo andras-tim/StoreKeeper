@@ -18,7 +18,7 @@ class ApiDoc:
 
     .. sourcecode:: http
 
-        {{ command }} /{{ app_name }}/api/{{ url_tail }} HTTP/1.1
+        {{ command }} /{{ app_name }}/api{{ url_tail }} HTTP/1.1
         Host: localhost:8000
         Content-Type: application/json
         {% for request_line in request_lines %}

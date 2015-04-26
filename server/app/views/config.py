@@ -7,7 +7,7 @@ from app.views.common import api_func
 
 
 class ConfigView(restful.Resource):
-    @api_func('Get server settings', url_tail='config',
+    @api_func('Get server settings', url_tail='/config',
               login_required=False,
               response=ExampleConfigs.CONFIG1.get())
     def get(self):

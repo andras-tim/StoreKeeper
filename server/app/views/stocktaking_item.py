@@ -10,12 +10,12 @@ class StocktakingItemListView(BaseModelListView):
     _serializer = StocktakingItemSerializer
     _deserializer = StocktakingItemSerializer
 
-    @api_func('List stocktaking items', url_tail='stocktaking-items',
+    @api_func('List stocktaking items', url_tail='/stocktaking-items',
               response=[ExampleStocktakingItems.ITEM1.get(), ExampleStocktakingItems.ITEM2.get()])
     def get(self):
         return self._get()
 
-    @api_func('Create stocktaking item', url_tail='stocktaking-items',
+    @api_func('Create stocktaking item', url_tail='/stocktaking-items',
               request=ExampleStocktakingItems.ITEM1.set(),
               response=ExampleStocktakingItems.ITEM1.get(),
               status_codes={422: '{{ original }} / can not add one item twice'})
@@ -28,19 +28,19 @@ class StocktakingItemView(BaseView):
     _serializer = StocktakingItemSerializer
     _deserializer = StocktakingItemSerializer
 
-    @api_func('Get stocktaking item', item_name='stocktaking item', url_tail='stocktaking-items/1',
+    @api_func('Get stocktaking item', item_name='stocktaking item', url_tail='/stocktaking-items/1',
               response=ExampleStocktakingItems.ITEM1.get())
     def get(self, id: int):
         return self._get(id)
 
-    @api_func('Update stocktaking item', item_name='stocktaking item', url_tail='stocktaking-items/1',
+    @api_func('Update stocktaking item', item_name='stocktaking item', url_tail='/stocktaking-items/1',
               request=ExampleStocktakingItems.ITEM1.set(),
               response=ExampleStocktakingItems.ITEM1.get(),
               status_codes={422: '{{ original }} / can not add one item twice'})
     def put(self, id: int):
         return self._put(id)
 
-    @api_func('Delete stocktaking item', item_name='stocktaking item', url_tail='stocktaking-items/1',
+    @api_func('Delete stocktaking item', item_name='stocktaking item', url_tail='/stocktaking-items/1',
               response=None)
     def delete(self, id: int):
         return self._delete(id)

@@ -13,12 +13,12 @@ class WorkItemListView(BaseModelListView):
     _serializer = WorkItemSerializer
     _deserializer = WorkItemSerializer
 
-    @api_func('List work items', url_tail='work-items',
+    @api_func('List work items', url_tail='/work-items',
               response=[ExampleWorkItems.ITEM1.get(), ExampleWorkItems.ITEM2.get()])
     def get(self):
         return self._get()
 
-    @api_func('Create work item', url_tail='work-items',
+    @api_func('Create work item', url_tail='/work-items',
               request=ExampleWorkItems.ITEM1.set(),
               response=ExampleWorkItems.ITEM1.get(),
               status_codes={403: 'can not add new work item after outbound items was closed',
@@ -38,12 +38,12 @@ class WorkItemView(BaseViewWithDiff):
     _serializer = WorkItemSerializer
     _deserializer = WorkItemSerializer
 
-    @api_func('Get work item', item_name='work item', url_tail='work-items/1',
+    @api_func('Get work item', item_name='work item', url_tail='/work-items/1',
               response=ExampleWorkItems.ITEM1.get())
     def get(self, id: int):
         return self._get(id)
 
-    @api_func('Update work item', item_name='work item', url_tail='work-items/1',
+    @api_func('Update work item', item_name='work item', url_tail='/work-items/1',
               request=ExampleWorkItems.ITEM1.set(),
               response=ExampleWorkItems.ITEM1.get(),
               status_codes={403: 'can not change work item after outbound/returned items was closed',
@@ -63,7 +63,7 @@ class WorkItemView(BaseViewWithDiff):
 
         return self._put_commit(work_item)
 
-    @api_func('Delete work item', item_name='work item', url_tail='work-items/1',
+    @api_func('Delete work item', item_name='work item', url_tail='/work-items/1',
               response=None)
     def delete(self, id: int):
         return self._delete(id)
