@@ -94,3 +94,13 @@ class TestConfig(unittest.TestCase):
                 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test/app.sqlite',
             },
         }, config.get_dict())
+
+    def test_str_dump_validity(self):
+        config = self.config.read(config_reader=ConfigMock('DevelopmentConfig').config_reader)
+        assert """{'App': {'MIGRATE_REPO_PATH': '/test/db_repository'},
+ 'DebugId': 'Development',
+ 'Flask': {'DEBUG': True,
+           'SERVER_NAME': '0.0.0.0:8000',
+           'STATIC_FOLDER': '/test',
+           'TESTING': False},
+ 'SqlAlchemy': {'SQLALCHEMY_DATABASE_URI': 'sqlite:///test/app.sqlite'}}""" == str(config)

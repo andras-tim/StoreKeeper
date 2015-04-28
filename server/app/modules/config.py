@@ -1,3 +1,4 @@
+from pprint import pformat
 import string
 import sys
 import yaml
@@ -30,6 +31,9 @@ class ConfigObject:
     def __getitem__(self, name: str):
         self.__check(name)
         return self.__config[name]
+
+    def __str__(self) -> str:
+        return pformat(self.__config)
 
     def get_dict(self)-> dict:
         return self.__config
