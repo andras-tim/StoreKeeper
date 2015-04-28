@@ -3,7 +3,7 @@ from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 
-from app import test_mode, doc_mode, log
+from app import test_mode, doc_mode, log, static
 from app.config import get_config
 from app.res.restfulApi import RestfulApiWithoutSimpleAuth
 
@@ -12,9 +12,7 @@ config = get_config()
 flask_args = {}
 
 # static sharing
-if config.App.SHARE_STATIC:
-    from app import static
-    flask_args.update(static.get_flask_parameters(config))
+flask_args.update(static.get_flask_parameters(config))
 
 app = Flask(__name__, **flask_args)
 app.config.update(config['Flask'])

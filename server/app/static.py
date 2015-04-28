@@ -6,9 +6,13 @@ from app import basedir
 
 
 def get_flask_parameters(config: ConfigObject) -> dict:
+    if config.App.SHARE_STATIC:
+        return {
+            'static_folder': '{!s}/../client/app'.format(basedir),
+            'static_url_path': '/{!s}'.format(config.App.NAME),
+        }
     return {
-        'static_folder': '{!s}/../client/app'.format(basedir),
-        'static_url_path': '/{!s}'.format(config.App.NAME),
+        'static_folder': None
     }
 
 
