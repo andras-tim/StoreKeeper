@@ -45,6 +45,16 @@ DefaultConfig:
       RECIPIENTS:
         - foo@bar.com
 
+    ToSyslog:
+      # The TRANSPORT should be: UDP, TCP
+
+      ENABLED: False
+      LEVEL: WARNING
+
+      ADDRESS: log.bar
+      TRANSPORT: TCP
+      PORT: 514
+
 
 ProductionConfig:
   Base: DefaultConfig
