@@ -21,12 +21,12 @@ class BarcodeListView(BaseModelListView):
     _serializer = BarcodeSerializer
     _deserializer = BarcodeSerializer
 
-    @api_func('List stocktaking items', url_tail='/barcodes',
+    @api_func('List barcodes items', url_tail='/barcodes',
               response=[ExampleBarcodes.BARCODE1.get(), ExampleBarcodes.BARCODE2.get()])
     def get(self):
         return self._get()
 
-    @api_func('Create stocktaking item', url_tail='/barcodes',
+    @api_func('Create barcodes item', url_tail='/barcodes',
               request=ExampleBarcodes.BARCODE1.set(),
               response=ExampleBarcodes.BARCODE1.get(),
               status_codes={422: '{{ original }} / try to set multiple main barcode to an item'})
@@ -41,12 +41,12 @@ class BarcodeView(BaseView):
     _serializer = BarcodeSerializer
     _deserializer = BarcodeSerializer
 
-    @api_func('Get stocktaking item', url_tail='/barcodes/1',
+    @api_func('Get barcodes item', url_tail='/barcodes/1',
               response=ExampleBarcodes.BARCODE1.get())
     def get(self, id: int):
         return self._get(id)
 
-    @api_func('Update stocktaking item', url_tail='/barcodes/1',
+    @api_func('Update barcodes item', url_tail='/barcodes/1',
               request=ExampleBarcodes.BARCODE1.set(),
               response=ExampleBarcodes.BARCODE1.get(),
               status_codes={422: '{{ original }} / try to set multiple main barcode to an item'})
@@ -55,7 +55,7 @@ class BarcodeView(BaseView):
         _check_only_one_main_barcode_per_item(barcode)
         return self._put_commit(barcode)
 
-    @api_func('Delete stocktaking item', url_tail='/barcodes/1',
+    @api_func('Delete barcodes item', url_tail='/barcodes/1',
               response=None)
     def delete(self, id: int):
         return self._delete(id)
