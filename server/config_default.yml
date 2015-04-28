@@ -21,6 +21,30 @@ DefaultConfig:
 
     ALLOW_API_SIMPLE_AUTH: False
 
+  Log:
+    # The log level (LEVEL) should be: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
+
+    ToFile:
+      ENABLED: False
+      LEVEL: INFO
+
+      PATH: "$BASEDIR/tmp/storekeeper.log"
+      MAX_SIXE_IN_MB: 10
+      HOLD_COUNT: 5
+
+    ToEmail:
+      ENABLED: False
+      LEVEL: ERROR
+
+      SERVER: bar.com
+      PORT: 25
+      USERNAME: None
+      PASSWORD: None
+
+      SENDER: no-reply@storekeeper
+      RECIPIENTS:
+        - foo@bar.com
+
 
 ProductionConfig:
   Base: DefaultConfig
@@ -30,6 +54,10 @@ ProductionConfig:
 
   Flask:
     SQLALCHEMY_DATABASE_URI: "mysql+pymysql://storekeeper:StoreKeeper@localhost/storekeeper"
+
+  Log:
+    ToEmail:
+      ENABLED: True
 
 
 DevelopmentConfig:

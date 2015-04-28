@@ -3,7 +3,7 @@ from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 
-from app import test_mode, doc_mode
+from app import test_mode, doc_mode, log
 from app.config import get_config
 from app.res.restfulApi import RestfulApiWithoutSimpleAuth
 
@@ -18,6 +18,9 @@ if config.App.SHARE_STATIC:
 
 app = Flask(__name__, **flask_args)
 app.config.update(config['Flask'])
+
+# logging
+log.initialize(app, config)
 
 # flask-sqlalchemy
 db = SQLAlchemy(app)
@@ -44,3 +47,5 @@ if config.App.SHARE_STATIC:
 if config.App.ADMIN_PAGE and not (test_mode or doc_mode):
     from app import admin
     admin.initialize(app, db, config)
+
+app.logger.info('Ready')
