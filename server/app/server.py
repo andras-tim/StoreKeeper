@@ -18,7 +18,8 @@ app = Flask(__name__, **flask_args)
 app.config.update(config['Flask'])
 
 # logging
-log.initialize(app, config)
+if not app.debug and not app.testing:
+    log.initialize(app, config)
 
 # flask-sqlalchemy
 db = SQLAlchemy(app)
