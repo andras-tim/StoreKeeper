@@ -19,7 +19,7 @@ function init()
 function do_preinstall()
 {
     # Extra dependencies for fast Yaml file reading (http://stackoverflow.com/a/24791419/1108919)
-    packages="build-essential python${PYTHON_VERSION} python${PYTHON_VERSION}-dev libyaml-dev"
+    packages="build-essential python${PYTHON_VERSION} python${PYTHON_VERSION}-dev libyaml-dev python3-cups"
     if [ "${GLOBAL_INSTALL}" == true ]
     then
         packages="${packages} python3-pip"
@@ -33,7 +33,7 @@ function do_preinstall()
         # Install virtualenv
         if [ ! -e flask ]
         then
-            virtualenv -p python${PYTHON_VERSION} flask
+            virtualenv --system-site-packages -p python${PYTHON_VERSION} flask
         fi
     fi
     ${PIP} install --upgrade pip setuptools

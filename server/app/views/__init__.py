@@ -15,6 +15,7 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
 
         'barcode_list': (barcode.BarcodeListView, '/barcodes'),
         'barcode': (barcode.BarcodeView, '/barcodes/<int:id>'),
+        'barcode_print': (barcode.BarcodePrintView, '/barcodes/<int:id>/print'),
 
         'config': (config.ConfigView, '/config'),
 

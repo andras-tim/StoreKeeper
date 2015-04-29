@@ -18,3 +18,11 @@ Data management
   .. autoflask:: app.server:app
      :endpoints: barcode
 
+Commands
+--------
+
+``/api/barcodes/<id>/print``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: barcode_print
+
