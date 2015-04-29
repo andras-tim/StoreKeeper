@@ -1,6 +1,6 @@
 import unittest
 
-from test.Mock.ConfigMock import ConfigMock
+from test.mock.config_mock import ConfigMock
 from app.modules.config import Config, CircularDependencyError
 
 
