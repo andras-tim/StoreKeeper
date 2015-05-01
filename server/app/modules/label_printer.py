@@ -5,16 +5,8 @@ from reportlab.graphics.barcode import code39
 from reportlab.lib.units import mm
 
 from app import basedir, tempdir
-from app.server import app, config
-
-try:
-    import cups
-except ImportError:
-    app.logger.warning('Missing \'pycups\' python3 module; printing was deactivated')
-
-
-class MissingCups(Exception):
-    pass
+from app.server import config
+from app.modules.printer import Printer
 
 
 class LabelPrinter:
@@ -22,9 +14,10 @@ class LabelPrinter:
     __print_cache_dir = os.path.join(tempdir, 'print_cache')
     __pdf_name_template = 'label__{data}__{title_hash}.pdf'
 
-    def __init__(self, title: str, data: str):
+    def __init__(self, title: str, data: str, printer: (Printer, None)=None):
         self.__title = title
         self.__data = data
+        self.__printer = printer or Printer(config.App.LABEL_PRINTER)
 
         self.__pdf_path = self.__get_pdf_path()
 
@@ -36,10 +29,8 @@ class LabelPrinter:
         return self.__pdf_path
 
     def print(self):
-        printer = _Printer()
-
         self.print_to_pdf()
-        printer.print_pdf(self.__pdf_path)
+        self.__printer.print_pdf(self.__pdf_path)
 
     def __generate_pdf(self):
         pdf_generator = _LabelPdfGenerator()
@@ -116,31 +107,3 @@ class _LabelPdfGenerator:
 
         canv.setFont(self.data_font_name, self.data_font_size)
         canv.drawCentredString(self.inner_left + self.inner_width / 2, y - 4 * mm, data)
-
-
-class _Printer(object):
-    printer_options = {
-        # 'BrCutLabel': '1'
-        # 'BrCutAtEnd': 'ON'
-        # 'BrMirror': 'OFF'
-        # 'BrPriority': 'BrSpeed'
-        # 'Resolution': 'Normal'
-        # 'BrHalftonePattern': 'BrErrorDiffusion'
-        # 'BrBrightness': '0'
-        # 'BrContrast': '0'
-        # 'PageSize': '29x90'
-        # 'PageRegion': '29x90'
-        # 'BrMargin': '3'
-    }
-
-    def __init__(self):
-        if 'cups' not in globals().keys():
-            raise MissingCups('Can not print while \'pycups\' python3 module is not installed.')
-
-        self.conn = cups.Connection()
-
-    def print_pdf(self, pdf_path: str, printer_name: (str, None)=None) -> int:
-        printer_name = printer_name or self.conn.getDefault()
-        job_title = '{} - {}'.format(config.App.TITLE, os.path.basename(pdf_path))
-
-        self.conn.printFile(printer_name, pdf_path, job_title, self.printer_options)

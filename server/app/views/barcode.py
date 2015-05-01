@@ -4,7 +4,8 @@ from flask.ext.restful import abort
 from app.models import Barcode
 from app.modules.base_views import BaseModelListView, BaseView
 from app.modules.example_data import ExampleBarcodes
-from app.modules.label_printer import LabelPrinter, MissingCups
+from app.modules.label_printer import LabelPrinter
+from app.modules.printer import MissingCups
 from app.serializers import BarcodeSerializer
 from app.views.common import api_func
 
@@ -75,12 +76,12 @@ class BarcodePrintView(BaseView):
               status_codes={400: 'missing pycups python3 module'})
     def put(self, id: int):
         barcode = self._get_item_by_id(id)
-        label_printer = _get_label_printer(barcode)
 
         try:
-            label_printer.print()
+            label_printer = _get_label_printer(barcode)
         except MissingCups as e:
-            abort(400, message=str(e))
+            return abort(400, message=str(e))
+        label_printer.print()
 
 
 def _check_only_one_main_barcode_per_item(barcode: Barcode):

@@ -10,6 +10,9 @@ DefaultConfig:
     MIGRATE_REPO_PATH: "$BASEDIR/db_repository"
     SHARE_STATIC: True
 
+    # Set to DEFAULT for use default Cups printer
+    LABEL_PRINTER: DEFAULT
+
   Flask:
     # http://flask.pocoo.org/docs/0.10/config/
     SECRET_KEY: ImportantSecretString
