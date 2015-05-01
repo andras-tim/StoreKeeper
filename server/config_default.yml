@@ -85,7 +85,8 @@ DevelopmentConfig:
     DEBUG: True
 
     # http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling
-    # SQLALCHEMY_RECORD_QUERIES = True
+    # SQLALCHEMY_RECORD_QUERIES: True
+    SQLALCHEMY_ECHO: True
 
 
 TestingConfig:
