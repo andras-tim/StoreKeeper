@@ -42,6 +42,35 @@ class TestApiDocDecorator(ApiDocTestCase):
 
         :statuscode 201: no error
         :statuscode 401: user was not logged in
+
+        **Example request**:
+
+        .. sourcecode:: http
+
+            POST /%(app_name)s/api/foo HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
+
+        **Example response**:
+
+        .. sourcecode:: http
+
+            HTTP/1.0 201 CREATED
+            Content-Type: application/json
+
+            null
+        """)
+
+    def test_minimal_post_with_data(self):
+        @api_func('Test command', url_tail='/foo', request={'foo': 1})
+        def post():
+            pass
+
+        self.assertApiDoc(post.__doc__, """
+        Test command
+
+        :statuscode 201: no error
+        :statuscode 401: user was not logged in
         :statuscode 422: there is wrong type / missing field
 
         **Example request**:
@@ -51,6 +80,10 @@ class TestApiDocDecorator(ApiDocTestCase):
             POST /%(app_name)s/api/foo HTTP/1.1
             Host: localhost:8000
             Content-Type: application/json
+
+            {
+              "foo": 1
+            }
 
         **Example response**:
 
@@ -72,6 +105,35 @@ class TestApiDocDecorator(ApiDocTestCase):
 
         :statuscode 200: no error
         :statuscode 401: user was not logged in
+
+        **Example request**:
+
+        .. sourcecode:: http
+
+            PUT /%(app_name)s/api/foo HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
+
+        **Example response**:
+
+        .. sourcecode:: http
+
+            HTTP/1.0 200 OK
+            Content-Type: application/json
+
+            null
+        """)
+
+    def test_minimal_put_with_data(self):
+        @api_func('Test command', url_tail='/foo', request={'foo': 1})
+        def put():
+            pass
+
+        self.assertApiDoc(put.__doc__, """
+        Test command
+
+        :statuscode 200: no error
+        :statuscode 401: user was not logged in
         :statuscode 422: there is wrong type / missing field
 
         **Example request**:
@@ -81,6 +143,10 @@ class TestApiDocDecorator(ApiDocTestCase):
             PUT /%(app_name)s/api/foo HTTP/1.1
             Host: localhost:8000
             Content-Type: application/json
+
+            {
+              "foo": 1
+            }
 
         **Example response**:
 

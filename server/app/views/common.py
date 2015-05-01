@@ -131,7 +131,7 @@ def api_func(title: str,
             new_status_codes[401] = ''
         if admin_required and 403 not in new_status_codes.keys():
             new_status_codes[403] = ''
-        if func.__name__ in ('post', 'put') and 422 not in new_status_codes.keys() and not handled_file:
+        if request is not None and func.__name__ in ('post', 'put') and 422 not in new_status_codes.keys():
             new_status_codes[422] = ''
         if 'id' in args and 404 not in new_status_codes.keys():
             new_status_codes[404] = 'there is no {!s}'.format(item_name)
