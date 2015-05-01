@@ -25,4 +25,3 @@ Commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
      :endpoints: barcode_print
-

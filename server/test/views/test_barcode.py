@@ -3,6 +3,8 @@ from app.modules.example_data import ExampleBarcodes as Barcodes, ExampleItems a
 from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
+# I do not want to check the output of printing, therefore this feature is tested only by rights
+
 @append_mandatory_field_tests(item_name='barcode', base_item=Barcodes.BARCODE1,
                               mandatory_fields=['barcode', 'item'])
 class TestBarcodeWithBrandNewDb(CommonApiTest):

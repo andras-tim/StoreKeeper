@@ -1,3 +1,4 @@
+from flask import send_file
 from flask.ext.restful import abort
 
 from app.models import Barcode
@@ -58,17 +59,24 @@ class BarcodePrintView(BaseView):
     _serializer = BarcodeSerializer
     _deserializer = BarcodeSerializer
 
+    @api_func('Generate barcode label to PDF with some details, and starts downloading that.',
+              url_tail='/barcodes/1/print',
+              response_content_type='application/pdf',
+              response_filename='label__SK642031__4f0ff51c73703295643a325e55bc7ed2d94aa03d.pdf')
+    def get(self, id: int):
+        barcode = self._get_item_by_id(id)
+        label_printer = _get_label_printer(barcode)
+
+        file_path = label_printer.print_to_pdf()
+        return send_file(file_path, as_attachment=True)
+
     @api_func('Print barcode label with some details', url_tail='/barcodes/1/print',
               response=None,
               status_codes={400: 'missing pycups python3 module'})
     def put(self, id: int):
         barcode = self._get_item_by_id(id)
+        label_printer = _get_label_printer(barcode)
 
-        title = barcode.item.name
-        if barcode.quantity > 1:
-            title = '{} ({:d} db)'.format(title, barcode.quantity)
-
-        label_printer = LabelPrinter(title=title, data=barcode.barcode)
         try:
             label_printer.print()
         except MissingCups as e:
@@ -82,3 +90,11 @@ def _check_only_one_main_barcode_per_item(barcode: Barcode):
                             Barcode.item_id == barcode.item.id,
                             Barcode.main).count() > 0:
         abort(422, message={'main': ['Can not set more than one main barcode to an item.']})
+
+
+def _get_label_printer(barcode: Barcode) -> LabelPrinter:
+    title = barcode.item.name
+    if barcode.quantity > 1:
+        title = '{} ({:d} db)'.format(title, barcode.quantity)
+
+    return LabelPrinter(title=title, data=barcode.barcode)

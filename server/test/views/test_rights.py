@@ -70,6 +70,27 @@ class TestBarcodeRights(CommonRightsTest):
     RIGHTS = _get_all_rights_for_logged_in_users('barcode1', 'barcode2')
 
 
+@use_as_rights_data_provider('/barcodes/1/print')
+class TestBarcodeLabelPrintingRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/vendors', [Vendors.VENDOR1]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1]),
+        ('/barcodes', [Barcodes.BARCODE1]),
+    ]
+    RIGHTS = {  # Can not test PUT (printing on printer) while it was not mocked
+        'anonymous': {
+            'get': False,
+        },
+        'admin': {
+            'get': True,
+        },
+        'user1': {
+            'get': True,
+        },
+    }
+
+
 @use_as_rights_data_provider('/config')
 class TestConfigRights(CommonRightsTest):
     RIGHTS = {
