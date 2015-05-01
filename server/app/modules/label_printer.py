@@ -59,13 +59,13 @@ class LabelPrinter:
 
 
 class _LabelPdfGenerator:
-    page_width = 90*mm
-    page_height = 29*mm
+    page_width = 90 * mm
+    page_height = 29 * mm
 
-    margin_left = 3*mm
-    margin_top = 2*mm
-    margin_right = 4*mm
-    margin_bottom = 2*mm
+    margin_left = 3 * mm
+    margin_top = 2 * mm
+    margin_right = 4 * mm
+    margin_bottom = 2 * mm
 
     inner_left = margin_left
     inner_top = page_height - margin_top
@@ -88,9 +88,9 @@ class _LabelPdfGenerator:
         canv.setSubject(data)
 
         self._draw_border(canv)
-        self._draw_logo(canv, self.inner_left + 1*mm, self.inner_top - 8.5*mm, logo_path)
-        self._draw_title(canv, self.inner_left + 30*mm, self.inner_top - 7*mm, title)
-        self._draw_barcode(canv, self.inner_bottom + 5*mm, data, bar_height=10*mm)
+        self._draw_logo(canv, self.inner_left + 1 * mm, self.inner_top - 8.5 * mm, logo_path)
+        self._draw_title(canv, self.inner_left + 30 * mm, self.inner_top - 7 * mm, title)
+        self._draw_barcode(canv, self.inner_bottom + 5 * mm, data, bar_height=10 * mm)
 
         canv.showPage()
         canv.save()
@@ -107,15 +107,15 @@ class _LabelPdfGenerator:
         canv.drawString(x, y, title)
 
     def _draw_logo(self, canv: canvas, x: int, y: int, image_path: str):
-        canv.drawImage(image_path, x, y, 28*mm, 7*mm)
+        canv.drawImage(image_path, x, y, 28 * mm, 7 * mm)
 
-    def _draw_barcode(self, canv: canvas, y: int, data: str, bar_height: int=20*mm):
+    def _draw_barcode(self, canv: canvas, y: int, data: str, bar_height: int=20 * mm):
         # http://en.wikipedia.org/wiki/Code_39
-        barcode = code39.Standard39(data, barWidth=0.55*mm, barHeight=bar_height, stop=True, checksum=False)
+        barcode = code39.Standard39(data, barWidth=0.55 * mm, barHeight=bar_height, stop=True, checksum=False)
         barcode.drawOn(canv, self.inner_left + (self.inner_width - barcode.width) / 2, y)
 
         canv.setFont(self.data_font_name, self.data_font_size)
-        canv.drawCentredString(self.inner_left + self.inner_width / 2, y - 4*mm, data)
+        canv.drawCentredString(self.inner_left + self.inner_width / 2, y - 4 * mm, data)
 
 
 class _Printer(object):
