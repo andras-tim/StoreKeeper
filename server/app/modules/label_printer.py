@@ -34,7 +34,7 @@ class LabelPrinter:
 
     def __generate_pdf(self):
         pdf_generator = _LabelPdfGenerator()
-        pdf_generator.generate_label(self.__title, self.__data, self.__logo_path,
+        pdf_generator.generate_label(self.__title, self.__data, self.__logo_path, config.App.LABEL_BORDER,
                                      output_path=self.__pdf_path)
 
     def __prepare_print_cache_dir(self):
@@ -71,14 +71,15 @@ class _LabelPdfGenerator:
     data_font_name = 'Helvetica'
     data_font_size = 10
 
-    def generate_label(self, title: str, data: str, logo_path: str, output_path: str):
+    def generate_label(self, title: str, data: str, logo_path: str, label_border: bool, output_path: str):
         canv = self._create_new_canvas(pdf_path=output_path)
 
         canv.setAuthor(config.App.TITLE)
         canv.setTitle(title)
         canv.setSubject(data)
 
-        self._draw_border(canv)
+        if label_border:
+            self._draw_border(canv)
         self._draw_logo(canv, self.inner_left + 1 * mm, self.inner_top - 8.5 * mm, logo_path)
         self._draw_title(canv, self.inner_left + 30 * mm, self.inner_top - 7 * mm, title)
         self._draw_barcode(canv, self.inner_bottom + 5 * mm, data, bar_height=10 * mm)

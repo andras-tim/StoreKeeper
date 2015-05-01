@@ -12,6 +12,7 @@ DefaultConfig:
 
     # Set to DEFAULT for use default Cups printer
     LABEL_PRINTER: DEFAULT
+    LABEL_BORDER: False
 
   Flask:
     # http://flask.pocoo.org/docs/0.10/config/
