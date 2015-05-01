@@ -51,7 +51,7 @@ class TestLabelPrinter(unittest.TestCase):
 
     def test_can_print(self):
         printer = PrinterMock()
-        lp = LabelPrinter(self.title, self.barcode, printer)
+        lp = LabelPrinter(self.title, self.barcode)
 
-        lp.print()
+        lp.print(printer)
         assert printer.last_printed_pdf is not None

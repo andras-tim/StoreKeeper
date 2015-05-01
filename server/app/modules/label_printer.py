@@ -14,10 +14,9 @@ class LabelPrinter:
     __print_cache_dir = os.path.join(tempdir, 'print_cache')
     __pdf_name_template = 'label__{data}__{title_hash}.pdf'
 
-    def __init__(self, title: str, data: str, printer: (Printer, None)=None):
+    def __init__(self, title: str, data: str):
         self.__title = title
         self.__data = data
-        self.__printer = printer or Printer(config.App.LABEL_PRINTER)
 
         self.__pdf_path = self.__get_pdf_path()
 
@@ -28,9 +27,11 @@ class LabelPrinter:
             self.__generate_pdf()
         return self.__pdf_path
 
-    def print(self):
+    def print(self, printer: (Printer, None)=None):
+        printer = printer or Printer(config.App.LABEL_PRINTER)
+
         self.print_to_pdf()
-        self.__printer.print_pdf(self.__pdf_path)
+        printer.print_pdf(self.__pdf_path)
 
     def __generate_pdf(self):
         pdf_generator = _LabelPdfGenerator()
