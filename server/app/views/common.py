@@ -55,8 +55,10 @@ def admin_login_required(func: callable):
 
 
 def api_func(title: str, url_tail: str, item_name: str='item', request: (list, dict, None)=None,
-             response: (list, dict, None)=None, response_status: (int, None)=None, queries: (dict, None)=None,
-             status_codes: (dict, None)=None, login_required: bool=True, admin_required: bool=False) -> callable:
+             request_content_type: str='application/json', response: (list, dict, None)=None,
+             response_content_type: str='application/json', response_status: (int, None)=None,
+             queries: (dict, None)=None, status_codes: (dict, None)=None, login_required: bool=True,
+             admin_required: bool=False) -> callable:
     def wrapper(func: callable) -> callable:
         decorated_func = __decorate_function(func)
         if not doc_mode and not test_mode:
@@ -70,7 +72,9 @@ def api_func(title: str, url_tail: str, item_name: str='item', request: (list, d
         status_codes = __get_status_codes(func, args, login_required, response_status)
 
         decorated_func.__doc__ = ApiDoc.get_doc(title=title, command=func.__name__, url_tail=url_tail, request=request,
-                                                response=response, response_status=response_status, queries=queries,
+                                                request_content_type=request_content_type, response=response,
+                                                response_content_type=response_content_type,
+                                                response_status=response_status, queries=queries,
                                                 status_codes=status_codes)
         return decorated_func
 

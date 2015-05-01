@@ -1,5 +1,5 @@
-from app.modules.doc_helper import ApiDoc
 from test.modules.base_doc_test import ApiDocTestCase
+from app.modules.doc_helper import ApiDoc
 
 
 class TestApiDoc(ApiDocTestCase):
@@ -29,7 +29,9 @@ class TestApiDoc(ApiDocTestCase):
     def test_full_case_with_auto_filled_status_code(self):
         results = ApiDoc.get_doc(title='Test command', command='push', url_tail='/foobar/2',
                                  request=[{'apple': 1, 'banana': {'small': 2, 'big': 3}}, {'tree': 1}],
+                                 request_content_type='banana',
                                  response=[{'orange': 4}, 5], response_status=201,
+                                 response_content_type='apple',
                                  queries={'foobar_id': 'Foobar selector'},
                                  status_codes={201: '', 404: 'something is missing'})
         self.assertApiDoc(results, """
@@ -46,7 +48,7 @@ class TestApiDoc(ApiDocTestCase):
 
             PUSH /%(app_name)s/api/foobar/2 HTTP/1.1
             Host: localhost:8000
-            Content-Type: application/json
+            Content-Type: banana
 
             [
               {
@@ -66,7 +68,7 @@ class TestApiDoc(ApiDocTestCase):
         .. sourcecode:: http
 
             HTTP/1.0 201 CREATED
-            Content-Type: application/json
+            Content-Type: apple
 
             [
               {

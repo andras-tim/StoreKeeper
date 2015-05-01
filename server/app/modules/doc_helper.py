@@ -20,7 +20,7 @@ class ApiDoc:
 
         {{ command }} /{{ app_name }}/api{{ url_tail }} HTTP/1.1
         Host: localhost:8000
-        Content-Type: application/json
+        Content-Type: {{ request_content_type }}
         {% for request_line in request_lines %}
         {{ request_line }}{% endfor %}
 
@@ -29,7 +29,7 @@ class ApiDoc:
     .. sourcecode:: http
 
         HTTP/1.0 {{ response_status }}
-        Content-Type: application/json
+        Content-Type: {{ response_content_type }}
         {% for response_line in response_lines %}
         {{ response_line }}{% endfor %}
     """)
@@ -45,7 +45,8 @@ class ApiDoc:
 
     @classmethod
     def get_doc(cls, title: str, command: str, url_tail: str, request: (list, dict, None)=None,
-                response: (list, dict, None)=None, response_status: int=200, queries: (dict, None)=None,
+                request_content_type: str='application/json', response: (list, dict, None)=None,
+                response_content_type: str='application/json', response_status: int=200, queries: (dict, None)=None,
                 status_codes: (dict, None)=None) -> str:
         doc = cls.__API_CALL_TEMPLATE.render(
             title=title,
@@ -54,7 +55,9 @@ class ApiDoc:
             app_name=config.App.NAME,
             queries=cls.__format_queries(queries),
             statuses=cls.__format_status_codes(status_codes),
+            request_content_type=request_content_type,
             request_lines=cls.__format_request(request),
+            response_content_type=response_content_type,
             response_status=cls.__format_response_status(response_status),
             response_lines=cls.__format_response(response)
         )
