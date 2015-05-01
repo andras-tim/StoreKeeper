@@ -1,13 +1,20 @@
-import cups
 import hashlib
 import os
-
 from reportlab.pdfgen import canvas
 from reportlab.graphics.barcode import code39
 from reportlab.lib.units import mm
 
 from app import basedir, tempdir
-from app.server import config
+from app.server import app, config
+
+try:
+    import cups
+except ImportError:
+    app.logger.warning('Missing \'pycups\' python3 module; printing was deactivated')
+
+
+class MissingCups(Exception):
+    pass
 
 
 class LabelPrinter:
@@ -127,6 +134,9 @@ class _Printer(object):
     }
 
     def __init__(self):
+        if 'cups' not in globals().keys():
+            raise MissingCups('Can not print while \'pycups\' python3 module is not installed.')
+
         self.conn = cups.Connection()
 
     def print_pdf(self, pdf_path: str, printer_name: (str, None)=None) -> int:
