@@ -2,7 +2,7 @@ from flask import g
 from flask.ext.restful import abort
 
 from app.models import User
-from app.modules.base_views import BaseModelListView, BaseView
+from app.modules.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleUsers
 from app.serializers import UserSerializer, UserDeserializer
 from app.views.common import api_func
@@ -14,7 +14,7 @@ def _set_password(user: User):
     return user
 
 
-class UserListView(BaseModelListView):
+class UserListView(BaseListView):
     _model = User
     _serializer = UserSerializer
     _deserializer = UserDeserializer

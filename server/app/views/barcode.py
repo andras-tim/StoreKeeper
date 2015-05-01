@@ -2,7 +2,7 @@ from flask import send_file
 from flask.ext.restful import abort
 
 from app.models import Barcode
-from app.modules.base_views import BaseModelListView, BaseView
+from app.modules.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleBarcodes
 from app.modules.label_printer import LabelPrinter
 from app.modules.printer import MissingCups
@@ -10,7 +10,7 @@ from app.serializers import BarcodeSerializer
 from app.views.common import api_func
 
 
-class BarcodeListView(BaseModelListView):
+class BarcodeListView(BaseListView):
     _model = Barcode
     _serializer = BarcodeSerializer
     _deserializer = BarcodeSerializer

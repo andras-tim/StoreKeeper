@@ -1,11 +1,11 @@
 from app.models import Customer
-from app.modules.base_views import BaseModelListView, BaseView
+from app.modules.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleCustomers
 from app.serializers import CustomerSerializer, CustomerDeserializer
 from app.views.common import api_func
 
 
-class CustomerListView(BaseModelListView):
+class CustomerListView(BaseListView):
     _model = Customer
     _serializer = CustomerSerializer
     _deserializer = CustomerDeserializer

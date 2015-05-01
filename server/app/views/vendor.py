@@ -1,11 +1,11 @@
 from app.models import Vendor
-from app.modules.base_views import BaseModelListView, BaseView
+from app.modules.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleVendors
 from app.serializers import VendorSerializer, VendorDeserializer
 from app.views.common import api_func
 
 
-class VendorListView(BaseModelListView):
+class VendorListView(BaseListView):
     _model = Vendor
     _serializer = VendorSerializer
     _deserializer = VendorDeserializer

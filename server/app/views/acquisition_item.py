@@ -1,11 +1,11 @@
 from app.models import AcquisitionItem
-from app.modules.base_views import BaseModelListView, BaseView
+from app.modules.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleAcquisitionItems
 from app.serializers import AcquisitionItemSerializer
 from app.views.common import api_func
 
 
-class AcquisitionItemListView(BaseModelListView):
+class AcquisitionItemListView(BaseListView):
     _model = AcquisitionItem
     _serializer = AcquisitionItemSerializer
     _deserializer = AcquisitionItemSerializer

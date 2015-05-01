@@ -17,12 +17,12 @@ class _BaseModelResource(restful.Resource):
             abort(422, message=p.errors)
 
 
-class BaseModelListView(_BaseModelResource):
+class BaseListView(_BaseModelResource):
     """
     Model based list view
 
     Example:
-    >>> class FooListView(BaseModelListView):
+    >>> class FooListView(BaseListView):
     >>>     _model = Foo
     >>>     _serializer = FooSerializer
     >>>     _deserializer = FooDeserializer

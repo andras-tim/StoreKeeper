@@ -1,11 +1,11 @@
 from app.models import Item
-from app.modules.base_views import BaseModelListView, BaseView
+from app.modules.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleItems
 from app.serializers import ItemSerializer
 from app.views.common import api_func
 
 
-class ItemListView(BaseModelListView):
+class ItemListView(BaseListView):
     _model = Item
     _serializer = ItemSerializer
     _deserializer = ItemSerializer

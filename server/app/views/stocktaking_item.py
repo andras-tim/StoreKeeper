@@ -1,11 +1,11 @@
 from app.models import StocktakingItem
-from app.modules.base_views import BaseModelListView, BaseView
+from app.modules.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleStocktakingItems
 from app.serializers import StocktakingItemSerializer
 from app.views.common import api_func
 
 
-class StocktakingItemListView(BaseModelListView):
+class StocktakingItemListView(BaseListView):
     _model = StocktakingItem
     _serializer = StocktakingItemSerializer
     _deserializer = StocktakingItemSerializer

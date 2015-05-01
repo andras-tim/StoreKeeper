@@ -2,13 +2,13 @@ from flask import g
 from flask.ext.restful import abort
 
 from app.models import Work
-from app.modules.base_views import BaseModelListView, BaseView
+from app.modules.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleWorks
 from app.serializers import WorkSerializer, WorkDeserializer
 from app.views.common import api_func
 
 
-class WorkListView(BaseModelListView):
+class WorkListView(BaseListView):
     _model = Work
     _serializer = WorkSerializer
     _deserializer = WorkDeserializer

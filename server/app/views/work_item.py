@@ -1,14 +1,14 @@
 from flask.ext.restful import abort
 
 from app.models import WorkItem, Work
-from app.modules.base_views import BaseModelListView, BaseViewWithDiff
+from app.modules.base_views import BaseListView, BaseViewWithDiff
 from app.modules.common_helper import any_in
 from app.modules.example_data import ExampleWorkItems
 from app.serializers import WorkItemSerializer
 from app.views.common import api_func
 
 
-class WorkItemListView(BaseModelListView):
+class WorkItemListView(BaseListView):
     _model = WorkItem
     _serializer = WorkItemSerializer
     _deserializer = WorkItemSerializer
