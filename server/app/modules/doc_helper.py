@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import json
 from operator import itemgetter
 import re
@@ -20,7 +21,8 @@ class ApiDoc:
 
         {{ command }} /{{ app_name }}/api{{ url_tail }} HTTP/1.1
         Host: localhost:8000
-        Content-Type: {{ request_content_type }}
+        Content-Type: {{ request_content_type }} {% for field in request_header %}
+        {{ field['name'] }}: {{ field['value'] }}{% endfor %}
         {% for request_line in request_lines %}
         {{ request_line }}{% endfor %}
 
@@ -29,7 +31,8 @@ class ApiDoc:
     .. sourcecode:: http
 
         HTTP/1.0 {{ response_status }}
-        Content-Type: {{ response_content_type }}
+        Content-Type: {{ response_content_type }} {% for field in response_header %}
+        {{ field['name'] }}: {{ field['value'] }}{% endfor %}
         {% for response_line in response_lines %}
         {{ response_line }}{% endfor %}
     """)
@@ -44,9 +47,10 @@ class ApiDoc:
     }
 
     @classmethod
-    def get_doc(cls, title: str, command: str, url_tail: str, request: (list, dict, None)=None,
-                request_content_type: str='application/json', response: (list, dict, None)=None,
-                response_content_type: str='application/json', response_status: int=200, queries: (dict, None)=None,
+    def get_doc(cls, title: str, command: str, url_tail: str, request_header: (dict, None)=None,
+                request_content_type: str='application/json', request: (list, dict, None)=None,
+                response_header: (dict, None)=None, response_content_type: str='application/json',
+                response: (list, dict, None)=None, response_status: int=200, queries: (dict, None)=None,
                 status_codes: (dict, None)=None) -> str:
         doc = cls.__API_CALL_TEMPLATE.render(
             title=title,
@@ -55,8 +59,10 @@ class ApiDoc:
             app_name=config.App.NAME,
             queries=cls.__format_queries(queries),
             statuses=cls.__format_status_codes(status_codes),
+            request_header=cls.__format_custom_header(request_header),
             request_content_type=request_content_type,
             request_lines=cls.__format_request(request),
+            response_header=cls.__format_custom_header(response_header),
             response_content_type=response_content_type,
             response_status=cls.__format_response_status(response_status),
             response_lines=cls.__format_response(response)
@@ -84,18 +90,27 @@ class ApiDoc:
         return sorted(lines, key=itemgetter('code'))
 
     @classmethod
-    def __format_request(cls, request: (list, dict, None)) -> list:
+    def __format_request(cls, request: (str, list, dict, None)) -> list:
+        if isinstance(request, str):
+            return request.splitlines()
         if request is None:
             return []
         return cls.__json_dump_to_lines(request)
 
     @classmethod
-    def __format_response(cls, response: (list, dict, None)) -> list:
+    def __format_response(cls, response: (str, list, dict, None)) -> list:
+        if isinstance(response, str):
+            return response.splitlines()
         return cls.__json_dump_to_lines(response)
 
     @classmethod
     def __format_response_status(cls, response_status: int) -> str:
         return '{:d} {!s}'.format(response_status, cls.__STATUSES[response_status][0])
+
+    @classmethod
+    def __format_custom_header(cls, headers: (dict, None)) -> list:
+        headers = headers or {}
+        return [({'name': name, 'value': headers[name]}) for name in sorted(headers.keys())]
 
     @classmethod
     def __json_dump_to_lines(cls, data: (list, dict, None)) -> list:

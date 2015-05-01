@@ -1,5 +1,5 @@
-from app.views.common import api_func
 from test.modules.base_doc_test import ApiDocTestCase
+from app.views.common import api_func
 
 
 class TestApiDocDecorator(ApiDocTestCase):
@@ -266,4 +266,98 @@ class TestApiDocDecorator(ApiDocTestCase):
             Content-Type: application/json
 
             null
+        """)
+
+    def test_custom_content_types(self):
+        @api_func('Test command', url_tail='/foo', request_content_type='application/pdf',
+                  response_content_type='text/plain')
+        def get():
+            pass
+
+        self.assertApiDoc(get.__doc__, """
+        Test command
+
+        :statuscode 200: no error
+        :statuscode 401: user was not logged in
+
+        **Example request**:
+
+        .. sourcecode:: http
+
+            GET /%(app_name)s/api/foo HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/pdf
+
+        **Example response**:
+
+        .. sourcecode:: http
+
+            HTTP/1.0 200 OK
+            Content-Type: text/plain
+
+            null
+        """)
+
+    def test_file_upload_types(self):
+        @api_func('Test command', url_tail='/foo', request_filename='test.json')
+        def post():
+            pass
+
+        self.assertApiDoc(post.__doc__, """
+        Test command
+
+        :statuscode 201: no error
+        :statuscode 401: user was not logged in
+
+        **Example request**:
+
+        .. sourcecode:: http
+
+            POST /%(app_name)s/api/foo HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
+            Content-Disposition: attachment; filename=test.json
+            Content-Length: 11234
+
+            <file content>
+
+        **Example response**:
+
+        .. sourcecode:: http
+
+            HTTP/1.0 201 CREATED
+            Content-Type: application/json
+
+            null
+        """)
+
+    def test_file_download_types(self):
+        @api_func('Test command', url_tail='/foo', response_filename='test.json')
+        def get():
+            pass
+
+        self.assertApiDoc(get.__doc__, """
+        Test command
+
+        :statuscode 200: no error
+        :statuscode 401: user was not logged in
+
+        **Example request**:
+
+        .. sourcecode:: http
+
+            GET /%(app_name)s/api/foo HTTP/1.1
+            Host: localhost:8000
+            Content-Type: application/json
+
+        **Example response**:
+
+        .. sourcecode:: http
+
+            HTTP/1.0 200 OK
+            Content-Type: application/json
+            Content-Disposition: attachment; filename=test.json
+            Content-Length: 11234
+
+            <file content>
         """)
