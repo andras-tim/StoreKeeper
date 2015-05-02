@@ -96,6 +96,6 @@ def _check_only_one_main_barcode_per_item(barcode: Barcode):
 def _get_label_printer(barcode: Barcode) -> LabelPrinter:
     title = barcode.item.name
     if barcode.quantity > 1:
-        title = '{} ({:d} db)'.format(title, barcode.quantity)
+        title = '{} ({!s}{})'.format(title, barcode.quantity, barcode.item.unit.unit)
 
     return LabelPrinter(title=title, data=barcode.barcode)
