@@ -1,6 +1,10 @@
 import hashlib
 import os
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.pdfgen import canvas
+from reportlab.platypus import Table, Paragraph, TableStyle
 from reportlab.graphics.barcode import code39
 from reportlab.lib.units import mm
 
@@ -66,11 +70,19 @@ class _LabelPdfGenerator:
     inner_width = inner_right - margin_left
     inner_height = inner_top - margin_bottom
 
-    title_font_name = 'Helvetica'
-    title_font_size = 12
-
-    data_font_name = 'Helvetica'
-    data_font_size = 10
+    stylesheet = StyleSheet1()
+    stylesheet.add(ParagraphStyle(
+        name='title',
+        fontName='Helvetica',
+        fontSize=12,
+        alignment=TA_CENTER,
+    ))
+    stylesheet.add(ParagraphStyle(
+        name='data',
+        fontName='Helvetica',
+        fontSize=10,
+        alignment=TA_CENTER,
+    ))
 
     def generate_label(self, title: str, data: str, logo_path: str, label_border: bool, output_path: str):
         canv = self._create_new_canvas(pdf_path=output_path)
@@ -82,7 +94,7 @@ class _LabelPdfGenerator:
         if label_border:
             self._draw_border(canv)
         self._draw_logo(canv, self.inner_left + 1 * mm, self.inner_top - 8.5 * mm, logo_path)
-        self._draw_title(canv, self.inner_left + 30 * mm, self.inner_top - 7 * mm, title)
+        self._draw_title(canv, self.inner_left + 32 * mm, self.inner_top - 10 * mm, 50 * mm, 10 * mm, title)
         self._draw_barcode(canv, self.inner_bottom + 5 * mm, data, bar_height=8 * mm)
 
         canv.showPage()
@@ -95,9 +107,8 @@ class _LabelPdfGenerator:
         canv.roundRect(self.margin_left, self.margin_bottom, self.inner_width, self.inner_height, radius=5, stroke=1,
                        fill=0)
 
-    def _draw_title(self, canv: canvas, x: int, y: int, title: str):
-        canv.setFont(self.title_font_name, self.title_font_size)
-        canv.drawString(x, y, title)
+    def _draw_title(self, canv: canvas, x: int, y: int, width: int, height: int, title: str):
+        self._draw_textbox(canv, x, y, width, height, title, style_name='title')
 
     def _draw_logo(self, canv: canvas, x: int, y: int, image_path: str):
         canv.drawImage(image_path, x, y, 28 * mm, 7 * mm)
@@ -107,5 +118,22 @@ class _LabelPdfGenerator:
         barcode = code39.Standard39(data, barWidth=0.6 * mm, barHeight=bar_height, stop=True, checksum=False)
         barcode.drawOn(canv, self.inner_left + (self.inner_width - barcode.width) / 2, y)
 
-        canv.setFont(self.data_font_name, self.data_font_size)
-        canv.drawCentredString(self.inner_left + self.inner_width / 2, y - 4 * mm, data)
+        box_height = 4 * mm
+        self._draw_textbox(canv, self.inner_left, y - 0.5 * mm - box_height,
+                           self.inner_width, box_height, data, style_name='data')
+
+    def _draw_textbox(self, canv: canvas, x: int, y: int, width: int, height: int,
+                      data: str, style_name: str, border: bool=False):
+        table_cells = [
+            [Paragraph(data, self.stylesheet[style_name])]
+        ]
+        table_style = [
+            ('VALIGN', (-1, -1), (-1, -1), 'MIDDLE'),
+        ]
+        if border:
+            table_style += [('BOX', (0, 0), (-1, -1), 0.25, colors.black)]
+
+        table = Table(table_cells, colWidths=[width], rowHeights=[height])
+        table.setStyle(TableStyle(table_style))
+        table.wrapOn(canv, width, height)
+        table.drawOn(canv, x, y)
