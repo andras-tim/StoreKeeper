@@ -83,7 +83,7 @@ class _LabelPdfGenerator:
             self._draw_border(canv)
         self._draw_logo(canv, self.inner_left + 1 * mm, self.inner_top - 8.5 * mm, logo_path)
         self._draw_title(canv, self.inner_left + 30 * mm, self.inner_top - 7 * mm, title)
-        self._draw_barcode(canv, self.inner_bottom + 5 * mm, data, bar_height=10 * mm)
+        self._draw_barcode(canv, self.inner_bottom + 5 * mm, data, bar_height=8 * mm)
 
         canv.showPage()
         canv.save()
@@ -104,7 +104,7 @@ class _LabelPdfGenerator:
 
     def _draw_barcode(self, canv: canvas, y: int, data: str, bar_height: int=20 * mm):
         # http://en.wikipedia.org/wiki/Code_39
-        barcode = code39.Standard39(data, barWidth=0.55 * mm, barHeight=bar_height, stop=True, checksum=False)
+        barcode = code39.Standard39(data, barWidth=0.6 * mm, barHeight=bar_height, stop=True, checksum=False)
         barcode.drawOn(canv, self.inner_left + (self.inner_width - barcode.width) / 2, y)
 
         canv.setFont(self.data_font_name, self.data_font_size)
