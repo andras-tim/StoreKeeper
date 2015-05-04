@@ -6,7 +6,7 @@ from app.modules.view_helper import nested_fields
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), nullable=False, unique=True)
+    username = db.Column(db.String(30), nullable=False, unique=True, index=True)
     password_hash = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
