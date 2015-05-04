@@ -46,8 +46,11 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
         parsed_response = self.__get_parsed_response(response_string)
         expected_data = self.__make_testable_data(expected_data)
 
-        assert expected_data == parsed_response, \
-            'Not expected response; request={!r} status_code={}'.format(request, response.status_code)
+        try:
+            self.assertCountEqual(expected_data, parsed_response)
+        except AssertionError as e:
+            assert False, '{!s}\n\nrequest={!r}\nresponse={!r}\nstatus_code={}'\
+                .format(e, request, parsed_response, response.status_code)
 
     def __get_parsed_response(self, response_string: str) -> (str, list, dict, None):
         try:
