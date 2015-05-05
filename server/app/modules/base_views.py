@@ -219,7 +219,7 @@ class BaseNestedModelView(BaseView):
         return _initialize_parent_item(self._parent_model, parent_id)
 
 
-class BaseViewWithDiff(BaseView):
+class BaseNestedModelViewWithDiff(BaseNestedModelView):
     __differ = ModelDataDiffer()
 
     def _save_original_before_populate(self, id: int):

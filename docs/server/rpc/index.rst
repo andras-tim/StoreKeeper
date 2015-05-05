@@ -30,4 +30,3 @@ Endpoints
    users
    vendors
    works
-   work_items

@@ -169,11 +169,9 @@ class ExampleWorks:
 
 
 class ExampleWorkItems:
-    ITEM1 = FilterableDict(commons={'work': ExampleWorks.WORK1.get(),
-                                    'item': ExampleItems.ITEM2.get(), 'outbound_quantity': 132},
+    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'outbound_quantity': 132},
                            getters={'id': 1, 'returned_quantity': None})
-    ITEM2 = FilterableDict(commons={'work': ExampleWorks.WORK2.get(),
-                                    'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 32, 'returned_quantity': 0},
+    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 32, 'returned_quantity': 0},
                            getters={'id': 2})
 
 
