@@ -2,7 +2,7 @@ from flask.ext import restful
 from flask.ext.restful import abort
 from sqlalchemy.orm import Query
 
-from app.modules.view_helper import PopulateModelOnSubmit, ModelDataDiffer
+from app.modules.view_helper_for_models import PopulateModelOnSubmit, ModelDataDiffer
 from app.server import db
 from app.views.common import commit_with_error_handling
 

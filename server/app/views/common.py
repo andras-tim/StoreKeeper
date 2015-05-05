@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from app import doc_mode, test_mode
 from app.models import User
 from app.modules.doc_helper import ApiDoc
-from app.modules.view_helper import SqlErrorParser
+from app.modules.view_helper_for_models import SqlErrorParser
 from app.server import app, db, lm
 
 

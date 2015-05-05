@@ -1,5 +1,5 @@
 from app.models import Unit
-from app.modules.base_views import BaseListView, BaseView
+from app.views.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleUnits
 from app.serializers import UnitSerializer, UnitDeserializer
 from app.views.common import api_func

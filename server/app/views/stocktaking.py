@@ -1,5 +1,5 @@
 from app.models import Stocktaking, StocktakingItem
-from app.modules.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
+from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
 from app.modules.example_data import ExampleStocktakings, ExampleStocktakingItems
 from app.serializers import StocktakingSerializer, StocktakingDeserializer, StocktakingItemSerializer, \
     StocktakingItemDeserializer

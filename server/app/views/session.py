@@ -5,7 +5,7 @@ from flask.ext.login import login_user, logout_user
 
 from app.models import User
 from app.modules.example_data import ExampleUsers
-from app.modules.view_helper import get_validated_request, RequestProcessingError
+from app.modules.view_helper_for_models import get_validated_request, RequestProcessingError
 from app.serializers import UserSerializer, SessionDeserializer
 from app.views.common import api_func
 

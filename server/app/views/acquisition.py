@@ -1,5 +1,5 @@
 from app.models import Acquisition, AcquisitionItem
-from app.modules.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
+from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
 from app.modules.example_data import ExampleAcquisitions, ExampleAcquisitionItems
 from app.serializers import AcquisitionSerializer, AcquisitionDeserializer, AcquisitionItemSerializer, \
     AcquisitionItemDeserializer

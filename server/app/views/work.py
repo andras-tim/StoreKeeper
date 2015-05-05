@@ -2,8 +2,8 @@ from flask import g
 from flask.ext.restful import abort
 
 from app.models import Work, WorkItem
-from app.modules.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelViewWithDiff
-from app.modules.common_helper import any_in
+from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelViewWithDiff
+from app.modules.common import any_in
 from app.modules.example_data import ExampleWorks, ExampleWorkItems
 from app.serializers import WorkSerializer, WorkDeserializer, WorkItemSerializer, WorkItemDeserializer
 from app.views.common import api_func

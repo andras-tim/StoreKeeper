@@ -1,5 +1,5 @@
 from app.models import Item
-from app.modules.base_views import BaseListView, BaseView
+from app.views.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleItems
 from app.serializers import ItemSerializer
 from app.views.common import api_func

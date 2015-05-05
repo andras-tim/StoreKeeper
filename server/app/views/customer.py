@@ -1,5 +1,5 @@
 from app.models import Customer
-from app.modules.base_views import BaseListView, BaseView
+from app.views.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleCustomers
 from app.serializers import CustomerSerializer, CustomerDeserializer
 from app.views.common import api_func

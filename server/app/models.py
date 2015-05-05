@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from app.server import db, bcrypt
-from app.modules.view_helper import nested_fields
+from app.modules.view_helper_for_models import nested_fields
 
 
 class User(db.Model):

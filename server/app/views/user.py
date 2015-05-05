@@ -2,7 +2,7 @@ from flask import g
 from flask.ext.restful import abort
 
 from app.models import User
-from app.modules.base_views import BaseListView, BaseView
+from app.views.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleUsers
 from app.serializers import UserSerializer, UserDeserializer
 from app.views.common import api_func
