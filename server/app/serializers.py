@@ -94,8 +94,13 @@ class ItemSerializer(Serializer):
 
 
 class AcquisitionItemSerializer(Serializer):
-    id = fields.Int()
-    acquisition = fields.Nested(AcquisitionSerializer, required=True)
+    item = fields.Nested(ItemSerializer, required=True)
+
+    class Meta:
+        fields = ('id', 'item', 'quantity')
+
+
+class AcquisitionItemDeserializer(Serializer):
     item = fields.Nested(ItemSerializer, required=True)
     quantity = fields.Int(required=True, validate=_greater_than_zero)
 

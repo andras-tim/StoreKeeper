@@ -19,7 +19,6 @@ Endpoints
 .. toctree::
    :maxdepth: 3
 
-   acquisition_items
    acquisitions
    barcodes
    config

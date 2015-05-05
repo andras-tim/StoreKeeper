@@ -1,17 +1,16 @@
 from app.modules.config import ConfigObject
 from app.res.restfulApi import RestfulApiWithoutSimpleAuth
 
-from app.views import common, acquisition, acquisition_item, barcode, config, customer, item, session, stocktaking, \
-    unit, user, vendor, work, work_item
+from app.views import common, acquisition, barcode, config, customer, item, session, stocktaking, unit, user, vendor, \
+    work, work_item
 
 
 def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleAuth):
     views = {
         'acquisition_list': (acquisition.AcquisitionListView, '/acquisitions'),
         'acquisition': (acquisition.AcquisitionView, '/acquisitions/<int:id>'),
-
-        'acquisition_item_list': (acquisition_item.AcquisitionItemListView, '/acquisition-items'),
-        'acquisition_item': (acquisition_item.AcquisitionItemView, '/acquisition-items/<int:id>'),
+        'acquisition_item_list': (acquisition.AcquisitionItemListView, '/acquisitions/<int:id>/items'),
+        'acquisition_item': (acquisition.AcquisitionItemView, '/acquisitions/<int:id>/items/<int:item_id>'),
 
         'barcode_list': (barcode.BarcodeListView, '/barcodes'),
         'barcode': (barcode.BarcodeView, '/barcodes/<int:id>'),
