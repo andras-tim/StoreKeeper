@@ -18,3 +18,13 @@ Data management
   .. autoflask:: app.server:app
      :endpoints: acquisition
 
+``/api/acquisitions/<id>/items``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: acquisition_item_list
+
+``/api/acquisitions/<id>/items``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: acquisition_item
+

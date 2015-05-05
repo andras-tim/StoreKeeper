@@ -19,17 +19,14 @@ Endpoints
 .. toctree::
    :maxdepth: 3
 
-   acquisition_items
    acquisitions
    barcodes
    config
    customers
    items
    session
-   stocktaking_items
    stocktakings
    units
    users
    vendors
    works
-   work_items

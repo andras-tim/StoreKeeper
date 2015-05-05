@@ -1,17 +1,16 @@
 from app.modules.config import ConfigObject
 from app.res.restfulApi import RestfulApiWithoutSimpleAuth
 
-from app.views import common, acquisition, acquisition_item, barcode, config, customer, item, session, stocktaking, \
-    stocktaking_item, unit, user, vendor, work, work_item
+from app.views import common, acquisition, barcode, config, customer, item, session, stocktaking, unit, user, vendor, \
+    work
 
 
 def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleAuth):
     views = {
         'acquisition_list': (acquisition.AcquisitionListView, '/acquisitions'),
         'acquisition': (acquisition.AcquisitionView, '/acquisitions/<int:id>'),
-
-        'acquisition_item_list': (acquisition_item.AcquisitionItemListView, '/acquisition-items'),
-        'acquisition_item': (acquisition_item.AcquisitionItemView, '/acquisition-items/<int:id>'),
+        'acquisition_item_list': (acquisition.AcquisitionItemListView, '/acquisitions/<int:id>/items'),
+        'acquisition_item': (acquisition.AcquisitionItemView, '/acquisitions/<int:id>/items/<int:item_id>'),
 
         'barcode_list': (barcode.BarcodeListView, '/barcodes'),
         'barcode': (barcode.BarcodeView, '/barcodes/<int:id>'),
@@ -29,9 +28,9 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
 
         'stocktaking_list': (stocktaking.StocktakingListView, '/stocktakings'),
         'stocktaking': (stocktaking.StocktakingView, '/stocktakings/<int:id>'),
-
-        'stocktaking_item_list': (stocktaking_item.StocktakingItemListView, '/stocktaking-items'),
-        'stocktaking_item': (stocktaking_item.StocktakingItemView, '/stocktaking-items/<int:id>'),
+        'stocktaking_item_list': (stocktaking.StocktakingItemListView, '/stocktakings/<int:id>/items'),
+        'stocktaking_item': (stocktaking.StocktakingItemView,
+                             '/stocktakings/<int:id>/items/<int:item_id>'),
 
         'unit_list': (unit.UnitListView, '/units'),
         'unit': (unit.UnitView, '/units/<int:id>'),
@@ -44,11 +43,11 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
 
         'work_list': (work.WorkListView, '/works'),
         'work': (work.WorkView, '/works/<int:id>'),
+        'work_item_list': (work.WorkItemListView, '/works/<int:id>/items'),
+        'work_item': (work.WorkItemView, '/works/<int:id>/items/<int:item_id>'),
         'work_close_outbound': (work.WorkCloseOutboundView, '/works/<int:id>/close-outbound'),
         'work_close_returned': (work.WorkCloseReturnedView, '/works/<int:id>/close-returned'),
 
-        'work_item_list': (work_item.WorkItemListView, '/work-items'),
-        'work_item': (work_item.WorkItemView, '/work-items/<int:id>'),
     }
 
     for (endpoint, view_url) in views.items():

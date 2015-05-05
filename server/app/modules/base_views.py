@@ -1,5 +1,6 @@
 from flask.ext import restful
 from flask.ext.restful import abort
+from sqlalchemy.orm import Query
 
 from app.modules.view_helper import PopulateModelOnSubmit, ModelDataDiffer
 from app.server import db
@@ -10,6 +11,10 @@ class _BaseModelResource(restful.Resource):
     _model = None
     _serializer = None
     _deserializer = None
+
+    @property
+    def _query(self) -> Query:
+        return self._model.query
 
     def _populate_item(self, item):
         p = PopulateModelOnSubmit(item, self._deserializer())
@@ -40,7 +45,7 @@ class BaseListView(_BaseModelResource):
         """
         List items
         """
-        items = self._model.query.all()
+        items = self._query.all()
         return self._serializer(items, many=True).data
 
     def _post(self) -> 'RPC response':
@@ -119,11 +124,8 @@ class BaseView(_BaseModelResource):
         >>> item = self._delete_get_item()
         >>> return self._delete_commit(item)
         """
-        item = self._get_item_by_id(id)
-
-        db.session.delete(item)
-        commit_with_error_handling(db)
-        return None
+        item = self._delete_get_item(id)
+        return self._delete_commit(item)
 
     def _put_populate(self, id: int) -> 'item':
         """
@@ -155,13 +157,69 @@ class BaseView(_BaseModelResource):
         return None
 
     def _get_item_by_id(self, id: int) -> 'item':
-        item = self._model.query.get(id)
-        if not item:
-            abort(404)
+        item = self._query.get(id)
+        _check_is_missing(item)
         return item
 
 
-class BaseViewWithDiff(BaseView):
+class BaseNestedListView(BaseListView):
+    _parent_model = None
+
+    def _get(self, **filter) -> 'RPC response':
+        """
+        List items
+        """
+        items = self._query.filter_by(**filter)
+        return self._serializer(items, many=True).data
+
+    def _post_populate(self, **set_fields) -> 'item':
+        """
+        Populate a new object
+        """
+        item = self._model()
+        for name, value in set_fields.items():
+            setattr(item, name, value)
+        self._populate_item(item)
+        return item
+
+    def _initialize_parent_item(self, parent_id: int) -> 'item':
+        return _initialize_parent_item(self._parent_model, parent_id)
+
+
+class BaseNestedModelView(BaseView):
+    _parent_model = None
+
+    def _get(self, **filter) -> 'RPC response':
+        """
+        Single item getter
+        """
+        item = self._get_item_by_filter(**filter)
+        return self._serializer(item).data
+
+    def _put_populate(self, **filter) -> 'item':
+        """
+        Populate change object
+        """
+        item = self._get_item_by_filter(**filter)
+        self._populate_item(item)
+        return item
+
+    def _delete_get_item(self, **filter) -> 'item':
+        """
+        Getting object for delete
+        """
+        return self._get_item_by_filter(**filter)
+
+    def _get_item_by_filter(self, **filter) -> 'item':
+        item = self._query.filter_by(**filter).first()
+        _check_is_missing(item)
+        return item
+
+    def _initialize_parent_item(self, parent_id: int) -> 'item':
+        return _initialize_parent_item(self._parent_model, parent_id)
+
+
+class BaseNestedModelViewWithDiff(BaseNestedModelView):
     __differ = ModelDataDiffer()
 
     def _save_original_before_populate(self, id: int):
@@ -169,3 +227,14 @@ class BaseViewWithDiff(BaseView):
 
     def _get_populate_diff(self, item) -> dict:
         return self.__differ.get_diff(item)
+
+
+def _check_is_missing(item):
+    if not item:
+        abort(404)
+
+
+def _initialize_parent_item(parent_model, parent_id: int) -> 'item':
+    item = parent_model.query.get(parent_id)
+    _check_is_missing(item)
+    return item

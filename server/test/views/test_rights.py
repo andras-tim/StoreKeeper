@@ -45,14 +45,14 @@ class TestAcquisitionRights(CommonRightsTest):
     RIGHTS = _get_all_rights_for_logged_in_users('acquisition1', 'acquisition2')
 
 
-@use_as_rights_data_provider('/acquisition-items')
+@use_as_rights_data_provider('/acquisitions/1/items')
 class TestAcquisitionItemRights(CommonRightsTest):
     INIT_PUSH = [
-        ('/acquisitions', [Acquisitions.ACQUISITION1, Acquisitions.ACQUISITION2]),
+        ('/acquisitions', [Acquisitions.ACQUISITION1]),
         ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
         ('/units', [Units.UNIT1, Units.UNIT2]),
         ('/items', [Items.ITEM1, Items.ITEM2]),
-        ('/acquisition-items', [AcquisitionItems.ITEM1]),
+        ('/acquisitions/1/items', [AcquisitionItems.ITEM1]),
     ]
     DATA_MAP = {'item1': AcquisitionItems.ITEM1, 'item2': AcquisitionItems.ITEM2}
     RIGHTS = _get_all_rights_for_logged_in_users('item1', 'item2')
@@ -154,14 +154,14 @@ class TestStocktakingRights(CommonRightsTest):
     RIGHTS = _get_all_rights_for_logged_in_users('stocktaking1', 'stocktaking2')
 
 
-@use_as_rights_data_provider('/stocktaking-items')
+@use_as_rights_data_provider('/stocktakings/1/items')
 class TestStocktakingItemRights(CommonRightsTest):
     INIT_PUSH = [
-        ('/stocktakings', [Stocktakings.STOCKTAKING1, Stocktakings.STOCKTAKING2]),
+        ('/stocktakings', [Stocktakings.STOCKTAKING1]),
         ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
         ('/units', [Units.UNIT1, Units.UNIT2]),
         ('/items', [Items.ITEM1, Items.ITEM2]),
-        ('/stocktaking-items', [StocktakingItems.ITEM1]),
+        ('/stocktakings/1/items', [StocktakingItems.ITEM1]),
     ]
     DATA_MAP = {'item1': StocktakingItems.ITEM1, 'item2': StocktakingItems.ITEM2}
     RIGHTS = _get_all_rights_for_logged_in_users('item1', 'item2')
@@ -217,15 +217,15 @@ class TestWorkRights(CommonRightsTest):
     RIGHTS = _get_all_rights_for_logged_in_users('work1', 'work2')
 
 
-@use_as_rights_data_provider('/work-items')
+@use_as_rights_data_provider('/works/1/items')
 class TestWorkItemRights(CommonRightsTest):
     INIT_PUSH = [
         ('/customers', [Customers.CUSTOMER1, Customers.CUSTOMER2]),
-        ('/works', [Works.WORK1, Works.WORK2]),
+        ('/works', [Works.WORK1]),
         ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
         ('/units', [Units.UNIT1, Units.UNIT2]),
         ('/items', [Items.ITEM1, Items.ITEM2]),
-        ('/work-items', [WorkItems.ITEM1]),
+        ('/works/1/items', [WorkItems.ITEM1]),
     ]
     DATA_MAP = {'item1': WorkItems.ITEM1, 'item2': WorkItems.ITEM2}
     RIGHTS = _get_all_rights_for_logged_in_users('item1', 'item2')

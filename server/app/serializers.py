@@ -94,15 +94,25 @@ class ItemSerializer(Serializer):
 
 
 class AcquisitionItemSerializer(Serializer):
-    id = fields.Int()
-    acquisition = fields.Nested(AcquisitionSerializer, required=True)
+    item = fields.Nested(ItemSerializer, required=True)
+
+    class Meta:
+        fields = ('id', 'item', 'quantity')
+
+
+class AcquisitionItemDeserializer(Serializer):
     item = fields.Nested(ItemSerializer, required=True)
     quantity = fields.Int(required=True, validate=_greater_than_zero)
 
 
 class StocktakingItemSerializer(Serializer):
-    id = fields.Int()
-    stocktaking = fields.Nested(StocktakingSerializer, required=True)
+    item = fields.Nested(ItemSerializer)
+
+    class Meta:
+        fields = ('id', 'item', 'quantity')
+
+
+class StocktakingItemDeserializer(Serializer):
     item = fields.Nested(ItemSerializer, required=True)
     quantity = fields.Int(required=True)
 
@@ -132,8 +142,14 @@ class WorkDeserializer(Serializer):
 
 
 class WorkItemSerializer(Serializer):
-    id = fields.Int()
-    work = fields.Nested(WorkSerializer, required=True)
+    item = fields.Nested(ItemSerializer, required=True)
+    returned_quantity = fields.Int(default=None)
+
+    class Meta:
+        fields = ('id', 'item', 'outbound_quantity', 'returned_quantity')
+
+
+class WorkItemDeserializer(Serializer):
     item = fields.Nested(ItemSerializer, required=True)
     outbound_quantity = fields.Int(required=True, validate=_greater_than_zero)
     returned_quantity = fields.Int(default=None, validate=_greater_than_or_equal_zero)

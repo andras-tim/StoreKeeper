@@ -1,7 +1,8 @@
-from app.models import Acquisition
-from app.modules.base_views import BaseListView, BaseView
-from app.modules.example_data import ExampleAcquisitions
-from app.serializers import AcquisitionSerializer, AcquisitionDeserializer
+from app.models import Acquisition, AcquisitionItem
+from app.modules.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
+from app.modules.example_data import ExampleAcquisitions, ExampleAcquisitionItems
+from app.serializers import AcquisitionSerializer, AcquisitionDeserializer, AcquisitionItemSerializer, \
+    AcquisitionItemDeserializer
 from app.views.common import api_func
 
 
@@ -42,3 +43,63 @@ class AcquisitionView(BaseView):
               response=None)
     def delete(self, id: int):
         return self._delete(id)
+
+
+class AcquisitionItemListView(BaseNestedListView):
+    _model = AcquisitionItem
+    _parent_model = Acquisition
+    _serializer = AcquisitionItemSerializer
+    _deserializer = AcquisitionItemDeserializer
+
+    @api_func('List acquisition items', url_tail='/acquisitions/1/items',
+              response=[ExampleAcquisitionItems.ITEM1.get(), ExampleAcquisitionItems.ITEM2.get()],
+              queries={'id': 'ID of acquisition'})
+    def get(self, id: int):
+        self._initialize_parent_item(id)
+        return self._get(acquisition_id=id)
+
+    @api_func('Create acquisition item', url_tail='/acquisitions/1/items',
+              request=ExampleAcquisitionItems.ITEM1.set(),
+              response=ExampleAcquisitionItems.ITEM1.get(),
+              status_codes={422: '{{ original }} / can not add one item twice'},
+              queries={'id': 'ID of acquisition'})
+    def post(self, id: int):
+        self._initialize_parent_item(id)
+        item = self._post_populate(acquisition_id=id)
+        return self._post_commit(item)
+
+
+class AcquisitionItemView(BaseNestedModelView):
+    _model = AcquisitionItem
+    _parent_model = Acquisition
+    _serializer = AcquisitionItemSerializer
+    _deserializer = AcquisitionItemDeserializer
+
+    @api_func('Get acquisition item', item_name='acquisition item', url_tail='/acquisitions/1/items/1',
+              response=ExampleAcquisitionItems.ITEM1.get(),
+              queries={'id': 'ID of acquisition',
+                       'item_id': 'ID of selected acquisition item for get'})
+    def get(self, id: int, item_id: int):
+        self._initialize_parent_item(id)
+        item = self._get(acquisition_id=id, id=item_id)
+        return self._serializer(item).data
+
+    @api_func('Update acquisition item', item_name='acquisition item', url_tail='/acquisitions/1/items/1',
+              request=ExampleAcquisitionItems.ITEM1.set(),
+              response=ExampleAcquisitionItems.ITEM1.get(),
+              status_codes={422: '{{ original }} / can not add one item twice'},
+              queries={'id': 'ID of acquisition',
+                       'item_id': 'ID of selected acquisition item for get'})
+    def put(self, id: int, item_id: int):
+        self._initialize_parent_item(id)
+        item = self._put_populate(acquisition_id=id, id=item_id)
+        return self._put_commit(item)
+
+    @api_func('Delete acquisition item', item_name='acquisition item', url_tail='/acquisitions/1/items/1',
+              response=None,
+              queries={'id': 'ID of acquisition',
+                       'item_id': 'ID of selected acquisition item for get'})
+    def delete(self, id: int, item_id: int):
+        self._initialize_parent_item(id)
+        item = self._delete_get_item(acquisition_id=id, id=item_id)
+        return self._delete_commit(item)

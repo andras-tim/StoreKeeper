@@ -18,6 +18,17 @@ Data management
   .. autoflask:: app.server:app
      :endpoints: work
 
+``/api/works/<id>/items``
+^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: work_item_list
+
+``/api/works/<id>/items/<item_id>``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: work_item
+
+
 Commands
 --------
 

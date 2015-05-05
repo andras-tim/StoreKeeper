@@ -1,7 +1,8 @@
-from app.models import Stocktaking
-from app.modules.base_views import BaseListView, BaseView
-from app.modules.example_data import ExampleStocktakings
-from app.serializers import StocktakingSerializer, StocktakingDeserializer
+from app.models import Stocktaking, StocktakingItem
+from app.modules.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
+from app.modules.example_data import ExampleStocktakings, ExampleStocktakingItems
+from app.serializers import StocktakingSerializer, StocktakingDeserializer, StocktakingItemSerializer, \
+    StocktakingItemDeserializer
 from app.views.common import api_func
 
 
@@ -42,3 +43,63 @@ class StocktakingView(BaseView):
               response=None)
     def delete(self, id: int):
         return self._delete(id)
+
+
+class StocktakingItemListView(BaseNestedListView):
+    _model = StocktakingItem
+    _parent_model = Stocktaking
+    _serializer = StocktakingItemSerializer
+    _deserializer = StocktakingItemDeserializer
+
+    @api_func('List stocktaking items.', url_tail='/stocktakings/1/items',
+              response=[ExampleStocktakingItems.ITEM1.get(), ExampleStocktakingItems.ITEM2.get()],
+              queries={'id': 'ID of stocktaking'})
+    def get(self, id: int):
+        self._initialize_parent_item(id)
+        return self._get(stocktaking_id=id)
+
+    @api_func('Create stocktaking item', url_tail='/stocktakings/1/items',
+              request=ExampleStocktakingItems.ITEM1.set(),
+              response=ExampleStocktakingItems.ITEM1.get(),
+              status_codes={422: '{{ original }} / can not add one item twice'},
+              queries={'id': 'ID of stocktaking'})
+    def post(self, id: int):
+        self._initialize_parent_item(id)
+        item = self._post_populate(stocktaking_id=id)
+        return self._post_commit(item)
+
+
+class StocktakingItemView(BaseNestedModelView):
+    _model = StocktakingItem
+    _parent_model = Stocktaking
+    _serializer = StocktakingItemSerializer
+    _deserializer = StocktakingItemDeserializer
+
+    @api_func('Get stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
+              response=ExampleStocktakingItems.ITEM1.get(),
+              queries={'id': 'ID of stocktaking',
+                       'item_id': 'ID of selected stocktaking item for get'})
+    def get(self, id: int, item_id: int):
+        self._initialize_parent_item(id)
+        item = self._get(stocktaking_id=id, id=item_id)
+        return self._serializer(item).data
+
+    @api_func('Update stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
+              request=ExampleStocktakingItems.ITEM1.set(),
+              response=ExampleStocktakingItems.ITEM1.get(),
+              status_codes={422: '{{ original }} / can not add one item twice'},
+              queries={'id': 'ID of stocktaking',
+                       'item_id': 'ID of selected stocktaking item for put'})
+    def put(self, id: int, item_id: int):
+        self._initialize_parent_item(id)
+        item = self._put_populate(stocktaking_id=id, id=item_id)
+        return self._put_commit(item)
+
+    @api_func('Delete stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
+              response=None,
+              queries={'id': 'ID of stocktaking',
+                       'item_id': 'ID of selected stocktaking item for delete'})
+    def delete(self, id: int, item_id: int):
+        self._initialize_parent_item(id)
+        item = self._delete_get_item(stocktaking_id=id, id=item_id)
+        return self._delete_commit(item)
