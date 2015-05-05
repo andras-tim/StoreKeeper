@@ -16,7 +16,9 @@ def initialize(app: Flask, db: SQLAlchemy, config: ConfigObject):
 
     admin = Admin(app, url=url, name=title, template_mode='bootstrap3')
     __import_models(db, admin)
-    __add_file_managers(app, admin)
+
+    if config.App.ADMIN_MANAGE_STATIC:
+        __add_file_managers(app, admin)
 
     app.logger.debug('Admin page available: {!s}'.format(admin.url))
 

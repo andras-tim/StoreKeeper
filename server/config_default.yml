@@ -6,9 +6,11 @@ DefaultConfig:
     NAME: "storekeeper"
     TITLE: "StoreKeeper"
 
-    ADMIN_PAGE: False
     MIGRATE_REPO_PATH: "$BASEDIR/db_repository"
     SHARE_STATIC: True
+
+    ADMIN_PAGE: False
+    ADMIN_MANAGE_STATIC: False
 
     # Set to DEFAULT for use default Cups printer
     LABEL_PRINTER: DEFAULT
@@ -79,6 +81,7 @@ DevelopmentConfig:
 
   App:
     ADMIN_PAGE: True
+    ADMIN_MANAGE_STATIC: True
 
   Flask:
     WTF_CSRF_ENABLED: False
