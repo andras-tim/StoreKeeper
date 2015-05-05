@@ -1,5 +1,14 @@
 module.exports = function(config) {
-    config.set({
+    var configuration = {
+
+        plugins: [
+            'karma-chrome-launcher',
+            'karma-firefox-launcher',
+            'karma-jasmine',
+            'karma-coverage'
+        ],
+
+        frameworks: ['jasmine'],
 
         basePath: '../',
 
@@ -22,22 +31,44 @@ module.exports = function(config) {
             'test/unit/**/*.js'
         ],
 
-        autoWatch: true,
+        exclude: [],
 
-        frameworks: ['jasmine'],
+        autoWatch: true,
 
         browsers: ['Chrome'],
 
-        plugins: [
-            'karma-chrome-launcher',
-            'karma-firefox-launcher',
-            'karma-jasmine'
-        ],
+        customLaunchers: {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        },
 
-        junitReporter: {
-            outputFile: 'test_out/unit.xml',
-            suite: 'unit'
+        colors: true,
+
+        logLevel: config.LOG_INFO,
+
+        reportSlowerThan: 500,
+
+        preprocessors: {
+            'app/js/**/*.js': 'coverage'
+        },
+
+        reporters: ['progress', 'dots', 'coverage'],
+
+        coverageReporter: {
+            reporters: [
+                {type: 'lcovonly', dir: 'tmp/coverage/'},
+                {type: 'text-summary'},
+                {type: 'text'}
+            ]
         }
 
-    });
+    };
+
+    if (process.env.TRAVIS) {
+        configuration.browsers = ['Chrome_travis_ci'];
+    }
+
+    config.set(configuration);
 };

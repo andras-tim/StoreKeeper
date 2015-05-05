@@ -6,7 +6,10 @@ exports.config = {
     ],
 
     capabilities: {
-        'browserName': 'chrome'
+        'browserName': 'chrome',
+        'chromeOptions': {
+            args: []
+        }
     },
 
     chromeOnly: true,
@@ -19,3 +22,7 @@ exports.config = {
         defaultTimeoutInterval: 30000
     }
 };
+
+if (process.env.TRAVIS) {
+    exports.config.capabilities.chromeOptions.args = ['--no-sandbox'];
+}

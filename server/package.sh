@@ -9,7 +9,7 @@ function init()
         PYTHON='flask/bin/python'
     fi
 
-    PIP='sudo pip3'
+    PIP='pip3'
     if [ "${GLOBAL_INSTALL}" == false ]
     then
         PIP="${PYTHON} -m pip"
@@ -65,9 +65,14 @@ function do_start()
 
 function do_test()
 {
+    export PYTHON
     ./test.sh "$@"
 }
 
+function do_manage_database()
+{
+    ${PYTHON} database.py "$@"
+}
 
 cd "$(dirname "$0")"
 source ../.main.sh
