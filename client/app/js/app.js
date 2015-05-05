@@ -7,6 +7,7 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'ngAnimate',
     'restangular',
     'gettext',
+    'smart-table',
     'appControllers',
     'appFactories',
     'appFilters',

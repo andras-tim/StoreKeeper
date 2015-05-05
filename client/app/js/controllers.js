@@ -31,7 +31,7 @@ appControllers.controller('LoginController', function ($scope, $location, Sessio
 });
 
 
-appControllers.controller('MainController', function ($scope, $location, SessionFactory) {
+appControllers.controller('MainController', function ($scope, $location, SessionFactory, ItemService, HelperFactory) {
     $scope.logout = function () {
         SessionFactory.logout().then(function () {
             $location.path('/login');
@@ -41,4 +41,8 @@ appControllers.controller('MainController', function ($scope, $location, Session
     SessionFactory.getSession().then(function (session) {
         $scope.session = session;
     });
+
+    ItemService.getList().then(function (items) {
+        $scope.items = items;
+    }, HelperFactory.showResponseError);
 });

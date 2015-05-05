@@ -24,6 +24,7 @@ module.exports = function(config) {
             'app/bower_components/angular-strap/dist/angular-strap.js',
             'app/bower_components/angular-strap/dist/angular-strap.tpl.js',
             'app/bower_components/angular-gettext/dist/angular-gettext.js',
+            'app/bower_components/angular-smart-table/dist/smart-table.js',
 
             'app/bower_components/angular-mocks/angular-mocks.js',
 

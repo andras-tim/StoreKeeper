@@ -11,3 +11,8 @@ appServices.factory('SessionService', function (Restangular) {
 appServices.factory('ConfigService', function (Restangular) {
     return Restangular.service('config');
 });
+
+
+appServices.factory('ItemService', function (Restangular) {
+    return Restangular.service('items');
+});

@@ -12,11 +12,19 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: ../\n"
 
+#: app/partials/main.html:18
+msgid "Article Number"
+msgstr "Cikkszám"
+
 #: app/js/factories.js:29
 msgid "Error {{status}}"
 msgstr "Hiba {{status}}"
 
-#: app/partials/main.html:16
+#: app/partials/main.html:12
+msgid "Items"
+msgstr "Elemek"
+
+#: app/partials/main.html:49
 msgid "LogOut"
 msgstr "Kijelentkezés"
 
@@ -28,9 +36,17 @@ msgstr "Bejelentkezés"
 msgid "Main"
 msgstr "Főoldal"
 
+#: app/partials/main.html:19
+msgid "Name"
+msgstr "Megnevezés"
+
 #: app/partials/login.html:23 app/partials/login.html:26
 msgid "Password"
 msgstr "Jelszó"
+
+#: app/partials/main.html:20
+msgid "Quantity"
+msgstr "Mennyiség"
 
 #: app/partials/login.html:32
 msgid "Sign in"
@@ -48,6 +64,14 @@ msgstr "A felhasználónevet kötelező megadni"
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: app/partials/main.html:12
-msgid "Welcome {{session.username}}!"
-msgstr "Üdvözöllek {{session.username}}!"
+#: app/partials/main.html:17
+msgid "Vendor"
+msgstr "Gyártó"
+
+#: app/partials/main.html:24
+msgid "global search"
+msgstr "globális szűrő"
+
+#: app/partials/main.html:27
+msgid "search for vendor"
+msgstr "szűrés gyártó szerint"
