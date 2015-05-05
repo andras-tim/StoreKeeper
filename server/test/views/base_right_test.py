@@ -48,6 +48,7 @@ def use_as_rights_data_provider(endpoint: str):
 class CommonRightsTest(CommonSessionTest):
     DATA_MAP = {}
     RIGHTS = ()
+    ID_FIELD = 'id'
 
     @classmethod
     def setUpClass(cls):
@@ -80,7 +81,7 @@ class CommonRightsTest(CommonSessionTest):
     def check_right(self, actor: str, command: str, expected: bool, data=None):
         url = self.ENDPOINT
         if data is not None and command != 'post':
-            url += '/{:d}'.format(self.DATA_MAP[data].get()['id'])
+            url += '/{!s}'.format(self.DATA_MAP[data].get()[self.ID_FIELD])
 
         if data is not None:
             data = self.DATA_MAP[data].set()
