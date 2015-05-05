@@ -76,7 +76,6 @@ def api_func(title: str,
         args = inspect.getfullargspec(func)[0]
         login_required = __get_login_required()
         response_status = __get_response_status(func)
-        handled_file = bool(request_filename or response_filename)
 
         decorated_func.__doc__ = ApiDoc.get_doc(
             title=__get_title(),
@@ -90,7 +89,7 @@ def api_func(title: str,
             response=__get_content(response, response_filename),
             response_status=response_status,
             queries=__get_queries(func, args),
-            status_codes=__get_status_codes(func, args, login_required, response_status, handled_file)
+            status_codes=__get_status_codes(func, args, login_required, response_status)
         )
         return decorated_func
 
@@ -121,8 +120,7 @@ def api_func(title: str,
             new_queries['id'] = 'ID of selected {!s} for {!s}'.format(item_name, func.__name__)
         return new_queries
 
-    def __get_status_codes(func: callable, args: list, login_required: bool, response_status: int,
-                           handled_file: bool) -> dict:
+    def __get_status_codes(func: callable, args: list, login_required: bool, response_status: int) -> dict:
         new_status_codes = status_codes or {}
 
         if response_status not in new_status_codes.keys():
