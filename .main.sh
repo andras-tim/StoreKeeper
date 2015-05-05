@@ -43,6 +43,11 @@ Available arguments:
 EOF
 }
 
+function run()
+{
+    "./$(basename "$0")" "$@"
+}
+
 function apt_get_install()
 {
     args=

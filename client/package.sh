@@ -21,7 +21,7 @@ function do_install()
     fi
     node_modules/bower/bin/bower install
 
-    "$0" update_webdriver
+    run update_webdriver
 }
 
 function do_clear()
@@ -32,8 +32,8 @@ function do_clear()
 
 function do_test()
 {
-    "$0" test_single_run
-    "$0" protractor
+    run test_single_run
+    run protractor
 }
 
 function do_test_continously()

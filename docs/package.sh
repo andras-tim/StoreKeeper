@@ -12,8 +12,8 @@ function do_build()
 
 function do_rebuild()
 {
-    do_clear
-    do_build
+    run clear
+    run build
 }
 
 function do_start()
