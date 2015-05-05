@@ -79,12 +79,12 @@ echo -e "\nChecking PEP8 compliance..."
 run_pep8_check
 echo "passed"
 
-if [ "${QUICK}" != 'true' ]
-then
-    echo -e "\nRunning pylint..."
-    run_pylint
-    echo "passed"
-fi
+#if [ "${QUICK}" != 'true' ]
+#then
+#    echo -e "\nRunning pylint..."
+#    run_pylint
+#    echo "passed"
+#fi
 
 echo -e "\nAll done"
 exit 0
