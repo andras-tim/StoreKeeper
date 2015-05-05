@@ -21,7 +21,10 @@ function do_install()
     fi
     node_modules/bower/bin/bower install
 
-    run update_webdriver
+    if [ "${PRODUCTION}" == false ]
+    then
+        run update_webdriver
+    fi
 }
 
 function do_clear()
