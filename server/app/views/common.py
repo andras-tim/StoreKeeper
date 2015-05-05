@@ -73,7 +73,7 @@ def api_func(title: str,
         if not doc_mode and not test_mode:
             return decorated_func
 
-        args = inspect.getfullargspec(func)[0]
+        args = __get_args(func)
         login_required = __get_login_required()
         response_status = __get_response_status(func)
 
@@ -100,6 +100,10 @@ def api_func(title: str,
             func = login_required_decorator(func)
         return func
 
+    def __get_args(func: callable) -> set:
+        args = set(inspect.getfullargspec(func)[0])
+        return args - {'self'}
+
     def __get_login_required() -> bool:
         return login_required or admin_required
 
@@ -113,14 +117,14 @@ def api_func(title: str,
             return response_status or 201
         return response_status or 200
 
-    def __get_queries(func: callable, args: list) -> dict:
+    def __get_queries(func: callable, args: set) -> dict:
         new_queries = queries or {}
 
         if 'id' in args and 'id' not in new_queries.keys():
             new_queries['id'] = 'ID of selected {!s} for {!s}'.format(item_name, func.__name__)
         return new_queries
 
-    def __get_status_codes(func: callable, args: list, login_required: bool, response_status: int) -> dict:
+    def __get_status_codes(func: callable, args: set, login_required: bool, response_status: int) -> dict:
         new_status_codes = status_codes or {}
 
         if response_status not in new_status_codes.keys():
@@ -131,7 +135,7 @@ def api_func(title: str,
             new_status_codes[403] = ''
         if request is not None and func.__name__ in ('post', 'put') and 422 not in new_status_codes.keys():
             new_status_codes[422] = ''
-        if 'id' in args and 404 not in new_status_codes.keys():
+        if args and 404 not in new_status_codes.keys():
             new_status_codes[404] = 'there is no {!s}'.format(item_name)
 
         return new_status_codes
