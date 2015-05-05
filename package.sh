@@ -23,11 +23,6 @@ function do_clear()
     docs/package.sh clear
 }
 
-function do_test()
-{
-    server/package.sh test "$@"
-}
-
 function do_docs()
 {
     docs/package.sh rebuild
