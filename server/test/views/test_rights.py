@@ -8,6 +8,7 @@ from app.modules.example_data import (
     ExampleStocktakings as Stocktakings,
     ExampleStocktakingItems as StocktakingItems,
     ExampleUsers as Users,
+    ExampleUserConfigs as UserConfigs,
     ExampleVendors as Vendors,
     ExampleWorks as Works,
     ExampleWorkItems as WorkItems,
@@ -198,6 +199,17 @@ class TestUserRights(CommonRightsTest):
             'delete': [('admin', False), ('user1', False), ('user2', False)],
         },
     }
+
+
+@use_as_rights_data_provider('/users/2/config')
+class TestStocktakingItemRights(CommonRightsTest):
+    ID_FIELD = 'name'
+    INIT_PUSH = [
+        ('/users', [Users.USER2]),
+        ('/users/2/config', [UserConfigs.CONFIG1]),
+    ]
+    DATA_MAP = {'config1': UserConfigs.CONFIG1, 'config2': UserConfigs.CONFIG2}
+    RIGHTS = _get_all_rights_for_logged_in_users('config1', 'config2')
 
 
 @use_as_rights_data_provider('/vendors')

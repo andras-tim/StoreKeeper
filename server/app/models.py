@@ -12,6 +12,8 @@ class User(db.Model):
     admin = db.Column(db.Boolean, nullable=False, default=False)
     disabled = db.Column(db.Boolean, nullable=False, default=False)
 
+    configs = db.relationship('UserConfig', lazy='dynamic')
+
     def __repr__(self)-> str:
         return '{!s} [admin={!r} disabled={!r}]'.format(self.username, self.admin, self.disabled)
 
@@ -36,6 +38,23 @@ class User(db.Model):
     # flask-loginmanager
     def get_id(self) -> str:
         return str(self.id)
+
+
+@nested_fields(user=User)
+class UserConfig(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    name = db.Column(db.String(50), index=True, nullable=False)
+    value = db.Column(db.String(200), nullable=False)
+
+    configs = db.relationship('User')
+
+    __table_args__ = (
+        db.Index('user_config__can_not_add_one_name_twice_to_a_user', 'user_id', 'name', unique=True),
+    )
+
+    def __repr__(self)-> str:
+        return '{!s} [{!r}]'.format(self.id, self.name)
 
 
 class Vendor(db.Model):

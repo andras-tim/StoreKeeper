@@ -1,10 +1,10 @@
 from flask import g
 from flask.ext.restful import abort
 
-from app.models import User
-from app.views.base_views import BaseListView, BaseView
-from app.modules.example_data import ExampleUsers
-from app.serializers import UserSerializer, UserDeserializer
+from app.models import User, UserConfig
+from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
+from app.modules.example_data import ExampleUsers, ExampleUserConfigs
+from app.serializers import UserSerializer, UserDeserializer, UserConfigSerializer
 from app.views.common import api_func
 
 
@@ -67,3 +67,63 @@ class UserView(BaseView):
         if user.id == g.user.id:
             abort(403, message="User can not remove itself")
         return self._delete_commit(user)
+
+
+class UserConfigListView(BaseNestedListView):
+    _model = UserConfig
+    _parent_model = User
+    _serializer = UserConfigSerializer
+    _deserializer = UserConfigSerializer
+
+    @api_func('List user items.', url_tail='/users/2/config',
+              response=[ExampleUserConfigs.CONFIG1.get(), ExampleUserConfigs.CONFIG2.get()],
+              queries={'id': 'ID of user'})
+    def get(self, id: int):
+        self._initialize_parent_item(id)
+        return self._get(user_id=id)
+
+    @api_func('Create user item', url_tail='/users/2/config',
+              request=ExampleUserConfigs.CONFIG1.set(),
+              response=ExampleUserConfigs.CONFIG1.get(),
+              status_codes={422: '{{ original }} / can not add one item twice'},
+              queries={'id': 'ID of user'})
+    def post(self, id: int):
+        self._initialize_parent_item(id)
+        item = self._post_populate(user_id=id)
+        return self._post_commit(item)
+
+
+class UserConfigView(BaseNestedModelView):
+    _model = UserConfig
+    _parent_model = User
+    _serializer = UserConfigSerializer
+    _deserializer = UserConfigSerializer
+
+    @api_func('Get user item', item_name='user item', url_tail='/users/2/config/lang',
+              response=ExampleUserConfigs.CONFIG1.get(),
+              queries={'id': 'ID of user',
+                       'name': 'Name of selected user config value for get'})
+    def get(self, id: int, name: str):
+        self._initialize_parent_item(id)
+        item = self._get(user_id=id, name=name)
+        return self._serializer(item).data
+
+    @api_func('Update user item', item_name='user item', url_tail='/users/2/config/lang',
+              request=ExampleUserConfigs.CONFIG1.set(),
+              response=ExampleUserConfigs.CONFIG1.get(),
+              status_codes={422: '{{ original }} / can not use one config name twice'},
+              queries={'id': 'ID of user',
+                       'name': 'Name of selected user config value for put'})
+    def put(self, id: int, name: str):
+        self._initialize_parent_item(id)
+        item = self._put_populate(user_id=id, name=name)
+        return self._put_commit(item)
+
+    @api_func('Delete user item', item_name='user item', url_tail='/users/2/config/lang',
+              response=None,
+              queries={'id': 'ID of user',
+                       'name': 'Name of selected user config value for delete'})
+    def delete(self, id: int, name: str):
+        self._initialize_parent_item(id)
+        item = self._delete_get_item(user_id=id, name=name)
+        return self._delete_commit(item)

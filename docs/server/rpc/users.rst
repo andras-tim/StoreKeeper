@@ -17,3 +17,17 @@ Data management
 ^^^^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
      :endpoints: user
+
+
+Config management
+-----------------
+
+``/api/users/<id>/config``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: user_config_list
+
+``/api/users/<id>/config/<id>``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: user_config

@@ -159,3 +159,8 @@ class ConfigSerializer(Serializer):
     app_name = fields.Str()
     app_title = fields.Str()
     debug = fields.Bool()
+
+
+class UserConfigSerializer(Serializer):
+    name = fields.Str(required=True, validate=_not_blank)
+    value = fields.Str(required=True)

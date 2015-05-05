@@ -37,6 +37,8 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
 
         'user_list': (user.UserListView, '/users'),
         'user': (user.UserView, '/users/<int:id>'),
+        'user_config_list': (user.UserConfigListView, '/users/<int:id>/config'),
+        'user_config': (user.UserConfigView, '/users/<int:id>/config/<string:name>'),
 
         'vendor_list': (vendor.VendorListView, '/vendors'),
         'vendor': (vendor.VendorView, '/vendors/<int:id>'),

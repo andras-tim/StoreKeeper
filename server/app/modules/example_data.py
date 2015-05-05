@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 
 class FilterableDict:
@@ -177,3 +178,8 @@ class ExampleWorkItems:
 
 class ExampleConfigs:
     CONFIG1 = FilterableDict(getters={'app_name': 'storekeeper', 'app_title': 'StoreKeeper', 'debug': False})
+
+
+class ExampleUserConfigs:
+    CONFIG1 = FilterableDict(commons={'name': 'lang', 'value': 'hu'})
+    CONFIG2 = FilterableDict(commons={'name': 'fruits', 'value': json.dumps(['apple', 'orange', 'banana'])})
