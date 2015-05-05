@@ -25,6 +25,8 @@ function do_install()
     then
         run update_webdriver
     fi
+
+    mkdir -p tmp
 }
 
 function do_clear()
