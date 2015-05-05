@@ -101,8 +101,13 @@ class AcquisitionItemSerializer(Serializer):
 
 
 class StocktakingItemSerializer(Serializer):
-    id = fields.Int()
-    stocktaking = fields.Nested(StocktakingSerializer, required=True)
+    item = fields.Nested(ItemSerializer)
+
+    class Meta:
+        fields = ('id', 'item', 'quantity')
+
+
+class StocktakingItemDeserializer(Serializer):
     item = fields.Nested(ItemSerializer, required=True)
     quantity = fields.Int(required=True)
 

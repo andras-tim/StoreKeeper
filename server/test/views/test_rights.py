@@ -154,14 +154,14 @@ class TestStocktakingRights(CommonRightsTest):
     RIGHTS = _get_all_rights_for_logged_in_users('stocktaking1', 'stocktaking2')
 
 
-@use_as_rights_data_provider('/stocktaking-items')
+@use_as_rights_data_provider('/stocktakings/1/items')
 class TestStocktakingItemRights(CommonRightsTest):
     INIT_PUSH = [
-        ('/stocktakings', [Stocktakings.STOCKTAKING1, Stocktakings.STOCKTAKING2]),
+        ('/stocktakings', [Stocktakings.STOCKTAKING1]),
         ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
         ('/units', [Units.UNIT1, Units.UNIT2]),
         ('/items', [Items.ITEM1, Items.ITEM2]),
-        ('/stocktaking-items', [StocktakingItems.ITEM1]),
+        ('/stocktakings/1/items', [StocktakingItems.ITEM1]),
     ]
     DATA_MAP = {'item1': StocktakingItems.ITEM1, 'item2': StocktakingItems.ITEM2}
     RIGHTS = _get_all_rights_for_logged_in_users('item1', 'item2')

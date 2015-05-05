@@ -26,7 +26,6 @@ Endpoints
    customers
    items
    session
-   stocktaking_items
    stocktakings
    units
    users

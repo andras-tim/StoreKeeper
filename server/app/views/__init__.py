@@ -2,7 +2,7 @@ from app.modules.config import ConfigObject
 from app.res.restfulApi import RestfulApiWithoutSimpleAuth
 
 from app.views import common, acquisition, acquisition_item, barcode, config, customer, item, session, stocktaking, \
-    stocktaking_item, unit, user, vendor, work, work_item
+    unit, user, vendor, work, work_item
 
 
 def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleAuth):
@@ -29,9 +29,9 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
 
         'stocktaking_list': (stocktaking.StocktakingListView, '/stocktakings'),
         'stocktaking': (stocktaking.StocktakingView, '/stocktakings/<int:id>'),
-
-        'stocktaking_item_list': (stocktaking_item.StocktakingItemListView, '/stocktaking-items'),
-        'stocktaking_item': (stocktaking_item.StocktakingItemView, '/stocktaking-items/<int:id>'),
+        'stocktaking_item_list': (stocktaking.StocktakingItemListView, '/stocktakings/<int:id>/items'),
+        'stocktaking_item': (stocktaking.StocktakingItemView,
+                             '/stocktakings/<int:id>/items/<int:item_id>'),
 
         'unit_list': (unit.UnitListView, '/units'),
         'unit': (unit.UnitView, '/units/<int:id>'),
