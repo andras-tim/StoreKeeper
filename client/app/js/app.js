@@ -4,7 +4,7 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'mgcrea.ngStrap',
     'ngSanitize',
     'ngRoute',
-    'ngAnimate',
+    //'ngAnimate',
     'restangular',
     'gettext',
     'smart-table',
@@ -43,7 +43,9 @@ storekeeperApp.run(function ($rootScope, $location, SessionFactory) {
         if (!next.$$route) {
             return
         }
-        SessionFactory.getSession().then(null, function () {
+        SessionFactory.getSession().then(function (session) {
+            $rootScope.session = session;
+        }, function () {
             if (next.$$route.originalPath != '/login') {
                 event.preventDefault();
                 $location.path('/login');

@@ -172,7 +172,7 @@ appFactories.factory('SessionFactory', function ($q, Restangular, SessionService
         return result.promise;
     }
 
-    function getCachedSession() {
+    function apiGetCachedSession() {
         if (!initialized) {
             return apiGetSession();
         }
@@ -186,9 +186,17 @@ appFactories.factory('SessionFactory', function ($q, Restangular, SessionService
         });
     }
 
+    function apiIsAuthenticated() {
+        if (!initialized) {
+            return false;
+        }
+        return session.username != null;
+    }
+
     clearSession();
     return {
-        getSession: getCachedSession,
+        isAuthenticated: apiIsAuthenticated,
+        getSession: apiGetCachedSession,
         login: apiLogin,
         logout: apiLogout
     };

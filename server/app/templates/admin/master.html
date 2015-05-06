@@ -1,18 +1,14 @@
 {% extends admin_base_template %}
 
 {% block head_css %}
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url_for('static', filename='ico/apple-touch-icon-144-precomposed.png') }}" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ url_for('static', filename='ico/apple-touch-icon-114-precomposed.png') }}" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_for('static', filename='ico/apple-touch-icon-72-precomposed.png') }}" />
+  <link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='ico/apple-touch-icon-57-precomposed.png') }}" />
+  <link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.png') }}" />
+
   {{ super() }}
-  <style>
-    .navbar-brand {
-      padding: 8px 15px;
-    }
-    .navbar-brand img {
-      display: inline;
-      max-height: 35px;
-      vertical-align: -10px;
-      margin-right: 0.5em;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 {% endblock %}
 
 {% block brand %}

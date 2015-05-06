@@ -3,19 +3,42 @@
 var appControllers = angular.module('appControllers', []);
 
 
-appControllers.controller('CommonController', function ($scope, gettextCatalog, ConfigFactory, PageFactory) {
+appControllers.controller('CommonController', function ($scope, $location, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, HelperFactory) {
+    $scope.currentLanguage = gettextCatalog.currentLanguage;
+
+    $scope.languages = [
+        {
+            "text": "EN",
+            "click": "changeLanguage('en')"
+        }, {
+            "text": "HU",
+            "click": "changeLanguage('hu')"
+        }
+    ];
+
     $scope.changeLanguage = function (lang) {
         gettextCatalog.setCurrentLanguage(lang);
+        $scope.currentLanguage = lang;
     };
+
+
+    $scope.isAuthenticated = SessionFactory.isAuthenticated;
+
+    $scope.logout = function () {
+        SessionFactory.logout().then(function () {
+            $location.path('/login');
+        });
+    };
+
 
     ConfigFactory.getConfig().then(function (config) {
         $scope.appTitle = config.app_title;
-    });
+    }, HelperFactory.showResponseError);
     $scope.getWindowTitle = PageFactory.getWindowTitle;
 });
 
 
-appControllers.controller('LoginController', function ($scope, $location, SessionFactory) {
+appControllers.controller('LoginController', function ($scope, $location, SessionFactory, HelperFactory) {
     $scope.login = function () {
         $scope.$broadcast('show-errors-check-validity');
         if (!$scope.userForm.$valid) {
@@ -24,24 +47,14 @@ appControllers.controller('LoginController', function ($scope, $location, Sessio
         SessionFactory.login($scope.user.username, $scope.user.password).then(function () {
             $scope.userForm.$setPristine();
             $location.path('/main');
-        });
+        }, HelperFactory.showResponseError);
     };
 
     $scope.user = { username: '', password: '' };
 });
 
 
-appControllers.controller('MainController', function ($scope, $location, SessionFactory, ItemService, HelperFactory) {
-    $scope.logout = function () {
-        SessionFactory.logout().then(function () {
-            $location.path('/login');
-        });
-    };
-
-    SessionFactory.getSession().then(function (session) {
-        $scope.session = session;
-    });
-
+appControllers.controller('MainController', function ($scope, ItemService, HelperFactory) {
     ItemService.getList().then(function (items) {
         $scope.items = items;
     }, HelperFactory.showResponseError);
