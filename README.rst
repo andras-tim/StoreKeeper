@@ -1,7 +1,7 @@
 .. image:: https://raw.githubusercontent.com/andras-tim/StoreKeeper/master/client/app/img/logo.png
 
 
-|Build| |Coverage| |Docs| |License|
+|Build| |Docs| |CodeClimate| |CoverageServer| |CoverageClient| |License|
 
 StoreKeeper is an open source, multilingual warehouse/store management software
 
@@ -54,12 +54,19 @@ You can read more details in documentation. It's available in online and offline
 .. |Build| image:: https://travis-ci.org/andras-tim/StoreKeeper.svg?branch=master
    :target: https://travis-ci.org/andras-tim/StoreKeeper
    :alt: Build Status
-.. |Coverage| image:: https://coveralls.io/repos/andras-tim/StoreKeeper/badge.svg?branch=master
-   :target: https://coveralls.io/r/andras-tim/StoreKeeper?branch=master
-   :alt: Coverage Status
 .. |Docs| image:: https://readthedocs.org/projects/storekeeper/badge/?version=latest
    :target: https://readthedocs.org/projects/storekeeper/?badge=latest
    :alt: Documentation Status
 .. |License| image:: https://img.shields.io/badge/license-GPL%202.0-blue.svg
    :target: https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE
    :alt: License
+
+.. |CodeClimate| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/gpa.svg
+   :target: https://codeclimate.com/github/andras-tim/StoreKeeper
+   :alt: Code Climate
+.. |CoverageServer| image:: https://coveralls.io/repos/andras-tim/StoreKeeper/badge.svg?branch=master
+   :target: https://coveralls.io/r/andras-tim/StoreKeeper?branch=master
+   :alt: Server Test Coverage
+.. |CoverageClient| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/coverage.svg
+   :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
+   :alt: Client Test Coverage
