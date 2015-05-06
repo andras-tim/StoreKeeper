@@ -82,6 +82,21 @@ function find_and_purge()
     done
 }
 
+function make_default()
+{
+    local prefix="$1"
+    local suffix="$2"
+
+    if [ -e "${prefix}${suffix}" ]
+    then
+        return
+    fi
+    echo -n "Making default ${prefix}${suffix}... "
+    cp -p "${prefix}.default${suffix}" "${prefix}${suffix}"
+    echo "Done"
+}
+
+
 # Init
 cmd=
 args=
