@@ -3,6 +3,10 @@
 function do_preinstall()
 {
     apt_get_install wget
+    if [ "${PRODUCTION}" == false ]
+    then
+        apt_get_install inotify-tools
+    fi
 
     if [ ! -e '/etc/apt/sources.list.d/nodesource.list' ]
     then
