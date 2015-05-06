@@ -43,7 +43,7 @@ appFactories.factory('ConfigFactory', function ($q, Restangular, ConfigService) 
         debug: false
     };
 
-    function getConfig() {
+    function apiGetConfig() {
         var result = $q.defer();
 
         if (config.app_name != undefined) {
@@ -62,13 +62,7 @@ appFactories.factory('ConfigFactory', function ($q, Restangular, ConfigService) 
     }
 
     return {
-        getConfig: getConfig,
-        getAppName: function () {
-            return config.app_name;
-        },
-        getAppTitle: function () {
-            return config.app_title;
-        },
+        getConfig: apiGetConfig,
         getDebug: function () {
             return config.debug;
         }
