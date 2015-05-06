@@ -29,7 +29,7 @@ def __check_config(config: ConfigObject):
 
 def __get_config_reader() -> Config:
     config_path = os.path.join(basedir, 'config.yml')
-    default_config_path = os.path.join(basedir, 'config_default.yml')
+    default_config_path = os.path.join(basedir, 'config.default.yml')
 
     if not os.path.exists(config_path):
         shutil.copy(default_config_path, config_path)
