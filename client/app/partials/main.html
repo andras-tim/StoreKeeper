@@ -1,46 +1,48 @@
-<h2 style="display: none;" ng-bind="'Main' | translate | setTitle"></h2>
+<div class="container">
+  <h2 style="display: none;" ng-bind="'Main' | translate | setTitle"></h2>
 
-<div class="container-fluid">
-  <div class="row">
+  <div class="container-fluid">
+    <div class="row">
 
-    <div class="col-md-12">
-      <!--Body content-->
-      <h2 translate>Items</h2>
+      <div class="col-md-12">
+        <!--Body content-->
+        <h2 translate>Items</h2>
 
-      <table st-table="displayedItems" st-safe-src="items" class="table table-striped">
-        <thead>
-          <tr>
-            <th st-sort="item.vendor" st-sort-default="true" translate>Vendor</th>
-            <th st-sort="item.article_number" translate>Article Number</th>
-            <th st-sort="item.name" translate>Name</th>
-            <th st-sort="item.quantity" translate>Quantity</th>
-          </tr>
-          <tr>
-            <th colspan="2">
-              <input st-search placeholder="{{ 'global search' | translate}}" class="input-sm form-control" type="search"/>
-            </th>
-            <th>
-              <input st-search="item.vendor" placeholder="{{ 'search for vendor' | translate}}" class="input-sm form-control" type="search"/>
-            </th>
+        <table st-table="displayedItems" st-safe-src="items" class="table table-striped">
+          <thead>
+            <tr>
+              <th st-sort="item.vendor" st-sort-default="true" translate>Vendor</th>
+              <th st-sort="item.article_number" translate>Article Number</th>
+              <th st-sort="item.name" translate>Name</th>
+              <th st-sort="item.quantity" translate>Quantity</th>
+            </tr>
+            <tr>
+              <th colspan="2">
+                <input st-search placeholder="{{ 'global search' | translate}}" class="input-sm form-control" type="search"/>
+              </th>
+              <th>
+                <input st-search="item.vendor" placeholder="{{ 'search for vendor' | translate}}" class="input-sm form-control" type="search"/>
+              </th>
 
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="item in displayedItems">
-            <td>{{item.vendor.name}}</td>
-            <td>{{item.article_number}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.quantity}} {{item.unit.unit}}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="5" class="text-center">
-              <div st-pagination="" st-items-by-page="20" st-displayed-pages="7"></div>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in displayedItems">
+              <td>{{item.vendor.name}}</td>
+              <td>{{item.article_number}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.quantity}} {{item.unit.unit}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="20" st-displayed-pages="7"></div>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </div>
 </div>

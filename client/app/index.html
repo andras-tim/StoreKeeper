@@ -19,35 +19,11 @@
   <link rel="stylesheet" href="bower_components/bootstrap-additions/dist/bootstrap-additions.css">
   <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css">
 
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/common.css">
 </head>
 <body>
-  <nav class="navbar navbar-default" role="navigation" bs-navbar>
-    <div class="container">
-
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#/"><img id="logo" src="img/logo.png" alt="Logo"> <span ng-bind="appTitle"></span></a>
-      </div>
-
-      <ul class="nav navbar-nav" ng-if="isAuthenticated()">
-        <li><a href data-template="partials/sidebar.html" data-placement="left" bs-aside="aside" data-container="body" translate>
-          Quick Search
-        </a></li>
-        <li data-match-route="/main$"><a href="#/main" translate>Items</a></li>
-      </ul>
-
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href ng-bind="session.username" ng-click="logout()" ng-if="isAuthenticated()"></a></li>
-        <li><a href ng-bind="currentLanguage" bs-dropdown="languages">...</a></li>
-      </ul>
-    </div>
-  </nav>
-
-
-
-  <div class="container">
-    <div ng-view></div>
-  </div>
+  <div ng-include="'partials/header.html'"></div>
+  <div ng-view></div>
 
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/lodash/dist/lodash.js"></script>

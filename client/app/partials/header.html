@@ -1,0 +1,22 @@
+<nav class="navbar navbar-default" role="navigation" bs-navbar>
+  <div class="container">
+
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#/"><img id="logo" src="img/logo.png" alt="Logo"> <span ng-bind="appTitle"></span></a>
+    </div>
+
+    <ul class="nav navbar-nav" ng-if="isAuthenticated()" bs-navbar>
+      <li><a href data-template="partials/widgets/quick_search_sidebar.html" data-placement="left" data-container="body" bs-aside>
+        <i class="fa fa-search"></i>
+      </a></li>
+      <li data-match-route="/main$">
+        <a href="#/main" translate>Items</a>
+      </li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href ng-bind="session.username" ng-click="logout()" ng-if="isAuthenticated()"></a></li>
+      <li><a href ng-bind="currentLanguage" bs-dropdown="languages"></a></li>
+    </ul>
+  </div>
+</nav>
