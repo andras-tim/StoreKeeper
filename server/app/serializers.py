@@ -158,6 +158,7 @@ class WorkItemDeserializer(Serializer):
 class ConfigSerializer(Serializer):
     app_name = fields.Str()
     app_title = fields.Str()
+    forced_language = fields.Str(default=None)
     debug = fields.Bool()
 
 

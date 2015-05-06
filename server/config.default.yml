@@ -5,6 +5,7 @@ DefaultConfig:
   App:
     NAME: "storekeeper"
     TITLE: "StoreKeeper"
+    FORCED_LANGUAGE: NULL
 
     MIGRATE_REPO_PATH: "$BASEDIR/db_repository"
     SHARE_STATIC: True

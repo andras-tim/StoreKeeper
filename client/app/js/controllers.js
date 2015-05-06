@@ -4,24 +4,26 @@ var appControllers = angular.module('appControllers', []);
 
 
 appControllers.controller('CommonController', function ($scope, $location, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, HelperFactory) {
-    $scope.languages = [
-        {
-            'language': 'en',
-            'title': 'English',
-            'flag': 'us'
-        }, {
-            'language': 'hu',
-            'title': 'Magyar'
-        }
-    ];
+    function initializeLanguages() {
+        $scope.languages = [
+            {
+                'language': 'en',
+                'title': 'English',
+                'flag': 'us'
+            }, {
+                'language': 'hu',
+                'title': 'Magyar'
+            }
+        ];
 
-    $scope.getCurrentLanguage = function () {
-        return gettextCatalog.currentLanguage;
-    };
+        $scope.getCurrentLanguage = function () {
+            return gettextCatalog.currentLanguage;
+        };
 
-    $scope.changeLanguage = function (lang) {
-        gettextCatalog.setCurrentLanguage(lang);
-    };
+        $scope.changeLanguage = function (lang) {
+            gettextCatalog.setCurrentLanguage(lang);
+        };
+    }
 
 
     $scope.isAuthenticated = SessionFactory.isAuthenticated;
@@ -29,6 +31,9 @@ appControllers.controller('CommonController', function ($scope, $location, gette
 
     ConfigFactory.getConfig().then(function (config) {
         $scope.appTitle = config.app_title;
+        if (config.forced_language == null) {
+            initializeLanguages();
+        }
     }, HelperFactory.showResponseError);
     $scope.getWindowTitle = PageFactory.getWindowTitle;
 });

@@ -60,8 +60,15 @@ storekeeperApp.config(function (RestangularProvider) {
 });
 
 
-storekeeperApp.run(function (gettextCatalog) {
-    var language = window.navigator.userLanguage || window.navigator.language; // "en" or "en-US"
-    gettextCatalog.currentLanguage = language.split("-")[0];
-    gettextCatalog.debug = true;
+storekeeperApp.run(function (gettextCatalog, ConfigFactory, HelperFactory) {
+    ConfigFactory.getConfig().then(function (config) {
+        var language = config.forced_language;
+        if (language == null) {
+            language = window.navigator.userLanguage || window.navigator.language; // "en" or "en-US"
+            language = language.split("-")[0];
+        }
+        gettextCatalog.baseLanguage = 'en';
+        gettextCatalog.debug = config.debug;
+        gettextCatalog.setCurrentLanguage(language);
+    }, HelperFactory.showResponseError);
 });

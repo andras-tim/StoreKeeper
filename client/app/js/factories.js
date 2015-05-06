@@ -39,6 +39,7 @@ appFactories.factory('ConfigFactory', function ($q, Restangular, ConfigService) 
     var config = {
         app_name: undefined,
         app_title: undefined,
+        forced_language: undefined,
         debug: false
     };
 
