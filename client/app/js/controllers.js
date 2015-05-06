@@ -24,17 +24,21 @@ appControllers.controller('CommonController', function ($scope, $location, gette
 
     $scope.isAuthenticated = SessionFactory.isAuthenticated;
 
-    $scope.logout = function () {
-        SessionFactory.logout().then(function () {
-            $location.path('/login');
-        });
-    };
 
 
     ConfigFactory.getConfig().then(function (config) {
         $scope.appTitle = config.app_title;
     }, HelperFactory.showResponseError);
     $scope.getWindowTitle = PageFactory.getWindowTitle;
+});
+
+
+appControllers.controller('UserMenu', function ($scope, $location, SessionFactory, HelperFactory) {
+    $scope.logout = function () {
+        SessionFactory.logout().then(function () {
+            $location.path('/login');
+        }, HelperFactory.showResponseError);
+    };
 });
 
 
