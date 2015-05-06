@@ -4,26 +4,27 @@ var appControllers = angular.module('appControllers', []);
 
 
 appControllers.controller('CommonController', function ($scope, $location, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, HelperFactory) {
-    $scope.currentLanguage = gettextCatalog.currentLanguage;
-
     $scope.languages = [
         {
-            "text": "EN",
-            "click": "changeLanguage('en')"
+            'language': 'en',
+            'title': 'English',
+            'flag': 'us'
         }, {
-            "text": "HU",
-            "click": "changeLanguage('hu')"
+            'language': 'hu',
+            'title': 'Magyar'
         }
     ];
 
+    $scope.getCurrentLanguage = function () {
+        return gettextCatalog.currentLanguage;
+    };
+
     $scope.changeLanguage = function (lang) {
         gettextCatalog.setCurrentLanguage(lang);
-        $scope.currentLanguage = lang;
     };
 
 
     $scope.isAuthenticated = SessionFactory.isAuthenticated;
-
 
 
     ConfigFactory.getConfig().then(function (config) {
