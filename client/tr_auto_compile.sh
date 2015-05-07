@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 while true
 do
     inotifywait -qq -e modify po/hu.po
