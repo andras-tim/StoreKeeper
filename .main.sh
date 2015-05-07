@@ -73,7 +73,7 @@ function purge()
 
 function find_and_purge()
 {
-    find . "$@" | while read rm_path
+    find "$@" | while read rm_path
     do
         if [ -e "${rm_path}" ]
         then
