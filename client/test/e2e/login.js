@@ -10,10 +10,10 @@ describe('Login view', function() {
     it('can not login with missing credentials', function() {
         var username = element(by.model('user.username'));
         var password = element(by.model('user.password'));
-        var sign_in = element(by.id('sign_in'));
+        var login = element(by.id('login'));
 
         username.sendKeys('admin');
-        sign_in.click();
+        login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
             expect(url.split('#')[1]).toBe('/login');
@@ -23,10 +23,10 @@ describe('Login view', function() {
 
     it('can not login without missing username', function() {
         var password = element(by.model('user.password'));
-        var sign_in = element(by.id('sign_in'));
+        var login = element(by.id('login'));
 
         password.sendKeys('admin');
-        sign_in.click();
+        login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
             expect(url.split('#')[1]).toBe('/login');
@@ -36,10 +36,10 @@ describe('Login view', function() {
 
     it('can not login without missing password', function() {
         var username = element(by.model('user.username'));
-        var sign_in = element(by.id('sign_in'));
+        var login = element(by.id('login'));
 
         username.sendKeys('admin');
-        sign_in.click();
+        login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
             expect(url.split('#')[1]).toBe('/login');
@@ -50,11 +50,11 @@ describe('Login view', function() {
     it('can login with valid credentials', function() {
         var username = element(by.model('user.username'));
         var password = element(by.model('user.password'));
-        var sign_in = element(by.id('sign_in'));
+        var login = element(by.id('login'));
 
         username.sendKeys('admin');
         password.sendKeys('admin');
-        sign_in.click();
+        login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
             expect(url.split('#')[1]).toBe('/main');
