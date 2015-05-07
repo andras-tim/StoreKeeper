@@ -12,7 +12,7 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: ../\n"
 
-#: app/partials/main.html:15
+#: app/partials/widgets/items_table.html:5
 msgid "Article Number"
 msgstr "Cikkszám"
 
@@ -20,7 +20,7 @@ msgstr "Cikkszám"
 msgid "Error {{status}}"
 msgstr "Hiba {{status}}"
 
-#: app/partials/header.html:13 app/partials/main.html:9
+#: app/partials/header.html:13 app/partials/main.html:5
 msgid "Items"
 msgstr "Elemek"
 
@@ -32,7 +32,7 @@ msgstr "Bejelentkezés"
 msgid "Main"
 msgstr "Főoldal"
 
-#: app/partials/main.html:16
+#: app/partials/widgets/items_table.html:6
 msgid "Name"
 msgstr "Megnevezés"
 
@@ -40,9 +40,13 @@ msgstr "Megnevezés"
 msgid "Password"
 msgstr "Jelszó"
 
-#: app/partials/main.html:17
+#: app/partials/widgets/items_table.html:7
 msgid "Quantity"
 msgstr "Mennyiség"
+
+#: app/partials/widgets/quick_search_sidebar.html:6
+msgid "Quick Search"
+msgstr "Gyors keresés"
 
 #: app/partials/login.html:33
 msgid "Sign in"
@@ -60,7 +64,7 @@ msgstr "A felhasználónevet kötelező megadni"
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: app/partials/main.html:14
+#: app/partials/widgets/items_table.html:4
 msgid "Vendor"
 msgstr "Gyártó"
 
@@ -72,10 +76,14 @@ msgstr ""
 "motor <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE"
 "\">GPLv2</a> alatt"
 
-#: app/partials/main.html:21
+#: app/partials/widgets/items_table.html:11
 msgid "global search"
 msgstr "globális szűrő"
 
-#: app/partials/main.html:24
+#: app/partials/widgets/items_table.html:17
+msgid "search for name"
+msgstr "szűrés név szerint"
+
+#: app/partials/widgets/items_table.html:14
 msgid "search for vendor"
 msgstr "szűrés gyártó szerint"
