@@ -24,6 +24,10 @@ DefaultConfig:
     # http://flask.pocoo.org/docs/0.10/config/
     SECRET_KEY: PleaseChangeThisImportantSecretString
 
+    # https://flask-login.readthedocs.org/en/latest/
+    SESSION_PROTECTION: strong
+    REMEMBER_COOKIE_DURATION: 90
+
     # https://pythonhosted.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_DATABASE_URI: "sqlite:///$BASEDIR/app.sqlite"
 

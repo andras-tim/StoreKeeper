@@ -12,15 +12,15 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: ../\n"
 
-#: app/partials/widgets/items_table.html:5
+#: app/partials/main.html:15
 msgid "Article Number"
 msgstr "Cikkszám"
 
-#: app/js/factories.js:29
+#: app/js/factories.js:29 app/js/storekeeper.js:227
 msgid "Error {{status}}"
 msgstr "Hiba {{status}}"
 
-#: app/partials/header.html:13 app/partials/main.html:5
+#: app/partials/header.html:13 app/partials/main.html:9
 msgid "Items"
 msgstr "Elemek"
 
@@ -32,15 +32,15 @@ msgstr "Bejelentkezés"
 msgid "Main"
 msgstr "Főoldal"
 
-#: app/partials/widgets/items_table.html:6
+#: app/partials/main.html:16
 msgid "Name"
 msgstr "Megnevezés"
 
-#: app/partials/login.html:24 app/partials/login.html:27
+#: app/partials/login.html:24
 msgid "Password"
 msgstr "Jelszó"
 
-#: app/partials/widgets/items_table.html:7
+#: app/partials/main.html:17
 msgid "Quantity"
 msgstr "Mennyiség"
 
@@ -48,7 +48,11 @@ msgstr "Mennyiség"
 msgid "Quick Search"
 msgstr "Gyors keresés"
 
-#: app/partials/login.html:33
+#: app/partials/login.html:35
+msgid "Remember me"
+msgstr "Emlékezz rám"
+
+#: app/partials/login.html:42
 msgid "Sign in"
 msgstr "Bejelentkezés"
 
@@ -60,11 +64,15 @@ msgstr "A jelszót kötelező megadni"
 msgid "The user's username is required"
 msgstr "A felhasználónevet kötelező megadni"
 
-#: app/partials/login.html:14 app/partials/login.html:17
+#: app/partials/login.html:34
+msgid "User will not logged out after close this window"
+msgstr "A felhasználó nem lesz kijelentkeztetve a böngésző bezárása után"
+
+#: app/partials/login.html:14
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: app/partials/widgets/items_table.html:4
+#: app/partials/main.html:14
 msgid "Vendor"
 msgstr "Gyártó"
 
@@ -76,14 +84,18 @@ msgstr ""
 "motor <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE"
 "\">GPLv2</a> alatt"
 
-#: app/partials/widgets/items_table.html:11
+#: app/partials/main.html:21
 msgid "global search"
 msgstr "globális szűrő"
 
-#: app/partials/widgets/items_table.html:17
-msgid "search for name"
-msgstr "szűrés név szerint"
+#: app/partials/login.html:27
+msgid "password"
+msgstr "Jelszó"
 
-#: app/partials/widgets/items_table.html:14
+#: app/partials/main.html:24
 msgid "search for vendor"
 msgstr "szűrés gyártó szerint"
+
+#: app/partials/login.html:17
+msgid "username"
+msgstr "Felhasználónév"

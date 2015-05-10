@@ -133,10 +133,10 @@ appFactories.factory('SessionFactory', function ($q, Restangular, SessionService
         return result.promise;
     }
 
-    function apiLogin(username, password) {
+    function apiLogin(username, password, remember) {
         var result = $q.defer();
 
-        var credentials = { username: username, password: password };
+        var credentials = { username: username, password: password, remember: remember };
         SessionService.post(credentials).then(function (resp) {
             session = Restangular.stripRestangular(resp);
             result.resolve(session);

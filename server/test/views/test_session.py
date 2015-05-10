@@ -43,6 +43,11 @@ class TestLoginWithoutActiveSession(CommonSessionTest):
     def test_logging_cant_happen_without_active_session(self):
         self.assertApiLogout(expected_status_codes=401)
 
+    def test_logging_in_with_remember_me(self):
+        self.assertApiLogin(credential=Users.USER1.login(remember=True),
+                            expected_data=Users.USER1, expected_status_codes=201)
+        self.assertApiSession(expected_data=Users.USER1)
+
 
 class TestLoginWithActiveSession(CommonSessionTest):
     ENDPOINT = '/session'

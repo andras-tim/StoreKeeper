@@ -19,7 +19,7 @@ class SessionView(restful.Resource):
 
     @api_func('Login user', url_tail='/session',
               login_required=False,
-              request=ExampleUsers.ADMIN.set(['username', 'password']),
+              request=ExampleUsers.ADMIN.login(),
               response=ExampleUsers.ADMIN.get(),
               status_codes={401: 'bad authentication data or user is disabled'})
     def post(self):
@@ -31,7 +31,7 @@ class SessionView(restful.Resource):
         user = User.query.filter_by(username=data['username']).first()
         if not user or not user.check_password(data['password']):
             abort(401, message='login error')
-        if not login_user(user):
+        if not login_user(user, remember=data['remember']):
             abort(401, message='login error')
         return UserSerializer(user).data, 201
 

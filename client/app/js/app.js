@@ -72,3 +72,10 @@ storekeeperApp.run(function (gettextCatalog, ConfigFactory, HelperFactory) {
         gettextCatalog.setCurrentLanguage(language);
     }, HelperFactory.showResponseError);
 });
+
+
+storekeeperApp.config(function($tooltipProvider) {
+    angular.extend($tooltipProvider.defaults, {
+        delay: { show: 600, hide: 100 }
+    });
+});

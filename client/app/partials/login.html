@@ -10,26 +10,35 @@
         <h2 ng-bind="'Login' | translate | setTitle">Login</h2>
         <form name="userForm" class="form-horizontal">
           <div class="form-group" show-errors>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               <label for="inputUsername" class="control-label" translate>Username</label>
             </div>
-            <div class="col-sm-9" ng-class="{'has-error': userForm.username.$dirty && userForm.username.$error.required}">
-              <input name="username" type="text" class="form-control" id="inputUsername" autocomplete="off" placeholder="{{ 'Username' | translate}}" ng-model="user.username" required />
+            <div class="col-sm-8" ng-class="{'has-error': userForm.username.$dirty && userForm.username.$error.required}">
+              <input name="username" type="text" class="form-control" id="inputUsername" autocomplete="off" placeholder="{{ 'username' | translate}}" ng-model="user.username" required />
               <p class="help-block" ng-if="userForm.username.$dirty && userForm.username.$error.required" translate>The user's username is required</p>
             </div>
 
           </div>
           <div class="form-group" show-errors>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               <label for="inputPassword" class="control-label" translate>Password</label>
             </div>
-            <div class="col-sm-9" ng-class="{'has-error': userForm.password.$dirty && userForm.password.$error.required}">
-              <input name="password" type="password" class="form-control" id="inputPassword" placeholder="{{ 'Password' | translate }}" ng-model="user.password" required />
+            <div class="col-sm-8" ng-class="{'has-error': userForm.password.$dirty && userForm.password.$error.required}">
+              <input name="password" type="password" class="form-control" id="inputPassword" placeholder="{{ 'password' | translate }}" ng-model="user.password" required />
               <p class="help-block" ng-if="userForm.password.$dirty && userForm.password.$error.required" translate>The user's password is required</p>
             </div>
           </div>
           <div class="form-group">
-            <div class="col-sm-offset-3 col-sm-7">
+            <div class="col-sm-offset-4 col-sm-8">
+              <div class="checkbox">
+                <label data-type="info" data-title="{{'User will not logged out after close this window' | translate}}" bs-tooltip>
+                  <input type="checkbox" ng-model="user.remember"> {{'Remember me' | translate}}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-8">
               <button id="login" class="btn btn-default btn-primary" ng-click="login()" translate>Sign in</button>
             </div>
           </div>

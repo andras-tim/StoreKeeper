@@ -61,4 +61,23 @@ describe('Login view', function() {
         });
     });
 
+    it('can login with remember me', function() {
+        var username = element(by.model('user.username'));
+        var password = element(by.model('user.password'));
+        var remember = element(by.model('user.remember'));
+        var login = element(by.id('login'));
+
+        username.sendKeys('admin');
+        password.sendKeys('admin');
+        remember.click();
+
+        expect(remember.isSelected()).toBe(true);
+
+        login.click();
+
+        browser.getLocationAbsUrl().then(function (url) {
+            expect(url.split('#')[1]).toBe('/main');
+        });
+    });
+
 });

@@ -1,5 +1,6 @@
 import os
 import shutil
+import datetime
 from flask import Flask
 
 from app import basedir, test_mode
@@ -11,7 +12,7 @@ class ConfigurationError(Exception):
 
 
 def get_config() -> ConfigObject:
-    config = __get_config()
+    config = __translate_primitives(__get_config())
     __check_errors_in_config(config)
     return config
 
@@ -37,6 +38,14 @@ def check_warnings_in_config(app: Flask, config: ConfigObject):
     """
     if config.Flask.SECRET_KEY == 'PleaseChangeThisImportantSecretString':
         app.logger.warning('config: The Flask.SECRET_KEY was not customized; please change it for CSRF protection')
+
+
+def __translate_primitives(config: ConfigObject) -> ConfigObject:
+    """
+    Translate primitive types to appropriate objects
+    """
+    config.Flask['REMEMBER_COOKIE_DURATION'] = datetime.timedelta(days=config.Flask.REMEMBER_COOKIE_DURATION)
+    return config
 
 
 def __get_config_reader() -> Config:

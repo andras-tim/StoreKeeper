@@ -54,13 +54,13 @@ appControllers.controller('LoginController', function ($scope, $location, Sessio
         if (!$scope.userForm.$valid) {
             return;
         }
-        SessionFactory.login($scope.user.username, $scope.user.password).then(function () {
+        SessionFactory.login($scope.user.username, $scope.user.password, $scope.user.remember).then(function () {
             $scope.userForm.$setPristine();
             $location.path('/main');
         }, HelperFactory.showResponseError);
     };
 
-    $scope.user = { username: '', password: '' };
+    $scope.user = { username: '', password: '', remember: false };
 });
 
 
