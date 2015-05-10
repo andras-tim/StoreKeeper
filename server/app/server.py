@@ -4,7 +4,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 
 from app import test_mode, doc_mode, log, static
-from app.config import get_config
+from app.config import get_config, check_warnings_in_config
 from app.res.restfulApi import RestfulApiWithoutSimpleAuth
 
 
@@ -20,6 +20,8 @@ app.config.update(config['Flask'])
 # logging
 if not app.debug and not app.testing:
     log.initialize(app, config)
+
+check_warnings_in_config(app, config)
 
 # flask-sqlalchemy
 db = SQLAlchemy(app)

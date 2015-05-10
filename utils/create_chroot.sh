@@ -261,9 +261,23 @@ function install_update_storekeeper()
         return
     fi
 
-    echo ' * Configuring StoreKeeper...'
-    sed "s>^USED_CONFIG: .*$>USED_CONFIG: ${CONFIG}>" -i "${EXT_INSTALL_DIR}/server/config.yml"
     run_in_prod 'cd server && ./database.py --create'
+}
+
+function configure_storekeeper()
+{
+    local config_path="${EXT_INSTALL_DIR}/server/config.yml"
+    if [ -e "${config_path}" ]
+    then
+        return
+    fi
+
+    echo ' * Configuring StoreKeeper...'
+    cp "${EXT_INSTALL_DIR}/server/config.default.yml" "${config_path}"
+    local new_secret="$(openssl rand -hex 16)"
+
+    sed "s>^USED_CONFIG: .*$>USED_CONFIG: ${CONFIG}>" -i "${config_path}"
+    sed "s>PleaseChangeThisImportantSecretString>${new_secret}>g" -i "${config_path}"
 }
 
 function restart_services()
@@ -304,4 +318,5 @@ fi
 mount_resources
 clone_update_storekeeper_code
 install_update_storekeeper
+configure_storekeeper
 restart_services

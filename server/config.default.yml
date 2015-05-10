@@ -18,10 +18,11 @@ DefaultConfig:
     LABEL_BORDER: False
 
   Flask:
-    # http://flask.pocoo.org/docs/0.10/config/
-    SECRET_KEY: ImportantSecretString
     DEBUG: False
     TESTING: False
+
+    # http://flask.pocoo.org/docs/0.10/config/
+    SECRET_KEY: PleaseChangeThisImportantSecretString
 
     # https://pythonhosted.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_DATABASE_URI: "sqlite:///$BASEDIR/app.sqlite"
