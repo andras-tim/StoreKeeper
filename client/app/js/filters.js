@@ -1,11 +1,12 @@
 'use strict';
 
-var appFactories = angular.module('appFilters', []);
+var appFilters = angular.module('appFilters', []);
 
 
-appFactories.filter('setTitle', function (PageFactory) {
-    return function (title) {
-        PageFactory.setPageTitle(title);
-        return title;
-    };
-});
+appFilters.filter('setTitle', ['PageFactory',
+    function (PageFactory) {
+        return function (title) {
+            PageFactory.setPageTitle(title);
+            return title;
+        };
+    }]);
