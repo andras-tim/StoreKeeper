@@ -1,3 +1,6 @@
+/*
+ * Bootstrap
+ */
 .navbar-brand {
     padding: 8px 15px;
 }
@@ -17,4 +20,16 @@
 
 .bs-footer a {
     color: #80a0d0;
+}
+
+
+/*
+ * Tables
+ */
+.st-sort-ascent:before {
+    content: '\25B2';
+}
+
+.st-sort-descent:before {
+    content: '\25BC';
 }
