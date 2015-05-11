@@ -7,7 +7,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask_sqlalchemy import _BoundDeclarativeMeta as ModelType
 
 from app import models
-from app.modules.config import ConfigObject
+from app.modules.yaml_config import ConfigObject
 
 
 def initialize(app: Flask, db: SQLAlchemy, config: ConfigObject):

@@ -1,5 +1,5 @@
-from app.modules.config import ConfigObject
-from app.res.restfulApi import RestfulApiWithoutSimpleAuth
+from app.modules.yaml_config import ConfigObject
+from app.modules.restful_api import RestfulApiWithoutSimpleAuth
 
 from app.views import common, acquisition, barcode, config, customer, item, session, stocktaking, unit, user, vendor, \
     work

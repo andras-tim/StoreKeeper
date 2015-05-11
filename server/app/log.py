@@ -3,7 +3,7 @@ from logging.handlers import RotatingFileHandler, SMTPHandler, SysLogHandler
 import socket
 from flask import Flask
 
-from app.modules.config import ConfigObject
+from app.modules.yaml_config import ConfigObject
 
 LOG_LEVELS = {
     'CRITICAL': logging.CRITICAL,

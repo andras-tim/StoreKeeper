@@ -5,7 +5,7 @@ from flask.ext.bcrypt import Bcrypt
 
 from app import test_mode, doc_mode, log, static
 from app.config import get_config, check_warnings_in_config
-from app.res.restfulApi import RestfulApiWithoutSimpleAuth
+from app.modules.restful_api import RestfulApiWithoutSimpleAuth
 
 
 config = get_config()

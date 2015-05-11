@@ -4,7 +4,7 @@ import datetime
 from flask import Flask
 
 from app import basedir, test_mode
-from app.modules.config import Config, ConfigObject
+from app.modules.yaml_config import Config, ConfigObject
 
 
 class ConfigurationError(Exception):
