@@ -32,7 +32,8 @@ storekeeperApp.config(['$routeProvider',
             }).
             when('/main', {
                 templateUrl: 'partials/main.html',
-                controller: 'MainController'
+                controller: 'MainController',
+                resolve: sessionRequired
             }).
             otherwise({
                 redirectTo: '/main'
@@ -40,22 +41,24 @@ storekeeperApp.config(['$routeProvider',
     }]);
 
 
-storekeeperApp.run(['$rootScope', '$location', 'SessionFactory',
-    function ($rootScope, $location, SessionFactory) {
-        $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            if (!next.$$route) {
-                return
-            }
+var sessionRequired = {
+    'getSession': ['$rootScope', '$q', '$location', 'SessionFactory',
+        function ($rootScope, $q, $location, SessionFactory) {
+            var result = $q.defer();
+
             SessionFactory.getSession().then(function (session) {
+                result.resolve();
                 $rootScope.session = session;
+
             }, function () {
-                if (next.$$route.originalPath != '/login') {
-                    event.preventDefault();
-                    $location.path('/login');
-                }
+                result.reject();
+                $location.path('/login');
+
             });
-        })
-    }]);
+
+            return result.promise;
+        }]
+};
 
 
 storekeeperApp.config(['RestangularProvider',
