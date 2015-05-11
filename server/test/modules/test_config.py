@@ -104,3 +104,24 @@ class TestConfig(unittest.TestCase):
            'STATIC_FOLDER': '/test',
            'TESTING': False},
  'SqlAlchemy': {'SQLALCHEMY_DATABASE_URI': 'sqlite:///test/app.sqlite'}}""" == str(config)
+
+    def test_can_set_existed_value_by_key(self):
+        config = self.config.read(config_reader=ConfigMock('DefaultConfig').config_reader)
+        config.Flask['STATIC_FOLDER'] = '/new_path'
+        assert config.Flask.STATIC_FOLDER == '/new_path'
+
+    def test_can_not_set_existed_value_by_attr(self):
+        config = self.config.read(config_reader=ConfigMock('DefaultConfig').config_reader)
+        config.Flask.STATIC_FOLDER = '/new_path'
+        assert config.Flask.STATIC_FOLDER == '/test'
+
+    def test_can_set_not_existed_value_by_key(self):
+        config = self.config.read(config_reader=ConfigMock('DefaultConfig').config_reader)
+        config.Flask['NEW_PROPERTY'] = '/new_path'
+        assert 'NEW_PROPERTY' in config.Flask
+        assert config.Flask.NEW_PROPERTY == '/new_path'
+
+    def test_can_not_set_not_existed_value_by_attr(self):
+        config = self.config.read(config_reader=ConfigMock('DefaultConfig').config_reader)
+        config.Flask.NEW_PROPERTY = '/new_path'
+        assert 'NEW_PROPERTY' not in config.Flask

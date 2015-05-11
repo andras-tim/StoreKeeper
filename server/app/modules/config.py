@@ -32,6 +32,9 @@ class ConfigObject:
         self.__check(name)
         return self.__config[name]
 
+    def __setitem__(self, name: str, value):
+        self.__config[name] = value
+
     def __str__(self) -> str:
         return pformat(self.__config)
 
