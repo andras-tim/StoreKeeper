@@ -1,5 +1,5 @@
 from test.modules.base_doc_test import ApiDocTestCase
-from app.modules.doc_helper import ApiDoc
+from app.modules.api_doc import ApiDoc
 
 
 class TestApiDoc(ApiDocTestCase):

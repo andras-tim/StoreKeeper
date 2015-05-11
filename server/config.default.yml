@@ -5,6 +5,7 @@ DefaultConfig:
   App:
     NAME: "storekeeper"
     TITLE: "StoreKeeper"
+    FORCED_LANGUAGE: NULL
 
     MIGRATE_REPO_PATH: "$BASEDIR/db_repository"
     SHARE_STATIC: True
@@ -17,15 +18,18 @@ DefaultConfig:
     LABEL_BORDER: False
 
   Flask:
-    # http://flask.pocoo.org/docs/0.10/config/
-    SECRET_KEY: ImportantSecretString
     DEBUG: False
     TESTING: False
 
+    # http://flask.pocoo.org/docs/0.10/config/
+    SECRET_KEY: PleaseChangeThisImportantSecretString
+
+    # https://flask-login.readthedocs.org/en/latest/
+    SESSION_PROTECTION: strong
+    REMEMBER_COOKIE_DURATION: 90
+
     # https://pythonhosted.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_DATABASE_URI: "sqlite:///$BASEDIR/app.sqlite"
-
-    ALLOW_API_SIMPLE_AUTH: False
 
   Log:
     # The log level (LEVEL) should be: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET

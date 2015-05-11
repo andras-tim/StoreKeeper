@@ -1,8 +1,7 @@
-from collections import OrderedDict
 import json
-from operator import itemgetter
 import re
 from jinja2 import Template
+from operator import itemgetter
 
 from app.server import config
 

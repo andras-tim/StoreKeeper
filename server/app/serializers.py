@@ -30,9 +30,15 @@ class UserDeserializer(Serializer):
     disabled = fields.Bool()
 
 
-class SessionDeserializer(UserDeserializer):
-    class Meta:
-        fields = ('username', 'password')
+class SessionDeserializer(Serializer):
+    username = fields.Str(required=True, validate=_not_blank)
+    password = fields.Str(required=True, validate=_not_blank)
+    remember = fields.Bool()
+
+    def make_object(self, data: dict) -> dict:
+        if 'remember' not in data.keys():
+            data['remember'] = False
+        return data
 
 
 class VendorSerializer(Serializer):
@@ -158,6 +164,7 @@ class WorkItemDeserializer(Serializer):
 class ConfigSerializer(Serializer):
     app_name = fields.Str()
     app_title = fields.Str()
+    forced_language = fields.Str(default=None)
     debug = fields.Bool()
 
 

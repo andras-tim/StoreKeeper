@@ -48,8 +48,12 @@ class FilterableDict:
 
 
 class ExampleUser(FilterableDict):
-    def login(self, username: (str, None)=None, password: (str, None)=None):
-        return {'username': username or self['username'], 'password': password or self['password']}
+    def login(self, username: (str, None)=None, password: (str, None)=None, remember: bool=False):
+        return {
+            'username': username or self['username'],
+            'password': password or self['password'],
+            'remember': remember
+        }
 
 
 class ExampleTimestamp:
@@ -177,7 +181,8 @@ class ExampleWorkItems:
 
 
 class ExampleConfigs:
-    CONFIG1 = FilterableDict(getters={'app_name': 'storekeeper', 'app_title': 'StoreKeeper', 'debug': False})
+    CONFIG1 = FilterableDict(getters={'app_name': 'storekeeper', 'app_title': 'StoreKeeper', 'forced_language': 'hu',
+                                      'debug': False})
 
 
 class ExampleUserConfigs:

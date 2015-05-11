@@ -2,18 +2,21 @@
 
 describe('Login view', function() {
 
+    var elements = {};
+
     beforeEach(function() {
-      browser.get('storekeeper/index.html#/login');
+        browser.get('storekeeper/index.html#/login');
+
+        elements.username = element(by.model('user.username'));
+        elements.password = element(by.model('user.password'));
+        elements.remember = element(by.model('user.remember'));
+        elements.login = element(by.id('login'));
     });
 
 
     it('can not login with missing credentials', function() {
-        var username = element(by.model('user.username'));
-        var password = element(by.model('user.password'));
-        var sign_in = element(by.id('sign_in'));
-
-        username.sendKeys('admin');
-        sign_in.click();
+        elements.username.sendKeys('admin');
+        elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
             expect(url.split('#')[1]).toBe('/login');
@@ -22,11 +25,8 @@ describe('Login view', function() {
 
 
     it('can not login without missing username', function() {
-        var password = element(by.model('user.password'));
-        var sign_in = element(by.id('sign_in'));
-
-        password.sendKeys('admin');
-        sign_in.click();
+        elements.password.sendKeys('admin');
+        elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
             expect(url.split('#')[1]).toBe('/login');
@@ -35,11 +35,8 @@ describe('Login view', function() {
 
 
     it('can not login without missing password', function() {
-        var username = element(by.model('user.username'));
-        var sign_in = element(by.id('sign_in'));
-
-        username.sendKeys('admin');
-        sign_in.click();
+        elements.username.sendKeys('admin');
+        elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
             expect(url.split('#')[1]).toBe('/login');
@@ -48,13 +45,23 @@ describe('Login view', function() {
 
 
     it('can login with valid credentials', function() {
-        var username = element(by.model('user.username'));
-        var password = element(by.model('user.password'));
-        var sign_in = element(by.id('sign_in'));
+        elements.username.sendKeys('admin');
+        elements.password.sendKeys('admin');
+        elements.login.click();
 
-        username.sendKeys('admin');
-        password.sendKeys('admin');
-        sign_in.click();
+        browser.getLocationAbsUrl().then(function (url) {
+            expect(url.split('#')[1]).toBe('/main');
+        });
+    });
+
+    it('can login with remember me', function() {
+        elements.username.sendKeys('admin');
+        elements.password.sendKeys('admin');
+        elements.remember.click();
+
+        expect(elements.remember.isSelected()).toBe(true);
+
+        elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
             expect(url.split('#')[1]).toBe('/main');

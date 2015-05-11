@@ -90,21 +90,24 @@ class TestPreFilledFilterableDict(unittest.TestCase):
 class TestExampleUser(unittest.TestCase):
     def setUp(self):
         self.u = ExampleUser(commons={'username': 'apple', 'email': 'orange'},
-                             setters={'password': 'banana'},
-                             getters={'disabled': False})
+                             setters={'password': 'banana'})
 
     def test_login(self):
         self.assertDictEqual(self.u.login(),
-                             {'username': 'apple', 'password': 'banana'})
+                             {'username': 'apple', 'password': 'banana', 'remember': False})
 
     def test_login_with_overridden_username(self):
         self.assertDictEqual(self.u.login(username='new_apple'),
-                             {'username': 'new_apple', 'password': 'banana'})
+                             {'username': 'new_apple', 'password': 'banana', 'remember': False})
 
     def test_login_with_overridden_password(self):
         self.assertDictEqual(self.u.login(password='new_banana'),
-                             {'username': 'apple', 'password': 'new_banana'})
+                             {'username': 'apple', 'password': 'new_banana', 'remember': False})
 
     def test_login_with_overridden_username_and_password(self):
         self.assertDictEqual(self.u.login(username='new_apple', password='new_banana'),
-                             {'username': 'new_apple', 'password': 'new_banana'})
+                             {'username': 'new_apple', 'password': 'new_banana', 'remember': False})
+
+    def test_login_with_overridden_remember(self):
+        self.assertDictEqual(self.u.login(remember=True),
+                             {'username': 'apple', 'password': 'banana', 'remember': True})

@@ -55,7 +55,7 @@ function do_clear()
     purge tmp
     purge flask
     purge test/.cache
-    find_and_purge -name __pycache__
+    find_and_purge . -name __pycache__
 }
 
 function do_start()

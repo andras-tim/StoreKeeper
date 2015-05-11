@@ -15,52 +15,31 @@
 
   <title ng-bind="getWindowTitle()">StoreKeeper</title>
 
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="bower_components/bootstrap-additions/dist/bootstrap-additions.css">
-  <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bower_components/bootstrap-additions/dist/bootstrap-additions.min.css">
+  <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.min.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="bower_components/flag-icon-css/css/flag-icon.min.css">
 
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/common.css">
 </head>
 <body>
-  <nav class="navbar navbar-default" role="navigation" bs-navbar>
-    <div class="container">
+  <div ng-include="'partials/header.html'"></div>
+  <div ng-view></div>
+  <div ng-include="'partials/footer.html'"></div>
 
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#/"><img id="logo" src="img/logo.png" alt="Logo"> <span ng-bind="appTitle"></span></a>
-      </div>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/lodash/dist/lodash.min.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
 
-      <ul class="nav navbar-nav" ng-if="isAuthenticated()">
-        <li><a href data-template="partials/sidebar.html" data-placement="left" bs-aside="aside" data-container="body" translate>
-          Quick Search
-        </a></li>
-        <li data-match-route="/main$"><a href="#/main" translate>Items</a></li>
-      </ul>
-
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href ng-bind="session.username" ng-click="logout()" ng-if="isAuthenticated()"></a></li>
-        <li><a href ng-bind="currentLanguage" bs-dropdown="languages">...</a></li>
-      </ul>
-    </div>
-  </nav>
-
-
-
-  <div class="container">
-    <div ng-view></div>
-  </div>
-
-  <script src="bower_components/jquery/dist/jquery.js"></script>
-  <script src="bower_components/lodash/dist/lodash.js"></script>
-  <script src="bower_components/angular/angular.js"></script>
-
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <!--<script src="bower_components/angular-animate/angular-animate.js"></script>-->
-  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-  <script src="bower_components/restangular/dist/restangular.js"></script>
-  <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
-  <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
-  <script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
-  <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+  <script src="bower_components/angular-route/angular-route.min.js"></script>
+  <!--<script src="bower_components/angular-animate/angular-animate.min.js"></script>-->
+  <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="bower_components/restangular/dist/restangular.min.js"></script>
+  <script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
+  <script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
+  <script src="bower_components/angular-gettext/dist/angular-gettext.min.js"></script>
+  <script src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
 
   <script src="js/app.js"></script>
   <script src="js/controllers.js"></script>

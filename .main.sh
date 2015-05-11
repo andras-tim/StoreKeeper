@@ -73,7 +73,7 @@ function purge()
 
 function find_and_purge()
 {
-    find . "$@" | while read rm_path
+    find "$@" | while read rm_path
     do
         if [ -e "${rm_path}" ]
         then
@@ -82,14 +82,36 @@ function find_and_purge()
     done
 }
 
+function make_default()
+{
+    local prefix="$1"
+    local suffix="$2"
+
+    if [ -e "${prefix}${suffix}" ]
+    then
+        return
+    fi
+    echo -n "Making default ${prefix}${suffix}... "
+    cp -p "${prefix}.default${suffix}" "${prefix}${suffix}"
+    echo "Done"
+}
+
+
 # Init
 cmd=
 args=
+after_separator=false
 export GLOBAL_INSTALL=${GLOBAL_INSTALL:-false}
 export PRODUCTION=${PRODUCTION:-false}
 export FORCE=${FORCE:-false}
 while [ $# -gt 0 ]
 do
+    if [ "${after_separator}" == true ]
+    then
+        args="${args} $*"
+        break
+    fi
+
     case "$1" in
         --help|-h)          show_help
                             exit 0
@@ -99,6 +121,8 @@ do
         --production|-p)    export PRODUCTION=true
                             ;;
         --force|-f)         export FORCE=true
+                            ;;
+        --)                 after_separator=true
                             ;;
         *)                  if [ "${cmd}" == '' ]
                             then
