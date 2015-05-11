@@ -100,11 +100,18 @@ function make_default()
 # Init
 cmd=
 args=
+after_separator=false
 export GLOBAL_INSTALL=${GLOBAL_INSTALL:-false}
 export PRODUCTION=${PRODUCTION:-false}
 export FORCE=${FORCE:-false}
 while [ $# -gt 0 ]
 do
+    if [ "${after_separator}" == true ]
+    then
+        args="${args} $*"
+        break
+    fi
+
     case "$1" in
         --help|-h)          show_help
                             exit 0
@@ -114,6 +121,8 @@ do
         --production|-p)    export PRODUCTION=true
                             ;;
         --force|-f)         export FORCE=true
+                            ;;
+        --)                 after_separator=true
                             ;;
         *)                  if [ "${cmd}" == '' ]
                             then
