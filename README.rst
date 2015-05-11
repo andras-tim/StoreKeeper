@@ -1,5 +1,4 @@
-.. image:: https://raw.githubusercontent.com/andras-tim/StoreKeeper/master/client/app/img/logo.png
-
+|Logo|
 
 |Build| |Docs| |CodeClimate| |CoverageServer| |CoverageClient| |License|
 
@@ -50,6 +49,8 @@ You can read more details in documentation. It's available in online and offline
 * Run ``./package.sh docs`` after preparation for offline format
 * For online, pre-built docs, please open the http://storekeeper.readthedocs.org
 
+
+.. |Logo| image:: https://raw.githubusercontent.com/andras-tim/StoreKeeper/master/client/app/img/logo.default.png
 
 .. |Build| image:: https://travis-ci.org/andras-tim/StoreKeeper.svg?branch=master
    :target: https://travis-ci.org/andras-tim/StoreKeeper
