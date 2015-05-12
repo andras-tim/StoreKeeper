@@ -254,7 +254,7 @@ function clone_update_storekeeper_code()
 
 function install_update_storekeeper()
 {
-    run_in_prod ./package.sh install --production --force
+    run_in_prod ./package.sh --production --force install
 
     if [ -e "${EXT_INSTALL_DIR}/server/db_repository" ]
     then
