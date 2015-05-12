@@ -4,7 +4,7 @@ PYTHON=${PYTHON:-${BASEDIR}/flask/bin/python3}
 
 function run_test()
 {
-    "${PYTHON}" -m pytest --durations=3 --ff --showlocals "$@" "${BASEDIR}/test"
+    "${PYTHON}" -m pytest "$@" "${BASEDIR}/test"
 }
 
 function run_test_with_coverage()
