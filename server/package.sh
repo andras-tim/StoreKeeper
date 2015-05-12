@@ -74,5 +74,10 @@ function do_manage_database()
     ${PYTHON} utils/database.py "$@"
 }
 
+function do_fill_up_database()
+{
+    ${PYTHON} utils/fill_up.py "$@"
+}
+
 cd "$(dirname "$0")"
 source ../.main.sh
