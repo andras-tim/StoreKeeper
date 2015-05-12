@@ -261,7 +261,7 @@ function install_update_storekeeper()
         return
     fi
 
-    run_in_prod 'cd server && ./database.py --create'
+    run_in_prod './package.sh create_database'
 }
 
 function configure_storekeeper()
