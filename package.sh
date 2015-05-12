@@ -11,6 +11,11 @@ function do_install()
     echo -e "\nAll Done!"
 }
 
+function do_create_database()
+{
+    server/package.sh manage_database --create
+}
+
 function do_start()
 {
     server/package.sh start

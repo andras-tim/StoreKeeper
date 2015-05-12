@@ -6,7 +6,7 @@ function init()
     PYTHON="python${PYTHON_VERSION}"
     if [ "${GLOBAL_INSTALL}" == false ]
     then
-        PYTHON='flask/bin/python'
+        PYTHON="$(pwd)/flask/bin/python"
     fi
 
     PIP='pip3'
@@ -66,12 +66,12 @@ function do_start()
 function do_test()
 {
     export PYTHON
-    ./test.sh "$@"
+    utils/test.sh "$@"
 }
 
 function do_manage_database()
 {
-    ${PYTHON} database.py "$@"
+    ${PYTHON} utils/database.py "$@"
 }
 
 cd "$(dirname "$0")"

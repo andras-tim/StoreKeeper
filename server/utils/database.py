@@ -1,6 +1,10 @@
-#!./flask/bin/python
+#!../flask/bin/python
 import argparse
+import os.path
 import sys
+
+basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(basedir)
 
 from app.server import db
 from app.models import User
@@ -20,7 +24,7 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def main():
+def main() -> int:
     args = parse_arguments()
     if args.create:
         DatabaseMaintenance.create()

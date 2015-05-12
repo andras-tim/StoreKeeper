@@ -1,5 +1,5 @@
 #!/bin/bash -e
-BASEDIR="$(dirname "$0")"
+BASEDIR="$(cd "$(dirname "$0")/.."; pwd)"
 PYTHON=${PYTHON:-${BASEDIR}/flask/bin/python3}
 
 function run_test()
@@ -14,12 +14,16 @@ function run_test_with_coverage()
 
 function run_pep8_check()
 {
-    "${PYTHON}" -m pep8 --max-line-length=120 --ignore=E402 "${BASEDIR}/app" "${BASEDIR}/test"
+    echo -e "\nChecking PEP8 compliance..."
+    "${PYTHON}" -m pep8 --max-line-length=120 --ignore=E402 "${BASEDIR}/app" "${BASEDIR}/utils" "${BASEDIR}/test"
+    echo "passed"
 }
 
 function run_pylint()
 {
-    "${PYTHON}" -m pylint --rcfile "${BASEDIR}/.pylintrc" "${BASEDIR}/app" "${BASEDIR}/test"
+    echo -e "\nRunning pylint..."
+    "${PYTHON}" -m pylint --rcfile "${BASEDIR}/.pylintrc" "${BASEDIR}/app" "${BASEDIR}/utils" "${BASEDIR}/test"
+    echo "passed"
 }
 
 function show_help()
@@ -33,6 +37,8 @@ Available arguments:
   -h, --help            Show this help
   -f, --fast            Parallel run tests (single threaded tests will be skipped)
   -q, --quick           Parallel run quick-test (single threaded and rights tests will be skipped)
+  -p, --pep8            Run PEP8 check only
+  -l, --pylint          Run pylint only
 
 EOF
 }
@@ -49,20 +55,28 @@ function get_parallel_run_options()
 
 
 # Main
+cd "${BASEDIR}"
+
 FAST=false
 QUICK=false
 if [ $# -gt 0 ]
 then
     case "$1" in
-        -h|--help)  show_help
-                    exit 0
-                    ;;
-        -f|--fast)  FAST=true
-                    shift
-                    ;;
-        -q|--quick) QUICK=true
-                    shift
-                    ;;
+        -h|--help)      show_help
+                        exit 0
+                        ;;
+        -f|--fast)      FAST=true
+                        shift
+                        ;;
+        -q|--quick)     QUICK=true
+                        shift
+                        ;;
+        -p|--pep8)      run_pep8_check
+                        exit 0
+                        ;;
+        -l|--pylint)    run_pylint
+                        exit 0
+                        ;;
     esac
 fi
 
@@ -76,15 +90,11 @@ else
     run_test_with_coverage "$@"
 fi
 
-echo -e "\nChecking PEP8 compliance..."
 run_pep8_check
-echo "passed"
 
 #if [ "${QUICK}" != 'true' ]
 #then
-#    echo -e "\nRunning pylint..."
 #    run_pylint
-#    echo "passed"
 #fi
 
 echo -e "\nAll done"

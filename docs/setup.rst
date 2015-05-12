@@ -13,7 +13,7 @@ available getting some info about the current module.
 
    1. Install all dependencies: ``./package.sh install``
    2. Check the ``./server/config.yml`` for database and other settings
-   3. Prepare database: ``./server/database.py --create``
+   3. Prepare database: ``./package.sh create_database``
    4. Start server: ``./package.sh start``
 
 Now, you can open the WebUI: http://localhost:8000/storekeeper
