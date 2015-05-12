@@ -1,8 +1,12 @@
-#!./flask/bin/python
+#!../flask/bin/python
 import argparse
+import os.path
 import sys
 
-from app.server import db
+basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(basedir)
+
+from app.server import db, config
 from app.models import User
 from app.modules.database_maintenance import DatabaseMaintenance
 
@@ -20,8 +24,23 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def main():
+def check_repo(have_to_be_created: bool) -> bool:
+    exist = os.path.isdir(config.App.MIGRATE_REPO_PATH)
+    if have_to_be_created == exist:
+        return True
+
+    if have_to_be_created:
+        print('\nERROR: Database have to created with --create', file=sys.stderr)
+    else:
+        print('\nERROR: Database is already created', file=sys.stderr)
+    return False
+
+
+def main() -> int:
     args = parse_arguments()
+    if not check_repo(have_to_be_created=not args.create):
+        return 1
+
     if args.create:
         DatabaseMaintenance.create()
 

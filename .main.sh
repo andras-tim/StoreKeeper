@@ -29,12 +29,12 @@ function show_title()
 function show_help()
 {
     cat - << EOF
-$(basename "$0") command [arg]
+$(basename "$0") [global-args] command [command-args]
 
 Available commands:
 $(get_commands | sort | sed 's>^>  * >')
 
-Available arguments:
+Available global arguments:
   -h, --help            Show this help
   -g, --global          Install/make all changes on system
   -p, --production      Prepare environment for production use
@@ -106,7 +106,7 @@ export PRODUCTION=${PRODUCTION:-false}
 export FORCE=${FORCE:-false}
 while [ $# -gt 0 ]
 do
-    if [ "${after_separator}" == true ]
+    if [ "${cmd}" != '' ]
     then
         args="${args} $*"
         break
@@ -122,19 +122,12 @@ do
                             ;;
         --force|-f)         export FORCE=true
                             ;;
-        --)                 after_separator=true
-                            ;;
-        *)                  if [ "${cmd}" == '' ]
+        *)                  if get_commands | grep -qx -- "$1"
                             then
-                                if get_commands | grep -qx -- "$1"
-                                then
-                                    cmd="$1"
-                                else
-                                    echo "Unknown command: $1" >&2
-                                    exit 1
-                                fi
+                                cmd="$1"
                             else
-                                args="${args} $1"
+                                echo "Unknown command: $1" >&2
+                                exit 1
                             fi
                             ;;
     esac
