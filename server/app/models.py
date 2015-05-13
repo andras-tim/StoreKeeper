@@ -114,7 +114,7 @@ class Barcode(db.Model):
         return '{!s} [quantity={!r}]'.format(self.barcode, self.quantity)
 
 
-@nested_fields(customer=Customer, outbound_close_user=User, return_close_user=User)
+@nested_fields(customer=Customer, outbound_close_user=User, returned_close_user=User)
 class Work(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
