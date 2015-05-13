@@ -44,7 +44,7 @@ class User(db.Model):
 class UserConfig(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    name = db.Column(db.String(50), index=True, nullable=False)
+    name = db.Column(db.String(40), index=True, nullable=False)
     value = db.Column(db.String(200), nullable=False)
 
     configs = db.relationship('User')
@@ -59,7 +59,7 @@ class UserConfig(db.Model):
 
 class Vendor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30), nullable=False, unique=True)
+    name = db.Column(db.String(60), nullable=False, unique=True)
 
     items = db.relationship('Item', lazy='dynamic')
 
@@ -77,7 +77,7 @@ class Unit(db.Model):
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False, unique=True)
+    name = db.Column(db.String(60), nullable=False, unique=True)
 
     def __repr__(self)-> str:
         return '{!s}'.format(self.name)
@@ -86,7 +86,7 @@ class Customer(db.Model):
 @nested_fields(vendor=Vendor, unit=Unit)
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False, unique=True)
+    name = db.Column(db.String(60), nullable=False, unique=True)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
     article_number = db.Column(db.Integer)
     quantity = db.Column(db.Integer, nullable=False, default=0)
