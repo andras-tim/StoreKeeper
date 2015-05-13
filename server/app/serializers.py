@@ -92,7 +92,7 @@ class StocktakingDeserializer(Serializer):
 
 class ItemSerializer(Serializer):
     id = fields.Int()
-    name = fields.Str(required=True)
+    name = fields.Str(required=True, validate=_not_blank)
     vendor = fields.Nested(VendorSerializer, required=True)
     article_number = fields.Int(default=None)
     quantity = fields.Int(required=True)
