@@ -31,7 +31,13 @@ function do_install()
     fi
 
     mkdir -p tmp
+    run minify
     run make_defaults
+}
+
+function do_minify()
+{
+    utils/res_minify.sh
 }
 
 function do_make_defaults()
