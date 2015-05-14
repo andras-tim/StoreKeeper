@@ -28,7 +28,7 @@ module.exports = function(config) {
 
             'app/bower_components/angular-mocks/angular-mocks.js',
 
-            'app/js/**/*.js',
+            'app/js/storekeeper.js',
             'test/unit/**/*.js'
         ],
 
@@ -52,7 +52,7 @@ module.exports = function(config) {
         reportSlowerThan: 500,
 
         preprocessors: {
-            'app/js/**/*.js': 'coverage'
+            'app/js/storekeeper.js': 'coverage'
         },
 
         reporters: ['progress', 'dots', 'coverage'],
