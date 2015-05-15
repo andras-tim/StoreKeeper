@@ -6,14 +6,14 @@ from app.views.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleBarcodes
 from app.modules.label_printer import LabelPrinter
 from app.modules.printer import MissingCups
-from app.serializers import BarcodeSerializer
+from app.serializers import BarcodeSerializer, BarcodeDeserializer
 from app.views.common import api_func
 
 
 class BarcodeListView(BaseListView):
     _model = Barcode
     _serializer = BarcodeSerializer()
-    _deserializer = BarcodeSerializer()
+    _deserializer = BarcodeDeserializer()
 
     @api_func('List barcodes items', url_tail='/barcodes',
               response=[ExampleBarcodes.BARCODE1.get(), ExampleBarcodes.BARCODE2.get()])
@@ -33,7 +33,7 @@ class BarcodeListView(BaseListView):
 class BarcodeView(BaseView):
     _model = Barcode
     _serializer = BarcodeSerializer()
-    _deserializer = BarcodeSerializer()
+    _deserializer = BarcodeDeserializer()
 
     @api_func('Get barcodes item', url_tail='/barcodes/1',
               response=ExampleBarcodes.BARCODE1.get())
@@ -58,7 +58,7 @@ class BarcodeView(BaseView):
 class BarcodePrintView(BaseView):
     _model = Barcode
     _serializer = BarcodeSerializer()
-    _deserializer = BarcodeSerializer()
+    _deserializer = BarcodeDeserializer()
 
     @api_func('Generate barcode label to PDF with some details, and starts downloading that.',
               url_tail='/barcodes/1/print',

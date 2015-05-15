@@ -4,7 +4,7 @@ from flask.ext.restful import abort
 from app.models import User, UserConfig
 from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
 from app.modules.example_data import ExampleUsers, ExampleUserConfigs
-from app.serializers import UserSerializer, UserDeserializer, UserConfigSerializer
+from app.serializers import UserSerializer, UserDeserializer, UserConfigSerializer, UserConfigDeserializer
 from app.views.common import api_func
 
 
@@ -73,7 +73,7 @@ class UserConfigListView(BaseNestedListView):
     _model = UserConfig
     _parent_model = User
     _serializer = UserConfigSerializer()
-    _deserializer = UserConfigSerializer()
+    _deserializer = UserConfigDeserializer()
 
     @api_func('List user items.', url_tail='/users/2/config',
               response=[ExampleUserConfigs.CONFIG1.get(), ExampleUserConfigs.CONFIG2.get()],
@@ -97,7 +97,7 @@ class UserConfigView(BaseNestedModelView):
     _model = UserConfig
     _parent_model = User
     _serializer = UserConfigSerializer()
-    _deserializer = UserConfigSerializer()
+    _deserializer = UserConfigDeserializer()
 
     @api_func('Get user item', item_name='user item', url_tail='/users/2/config/lang',
               response=ExampleUserConfigs.CONFIG1.get(),
