@@ -1,3 +1,21 @@
+"""
+Here are some public functions for API communication
+
+# Notes
+
+Serializers (server => client)
+ * use Meta/fields
+ * define nested fields, type-extremal defaults (e.g. None) without arguments
+ * do not use required=True
+
+Deserializer (client => server)
+ * define all fields with required, validate arguments
+ * make make_object() for defaults (by default the not set fields the non-present fields)
+ * required strings should not be blank
+
+Common
+ * nested fields have to refer serializer(!) instance(!)
+"""
 from marshmallow import Serializer, fields, ValidationError
 from marshmallow.validate import Regexp
 
@@ -91,16 +109,24 @@ class StocktakingDeserializer(Serializer):
 
 
 class ItemSerializer(Serializer):
-    id = fields.Int()
+    article_number = fields.Int(default=None)
+    vendor = fields.Nested(VendorSerializer())
+    unit = fields.Nested(UnitSerializer())
+
+    class Meta:
+        fields = ('id', 'name', 'vendor', 'article_number', 'quantity', 'unit')
+
+
+class ItemDeserializer(Serializer):
     name = fields.Str(required=True, validate=_not_blank)
     vendor = fields.Nested(VendorSerializer(), required=True)
-    article_number = fields.Int(default=None)
+    article_number = fields.Int()
     quantity = fields.Int(required=True)
     unit = fields.Nested(UnitSerializer(), required=True)
 
 
 class AcquisitionItemSerializer(Serializer):
-    item = fields.Nested(ItemSerializer(), required=True)
+    item = fields.Nested(ItemSerializer())
 
     class Meta:
         fields = ('id', 'item', 'quantity')
@@ -124,7 +150,13 @@ class StocktakingItemDeserializer(Serializer):
 
 
 class BarcodeSerializer(Serializer):
-    id = fields.Int()
+    item = fields.Nested(ItemSerializer())
+
+    class Meta:
+        fields = ('id', 'barcode', 'quantity', 'item', 'main')
+
+
+class BarcodeDeserializer(Serializer):
     barcode = fields.Str(required=True, validate=_not_blank)
     quantity = fields.Int(validate=_greater_than_zero)
     item = fields.Nested(ItemSerializer(), required=True)
@@ -132,7 +164,7 @@ class BarcodeSerializer(Serializer):
 
 
 class WorkSerializer(Serializer):
-    customer = fields.Nested(CustomerSerializer(), required=True)
+    customer = fields.Nested(CustomerSerializer())
     comment = fields.Str()
     outbound_close_user = fields.Nested(UserSerializer())
     returned_close_user = fields.Nested(UserSerializer())
@@ -148,7 +180,7 @@ class WorkDeserializer(Serializer):
 
 
 class WorkItemSerializer(Serializer):
-    item = fields.Nested(ItemSerializer(), required=True)
+    item = fields.Nested(ItemSerializer())
     returned_quantity = fields.Int(default=None)
 
     class Meta:
@@ -158,16 +190,21 @@ class WorkItemSerializer(Serializer):
 class WorkItemDeserializer(Serializer):
     item = fields.Nested(ItemSerializer(), required=True)
     outbound_quantity = fields.Int(required=True, validate=_greater_than_zero)
-    returned_quantity = fields.Int(default=None, validate=_greater_than_or_equal_zero)
+    returned_quantity = fields.Int(validate=_greater_than_or_equal_zero)
 
 
 class ConfigSerializer(Serializer):
-    app_name = fields.Str()
-    app_title = fields.Str()
     forced_language = fields.Str(default=None)
-    debug = fields.Bool()
+
+    class Meta:
+        fields = ('app_name', 'app_title', 'forced_language', 'debug')
 
 
 class UserConfigSerializer(Serializer):
+    class Meta:
+        fields = ('name', 'value')
+
+
+class UserConfigDeserializer(Serializer):
     name = fields.Str(required=True, validate=_not_blank)
     value = fields.Str(required=True)
