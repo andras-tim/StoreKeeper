@@ -8,8 +8,8 @@ from app.views.common import api_func
 
 class AcquisitionListView(BaseListView):
     _model = Acquisition
-    _serializer = AcquisitionSerializer
-    _deserializer = AcquisitionDeserializer
+    _serializer = AcquisitionSerializer()
+    _deserializer = AcquisitionDeserializer()
 
     @api_func('List acquisitions', url_tail='/acquisitions',
               response=[ExampleAcquisitions.ACQUISITION1.get(), ExampleAcquisitions.ACQUISITION2.get()])
@@ -25,8 +25,8 @@ class AcquisitionListView(BaseListView):
 
 class AcquisitionView(BaseView):
     _model = Acquisition
-    _serializer = AcquisitionSerializer
-    _deserializer = AcquisitionDeserializer
+    _serializer = AcquisitionSerializer()
+    _deserializer = AcquisitionDeserializer()
 
     @api_func('Get acquisition', item_name='acquisition', url_tail='/acquisitions/1',
               response=ExampleAcquisitions.ACQUISITION1.get())
@@ -48,8 +48,8 @@ class AcquisitionView(BaseView):
 class AcquisitionItemListView(BaseNestedListView):
     _model = AcquisitionItem
     _parent_model = Acquisition
-    _serializer = AcquisitionItemSerializer
-    _deserializer = AcquisitionItemDeserializer
+    _serializer = AcquisitionItemSerializer()
+    _deserializer = AcquisitionItemDeserializer()
 
     @api_func('List acquisition items', url_tail='/acquisitions/1/items',
               response=[ExampleAcquisitionItems.ITEM1.get(), ExampleAcquisitionItems.ITEM2.get()],
@@ -72,8 +72,8 @@ class AcquisitionItemListView(BaseNestedListView):
 class AcquisitionItemView(BaseNestedModelView):
     _model = AcquisitionItem
     _parent_model = Acquisition
-    _serializer = AcquisitionItemSerializer
-    _deserializer = AcquisitionItemDeserializer
+    _serializer = AcquisitionItemSerializer()
+    _deserializer = AcquisitionItemDeserializer()
 
     @api_func('Get acquisition item', item_name='acquisition item', url_tail='/acquisitions/1/items/1',
               response=ExampleAcquisitionItems.ITEM1.get(),
@@ -82,7 +82,7 @@ class AcquisitionItemView(BaseNestedModelView):
     def get(self, id: int, item_id: int):
         self._initialize_parent_item(id)
         item = self._get(acquisition_id=id, id=item_id)
-        return self._serializer(item).data
+        return self._serialize(item)
 
     @api_func('Update acquisition item', item_name='acquisition item', url_tail='/acquisitions/1/items/1',
               request=ExampleAcquisitionItems.ITEM1.set(),

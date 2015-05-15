@@ -7,8 +7,8 @@ from app.views.common import api_func
 
 class CustomerListView(BaseListView):
     _model = Customer
-    _serializer = CustomerSerializer
-    _deserializer = CustomerDeserializer
+    _serializer = CustomerSerializer()
+    _deserializer = CustomerDeserializer()
 
     @api_func('List customers', url_tail='/customers',
               response=[ExampleCustomers.CUSTOMER1.get(), ExampleCustomers.CUSTOMER2.get()])
@@ -25,8 +25,8 @@ class CustomerListView(BaseListView):
 
 class CustomerView(BaseView):
     _model = Customer
-    _serializer = CustomerSerializer
-    _deserializer = CustomerDeserializer
+    _serializer = CustomerSerializer()
+    _deserializer = CustomerDeserializer()
 
     @api_func('Get customer', item_name='customer', url_tail='/customers/1',
               response=ExampleCustomers.CUSTOMER1.get())

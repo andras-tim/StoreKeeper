@@ -11,8 +11,8 @@ from app.views.common import api_func
 
 class WorkListView(BaseListView):
     _model = Work
-    _serializer = WorkSerializer
-    _deserializer = WorkDeserializer
+    _serializer = WorkSerializer()
+    _deserializer = WorkDeserializer()
 
     @api_func('List works', url_tail='/works',
               response=[ExampleWorks.WORK1.get(), ExampleWorks.WORK2.get()])
@@ -28,8 +28,8 @@ class WorkListView(BaseListView):
 
 class WorkView(BaseView):
     _model = Work
-    _serializer = WorkSerializer
-    _deserializer = WorkDeserializer
+    _serializer = WorkSerializer()
+    _deserializer = WorkDeserializer()
 
     @api_func('Get work', item_name='work', url_tail='/works/1',
               response=ExampleWorks.WORK1.get())
@@ -51,8 +51,8 @@ class WorkView(BaseView):
 class WorkItemListView(BaseNestedListView):
     _model = WorkItem
     _parent_model = Work
-    _serializer = WorkItemSerializer
-    _deserializer = WorkItemDeserializer
+    _serializer = WorkItemSerializer()
+    _deserializer = WorkItemDeserializer()
 
     @api_func('List work items', url_tail='/works/1/items',
               response=[ExampleWorkItems.ITEM1.get(), ExampleWorkItems.ITEM2.get()],
@@ -80,8 +80,8 @@ class WorkItemListView(BaseNestedListView):
 class WorkItemView(BaseNestedModelViewWithDiff):
     _model = WorkItem
     _parent_model = Work
-    _serializer = WorkItemSerializer
-    _deserializer = WorkItemDeserializer
+    _serializer = WorkItemSerializer()
+    _deserializer = WorkItemDeserializer()
 
     @api_func('Get work item', item_name='work item', url_tail='/works/1/items/1',
               response=ExampleWorkItems.ITEM1.get(),
@@ -90,7 +90,7 @@ class WorkItemView(BaseNestedModelViewWithDiff):
     def get(self, id: int, item_id: int):
         self._initialize_parent_item(id)
         item = self._get(work_id=id, id=item_id)
-        return self._serializer(item).data
+        return self._serialize(item)
 
     @api_func('Update work item', item_name='work item', url_tail='/works/1/items/1',
               request=ExampleWorkItems.ITEM1.set(),
@@ -132,8 +132,8 @@ class WorkItemView(BaseNestedModelViewWithDiff):
 
 class WorkCloseOutboundView(BaseView):
     _model = Work
-    _serializer = WorkSerializer
-    _deserializer = WorkDeserializer
+    _serializer = WorkSerializer()
+    _deserializer = WorkDeserializer()
 
     @api_func('Close outbound items on work', item_name='work', url_tail='/works/1/close-outbound',
               response=ExampleWorks.WORK1_OUTBOUND_CLOSED.get())
@@ -148,8 +148,8 @@ class WorkCloseOutboundView(BaseView):
 
 class WorkCloseReturnedView(BaseView):
     _model = Work
-    _serializer = WorkSerializer
-    _deserializer = WorkDeserializer
+    _serializer = WorkSerializer()
+    _deserializer = WorkDeserializer()
 
     @api_func('Close returned items on work', item_name='work', url_tail='/works/1/close-returned',
               response=ExampleWorks.WORK1_RETURNED_CLOSED.get())

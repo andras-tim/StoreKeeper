@@ -12,8 +12,8 @@ from app.views.common import api_func
 
 class BarcodeListView(BaseListView):
     _model = Barcode
-    _serializer = BarcodeSerializer
-    _deserializer = BarcodeSerializer
+    _serializer = BarcodeSerializer()
+    _deserializer = BarcodeSerializer()
 
     @api_func('List barcodes items', url_tail='/barcodes',
               response=[ExampleBarcodes.BARCODE1.get(), ExampleBarcodes.BARCODE2.get()])
@@ -32,8 +32,8 @@ class BarcodeListView(BaseListView):
 
 class BarcodeView(BaseView):
     _model = Barcode
-    _serializer = BarcodeSerializer
-    _deserializer = BarcodeSerializer
+    _serializer = BarcodeSerializer()
+    _deserializer = BarcodeSerializer()
 
     @api_func('Get barcodes item', url_tail='/barcodes/1',
               response=ExampleBarcodes.BARCODE1.get())
@@ -57,8 +57,8 @@ class BarcodeView(BaseView):
 
 class BarcodePrintView(BaseView):
     _model = Barcode
-    _serializer = BarcodeSerializer
-    _deserializer = BarcodeSerializer
+    _serializer = BarcodeSerializer()
+    _deserializer = BarcodeSerializer()
 
     @api_func('Generate barcode label to PDF with some details, and starts downloading that.',
               url_tail='/barcodes/1/print',

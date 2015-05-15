@@ -7,8 +7,8 @@ from app.views.common import api_func
 
 class UnitListView(BaseListView):
     _model = Unit
-    _serializer = UnitSerializer
-    _deserializer = UnitDeserializer
+    _serializer = UnitSerializer()
+    _deserializer = UnitDeserializer()
 
     @api_func('List units', url_tail='/units',
               response=[ExampleUnits.UNIT1.get(), ExampleUnits.UNIT2.get()])
@@ -25,8 +25,8 @@ class UnitListView(BaseListView):
 
 class UnitView(BaseView):
     _model = Unit
-    _serializer = UnitSerializer
-    _deserializer = UnitDeserializer
+    _serializer = UnitSerializer()
+    _deserializer = UnitDeserializer()
 
     @api_func('Get unit', item_name='unit', url_tail='/units/1',
               response=ExampleUnits.UNIT1.get())

@@ -73,7 +73,8 @@ ProductionConfig:
     SHARE_STATIC: False
 
   Flask:
-    SQLALCHEMY_DATABASE_URI: "mysql+pymysql://storekeeper:StoreKeeper@localhost/storekeeper"
+    # SQLALCHEMY_DATABASE_URI: "mysql+pymysql://storekeeper:StoreKeeper@localhost/storekeeper"
+    SQLALCHEMY_DATABASE_URI: "postgresql+pypostgresql://storekeeper:StoreKeeper@localhost/storekeeper"
 
   Log:
     ToEmail:
