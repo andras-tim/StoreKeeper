@@ -10,7 +10,8 @@ from sqlalchemy.exc import IntegrityError
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(basedir, '..'))
-base_record_count_per_table = 1000
+base_record_count_per_table = 150
+commit_batch_size = 50
 
 from app.server import db
 from app.models import Unit, Vendor, Item, User, UserConfig, Customer, Barcode, Work, WorkItem, Acquisition, \
@@ -221,7 +222,6 @@ def iterate_work_items(data: dict):
 
 
 def main():
-    commit_batch_size = 200
     iterators = [
         iterate_users,
         iterate_user_config,
