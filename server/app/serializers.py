@@ -93,33 +93,33 @@ class StocktakingDeserializer(Serializer):
 class ItemSerializer(Serializer):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
-    vendor = fields.Nested(VendorSerializer, required=True)
+    vendor = fields.Nested(VendorSerializer(), required=True)
     article_number = fields.Int(default=None)
     quantity = fields.Int(required=True)
-    unit = fields.Nested(UnitSerializer, required=True)
+    unit = fields.Nested(UnitSerializer(), required=True)
 
 
 class AcquisitionItemSerializer(Serializer):
-    item = fields.Nested(ItemSerializer, required=True)
+    item = fields.Nested(ItemSerializer(), required=True)
 
     class Meta:
         fields = ('id', 'item', 'quantity')
 
 
 class AcquisitionItemDeserializer(Serializer):
-    item = fields.Nested(ItemSerializer, required=True)
+    item = fields.Nested(ItemSerializer(), required=True)
     quantity = fields.Int(required=True, validate=_greater_than_zero)
 
 
 class StocktakingItemSerializer(Serializer):
-    item = fields.Nested(ItemSerializer)
+    item = fields.Nested(ItemSerializer())
 
     class Meta:
         fields = ('id', 'item', 'quantity')
 
 
 class StocktakingItemDeserializer(Serializer):
-    item = fields.Nested(ItemSerializer, required=True)
+    item = fields.Nested(ItemSerializer(), required=True)
     quantity = fields.Int(required=True)
 
 
@@ -127,15 +127,15 @@ class BarcodeSerializer(Serializer):
     id = fields.Int()
     barcode = fields.Str(required=True, validate=_not_blank)
     quantity = fields.Int(validate=_greater_than_zero)
-    item = fields.Nested(ItemSerializer, required=True)
+    item = fields.Nested(ItemSerializer(), required=True)
     main = fields.Bool()
 
 
 class WorkSerializer(Serializer):
-    customer = fields.Nested(CustomerSerializer, required=True)
+    customer = fields.Nested(CustomerSerializer(), required=True)
     comment = fields.Str()
-    outbound_close_user = fields.Nested(UserSerializer)
-    returned_close_user = fields.Nested(UserSerializer)
+    outbound_close_user = fields.Nested(UserSerializer())
+    returned_close_user = fields.Nested(UserSerializer())
 
     class Meta:
         fields = ('id', 'customer', 'comment', 'outbound_close_timestamp', 'outbound_close_user',
@@ -143,12 +143,12 @@ class WorkSerializer(Serializer):
 
 
 class WorkDeserializer(Serializer):
-    customer = fields.Nested(CustomerSerializer, required=True)
+    customer = fields.Nested(CustomerSerializer(), required=True)
     comment = fields.Str()
 
 
 class WorkItemSerializer(Serializer):
-    item = fields.Nested(ItemSerializer, required=True)
+    item = fields.Nested(ItemSerializer(), required=True)
     returned_quantity = fields.Int(default=None)
 
     class Meta:
@@ -156,7 +156,7 @@ class WorkItemSerializer(Serializer):
 
 
 class WorkItemDeserializer(Serializer):
-    item = fields.Nested(ItemSerializer, required=True)
+    item = fields.Nested(ItemSerializer(), required=True)
     outbound_quantity = fields.Int(required=True, validate=_greater_than_zero)
     returned_quantity = fields.Int(default=None, validate=_greater_than_or_equal_zero)
 

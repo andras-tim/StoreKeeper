@@ -17,9 +17,15 @@ class _BaseModelResource(restful.Resource):
         return self._model.query
 
     def _populate_item(self, item):
-        p = PopulateModelOnSubmit(item, self._deserializer())
+        p = PopulateModelOnSubmit(item, self._deserializer)
         if not p.populate():
             abort(422, message=p.errors)
+
+    def _serialize(self, item) -> (dict, str):
+        return self._serializer.dump(item).data
+
+    def _serialize_many(self, items) -> (list, dict, str):
+        return self._serializer.dump(items, many=True).data
 
 
 class BaseListView(_BaseModelResource):
@@ -29,8 +35,8 @@ class BaseListView(_BaseModelResource):
     Example:
     >>> class FooListView(BaseListView):
     >>>     _model = Foo
-    >>>     _serializer = FooSerializer
-    >>>     _deserializer = FooDeserializer
+    >>>     _serializer = FooSerializer()
+    >>>     _deserializer = FooDeserializer()
     >>>
     >>>     def get(self):
     >>>         return self._get()
@@ -46,7 +52,7 @@ class BaseListView(_BaseModelResource):
         List items
         """
         items = self._query.all()
-        return self._serializer(items, many=True).data
+        return self._serialize_many(items)
 
     def _post(self) -> 'RPC response':
         """
@@ -73,7 +79,7 @@ class BaseListView(_BaseModelResource):
         """
         db.session.add(item)
         commit_with_error_handling(db)
-        return self._serializer(item).data
+        return self._serialize(item)
 
 
 class BaseView(_BaseModelResource):
@@ -83,8 +89,8 @@ class BaseView(_BaseModelResource):
     Example:
     >>> class FooView(BaseView):
     >>>     _model = Foo
-    >>>     _serializer = FooSerializer
-    >>>     _deserializer = FooDeserializer
+    >>>     _serializer = FooSerializer()
+    >>>     _deserializer = FooDeserializer()
     >>>
     >>>     def get(self, id: int):
     >>>         return self._get(id)
@@ -103,7 +109,7 @@ class BaseView(_BaseModelResource):
         Single item getter
         """
         item = self._get_item_by_id(id)
-        return self._serializer(item).data
+        return self._serialize(item)
 
     def _put(self, id: int) -> 'RPC response':
         """
@@ -140,7 +146,7 @@ class BaseView(_BaseModelResource):
         Save change object
         """
         commit_with_error_handling(db)
-        return self._serializer(item).data
+        return self._serialize(item)
 
     def _delete_get_item(self, id: int) -> 'item':
         """
@@ -170,7 +176,7 @@ class BaseNestedListView(BaseListView):
         List items
         """
         items = self._query.filter_by(**filter)
-        return self._serializer(items, many=True).data
+        return self._serialize_many(items)
 
     def _post_populate(self, **set_fields) -> 'item':
         """
@@ -194,7 +200,7 @@ class BaseNestedModelView(BaseView):
         Single item getter
         """
         item = self._get_item_by_filter(**filter)
-        return self._serializer(item).data
+        return self._serialize(item)
 
     def _put_populate(self, **filter) -> 'item':
         """

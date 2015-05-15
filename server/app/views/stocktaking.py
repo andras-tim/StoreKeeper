@@ -8,8 +8,8 @@ from app.views.common import api_func
 
 class StocktakingListView(BaseListView):
     _model = Stocktaking
-    _serializer = StocktakingSerializer
-    _deserializer = StocktakingDeserializer
+    _serializer = StocktakingSerializer()
+    _deserializer = StocktakingDeserializer()
 
     @api_func('List stocktakings', url_tail='/stocktakings',
               response=[ExampleStocktakings.STOCKTAKING1.get(), ExampleStocktakings.STOCKTAKING2.get()])
@@ -25,8 +25,8 @@ class StocktakingListView(BaseListView):
 
 class StocktakingView(BaseView):
     _model = Stocktaking
-    _serializer = StocktakingSerializer
-    _deserializer = StocktakingDeserializer
+    _serializer = StocktakingSerializer()
+    _deserializer = StocktakingDeserializer()
 
     @api_func('Get stocktaking', item_name='stocktaking', url_tail='/stocktakings/1',
               response=ExampleStocktakings.STOCKTAKING1.get())
@@ -48,8 +48,8 @@ class StocktakingView(BaseView):
 class StocktakingItemListView(BaseNestedListView):
     _model = StocktakingItem
     _parent_model = Stocktaking
-    _serializer = StocktakingItemSerializer
-    _deserializer = StocktakingItemDeserializer
+    _serializer = StocktakingItemSerializer()
+    _deserializer = StocktakingItemDeserializer()
 
     @api_func('List stocktaking items.', url_tail='/stocktakings/1/items',
               response=[ExampleStocktakingItems.ITEM1.get(), ExampleStocktakingItems.ITEM2.get()],
@@ -72,8 +72,8 @@ class StocktakingItemListView(BaseNestedListView):
 class StocktakingItemView(BaseNestedModelView):
     _model = StocktakingItem
     _parent_model = Stocktaking
-    _serializer = StocktakingItemSerializer
-    _deserializer = StocktakingItemDeserializer
+    _serializer = StocktakingItemSerializer()
+    _deserializer = StocktakingItemDeserializer()
 
     @api_func('Get stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
               response=ExampleStocktakingItems.ITEM1.get(),
@@ -82,7 +82,7 @@ class StocktakingItemView(BaseNestedModelView):
     def get(self, id: int, item_id: int):
         self._initialize_parent_item(id)
         item = self._get(stocktaking_id=id, id=item_id)
-        return self._serializer(item).data
+        return self._serialize(item)
 
     @api_func('Update stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
               request=ExampleStocktakingItems.ITEM1.set(),

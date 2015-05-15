@@ -16,8 +16,8 @@ def _set_password(user: User):
 
 class UserListView(BaseListView):
     _model = User
-    _serializer = UserSerializer
-    _deserializer = UserDeserializer
+    _serializer = UserSerializer()
+    _deserializer = UserDeserializer()
 
     @api_func('List users', url_tail='/users',
               admin_required=True,
@@ -38,8 +38,8 @@ class UserListView(BaseListView):
 
 class UserView(BaseView):
     _model = User
-    _serializer = UserSerializer
-    _deserializer = UserDeserializer
+    _serializer = UserSerializer()
+    _deserializer = UserDeserializer()
 
     @api_func('Get user', item_name='user', url_tail='/users/2',
               response=ExampleUsers.USER1.get())
@@ -72,8 +72,8 @@ class UserView(BaseView):
 class UserConfigListView(BaseNestedListView):
     _model = UserConfig
     _parent_model = User
-    _serializer = UserConfigSerializer
-    _deserializer = UserConfigSerializer
+    _serializer = UserConfigSerializer()
+    _deserializer = UserConfigSerializer()
 
     @api_func('List user items.', url_tail='/users/2/config',
               response=[ExampleUserConfigs.CONFIG1.get(), ExampleUserConfigs.CONFIG2.get()],
@@ -96,8 +96,8 @@ class UserConfigListView(BaseNestedListView):
 class UserConfigView(BaseNestedModelView):
     _model = UserConfig
     _parent_model = User
-    _serializer = UserConfigSerializer
-    _deserializer = UserConfigSerializer
+    _serializer = UserConfigSerializer()
+    _deserializer = UserConfigSerializer()
 
     @api_func('Get user item', item_name='user item', url_tail='/users/2/config/lang',
               response=ExampleUserConfigs.CONFIG1.get(),
@@ -106,7 +106,7 @@ class UserConfigView(BaseNestedModelView):
     def get(self, id: int, name: str):
         self._initialize_parent_item(id)
         item = self._get(user_id=id, name=name)
-        return self._serializer(item).data
+        return self._serialize(item)
 
     @api_func('Update user item', item_name='user item', url_tail='/users/2/config/lang',
               request=ExampleUserConfigs.CONFIG1.set(),

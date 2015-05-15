@@ -7,8 +7,8 @@ from app.views.common import api_func
 
 class ItemListView(BaseListView):
     _model = Item
-    _serializer = ItemSerializer
-    _deserializer = ItemSerializer
+    _serializer = ItemSerializer()
+    _deserializer = ItemSerializer()
 
     @api_func('List items', url_tail='/items',
               response=[ExampleItems.ITEM1.get(), ExampleItems.ITEM2.get()])
@@ -24,8 +24,8 @@ class ItemListView(BaseListView):
 
 class ItemView(BaseView):
     _model = Item
-    _serializer = ItemSerializer
-    _deserializer = ItemSerializer
+    _serializer = ItemSerializer()
+    _deserializer = ItemSerializer()
 
     @api_func('Get item', item_name='item', url_tail='/items/1',
               response=ExampleItems.ITEM1.get())
