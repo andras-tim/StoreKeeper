@@ -92,8 +92,8 @@ class Item(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=0)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
 
-    vendor = db.relationship('Vendor')
-    unit = db.relationship('Unit')
+    vendor = db.relationship('Vendor', lazy='joined')
+    unit = db.relationship('Unit', lazy='joined')
     barcodes = db.relationship('Barcode', lazy='dynamic')
 
     def __repr__(self)-> str:
@@ -124,9 +124,9 @@ class Work(db.Model):
     returned_close_timestamp = db.Column(db.DateTime)
     returned_close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    customer = db.relationship('Customer')
-    outbound_close_user = db.relationship('User', foreign_keys=[outbound_close_user_id])
-    returned_close_user = db.relationship('User', foreign_keys=[returned_close_user_id])
+    customer = db.relationship('Customer', lazy='joined')
+    outbound_close_user = db.relationship('User', foreign_keys=[outbound_close_user_id], lazy='joined')
+    returned_close_user = db.relationship('User', foreign_keys=[returned_close_user_id], lazy='joined')
     work_items = db.relationship('WorkItem', lazy='dynamic')
 
     def __repr__(self)-> str:
@@ -164,8 +164,8 @@ class WorkItem(db.Model):
     outbound_quantity = db.Column(db.Integer, nullable=False)
     returned_quantity = db.Column(db.Integer)
 
-    work = db.relationship('Work')
-    item = db.relationship('Item')
+    work = db.relationship('Work', lazy='joined')
+    item = db.relationship('Item', lazy='joined')
 
     __table_args__ = (
         db.Index('work_item__can_not_add_one_item_twice', 'work_id', 'item_id', unique=True),
@@ -193,8 +193,8 @@ class AcquisitionItem(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
-    acquisition = db.relationship('Acquisition')
-    item = db.relationship('Item')
+    acquisition = db.relationship('Acquisition', lazy='joined')
+    item = db.relationship('Item', lazy='joined')
 
     __table_args__ = (
         db.Index('acquisition_item__can_not_add_one_item_twice', 'acquisition_id', 'item_id', unique=True),
@@ -222,8 +222,8 @@ class StocktakingItem(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
-    stocktaking = db.relationship('Stocktaking')
-    item = db.relationship('Item')
+    stocktaking = db.relationship('Stocktaking', lazy='joined')
+    item = db.relationship('Item', lazy='joined')
 
     __table_args__ = (
         db.Index('stocktaking_item__can_not_add_one_item_twice', 'stocktaking_id', 'item_id', unique=True),
