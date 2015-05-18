@@ -12,7 +12,6 @@ PROD_USER_HOME='/var/run/storekeeper'
 HOST='localhost'
 PORT=8000
 URL='/storekeeper'
-CONFIG='DemoConfig'
 
 
 function chr()
@@ -255,13 +254,6 @@ function clone_update_storekeeper_code()
 function install_update_storekeeper()
 {
     run_in_prod ./package.sh --production --force install
-
-    if [ -e "${EXT_INSTALL_DIR}/server/db_repository" ]
-    then
-        return
-    fi
-
-    run_in_prod './package.sh create_database'
 }
 
 function configure_storekeeper()
@@ -276,8 +268,17 @@ function configure_storekeeper()
     cp "${EXT_INSTALL_DIR}/server/config.default.yml" "${config_path}"
     local new_secret="$(openssl rand -hex 16)"
 
-    sed "s>^USED_CONFIG: .*$>USED_CONFIG: ${CONFIG}>" -i "${config_path}"
     sed "s>PleaseChangeThisImportantSecretString>${new_secret}>g" -i "${config_path}"
+}
+
+function create_database()
+{
+    if [ -e "${EXT_INSTALL_DIR}/server/db_repository" ]
+    then
+        return
+    fi
+
+    run_in_prod './package.sh create_database'
 }
 
 function restart_services()
@@ -319,4 +320,5 @@ mount_resources
 clone_update_storekeeper_code
 install_update_storekeeper
 configure_storekeeper
+create_database
 restart_services
