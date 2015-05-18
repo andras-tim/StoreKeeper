@@ -21,11 +21,11 @@ class _BaseModelResource(restful.Resource):
         if not p.populate():
             abort(422, message=p.errors)
 
-    def _serialize(self, item) -> (dict, str):
-        return self._serializer.dump(item).data
+    def _serialize(self, item) -> dict:
+        return self._serializer.dump(item)
 
-    def _serialize_many(self, items) -> (list, dict, str):
-        return self._serializer.dump(items, many=True).data
+    def _serialize_many(self, items) -> list:
+        return self._serializer.dump_many(items)
 
 
 class BaseListView(_BaseModelResource):

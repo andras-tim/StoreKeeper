@@ -11,11 +11,14 @@ from app.views.common import api_func
 
 
 class SessionView(restful.Resource):
+    _serializer = UserSerializer()
+    _deserializer = SessionDeserializer()
+
     @api_func('Get current session', url_tail='/session',
               response=ExampleUsers.ADMIN.get())
     def get(self):
         user = User.query.filter_by(username=g.user.username).first()
-        return UserSerializer(user).data
+        return self._serializer.dump(user)
 
     @api_func('Login user', url_tail='/session',
               login_required=False,
@@ -24,7 +27,7 @@ class SessionView(restful.Resource):
               status_codes={401: 'bad authentication data or user is disabled'})
     def post(self):
         try:
-            data = get_validated_request(SessionDeserializer())
+            data = get_validated_request(self._deserializer)
         except RequestProcessingError as e:
             abort(422, message=e.message)
 
@@ -33,7 +36,7 @@ class SessionView(restful.Resource):
             abort(401, message='login error')
         if not login_user(user, remember=data['remember']):
             abort(401, message='login error')
-        return UserSerializer(user).data, 201
+        return self._serializer.dump(user), 201
 
     @api_func('Logout user', url_tail='/session',
               response=None)
