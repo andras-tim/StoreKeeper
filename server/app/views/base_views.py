@@ -178,6 +178,17 @@ class BaseNestedListView(BaseListView):
         items = self._query.filter_by(**filter)
         return self._serialize_many(items)
 
+    def _post(self, **filter) -> 'RPC response':
+        """
+        Save new item in one command
+
+        Same as:
+        >>> item = self._post_populate()
+        >>> return self._post_commit(item)
+        """
+        item = self._post_populate(**filter)
+        return self._post_commit(item)
+
     def _post_populate(self, **set_fields) -> 'item':
         """
         Populate a new object
@@ -201,6 +212,28 @@ class BaseNestedModelView(BaseView):
         """
         item = self._get_item_by_filter(**filter)
         return self._serialize(item)
+
+    def _put(self, **filter) -> 'RPC response':
+        """
+        Change single item in one command
+
+        Same as:
+        >>> item = self._put_populate()
+        >>> return self._put_commit(item)
+        """
+        item = self._put_populate(**filter)
+        return self._put_commit(item)
+
+    def _delete(self, **filter) -> 'RPC response':
+        """
+        Delete single item in one command
+
+        Same as:
+        >>> item = self._delete_get_item()
+        >>> return self._delete_commit(item)
+        """
+        item = self._delete_get_item(**filter)
+        return self._delete_commit(item)
 
     def _put_populate(self, **filter) -> 'item':
         """

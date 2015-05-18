@@ -65,8 +65,7 @@ class AcquisitionItemListView(BaseNestedListView):
               queries={'id': 'ID of acquisition'})
     def post(self, id: int):
         self._initialize_parent_item(id)
-        item = self._post_populate(acquisition_id=id)
-        return self._post_commit(item)
+        return self._post(acquisition_id=id)
 
 
 class AcquisitionItemView(BaseNestedModelView):
@@ -81,8 +80,7 @@ class AcquisitionItemView(BaseNestedModelView):
                        'item_id': 'ID of selected acquisition item for get'})
     def get(self, id: int, item_id: int):
         self._initialize_parent_item(id)
-        item = self._get(acquisition_id=id, id=item_id)
-        return self._serialize(item)
+        return self._get(acquisition_id=id, id=item_id)
 
     @api_func('Update acquisition item', item_name='acquisition item', url_tail='/acquisitions/1/items/1',
               request=ExampleAcquisitionItems.ITEM1.set(),
@@ -92,8 +90,7 @@ class AcquisitionItemView(BaseNestedModelView):
                        'item_id': 'ID of selected acquisition item for get'})
     def put(self, id: int, item_id: int):
         self._initialize_parent_item(id)
-        item = self._put_populate(acquisition_id=id, id=item_id)
-        return self._put_commit(item)
+        return self._put(acquisition_id=id, id=item_id)
 
     @api_func('Delete acquisition item', item_name='acquisition item', url_tail='/acquisitions/1/items/1',
               response=None,
@@ -101,5 +98,4 @@ class AcquisitionItemView(BaseNestedModelView):
                        'item_id': 'ID of selected acquisition item for get'})
     def delete(self, id: int, item_id: int):
         self._initialize_parent_item(id)
-        item = self._delete_get_item(acquisition_id=id, id=item_id)
-        return self._delete_commit(item)
+        return self._delete(acquisition_id=id, id=item_id)

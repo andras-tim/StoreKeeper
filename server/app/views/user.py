@@ -89,8 +89,7 @@ class UserConfigListView(BaseNestedListView):
               queries={'id': 'ID of user'})
     def post(self, id: int):
         self._initialize_parent_item(id)
-        item = self._post_populate(user_id=id)
-        return self._post_commit(item)
+        return self._post(user_id=id)
 
 
 class UserConfigView(BaseNestedModelView):
@@ -105,8 +104,7 @@ class UserConfigView(BaseNestedModelView):
                        'name': 'Name of selected user config value for get'})
     def get(self, id: int, name: str):
         self._initialize_parent_item(id)
-        item = self._get(user_id=id, name=name)
-        return self._serialize(item)
+        return self._get(user_id=id, name=name)
 
     @api_func('Update user item', item_name='user item', url_tail='/users/2/config/lang',
               request=ExampleUserConfigs.CONFIG1.set(),
@@ -116,8 +114,7 @@ class UserConfigView(BaseNestedModelView):
                        'name': 'Name of selected user config value for put'})
     def put(self, id: int, name: str):
         self._initialize_parent_item(id)
-        item = self._put_populate(user_id=id, name=name)
-        return self._put_commit(item)
+        return self._put(user_id=id, name=name)
 
     @api_func('Delete user item', item_name='user item', url_tail='/users/2/config/lang',
               response=None,
@@ -125,5 +122,4 @@ class UserConfigView(BaseNestedModelView):
                        'name': 'Name of selected user config value for delete'})
     def delete(self, id: int, name: str):
         self._initialize_parent_item(id)
-        item = self._delete_get_item(user_id=id, name=name)
-        return self._delete_commit(item)
+        return self._delete(user_id=id, name=name)
