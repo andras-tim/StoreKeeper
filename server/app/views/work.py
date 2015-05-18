@@ -89,8 +89,7 @@ class WorkItemView(BaseNestedModelViewWithDiff):
                        'item_id': 'ID of selected work item for get'})
     def get(self, id: int, item_id: int):
         self._initialize_parent_item(id)
-        item = self._get(work_id=id, id=item_id)
-        return self._serialize(item)
+        return self._get(work_id=id, id=item_id)
 
     @api_func('Update work item', item_name='work item', url_tail='/works/1/items/1',
               request=ExampleWorkItems.ITEM1.set(),
@@ -117,8 +116,7 @@ class WorkItemView(BaseNestedModelViewWithDiff):
                        'item_id': 'ID of selected work item for get'})
     def delete(self, id: int, item_id: int):
         self._initialize_parent_item(id)
-        item = self._delete_get_item(work_id=id, id=item_id)
-        return self._delete_commit(item)
+        return self._delete(work_id=id, id=item_id)
 
     def __is_tried_to_change_closed(self, work, changed_fields):
         if work.are_returned_items_closed():

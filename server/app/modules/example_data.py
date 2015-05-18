@@ -108,13 +108,13 @@ class ExampleCustomers:
 class ExampleAcquisitions:
     ACQUISITION1 = FilterableDict(commons={'comment': 'Maybe missing some items'},
                                   getters={'id': 1, 'timestamp': ExampleTimestamp.utcnow()})
-    ACQUISITION2 = FilterableDict(getters={'id': 2, 'comment': '', 'timestamp': ExampleTimestamp.utcnow()})
+    ACQUISITION2 = FilterableDict(getters={'id': 2, 'comment': None, 'timestamp': ExampleTimestamp.utcnow()})
 
 
 class ExampleStocktakings:
     STOCKTAKING1 = FilterableDict(commons={'comment': 'Maybe missing some items'},
                                   getters={'id': 1, 'timestamp': ExampleTimestamp.utcnow()})
-    STOCKTAKING2 = FilterableDict(getters={'id': 2, 'comment': '', 'timestamp': ExampleTimestamp.utcnow()})
+    STOCKTAKING2 = FilterableDict(getters={'id': 2, 'comment': None, 'timestamp': ExampleTimestamp.utcnow()})
 
 
 class ExampleItems:
@@ -159,7 +159,7 @@ class ExampleWorks:
                                     'returned_close_timestamp': None,
                                     'returned_close_user': ExampleUsers.NONE_USER.get()})
     WORK2 = FilterableDict(commons={'customer': ExampleCustomers.CUSTOMER2.get()},
-                           getters={'id': 2, 'comment': '', 'outbound_close_timestamp': None,
+                           getters={'id': 2, 'comment': None, 'outbound_close_timestamp': None,
                                     'outbound_close_user': ExampleUsers.NONE_USER.get(),
                                     'returned_close_timestamp': None,
                                     'returned_close_user': ExampleUsers.NONE_USER.get()})

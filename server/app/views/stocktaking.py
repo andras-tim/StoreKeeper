@@ -65,8 +65,7 @@ class StocktakingItemListView(BaseNestedListView):
               queries={'id': 'ID of stocktaking'})
     def post(self, id: int):
         self._initialize_parent_item(id)
-        item = self._post_populate(stocktaking_id=id)
-        return self._post_commit(item)
+        return self._post(stocktaking_id=id)
 
 
 class StocktakingItemView(BaseNestedModelView):
@@ -81,8 +80,7 @@ class StocktakingItemView(BaseNestedModelView):
                        'item_id': 'ID of selected stocktaking item for get'})
     def get(self, id: int, item_id: int):
         self._initialize_parent_item(id)
-        item = self._get(stocktaking_id=id, id=item_id)
-        return self._serialize(item)
+        return self._get(stocktaking_id=id, id=item_id)
 
     @api_func('Update stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
               request=ExampleStocktakingItems.ITEM1.set(),
@@ -92,8 +90,7 @@ class StocktakingItemView(BaseNestedModelView):
                        'item_id': 'ID of selected stocktaking item for put'})
     def put(self, id: int, item_id: int):
         self._initialize_parent_item(id)
-        item = self._put_populate(stocktaking_id=id, id=item_id)
-        return self._put_commit(item)
+        return self._put(stocktaking_id=id, id=item_id)
 
     @api_func('Delete stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
               response=None,
@@ -101,5 +98,4 @@ class StocktakingItemView(BaseNestedModelView):
                        'item_id': 'ID of selected stocktaking item for delete'})
     def delete(self, id: int, item_id: int):
         self._initialize_parent_item(id)
-        item = self._delete_get_item(stocktaking_id=id, id=item_id)
-        return self._delete_commit(item)
+        return self._delete(stocktaking_id=id, id=item_id)
