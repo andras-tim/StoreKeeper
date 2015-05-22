@@ -16,13 +16,13 @@ appFilters.filter('nestedIsContained', ['$parse', '$filter',
     function($parse, $filter) {
         function filter_in_all_fields(items, filters) {
             var f = $filter('filter');
-            return f(items, {'$': filters['$']});
+            return f(items, {'$': filters.$});
         }
 
         return function (items, filters) {
             var itemsLeft;
             if ('$' in filters) {
-                itemsLeft = filter_in_all_fields(items, filters)
+                itemsLeft = filter_in_all_fields(items, filters);
             } else {
                 itemsLeft = items.slice();
             }

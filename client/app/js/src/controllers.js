@@ -3,8 +3,8 @@
 var appControllers = angular.module('appControllers', []);
 
 
-appControllers.controller('CommonController', ['$scope', '$location', 'gettextCatalog', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'HelperFactory',
-    function ($scope, $location, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, HelperFactory) {
+appControllers.controller('CommonController', ['$scope', '$location', 'gettextCatalog', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
+    function ($scope, $location, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
         function initializeLanguages() {
             $scope.languages = [
                 {
@@ -32,26 +32,26 @@ appControllers.controller('CommonController', ['$scope', '$location', 'gettextCa
 
         ConfigFactory.getConfig().then(function (config) {
             $scope.appTitle = config.app_title;
-            if (config.forced_language == null) {
+            if (config.forced_language === null) {
                 initializeLanguages();
             }
-        }, HelperFactory.showResponseError);
+        }, CommonFactory.showResponseError);
         $scope.getWindowTitle = PageFactory.getWindowTitle;
     }]);
 
 
-appControllers.controller('UserMenu', ['$scope', '$location', 'SessionFactory', 'HelperFactory',
-    function ($scope, $location, SessionFactory, HelperFactory) {
+appControllers.controller('UserMenu', ['$scope', '$location', 'SessionFactory', 'CommonFactory',
+    function ($scope, $location, SessionFactory, CommonFactory) {
         $scope.logout = function () {
             SessionFactory.logout().then(function () {
                 $location.path('/login');
-            }, HelperFactory.showResponseError);
+            }, CommonFactory.showResponseError);
         };
     }]);
 
 
-appControllers.controller('LoginController', ['$scope', '$location', 'SessionFactory', 'HelperFactory',
-    function ($scope, $location, SessionFactory, HelperFactory) {
+appControllers.controller('LoginController', ['$scope', '$location', 'SessionFactory', 'CommonFactory',
+    function ($scope, $location, SessionFactory, CommonFactory) {
         $scope.login = function () {
             $scope.$broadcast('show-errors-check-validity');
             if (!$scope.userForm.$valid) {
@@ -60,16 +60,16 @@ appControllers.controller('LoginController', ['$scope', '$location', 'SessionFac
             SessionFactory.login($scope.user.username, $scope.user.password, $scope.user.remember).then(function () {
                 $scope.userForm.$setPristine();
                 $location.path('/main');
-            }, HelperFactory.showResponseError);
+            }, CommonFactory.showResponseError);
         };
 
         $scope.user = { username: '', password: '', remember: false };
     }]);
 
 
-appControllers.controller('MainController', ['$scope', 'ItemService', 'HelperFactory',
-    function ($scope, ItemService, HelperFactory) {
+appControllers.controller('MainController', ['$scope', 'ItemService', 'CommonFactory',
+    function ($scope, ItemService, CommonFactory) {
         ItemService.getList().then(function (items) {
             $scope.items = items;
-        }, HelperFactory.showResponseError);
+        }, CommonFactory.showResponseError);
     }]);

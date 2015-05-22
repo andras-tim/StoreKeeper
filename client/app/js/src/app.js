@@ -25,6 +25,25 @@ storekeeperApp.config(['$modalProvider',
 
 storekeeperApp.config(['$routeProvider',
     function ($routeProvider) {
+        var sessionRequired = {
+            'getSession': ['$rootScope', '$q', '$location', 'SessionFactory',
+                function ($rootScope, $q, $location, SessionFactory) {
+                    var result = $q.defer();
+
+                    SessionFactory.getSession().then(function (session) {
+                        result.resolve();
+                        $rootScope.session = session;
+
+                    }, function () {
+                        result.reject();
+                        $location.path('/login');
+
+                    });
+
+                    return result.promise;
+                }]
+        };
+
         $routeProvider.
             when('/login', {
                 templateUrl: 'partials/login.html',
@@ -41,44 +60,24 @@ storekeeperApp.config(['$routeProvider',
     }]);
 
 
-var sessionRequired = {
-    'getSession': ['$rootScope', '$q', '$location', 'SessionFactory',
-        function ($rootScope, $q, $location, SessionFactory) {
-            var result = $q.defer();
-
-            SessionFactory.getSession().then(function (session) {
-                result.resolve();
-                $rootScope.session = session;
-
-            }, function () {
-                result.reject();
-                $location.path('/login');
-
-            });
-
-            return result.promise;
-        }]
-};
-
-
 storekeeperApp.config(['RestangularProvider',
     function (RestangularProvider) {
         RestangularProvider.setBaseUrl('api');
     }]);
 
 
-storekeeperApp.run(['gettextCatalog', 'ConfigFactory', 'HelperFactory',
-    function (gettextCatalog, ConfigFactory, HelperFactory) {
+storekeeperApp.run(['gettextCatalog', 'ConfigFactory', 'CommonFactory',
+    function (gettextCatalog, ConfigFactory, CommonFactory) {
         ConfigFactory.getConfig().then(function (config) {
             var language = config.forced_language;
-            if (language == null) {
+            if (language === null) {
                 language = window.navigator.userLanguage || window.navigator.language; // "en" or "en-US"
                 language = language.split("-")[0];
             }
             gettextCatalog.baseLanguage = 'en';
             gettextCatalog.debug = config.debug;
             gettextCatalog.setCurrentLanguage(language);
-        }, HelperFactory.showResponseError);
+        }, CommonFactory.showResponseError);
     }]);
 
 

@@ -1,6 +1,9 @@
 {
   "globalstrict": true,
   "globals": {
+    "window": false,
+    "console": false,
+
     "angular": false,
 
     "browser": false,
