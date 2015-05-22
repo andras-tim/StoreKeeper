@@ -66,7 +66,7 @@ appControllers.controller('LoginController', ['$scope', '$location', 'SessionFac
                 'authenticating',
                 function () {
                     $scope.userForm.$setPristine();
-                    $location.path('/main');
+                    $location.path('/');
                 });
         };
 
@@ -74,7 +74,7 @@ appControllers.controller('LoginController', ['$scope', '$location', 'SessionFac
     }]);
 
 
-appControllers.controller('MainController', ['$scope', 'ItemService', 'CommonFactory',
+appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFactory',
     function ($scope, ItemService, CommonFactory) {
         CommonFactory.handlePromise(
             ItemService.getList(),

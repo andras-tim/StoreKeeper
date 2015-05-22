@@ -1,35 +1,8 @@
-/*
- * Bootstrap
- */
-.navbar-brand {
-    padding: 8px 15px;
-}
-.navbar-brand img {
-    display: inline;
-    max-height: 35px;
-    vertical-align: -10px;
-    margin-right: 0.5em;
-}
-
-.bs-footer {
-    margin-top: 30px;
-    padding-top: 15px;
-    border-top: 1px solid #e5e5e5;
-    text-align: center;
-}
-
-.bs-footer a {
-    color: #80a0d0;
-}
-
-
-/*
- * Tables
- */
-.st-sort-ascent:before {
-    content: '\25B2';
-}
-
-.st-sort-descent:before {
-    content: '\25BC';
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

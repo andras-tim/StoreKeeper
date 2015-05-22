@@ -50,7 +50,7 @@ describe('Login view', function() {
         elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
-            expect(url.split('#')[1]).toBe('/main');
+            expect(url.split('#')[1]).toBe('/items');
         });
     });
 
@@ -64,7 +64,7 @@ describe('Login view', function() {
         elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
-            expect(url.split('#')[1]).toBe('/main');
+            expect(url.split('#')[1]).toBe('/items');
         });
     });
 

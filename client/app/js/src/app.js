@@ -50,13 +50,13 @@ storekeeperApp.config(['$routeProvider',
                 templateUrl: 'partials/views/login.html',
                 controller: 'LoginController'
             }).
-            when('/main', {
-                templateUrl: 'partials/views/main.html',
-                controller: 'MainController',
+            when('/items', {
+                templateUrl: 'partials/views/items.html',
+                controller: 'ItemsController',
                 resolve: sessionRequired
             }).
             otherwise({
-                redirectTo: '/main'
+                redirectTo: '/items'
             });
     }]);
 
@@ -87,4 +87,10 @@ storekeeperApp.config(['$tooltipProvider',
         angular.extend($tooltipProvider.defaults, {
             delay: { show: 600, hide: 100 }
         });
+    }]);
+
+
+storekeeperApp.config(['stConfig',
+    function(stConfig) {
+        stConfig.pagination.template = 'partials/widgets/table_pagination.html';
     }]);
