@@ -12,7 +12,5 @@ app/img/label_logo.gif
 app/img/logo.png
 app/img/logo.svg
 
-app/js/storekeeper.js
-app/js/storekeeper.min.js
-app/css/storekeeper.css
-app/css/storekeeper.min.css
+app/js/dist/
+app/css/dist/

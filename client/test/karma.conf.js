@@ -28,7 +28,7 @@ module.exports = function(config) {
 
             'app/bower_components/angular-mocks/angular-mocks.js',
 
-            'app/js/storekeeper.js',
+            'app/js/dist/storekeeper.js',
             'test/unit/**/*.js'
         ],
 
