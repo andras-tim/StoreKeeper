@@ -1,18 +1,18 @@
 {
   "globalstrict": true,
   "globals": {
-    "window": false,
-    "console": false,
-
     "angular": false,
+    "console": false,
+    "window": false,
 
-    "browser": false,
-    "element": false,
-    "by": false,
-
-    "describe": false,
     "beforeEach": false,
+    "by": false,
+    "browser": false,
+    "describe": false,
+    "element": false,
+    "expect": false,
+    "inject": false,
     "it": false,
-    "expect": false
+    "module": false
   }
 }
