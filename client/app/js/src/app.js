@@ -50,13 +50,13 @@ storekeeperApp.config(['$routeProvider',
                 templateUrl: 'partials/views/login.html',
                 controller: 'LoginController'
             }).
-            when('/main', {
-                templateUrl: 'partials/views/main.html',
-                controller: 'MainController',
+            when('/items', {
+                templateUrl: 'partials/views/items.html',
+                controller: 'ItemsController',
                 resolve: sessionRequired
             }).
             otherwise({
-                redirectTo: '/main'
+                redirectTo: '/items'
             });
     }]);
 
