@@ -46,11 +46,11 @@ storekeeperApp.config(['$routeProvider',
 
         $routeProvider.
             when('/login', {
-                templateUrl: 'partials/login.html',
+                templateUrl: 'partials/views/login.html',
                 controller: 'LoginController'
             }).
             when('/main', {
-                templateUrl: 'partials/main.html',
+                templateUrl: 'partials/views/main.html',
                 controller: 'MainController',
                 resolve: sessionRequired
             }).
