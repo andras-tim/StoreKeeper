@@ -88,3 +88,9 @@ storekeeperApp.config(['$tooltipProvider',
             delay: { show: 600, hide: 100 }
         });
     }]);
+
+
+storekeeperApp.config(['stConfig',
+    function(stConfig) {
+        stConfig.pagination.template = 'partials/widgets/table_pagination.html';
+    }]);

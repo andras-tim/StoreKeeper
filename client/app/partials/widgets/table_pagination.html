@@ -1,0 +1,19 @@
+<nav ng-if="pages.length >= 2" class="noselect">
+  <ul class="pagination">
+    <li>
+      <a ng-click="selectPage(1)"><i class="fa fa-fast-backward"></i></a>
+    </li>
+    <li>
+      <a ng-click="selectPage(currentPage - 1)"><i class="fa fa-step-backward"></i></a>
+    </li>
+    <li>
+      <a><page-selector></page-selector> / {{numPages}}</a>
+    </li>
+    <li>
+      <a ng-click="selectPage(currentPage + 1)"><i class="fa fa-step-forward"></i></a>
+    </li>
+    <li>
+      <a ng-click="selectPage(numPages)"><i class="fa fa-fast-forward"></i></a>
+    </li>
+  </ul>
+</nav>
