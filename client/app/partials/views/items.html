@@ -6,7 +6,7 @@
 
       <div class="col-md-12">
         <!--Body content-->
-        <h2 translate>Items</h2>
+        <h2><i class="fa fa-cube"></i> <span translate>Items</span></h2>
 
         <table st-table="displayedItems" st-safe-src="items" st-set-filter="nestedIsContained" class="table table-striped">
           <thead>
@@ -26,11 +26,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="item in displayedItems">
-              <td>{{item.vendor.name}}</td>
-              <td>{{item.article_number}}</td>
-              <td>{{item.name}}</td>
-              <td>{{item.quantity}} {{item.unit.unit}}</td>
+            <tr data-template="partials/widgets/details_modal.html" bs-modal="item" ng-repeat="item in displayedItems">
+              <td>{{ item.vendor.name }}</td>
+              <td>{{ item.article_number }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.quantity }} {{ item.unit.unit }}</td>
             </tr>
           </tbody>
           <tfoot>
