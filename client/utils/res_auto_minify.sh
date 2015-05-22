@@ -1,6 +1,8 @@
 #!/bin/bash -e
+cd "$(dirname "$0")/.."
 while true
 do
     inotifywait -qq -e modify,create,delete app/css app/js
-    "$(dirname "$0")/res_minify.sh"
+    utils/res_minify.sh
+    date
 done

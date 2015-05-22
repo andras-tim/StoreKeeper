@@ -1,6 +1,8 @@
 #!/bin/bash -e
+cd "$(dirname "$0")/.."
 while true
 do
     inotifywait -qq -e modify po/hu.po
-    "$(dirname "$0")/tr_compile.sh"
+    utils/tr_compile.sh
+    date
 done
