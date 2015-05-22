@@ -43,9 +43,12 @@ appControllers.controller('CommonController', ['$scope', '$location', 'gettextCa
 appControllers.controller('UserMenu', ['$scope', '$location', 'SessionFactory', 'CommonFactory',
     function ($scope, $location, SessionFactory, CommonFactory) {
         $scope.logout = function () {
-            SessionFactory.logout().then(function () {
-                $location.path('/login');
-            }, CommonFactory.showResponseError);
+            CommonFactory.handlePromise(
+                SessionFactory.logout(),
+                null,
+                function () {
+                    $location.path('/login');
+                });
         };
     }]);
 
@@ -57,10 +60,14 @@ appControllers.controller('LoginController', ['$scope', '$location', 'SessionFac
             if (!$scope.userForm.$valid) {
                 return;
             }
-            SessionFactory.login($scope.user.username, $scope.user.password, $scope.user.remember).then(function () {
-                $scope.userForm.$setPristine();
-                $location.path('/main');
-            }, CommonFactory.showResponseError);
+
+            CommonFactory.handlePromise(
+                SessionFactory.login($scope.user.username, $scope.user.password, $scope.user.remember),
+                'authenticating',
+                function () {
+                    $scope.userForm.$setPristine();
+                    $location.path('/main');
+                });
         };
 
         $scope.user = { username: '', password: '', remember: false };
@@ -69,7 +76,10 @@ appControllers.controller('LoginController', ['$scope', '$location', 'SessionFac
 
 appControllers.controller('MainController', ['$scope', 'ItemService', 'CommonFactory',
     function ($scope, ItemService, CommonFactory) {
-        ItemService.getList().then(function (items) {
-            $scope.items = items;
-        }, CommonFactory.showResponseError);
+        CommonFactory.handlePromise(
+            ItemService.getList(),
+            null,
+            function (items) {
+                $scope.items = items;
+            });
     }]);

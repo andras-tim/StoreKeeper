@@ -9,6 +9,7 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'gettext',
     'smart-table',
     'appControllers',
+    'appDirectives',
     'appFactories',
     'appFilters',
     'appServices'

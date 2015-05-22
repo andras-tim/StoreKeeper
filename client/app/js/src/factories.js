@@ -3,8 +3,8 @@
 var appFactories = angular.module('appFactories', []);
 
 
-appFactories.factory('CommonFactory', ['$alert', 'gettextCatalog', 'ConfigFactory',
-    function ($alert, gettextCatalog, ConfigFactory) {
+appFactories.factory('CommonFactory', ['$rootScope', '$alert', 'gettextCatalog', 'ConfigFactory',
+    function ($rootScope, $alert, gettextCatalog, ConfigFactory) {
         function showErrorPopup(title, content) {
             $alert({
                 title: title,
@@ -31,10 +31,34 @@ appFactories.factory('CommonFactory', ['$alert', 'gettextCatalog', 'ConfigFactor
             );
         }
 
+        function setSpinner(spinnerName, value) {
+            if (spinnerName) {
+                $rootScope[spinnerName] = value;
+            }
+        }
+
+        function handlePromise(promise, spinnerName, doneFunc, errorFunc) {
+            setSpinner(spinnerName, true);
+
+            promise.then(function (resp) {
+                if (doneFunc) {
+                    doneFunc(resp);
+                }
+                setSpinner(spinnerName, false);
+            }, function (resp) {
+                if (errorFunc) {
+                    errorFunc(resp);
+                }
+                showResponseError(resp);
+                setSpinner(spinnerName, false);
+            });
+        }
+
         return {
             showResponseError: showResponseError,
-            printToConsole: printToConsole
-        };
+            printToConsole: printToConsole,
+            handlePromise: handlePromise
+        }
     }]);
 
 
