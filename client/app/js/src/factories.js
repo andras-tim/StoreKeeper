@@ -3,8 +3,8 @@
 var appFactories = angular.module('appFactories', []);
 
 
-appFactories.factory('HelperFactory', ['$alert', 'gettextCatalog', 'ConfigFactory',
-    function ($alert, gettextCatalog, ConfigFactory) {
+appFactories.factory('CommonFactory', ['$rootScope', '$alert', 'gettextCatalog', 'ConfigFactory',
+    function ($rootScope, $alert, gettextCatalog, ConfigFactory) {
         function showErrorPopup(title, content) {
             $alert({
                 title: title,
@@ -23,15 +23,41 @@ appFactories.factory('HelperFactory', ['$alert', 'gettextCatalog', 'ConfigFactor
             }
         }
 
+        function showResponseError(resp) {
+            printToConsole(resp);
+            showErrorPopup(
+                gettextCatalog.getString("Error {{status}}", {status: resp.status}),
+                resp.statusText + "<br />" + resp.data
+            );
+        }
+
+        function setSpinner(spinnerName, value) {
+            if (spinnerName) {
+                $rootScope[spinnerName] = value;
+            }
+        }
+
+        function handlePromise(promise, spinnerName, doneFunc, errorFunc) {
+            setSpinner(spinnerName, true);
+
+            promise.then(function (resp) {
+                if (doneFunc) {
+                    doneFunc(resp);
+                }
+                setSpinner(spinnerName, false);
+            }, function (resp) {
+                if (errorFunc) {
+                    errorFunc(resp);
+                }
+                showResponseError(resp);
+                setSpinner(spinnerName, false);
+            });
+        }
+
         return {
-            showResponseError: function (resp) {
-                printToConsole(resp);
-                showErrorPopup(
-                    gettextCatalog.getString("Error {{status}}", {status: resp.status}),
-                    resp.statusText + "<br />" + resp.data
-                );
-            },
-            printToConsole: printToConsole
+            showResponseError: showResponseError,
+            printToConsole: printToConsole,
+            handlePromise: handlePromise
         }
     }]);
 
@@ -45,17 +71,16 @@ appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
             debug: false
         };
 
-        function apiGetConfig() {
+        function getConfig() {
             var result = $q.defer();
 
-            if (config.app_name != undefined) {
+            if (config.app_name !== undefined) {
                 result.resolve(config);
             } else {
                 ConfigService.one().get().then(function (resp) {
                     config = Restangular.stripRestangular(resp);
                     result.resolve(config);
-                }, function (resp) {
-                    HelperFactory.showResponseError(resp);
+                }, function () {
                     result.reject(config);
                 });
             }
@@ -63,12 +88,14 @@ appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
             return result.promise;
         }
 
-        return {
-            getConfig: apiGetConfig,
-            getDebug: function () {
+        function getDebug() {
                 return config.debug;
             }
-        }
+
+        return {
+            getConfig: getConfig,
+            getDebug: getDebug
+        };
     }]);
 
 
@@ -78,16 +105,16 @@ appFactories.factory('PageFactory', ['ConfigFactory',
         var windowTitle;
 
         function getTitleSuffix(pageTitle) {
-            if (pageTitle == undefined) {
+            if (pageTitle === undefined) {
                 return '';
             }
             return ' - ' + pageTitle;
         }
 
         function setPageTitle(newPageTitle) {
-            if (appTitle != undefined) {
+            if (appTitle !== undefined) {
                 windowTitle = appTitle + getTitleSuffix(newPageTitle);
-                return
+                return;
             }
             ConfigFactory.getConfig().then(function (config) {
                 appTitle = config.app_title;
@@ -95,15 +122,19 @@ appFactories.factory('PageFactory', ['ConfigFactory',
             });
         }
 
+        function getWindowTitle() {
+            return windowTitle;
+        }
+
         return {
-            getWindowTitle: function () { return windowTitle },
+            getWindowTitle: getWindowTitle,
             setPageTitle: setPageTitle
         };
     }]);
 
 
-appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', 'HelperFactory',
-    function ($q, Restangular, SessionService, HelperFactory) {
+appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', 'CommonFactory',
+    function ($q, Restangular, SessionService, CommonFactory) {
         var session = {};
         var initialized = false;
 
@@ -117,7 +148,7 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
             };
         }
 
-        function apiGetSession() {
+        function getSession() {
             var result = $q.defer();
 
             SessionService.one().get().then(function (resp) {
@@ -128,7 +159,7 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
                 if (resp.status == 401) {
                     clearSession();
                 } else {
-                    HelperFactory.showResponseError(resp);
+                    CommonFactory.showResponseError(resp);
                 }
                 initialized = true;
                 result.reject(resp);
@@ -137,7 +168,7 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
             return result.promise;
         }
 
-        function apiLogin(username, password, remember) {
+        function login(username, password, remember) {
             var result = $q.defer();
 
             var credentials = { username: username, password: password, remember: remember };
@@ -145,14 +176,14 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
                 session = Restangular.stripRestangular(resp);
                 result.resolve(session);
             }, function (resp) {
-                HelperFactory.showResponseError(resp);
+                CommonFactory.showResponseError(resp);
                 result.reject(resp);
             });
 
             return result.promise;
         }
 
-        function apiLogout() {
+        function logout() {
             var result = $q.defer();
 
             SessionService.one().remove().then(function () {
@@ -163,7 +194,7 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
                     clearSession();
                     result.resolve(session);
                 } else {
-                    HelperFactory.showResponseError(resp);
+                    CommonFactory.showResponseError(resp);
                     result.reject(resp);
                 }
             });
@@ -171,13 +202,13 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
             return result.promise;
         }
 
-        function apiGetCachedSession() {
+        function getCachedSession() {
             if (!initialized) {
-                return apiGetSession();
+                return getSession();
             }
 
             return $q(function(resolve, reject) {
-                if (session.username == null) {
+                if (session.username === null) {
                     reject(session);
                 } else {
                     resolve(session);
@@ -185,18 +216,18 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
             });
         }
 
-        function apiIsAuthenticated() {
+        function isAuthenticated() {
             if (!initialized) {
                 return false;
             }
-            return session.username != null;
+            return session.username !== null;
         }
 
         clearSession();
         return {
-            isAuthenticated: apiIsAuthenticated,
-            getSession: apiGetCachedSession,
-            login: apiLogin,
-            logout: apiLogout
+            isAuthenticated: isAuthenticated,
+            getSession: getCachedSession,
+            login: login,
+            logout: logout
         };
     }]);

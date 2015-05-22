@@ -16,7 +16,7 @@ module.exports = function (grunt) {
         nggettext_compile: {
             all: {
                 files: {
-                    'app/js/translations.js': ['po/*.po']
+                    'app/js/src/translations.js': ['po/*.po']
                 }
             }
         }

@@ -8,6 +8,7 @@ function merge_resources()
     local destination="$3"
 
     echo -n "${path}: "
+    mkdir -p "$(dirname "${destination}")"
     find "${path}" -name "*${extension}" -a \! -name "storekeeper*${extension}" | sort |
         while read path
         do
@@ -17,10 +18,10 @@ function merge_resources()
         done > "${destination}"
 }
 
-merge_resources app/js '.js' app/js/storekeeper.js
-node_modules/minifier/index.js app/js/storekeeper.js --no-comments
+merge_resources app/js/src '.js' app/js/dist/storekeeper.js
+node_modules/minifier/index.js app/js/dist/storekeeper.js --no-comments
 
-merge_resources app/css '.css' app/css/storekeeper.css
-node_modules/minifier/index.js app/css/storekeeper.css --no-comments
+merge_resources app/css/src '.css' app/css/dist/storekeeper.css
+node_modules/minifier/index.js app/css/dist/storekeeper.css --no-comments
 
 echo 'Done'
