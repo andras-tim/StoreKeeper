@@ -1,7 +1,9 @@
-<dl>
-  <dt translate>Vendor:</dt><dd>{{ vendor.name }}</dd>
-  <dt translate>Article number:</dt><dd>{{ article_number }}</dd>
-  <dt translate>Article number:</dt><dd>{{ article_number }}</dd>
-  <dt translate>Name:</dt><dd>{{ name }}</dd>
-  <dt translate>Quantity:</dt><dd>{{ quantity }} {{ unit.unit }}</dd>
-</dl>
+<app-details data-title="{{ 'Item' | translate}} #{{ id }}">
+  <dl>
+    <dt translate>Vendor:</dt><dd>{{ vendor.name }}</dd>
+    <dt translate>Article number:</dt><dd>{{ article_number }}</dd>
+    <dt translate>Article number:</dt><dd>{{ article_number }}</dd>
+    <dt translate>Name:</dt><dd>{{ name }}</dd>
+    <dt translate>Quantity:</dt><dd>{{ quantity }} {{ unit.unit }}</dd>
+  </dl>
+</app-details>

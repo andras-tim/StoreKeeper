@@ -16,15 +16,24 @@ msgstr ""
 msgid "Article Number"
 msgstr "Cikkszám"
 
-#: app/partials/views/item.html:3 app/partials/views/item.html:4
+#: app/partials/views/item.html:4 app/partials/views/item.html:5
 msgid "Article number:"
 msgstr "Cikkszám:"
 
-#: app/js/dist/storekeeper.js:258 app/js/src/factories.js:29
+#: app/partials/widgets/details_modal.html:23
+#: app/partials/widgets/details_modal.html:37
+msgid "Close"
+msgstr "Bezárás"
+
+#: app/js/dist/storekeeper.js:272 app/js/src/factories.js:29
 msgid "Error {{status}}"
 msgstr "Hiba {{status}}"
 
-#: app/partials/header.html:13 app/partials/views/items.html:2
+#: app/partials/views/item.html:1
+msgid "Item"
+msgstr "Elem"
+
+#: app/partials/header.html:22 app/partials/views/items.html:2
 #: app/partials/views/items.html:9
 msgid "Items"
 msgstr "Elemek"
@@ -37,7 +46,7 @@ msgstr "Bejelentkezés"
 msgid "Name"
 msgstr "Megnevezés"
 
-#: app/partials/views/item.html:5
+#: app/partials/views/item.html:6
 msgid "Name:"
 msgstr "Megnevezés:"
 
@@ -49,7 +58,7 @@ msgstr "Jelszó"
 msgid "Quantity"
 msgstr "Mennyiség"
 
-#: app/partials/views/item.html:6
+#: app/partials/views/item.html:7
 msgid "Quantity:"
 msgstr "Mennyiség:"
 
@@ -73,6 +82,10 @@ msgstr "A jelszót kötelező megadni"
 msgid "The user's username is required"
 msgstr "A felhasználónevet kötelező megadni"
 
+#: app/partials/header.html:6 app/partials/widgets/details_modal.html:11
+msgid "Toggle menu"
+msgstr "Menü megjelenítése/elrejtése"
+
 #: app/partials/views/login.html:34
 msgid "User will not logged out after close this window"
 msgstr "A felhasználó nem lesz kijelentkeztetve a böngésző bezárása után"
@@ -85,7 +98,7 @@ msgstr "Felhasználónév"
 msgid "Vendor"
 msgstr "Gyártó"
 
-#: app/partials/views/item.html:2
+#: app/partials/views/item.html:3
 msgid "Vendor:"
 msgstr "Gyártó:"
 
