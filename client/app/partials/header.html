@@ -1,26 +1,40 @@
-<nav class="navbar navbar-default noselect" role="navigation" bs-navbar>
+<nav class="navbar navbar-default navbar-static-top main-navbar noselect" role="navigation" bs-collapse start-collapsed="true">
   <div class="container">
 
     <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" bs-collapse-toggle>
+        <span class="sr-only" translate>Toggle menu</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
       <a class="navbar-brand" href="#/"><img id="logo" src="img/logo.png" alt="Logo"> <span ng-bind="appTitle"></span></a>
     </div>
 
-    <ul class="nav navbar-nav" ng-if="isAuthenticated()" bs-navbar>
-      <li><a href data-template="partials/sidebars/quick_search.html" data-placement="left" data-container="body" bs-aside>
-        <i class="fa fa-search"></i>
-      </a></li>
-      <li data-match-route="/items$">
-        <a href="#/items" translate>Items</a>
-      </li>
-    </ul>
+    <div class="navbar-collapse" bs-collapse-target>
+      <ul class="nav navbar-nav" ng-if="isAuthenticated()" bs-navbar>
+        <li>
+          <a href data-template="partials/sidebars/quick_search.html" data-placement="left" data-container="body" bs-aside>
+            <i class="fa fa-search"></i>
+          </a>
+        </li>
+        <li data-match-route="/items$">
+          <a href="#/items" translate>Items</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-if="isAuthenticated()">
+          <a href data-template="partials/widgets/user_menu.html" role="button" aria-expanded="false" bs-dropdown>
+            <i class="fa fa-user"></i> <span ng-bind="session.username"></span> <span class="caret"></span>
+          </a>
+        </li>
+        <li ng-if="changeLanguage">
+          <a href data-template="partials/widgets/language_menu.html" role="button" aria-expanded="false" bs-dropdown="languages">
+            <i class="fa fa-flag"></i> <span ng-bind="getCurrentLanguage()"></span> <span class="caret"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-    <ul class="nav navbar-nav navbar-right">
-      <li ng-if="isAuthenticated()">
-        <a href data-template="partials/widgets/user_menu.html" role="button" aria-expanded="false" bs-dropdown><i class="fa fa-user"></i> <span ng-bind="session.username"></span> <span class="caret"></span></a>
-      </li>
-      <li ng-if="changeLanguage">
-        <a href data-template="partials/widgets/language_menu.html" role="button" aria-expanded="false" bs-dropdown="languages"><i class="fa fa-flag"></i> <span ng-bind="getCurrentLanguage()"></span> <span class="caret"></span></a>
-      </li>
-    </ul>
   </div>
 </nav>

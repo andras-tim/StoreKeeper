@@ -1,0 +1,13 @@
+.details-modal .modal-body {
+    padding: 0;
+}
+
+.details-modal-navbar {
+    cursor: default;
+    border-radius: 0;
+    margin-bottom: 10px;
+}
+
+.details-modal-content {
+    padding: 15px;
+}
