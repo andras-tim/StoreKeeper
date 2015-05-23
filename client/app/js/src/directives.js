@@ -27,9 +27,9 @@ appDirectives.directive('appPager', function() {
 });
 
 
-appDirectives.directive('appDetails', function() {
+appDirectives.directive('appDetailsModal', function() {
     return {
-        restrict: 'E',
+        restrict: 'A',
         transclude: true,
         replace: true,
         scope: true,
@@ -37,5 +37,17 @@ appDirectives.directive('appDetails', function() {
         link: function (scope, element, attrs) {
             scope.title = attrs.title;
         }
+    };
+});
+
+
+appDirectives.directive('appDetailsModalNavbar', function() {
+    return {
+        require: '^appDetails',
+        restrict: 'A',
+        transclude: true,
+        replace: true,
+        scope: true,
+        templateUrl: 'partials/widgets/details_modal_navbar.html'
     };
 });

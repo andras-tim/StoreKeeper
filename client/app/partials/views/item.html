@@ -1,9 +1,24 @@
-<app-details data-title="{{ 'Item' | translate}} #{{ id }}">
-  <dl>
-    <dt translate>Vendor:</dt><dd>{{ vendor.name }}</dd>
-    <dt translate>Article number:</dt><dd>{{ article_number }}</dd>
-    <dt translate>Article number:</dt><dd>{{ article_number }}</dd>
-    <dt translate>Name:</dt><dd>{{ name }}</dd>
-    <dt translate>Quantity:</dt><dd>{{ quantity }} {{ unit.unit }}</dd>
-  </dl>
-</app-details>
+<div app-details-modal>
+
+  <div class="modal-body">
+    <div app-details-modal-navbar>
+      <span class="navbar-brand"><i class="fa fa-cube"></i>{{ 'Item' | translate }} #{{ id }}</span>
+      <span class="navbar-brand" ng-bind="name"></span>
+    </div>
+
+    <div class="details-modal-content">
+      <dl>
+        <dt translate>Vendor:</dt><dd>{{ vendor.name }}</dd>
+        <dt translate>Article number:</dt><dd>{{ article_number }}</dd>
+        <dt translate>Article number:</dt><dd>{{ article_number }}</dd>
+        <dt translate>Name:</dt><dd>{{ name }}</dd>
+        <dt translate>Quantity:</dt><dd>{{ quantity }} {{ unit.unit }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$hide()" translate>Close</button>
+  </div>
+
+</div>
