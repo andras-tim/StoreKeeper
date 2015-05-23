@@ -3,18 +3,18 @@
 var appDirectives = angular.module('appDirectives', []);
 
 
-appDirectives.directive('spinner', function() {
+appDirectives.directive('appSpinner', function() {
     return {
         restrict: 'AE',
         scope: {
-            spinning: '=spinner'
+            spinning: '=appSpinner'
         },
         templateUrl: 'partials/widgets/spinner.html'
     };
 });
 
 
-appDirectives.directive('pageSelector', function() {
+appDirectives.directive('appPager', function() {
     return {
         restrict: 'E',
         template: '<input type="text" class="select-page" ng-model="inputPage" ng-change="selectPage(inputPage)">',
