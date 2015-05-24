@@ -58,7 +58,7 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', 'gettextCatalog',
             showResponseError: showResponseError,
             printToConsole: printToConsole,
             handlePromise: handlePromise
-        }
+        };
     }]);
 
 
