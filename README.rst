@@ -51,7 +51,7 @@ You can read more details in documentation. It's available in online and offline
 * For online, pre-built docs, please open the http://storekeeper.readthedocs.org
 
 
-.. |Logo| image:: https://raw.githubusercontent.com/andras-tim/StoreKeeper/master/client/app/img/logo.default.png
+.. |Logo| image:: https://raw.githubusercontent.com/andras-tim/StoreKeeper/master/config/img/logo.default.png
 
 .. |Build| image:: https://travis-ci.org/andras-tim/StoreKeeper.svg?branch=master
    :target: https://travis-ci.org/andras-tim/StoreKeeper
