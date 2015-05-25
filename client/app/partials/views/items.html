@@ -2,47 +2,42 @@
   <h2 style="display: none;" ng-bind="'Items' | translate | setTitle"></h2>
 
   <div class="container-fluid">
-    <div class="row">
+    <!--Body content-->
+    <h2><i class="fa fa-cube"></i> <span translate>Items</span></h2>
 
-      <div class="col-md-12">
-        <!--Body content-->
-        <h2><i class="fa fa-cube"></i> <span translate>Items</span></h2>
-
-        <table st-table="displayedItems" st-safe-src="items" st-set-filter="nestedIsContained" class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th st-sort="vendor.name" translate>Vendor</th>
-              <th st-sort="article_number" translate>Article Number</th>
-              <th st-sort="name" st-sort-default="true" translate>Name</th>
-              <th st-sort="quantity" translate>Quantity</th>
-            </tr>
-            <tr>
-              <th colspan="2">
-                <input placeholder="{{ 'global search' | translate}}" class="input-sm form-control" type="search" st-search />
-              </th>
-              <th>
-                <input placeholder="{{ 'search for vendor' | translate}}" class="input-sm form-control" type="search" st-search="vendor.name" />
-              </th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="clickable" data-template="partials/views/item.html" bs-modal="item" ng-repeat="item in displayedItems">
-              <td>{{ item.vendor.name }}</td>
-              <td>{{ item.article_number }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.quantity }} {{ item.unit.unit }}</td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="5" class="text-center">
-                <div st-items-by-page="20" st-pagination></div>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </div>
+    <table st-table="displayedItems" st-safe-src="items" st-set-filter="nestedIsContained" class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th st-sort="vendor.name" translate>Vendor</th>
+          <th st-sort="article_number" translate>Article Number</th>
+          <th st-sort="name" st-sort-default="true" translate>Name</th>
+          <th st-sort="quantity" translate>Quantity</th>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <input placeholder="{{ 'global search' | translate}}" class="input-sm form-control" type="search" st-search />
+          </th>
+          <th>
+            <input placeholder="{{ 'search for vendor' | translate}}" class="input-sm form-control" type="search" st-search="vendor.name" />
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="clickable" data-template="partials/views/item.html" bs-modal="item" ng-repeat="item in displayedItems">
+          <td>{{ item.vendor.name }}</td>
+          <td>{{ item.article_number }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.quantity }} {{ item.unit.unit }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="text-center">
+            <div st-items-by-page="20" st-pagination></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
   </div>
 </div>
