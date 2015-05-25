@@ -32,24 +32,11 @@ function do_install()
 
     mkdir -p tmp
     run minify
-    run make_defaults
 }
 
 function do_minify()
 {
     utils/res_minify.sh
-}
-
-function do_make_defaults()
-{
-    make_default 'app/ico/apple-touch-icon-114-precomposed' .png
-    make_default 'app/ico/apple-touch-icon-144-precomposed' .png
-    make_default 'app/ico/apple-touch-icon-72-precomposed' .png
-    make_default 'app/ico/apple-touch-icon-57-precomposed' .png
-    make_default 'app/ico/favicon' .png
-    make_default 'app/img/label_logo' .gif
-    make_default 'app/img/logo' .png
-    make_default 'app/img/logo' .svg
 }
 
 function do_clear()
@@ -62,6 +49,7 @@ function do_test()
 {
     run test_single_run
     run protractor
+    run jshint
 }
 
 function do_test_continously()
@@ -85,6 +73,10 @@ function do_protractor()
     npm run protractor "$@"
 }
 
+function do_jshint()
+{
+    npm run jshint "$@"
+}
 
 cd "$(dirname "$0")"
 source ../.main.sh

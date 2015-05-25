@@ -11,8 +11,10 @@
     "describe": false,
     "element": false,
     "expect": false,
+    "exports": false,
     "inject": false,
     "it": false,
-    "module": false
+    "module": false,
+    "process": false
   }
 }

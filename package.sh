@@ -8,12 +8,19 @@ function do_install()
     server/package.sh install
     client/package.sh install
 
+    config/package.sh make_defaults
+
     echo -e "\nAll Done!"
 }
 
 function do_create_database()
 {
     server/package.sh manage_database --create
+}
+
+function do_make_defaults()
+{
+    config/package.sh make_defaults
 }
 
 function do_start()

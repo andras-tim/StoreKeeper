@@ -8,11 +8,13 @@
   <link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.png') }}" />
 
   {{ super() }}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/src/main.css') }}">
 {% endblock %}
 
 {% block brand %}
-  <a class="navbar-brand" href="#">
-    <img src="{{ url_for('static', filename='img/logo.png') }}" alt=""> {{ admin_view.admin.name }}
-  </a>
+  <span class="main-navbar">
+    <a class="navbar-brand" href="{{ url_for('static', filename='admin/') }}">
+      <img id="logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo"> <span>{{ admin_view.admin.name }}</span>
+    </a>
+  </span>
 {% endblock %}

@@ -134,12 +134,12 @@ else:
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = '../client/app/img/logo.default.png'
+html_logo = '../config/img/logo.default.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = '../client/app/ico/favicon.default.png'
+html_favicon = '../config/ico/favicon.default.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -193,7 +193,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'StoreKeeperdoc'
+htmlhelp_basename = 'StoreKeeperDoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------

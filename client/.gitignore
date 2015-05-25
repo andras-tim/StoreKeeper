@@ -3,14 +3,5 @@ app/bower_components/
 *.log
 tmp/
 
-app/ico/apple-touch-icon-114-precomposed.png
-app/ico/apple-touch-icon-144-precomposed.png
-app/ico/apple-touch-icon-72-precomposed.png
-app/ico/apple-touch-icon-57-precomposed.png
-app/ico/favicon.png
-app/img/label_logo.gif
-app/img/logo.png
-app/img/logo.svg
-
 app/js/dist/
 app/css/dist/

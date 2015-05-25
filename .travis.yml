@@ -28,8 +28,8 @@ install:
 
 before_script:
   - server/package.sh manage_database --create
+  - config/package.sh make_defaults
   - case ${MODULE} in
-      server) client/package.sh make_defaults;;
       client) server/package.sh start & sleep 3;;
     esac
 

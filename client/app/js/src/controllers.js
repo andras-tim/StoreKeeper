@@ -83,3 +83,49 @@ appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFa
                 $scope.items = items;
             });
     }]);
+
+
+appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorService', 'UnitService', 'CommonFactory',
+    function ($scope, Restangular, VendorService, UnitService, CommonFactory) {
+        CommonFactory.handlePromise(
+            VendorService.getList(),
+            null,
+            function (vendors) {
+                $scope.vendors = vendors;
+            });
+
+        CommonFactory.handlePromise(
+            UnitService.getList(),
+            null,
+            function (units) {
+                $scope.units = units;
+            });
+
+        $scope.isFilled = function (modelRef) {
+            return typeof modelRef === "object";
+        };
+
+        $scope.createVendor = function () {
+            var completedNewVendor = {'name': $scope.vendor};
+            CommonFactory.handlePromise(
+                VendorService.post(Restangular.copy(completedNewVendor)),
+                'creatingVendor',
+                function (resp) {
+                    $scope.vendors.push(resp);
+                    $scope.vendor = resp;
+                });
+        };
+
+        $scope.createUnit = function () {
+            var completedNewUnit = { 'unit': $scope.unit };
+
+            CommonFactory.handlePromise(
+                UnitService.post(Restangular.copy(completedNewUnit)),
+                'creatingUnit',
+                function(resp) {
+                    $scope.units.push(resp);
+                    $scope.unit = resp;
+                });
+        };
+
+    }]);
