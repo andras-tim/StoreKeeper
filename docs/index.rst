@@ -1,7 +1,4 @@
-.. StoreKeeper documentation master file, created by
-   sphinx-quickstart on Mon Feb 23 13:34:56 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. StoreKeeper documentation master file
 
 Welcome to StoreKeeper's documentation!
 =======================================
@@ -29,6 +26,15 @@ You can test the latest development version on our demo server:
  http://storekeeper-demo.dras.hu/storekeeper
 
 Default username and password: **admin** / **admin**
+
+
+Languages
+---------
+
+StoreKeeper is building in multilingual approach, therefore it can easily translate to a new language.
+
+* You should create a new ``.po`` file in your language, then put to ``client/po/`` directory and create a pull request.
+* Or use *Transifex* for online translation: https://www.transifex.com/projects/p/storekeeper/
 
 
 The Guide

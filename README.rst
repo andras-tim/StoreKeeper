@@ -51,6 +51,19 @@ You can read more details in documentation. It's available in online and offline
 * For online, pre-built docs, please open the http://storekeeper.readthedocs.org
 
 
+Languages
+---------
+
+StoreKeeper is building in multilingual approach, therefore it can easily translate to a new language.
+
+* You should create a new ``.po`` file in your language, then put to ``client/po/`` directory and create a pull request.
+* Or use *Transifex* for online translation: https://www.transifex.com/projects/p/storekeeper/
+
+**Top translations:**
+ |TranslationState|
+
+
+
 .. |Logo| image:: https://raw.githubusercontent.com/andras-tim/StoreKeeper/master/config/img/logo.default.png
 
 .. |Build| image:: https://travis-ci.org/andras-tim/StoreKeeper.svg?branch=master
@@ -72,3 +85,7 @@ You can read more details in documentation. It's available in online and offline
 .. |CoverageClient| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/coverage.svg
    :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
    :alt: Client Test Coverage
+
+.. |TranslationState| image:: https://www.transifex.com/projects/p/storekeeper/resource/client/chart/image_png
+   :target: https://www.transifex.com/projects/p/storekeeper/
+   :alt: See more information on Transifex.com
