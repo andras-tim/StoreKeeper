@@ -13,7 +13,6 @@ before_install:
   - case ${MODULE} in
       server) pip install coveralls;;
       client) npm install -g codeclimate-test-reporter;
-              export CODECLIMATE_REPO_TOKEN=8b5891e47c0b3e6c1c22bfbab21ee60d64253b749af682bb774db5056482aa03;
               export CHROME_BIN=chromium-browser;
               export DISPLAY=:99.0;
               sh -e /etc/init.d/xvfb start;;
