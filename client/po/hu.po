@@ -12,20 +12,40 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Basepath: ../\n"
 
-#: app/partials/views/items.html:15
+#: app/partials/views/items.html:12
 msgid "Article Number"
 msgstr "Cikkszám"
 
-#: app/partials/views/item.html:12 app/partials/views/item.html:13
-msgid "Article number:"
-msgstr "Cikkszám:"
+#: app/partials/views/item.html:44
+msgid "Article no."
+msgstr "Cikkszám"
 
-#: app/partials/views/item.html:21
+#: app/partials/views/item.html:93
 #: app/partials/widgets/details_modal_navbar.html:17
 msgid "Close"
 msgstr "Bezárás"
 
-#: app/js/dist/storekeeper.js:284 app/js/src/factories.js:29
+#: app/partials/views/item.html:76
+msgid "Current Quantity"
+msgstr "Aktuális mennyiség"
+
+#: app/partials/views/item.html:46
+msgid "Enter article number"
+msgstr "Írja be a cikkszámot"
+
+#: app/partials/views/item.html:26
+msgid "Enter name of item"
+msgstr "Írja be a nevét"
+
+#: app/partials/views/item.html:54
+msgid "Enter unit"
+msgstr "Írja be a mennyiségi egységet"
+
+#: app/partials/views/item.html:34
+msgid "Enter vendor"
+msgstr "Írja be a gyártót"
+
+#: app/js/dist/storekeeper.js:330 app/js/src/factories.js:29
 msgid "Error {{status}}"
 msgstr "Hiba {{status}}"
 
@@ -34,7 +54,7 @@ msgid "Item"
 msgstr "Elem"
 
 #: app/partials/header.html:22 app/partials/views/items.html:2
-#: app/partials/views/items.html:9
+#: app/partials/views/items.html:6
 msgid "Items"
 msgstr "Elemek"
 
@@ -42,39 +62,39 @@ msgstr "Elemek"
 msgid "Login"
 msgstr "Bejelentkezés"
 
-#: app/partials/views/items.html:16
+#: app/partials/views/item.html:24 app/partials/views/items.html:13
 msgid "Name"
 msgstr "Megnevezés"
 
-#: app/partials/views/item.html:14
-msgid "Name:"
-msgstr "Megnevezés:"
-
-#: app/partials/views/login.html:24
+#: app/partials/views/login.html:23
 msgid "Password"
 msgstr "Jelszó"
 
-#: app/partials/views/items.html:17
+#: app/partials/views/items.html:14
 msgid "Quantity"
 msgstr "Mennyiség"
-
-#: app/partials/views/item.html:15
-msgid "Quantity:"
-msgstr "Mennyiség:"
 
 #: app/partials/sidebars/quick_search.html:6
 msgid "Quick Search"
 msgstr "Gyors keresés"
 
-#: app/partials/views/login.html:35
+#: app/partials/views/login.html:34
 msgid "Remember me"
 msgstr "Emlékezz rám"
 
-#: app/partials/views/login.html:42
+#: app/partials/views/item.html:92
+msgid "Save"
+msgstr "Mentés"
+
+#: app/partials/views/login.html:41
 msgid "Sign in"
 msgstr "Bejelentkezés"
 
-#: app/partials/views/login.html:28
+#: app/partials/views/item.html:59
+msgid "The unit of item is required"
+msgstr "A mennyiségi egységet kötelező megadni"
+
+#: app/partials/views/login.html:27
 msgid "The user's password is required"
 msgstr "A jelszót kötelező megadni"
 
@@ -82,11 +102,19 @@ msgstr "A jelszót kötelező megadni"
 msgid "The user's username is required"
 msgstr "A felhasználónevet kötelező megadni"
 
+#: app/partials/views/item.html:39
+msgid "The vendor of item is required"
+msgstr "A gyártót kötelező megadni"
+
 #: app/partials/header.html:6 app/partials/widgets/details_modal_navbar.html:6
 msgid "Toggle menu"
 msgstr "Menü megjelenítése/elrejtése"
 
-#: app/partials/views/login.html:34
+#: app/partials/views/item.html:51
+msgid "Unit"
+msgstr "Mennyiségi egység"
+
+#: app/partials/views/login.html:33
 msgid "User will not logged out after close this window"
 msgstr "A felhasználó nem lesz kijelentkeztetve a böngésző bezárása után"
 
@@ -94,13 +122,9 @@ msgstr "A felhasználó nem lesz kijelentkeztetve a böngésző bezárása után
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: app/partials/views/items.html:14
+#: app/partials/views/item.html:31 app/partials/views/items.html:11
 msgid "Vendor"
 msgstr "Gyártó"
-
-#: app/partials/views/item.html:11
-msgid "Vendor:"
-msgstr "Gyártó:"
 
 #: app/partials/footer.html:3
 msgid ""
@@ -110,15 +134,15 @@ msgstr ""
 "motor <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE"
 "\">GPLv2</a> alatt"
 
-#: app/partials/views/items.html:21
+#: app/partials/views/items.html:18
 msgid "global search"
 msgstr "globális szűrő"
 
-#: app/partials/views/login.html:27
+#: app/partials/views/login.html:26
 msgid "password"
 msgstr "Jelszó"
 
-#: app/partials/views/items.html:24
+#: app/partials/views/items.html:21
 msgid "search for vendor"
 msgstr "szűrés gyártó szerint"
 

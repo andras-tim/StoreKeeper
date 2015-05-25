@@ -45,16 +45,16 @@ appServices.factory('SessionService', ['Restangular',
 //    }]);
 
 
-//appServices.factory('UnitService', ['Restangular',
-//    function (Restangular) {
-//        return Restangular.service('works');
-//    }]);
+appServices.factory('UnitService', ['Restangular',
+    function (Restangular) {
+        return Restangular.service('units');
+    }]);
 
 
-//appServices.factory('VendorService', ['Restangular',
-//    function (Restangular) {
-//        return Restangular.service('vendors');
-//    }]);
+appServices.factory('VendorService', ['Restangular',
+    function (Restangular) {
+        return Restangular.service('vendors');
+    }]);
 
 
 //appServices.factory('WorkService', ['Restangular',
