@@ -49,6 +49,7 @@ function do_test()
 {
     run test_single_run
     run protractor
+    run jshint
 }
 
 function do_test_continously()
@@ -72,6 +73,10 @@ function do_protractor()
     npm run protractor "$@"
 }
 
+function do_jshint()
+{
+    npm run jshint "$@"
+}
 
 cd "$(dirname "$0")"
 source ../.main.sh
