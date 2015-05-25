@@ -7,7 +7,7 @@ DefaultConfig:
     TITLE: "StoreKeeper"
     FORCED_LANGUAGE: NULL
 
-    MIGRATE_REPO_PATH: "$BASEDIR/db_repository"
+    MIGRATE_REPO_PATH: "$SERVER/db_repository"
     SHARE_STATIC: True
 
     ADMIN_PAGE: False
@@ -29,7 +29,7 @@ DefaultConfig:
     REMEMBER_COOKIE_DURATION: 90
 
     # https://pythonhosted.org/Flask-SQLAlchemy/config.html
-    SQLALCHEMY_DATABASE_URI: "sqlite:///$BASEDIR/app.sqlite"
+    SQLALCHEMY_DATABASE_URI: "sqlite:///$SERVER/app.sqlite"
 
   Log:
     # The log level (LEVEL) should be: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
@@ -38,7 +38,7 @@ DefaultConfig:
       ENABLED: False
       LEVEL: INFO
 
-      PATH: "$BASEDIR/tmp/storekeeper.log"
+      PATH: "$SERVER/tmp/storekeeper.log"
       MAX_SIXE_IN_MB: 10
       HOLD_COUNT: 5
 
@@ -101,7 +101,7 @@ TestingConfig:
   Base: DefaultConfig
 
   App:
-    MIGRATE_REPO_PATH: "$BASEDIR/tmp/test_db_repository"
+    MIGRATE_REPO_PATH: "$SERVER/tmp/test_db_repository"
 
   Flask:
     WTF_CSRF_ENABLED: False
@@ -109,4 +109,4 @@ TestingConfig:
 
     # Most of SQL related tests override this settings and use in-memory database, however tests of DatabaseMaintenance
     # class have to use file based database!
-    SQLALCHEMY_DATABASE_URI: "sqlite:///$BASEDIR/tmp/test.sqlite"
+    SQLALCHEMY_DATABASE_URI: "sqlite:///$SERVER/tmp/test.sqlite"

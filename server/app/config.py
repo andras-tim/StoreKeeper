@@ -3,7 +3,7 @@ import shutil
 import datetime
 from flask import Flask
 
-from app import basedir, test_mode
+from app import basedir, configdir, test_mode
 from app.modules.yaml_config import Config, ConfigObject
 
 
@@ -49,10 +49,10 @@ def __translate_primitives(config: ConfigObject) -> ConfigObject:
 
 
 def __get_config_reader() -> Config:
-    config_path = os.path.join(basedir, 'config.yml')
-    default_config_path = os.path.join(basedir, 'config.default.yml')
+    config_path = os.path.join(configdir, 'config.yml')
+    default_config_path = os.path.join(configdir, 'config.default.yml')
 
     if not os.path.exists(config_path):
         shutil.copy(default_config_path, config_path)
 
-    return Config(config_path, config_variables={'BASEDIR': basedir})
+    return Config(config_path, config_variables={'SERVER': basedir})

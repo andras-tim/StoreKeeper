@@ -8,13 +8,13 @@ from reportlab.platypus import Table, Paragraph, TableStyle
 from reportlab.graphics.barcode import code39
 from reportlab.lib.units import mm
 
-from app import basedir, tempdir
+from app import configdir, tempdir
 from app.server import config
 from app.modules.printer import Printer
 
 
 class LabelPrinter:
-    __logo_path = os.path.abspath(os.path.join(basedir, '..', 'client', 'app', 'img', 'label_logo.gif'))
+    __logo_path = os.path.abspath(os.path.join(configdir, 'img', 'label_logo.gif'))
     __print_cache_dir = os.path.join(tempdir, 'print_cache')
     __pdf_name_template = 'label__{data}__{title_hash}.pdf'
 

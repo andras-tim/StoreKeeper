@@ -258,17 +258,16 @@ function install_update_storekeeper()
 
 function configure_storekeeper()
 {
-    local config_path="${EXT_INSTALL_DIR}/server/config.yml"
-    if [ -e "${config_path}" ]
+    local config_path="${EXT_INSTALL_DIR}/config/config.yml"
+    local tmp_secret='PleaseChangeThisImportantSecretString'
+    if grep -q "${tmp_secret}" "${config_path}"
     then
         return
     fi
 
     echo ' * Configuring StoreKeeper...'
-    cp "${EXT_INSTALL_DIR}/server/config.default.yml" "${config_path}"
     local new_secret="$(openssl rand -hex 16)"
-
-    sed "s>PleaseChangeThisImportantSecretString>${new_secret}>g" -i "${config_path}"
+    sed "s>${tmp_secret}>${new_secret}>g" -i "${config_path}"
 }
 
 function create_database()
