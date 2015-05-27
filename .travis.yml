@@ -20,9 +20,9 @@ before_install:
   - export GLOBAL_INSTALL=true
 
 install:
-  - server/package.sh install
+  - server/package.sh install --force
   - case ${MODULE} in
-      client) client/package.sh install;;
+      client) client/package.sh install --force;;
     esac
 
 before_script:
