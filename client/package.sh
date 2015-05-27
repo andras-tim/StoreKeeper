@@ -23,7 +23,13 @@ function do_install()
     else
         npm install
     fi
-    node_modules/bower/bin/bower install
+
+    if [ "${FORCE}" == true ]
+    then
+        node_modules/bower/bin/bower install --config.interactive=false
+    else
+        node_modules/bower/bin/bower install
+    fi
 
     if [ "${PRODUCTION}" == false ]
     then
