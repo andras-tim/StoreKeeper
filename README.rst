@@ -1,6 +1,6 @@
 |Logo|
 
-|Build| |Docs| |CodeClimate| |CoverageServer| |CoverageClient| |License|
+|Build| |Docs| |CoverageServer| |CoverageClient| |License|
 
 StoreKeeper is an open source, multilingual warehouse/store management software
 

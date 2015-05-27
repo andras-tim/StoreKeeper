@@ -1,3 +1,4 @@
+# Code Climate is used for dispplay coverage report of client tests from Travis only. Because, it does not support
+# Python3 yet, and auto-excluded the test codes in all language.
+
 languages:
-  JavaScript: true
-  Python: true
