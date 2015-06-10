@@ -14,7 +14,7 @@ appFilters.filter('setTitle', ['PageFactory',
 
 appFilters.filter('nestedIsContained', ['$parse', '$filter',
     function($parse, $filter) {
-        function filter_in_all_fields(items, filters) {
+        function filterInAllFields(items, filters) {
             var f = $filter('filter');
             return f(items, {'$': filters.$});
         }
@@ -22,13 +22,13 @@ appFilters.filter('nestedIsContained', ['$parse', '$filter',
         return function (items, filters) {
             var itemsLeft;
             if ('$' in filters) {
-                itemsLeft = filter_in_all_fields(items, filters);
+                itemsLeft = filterInAllFields(items, filters);
             } else {
                 itemsLeft = items.slice();
             }
 
             Object.keys(filters).forEach(function (model) {
-                if (model == '$') {
+                if (model === '$') {
                     return false;
                 }
                 var expected = filters[model].toLowerCase(),

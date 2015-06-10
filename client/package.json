@@ -28,6 +28,6 @@
     "test-single-run": "node node_modules/karma/bin/karma start test/karma.conf.js --no-auto-watch --single-run",
     "update-webdriver": "webdriver-manager update",
     "protractor": "protractor test/protractor-conf.js",
-    "jshint": "node node_modules/jshint/bin/jshint app/js/src test"
+    "jshint": "node node_modules/jshint/bin/jshint --verbose app/js/src test"
   }
 }

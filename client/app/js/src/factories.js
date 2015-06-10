@@ -9,9 +9,9 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', 'gettextCatalog',
             $alert({
                 title: title,
                 content: content,
-                container: "body",
-                placement: "top-right",
-                type: "danger",
+                container: 'body',
+                placement: 'top-right',
+                type: 'danger',
                 duration: 10,
                 show: true
             });
@@ -26,8 +26,8 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', 'gettextCatalog',
         function showResponseError(resp) {
             printToConsole(resp);
             showErrorPopup(
-                gettextCatalog.getString("Error {{status}}", {status: resp.status}),
-                resp.statusText + "<br />" + resp.data
+                gettextCatalog.getString('Error {{status}}', {status: resp.status}),
+                resp.statusText + '<br />' + resp.data
             );
         }
 
@@ -156,7 +156,7 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
                 initialized = true;
                 result.resolve(session);
             }, function (resp) {
-                if (resp.status == 401) {
+                if (resp.status === 401) {
                     clearSession();
                 } else {
                     CommonFactory.showResponseError(resp);
@@ -190,7 +190,7 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
                 clearSession();
                 result.resolve(session);
             }, function (resp) {
-                if (resp.status == 401) {
+                if (resp.status === 401) {
                     clearSession();
                     result.resolve(session);
                 } else {
