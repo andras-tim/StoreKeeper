@@ -13,7 +13,7 @@ appFilters.filter('setTitle', ['PageFactory',
 
 
 appFilters.filter('nestedIsContained', ['$parse', '$filter',
-    function($parse, $filter) {
+    function ($parse, $filter) {
         function filterInAllFields(items, filters) {
             var f = $filter('filter');
             return f(items, {'$': filters.$});

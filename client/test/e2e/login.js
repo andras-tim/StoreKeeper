@@ -1,10 +1,10 @@
 'use strict';
 
-describe('Login view', function() {
+describe('Login view', function () {
 
     var elements = {};
 
-    beforeEach(function() {
+    beforeEach(function () {
         browser.get('storekeeper/index.html#/login');
 
         elements.username = element(by.model('user.username'));
@@ -14,7 +14,7 @@ describe('Login view', function() {
     });
 
 
-    it('can not login with missing credentials', function() {
+    it('can not login with missing credentials', function () {
         elements.username.sendKeys('admin');
         elements.login.click();
 
@@ -24,7 +24,7 @@ describe('Login view', function() {
     });
 
 
-    it('can not login without missing username', function() {
+    it('can not login without missing username', function () {
         elements.password.sendKeys('admin');
         elements.login.click();
 
@@ -34,7 +34,7 @@ describe('Login view', function() {
     });
 
 
-    it('can not login without missing password', function() {
+    it('can not login without missing password', function () {
         elements.username.sendKeys('admin');
         elements.login.click();
 
@@ -44,7 +44,7 @@ describe('Login view', function() {
     });
 
 
-    it('can login with valid credentials', function() {
+    it('can login with valid credentials', function () {
         elements.username.sendKeys('admin');
         elements.password.sendKeys('admin');
         elements.login.click();
@@ -54,7 +54,7 @@ describe('Login view', function() {
         });
     });
 
-    it('can login with remember me', function() {
+    it('can login with remember me', function () {
         elements.username.sendKeys('admin');
         elements.password.sendKeys('admin');
         elements.remember.click();

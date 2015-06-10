@@ -55,7 +55,7 @@ function do_test()
 {
     run test_single_run
     run protractor
-    run jshint
+    run check_style
 }
 
 function do_test_continously()
@@ -79,9 +79,10 @@ function do_protractor()
     npm run protractor "$@"
 }
 
-function do_jshint()
+function do_check_style()
 {
-    npm run jshint "$@"
+    npm run jshint
+    npm run jscs
 }
 
 cd "$(dirname "$0")"

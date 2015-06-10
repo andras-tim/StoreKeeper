@@ -101,8 +101,8 @@ appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
 
 appFactories.factory('PageFactory', ['ConfigFactory',
     function (ConfigFactory) {
-        var appTitle;
-        var windowTitle;
+        var appTitle,
+            windowTitle;
 
         function getTitleSuffix(pageTitle) {
             if (pageTitle === undefined) {
@@ -135,8 +135,8 @@ appFactories.factory('PageFactory', ['ConfigFactory',
 
 appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', 'CommonFactory',
     function ($q, Restangular, SessionService, CommonFactory) {
-        var session = {};
-        var initialized = false;
+        var session = {},
+            initialized = false;
 
         function clearSession() {
             session = {
@@ -169,9 +169,9 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
         }
 
         function login(username, password, remember) {
-            var result = $q.defer();
+            var result = $q.defer(),
+                credentials = { username: username, password: password, remember: remember };
 
-            var credentials = { username: username, password: password, remember: remember };
             SessionService.post(credentials).then(function (resp) {
                 session = Restangular.stripRestangular(resp);
                 result.resolve(session);
@@ -207,7 +207,7 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
                 return getSession();
             }
 
-            return $q(function(resolve, reject) {
+            return $q(function (resolve, reject) {
                 if (session.username === null) {
                     reject(session);
                 } else {

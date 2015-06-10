@@ -13,6 +13,7 @@
     "grunt": "~0.4.5",
     "grunt-angular-gettext": "~2.0.1",
     "grunt-cli": "~0.1.13",
+    "jscs": "^1.13.1",
     "jshint": "^2.7.0",
     "karma": "^0.12.16",
     "karma-chrome-launcher": "^0.1.4",
@@ -28,6 +29,7 @@
     "test-single-run": "node node_modules/karma/bin/karma start test/karma.conf.js --no-auto-watch --single-run",
     "update-webdriver": "webdriver-manager update",
     "protractor": "protractor test/protractor-conf.js",
-    "jshint": "node node_modules/jshint/bin/jshint --verbose app/js/src test"
+    "jshint": "node node_modules/jshint/bin/jshint --verbose app/js/src test",
+    "jscs": "node node_modules/jscs/bin/jscs --verbose --max-errors=100 app/js/src test"
   }
 }

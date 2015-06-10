@@ -123,7 +123,7 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
             CommonFactory.handlePromise(
                 UnitService.post(Restangular.copy(completedNewUnit)),
                 'creatingUnit',
-                function(resp) {
+                function (resp) {
                     $scope.units.push(resp);
                     $scope.unit = resp;
                 });

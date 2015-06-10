@@ -3,7 +3,7 @@
 var appDirectives = angular.module('appDirectives', []);
 
 
-appDirectives.directive('appSpinner', function() {
+appDirectives.directive('appSpinner', function () {
     return {
         restrict: 'AE',
         scope: {
@@ -14,7 +14,7 @@ appDirectives.directive('appSpinner', function() {
 });
 
 
-appDirectives.directive('appPager', function() {
+appDirectives.directive('appPager', function () {
     return {
         restrict: 'E',
         template: '<input type="text" class="select-page" ng-model="inputPage" ng-change="selectPage(inputPage)">',
@@ -27,7 +27,7 @@ appDirectives.directive('appPager', function() {
 });
 
 
-appDirectives.directive('appDetailsModal', function() {
+appDirectives.directive('appDetailsModal', function () {
     return {
         restrict: 'A',
         transclude: true,
@@ -41,7 +41,7 @@ appDirectives.directive('appDetailsModal', function() {
 });
 
 
-appDirectives.directive('appDetailsModalNavbar', function() {
+appDirectives.directive('appDetailsModalNavbar', function () {
     return {
         require: '^appDetails',
         restrict: 'A',

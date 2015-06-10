@@ -1,6 +1,6 @@
 'use strict';
 
-describe('service', function() {
+describe('service', function () {
 
     beforeEach(module('storekeeperApp'));
 

@@ -13,21 +13,15 @@
     // Enforcing
 
     "bitwise"       : true,
-    "camelcase"     : false,
     "curly"         : true,
     "eqeqeq"        : true,
     "forin"         : true,
     "freeze"        : true,
-    "immed"         : true,
-    "indent"        : 4,
     "latedef"       : true,
-    "newcap"        : true,
     "noarg"         : true,
-    "noempty"       : true,
     "nonbsp"        : true,
     "nonew"         : true,
     "plusplus"      : true,
-    "quotmark"      : "single",
     "undef"         : true,
     "unused"        : "vars",
     "strict"        : true,
@@ -35,7 +29,6 @@
     "maxdepth"      : 7,
     "maxstatements" : 25,
     "maxcomplexity" : 10,
-    "maxlen"        : 120,
 
 
     // Relaxing
@@ -53,16 +46,12 @@
     "globalstrict"  : true,
     "iterator"      : false,
     "lastsemic"     : false,
-    "laxbreak"      : false,
-    "laxcomma"      : false,
     "loopfunc"      : false,
-    "multistr"      : false,
     "noyield"       : false,
     "notypeof"      : false,
     "proto"         : false,
     "scripturl"     : false,
     "shadow"        : false,
-    "sub"           : false,
     "supernew"      : false,
     "validthis"     : false,
 
