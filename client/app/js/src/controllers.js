@@ -3,9 +3,9 @@
 var appControllers = angular.module('appControllers', []);
 
 
-appControllers.controller('CommonController', ['$scope', '$location', 'gettextCatalog', 'ConfigFactory', 'PageFactory',
+appControllers.controller('CommonController', ['$scope', 'gettextCatalog', 'ConfigFactory', 'PageFactory',
                                                'SessionFactory', 'CommonFactory',
-    function ($scope, $location, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
+    function ($scope, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
         function initializeLanguages() {
             $scope.languages = [
                 {
