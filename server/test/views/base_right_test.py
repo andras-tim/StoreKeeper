@@ -21,25 +21,12 @@ def use_as_rights_data_provider(endpoint: str):
     def decorator(test_class):
         setattr(test_class, 'ENDPOINT', endpoint)
         for right in test_class.iterate_rights(test_class.RIGHTS):
-            setattr(test_class, get_name_of_test_func(right), test_wrapper(test_class, right))
+            setattr(test_class, 'test_%(actor)s_access_rights' % right, test_wrapper(test_class, right))
         return test_class
-
-    def get_name_of_test_func(right: dict) -> str:
-        values = dict(right)
-
-        values['verb'] = 'can_call'
-        if not right['expected']:
-            values['verb'] = 'can_not_call'
-
-        name_template = 'test_%(actor)s_%(verb)s_%(command)s'
-        if 'data' in right.keys():
-            name_template += '_%(data)s'
-
-        return name_template % values
 
     def test_wrapper(test_class, right: dict) -> callable:
         def test_func(self):
-            test_class.check_right(self, **right)
+            test_class.check_access_rights(self, **right)
         return test_func
     return decorator
 
@@ -57,15 +44,28 @@ class CommonRightsTest(CommonSessionTest):
 
     @classmethod
     def iterate_rights(cls, rights: dict):
-        for actor, per_command_rights in rights.items():
-            for command, expected in per_command_rights.items():
-                yield from cls.__parse_expected(actor, command, expected)
+        for actor, expected_per_command in rights.items():
+            yield {'actor': actor, 'expected_per_command': expected_per_command}
 
-    @classmethod
-    def __parse_expected(cls, actor: str, command: str, expected: (tuple, list, bool)):
+    def check_access_rights(self, actor: str, expected_per_command: dict):
+        commands_in_order = ('get', 'post', 'put', 'delete')
+
+        for command in commands_in_order:
+            if command not in expected_per_command.keys():
+                continue
+            expected = expected_per_command[command]
+
+            for case in self.__iterate_cases(actor, command, expected):
+                try:
+                    self.__check_right(**case)
+                except Exception:
+                    print('check access rights: case={!r}'.format(case))
+                    raise
+
+    def __iterate_cases(self, actor: str, command: str, expected: (tuple, list, bool)):
         if type(expected) == list:
             for exp in expected:
-                yield from cls.__parse_expected(actor, command, exp)
+                yield from self.__iterate_cases(actor, command, exp)
 
         elif type(expected) == bool:
             yield {'actor': actor, 'command': command, 'expected': expected}
@@ -78,7 +78,7 @@ class CommonRightsTest(CommonSessionTest):
             raise ValueError('Test case error: Unsupported data type used as expected; '
                              'type={}'.format(type(expected).__name__))
 
-    def check_right(self, actor: str, command: str, expected: bool, data=None):
+    def __check_right(self, actor: str, command: str, expected: bool, data=None):
         url = self.ENDPOINT
         if data is not None and command != 'post':
             url += '/{!s}'.format(self.DATA_MAP[data].get()[self.ID_FIELD])

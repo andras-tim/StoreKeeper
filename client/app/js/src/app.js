@@ -73,7 +73,7 @@ storekeeperApp.run(['gettextCatalog', 'ConfigFactory', 'CommonFactory',
             var language = config.forced_language;
             if (language === null) {
                 language = window.navigator.userLanguage || window.navigator.language; // "en" or "en-US"
-                language = language.split("-")[0];
+                language = language.split('-')[0];
             }
             gettextCatalog.baseLanguage = 'en';
             gettextCatalog.debug = config.debug;
@@ -83,7 +83,7 @@ storekeeperApp.run(['gettextCatalog', 'ConfigFactory', 'CommonFactory',
 
 
 storekeeperApp.config(['$tooltipProvider',
-    function($tooltipProvider) {
+    function ($tooltipProvider) {
         angular.extend($tooltipProvider.defaults, {
             delay: { show: 600, hide: 100 }
         });
@@ -91,6 +91,6 @@ storekeeperApp.config(['$tooltipProvider',
 
 
 storekeeperApp.config(['stConfig',
-    function(stConfig) {
+    function (stConfig) {
         stConfig.pagination.template = 'partials/widgets/table_pager.html';
     }]);

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('StoreKeeper app', function() {
+describe('StoreKeeper app', function () {
 
     it('should redirect index.html to index.html#/login when user was not authenticated', function () {
         browser.get('storekeeper/index.html');

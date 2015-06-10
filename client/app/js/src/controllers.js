@@ -3,8 +3,9 @@
 var appControllers = angular.module('appControllers', []);
 
 
-appControllers.controller('CommonController', ['$scope', '$location', 'gettextCatalog', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
-    function ($scope, $location, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
+appControllers.controller('CommonController', ['$scope', 'gettextCatalog', 'ConfigFactory', 'PageFactory',
+                                               'SessionFactory', 'CommonFactory',
+    function ($scope, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
         function initializeLanguages() {
             $scope.languages = [
                 {
@@ -102,7 +103,7 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
             });
 
         $scope.isFilled = function (modelRef) {
-            return typeof modelRef === "object";
+            return typeof modelRef === 'object';
         };
 
         $scope.createVendor = function () {
@@ -122,7 +123,7 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
             CommonFactory.handlePromise(
                 UnitService.post(Restangular.copy(completedNewUnit)),
                 'creatingUnit',
-                function(resp) {
+                function (resp) {
                     $scope.units.push(resp);
                     $scope.unit = resp;
                 });

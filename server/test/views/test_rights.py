@@ -132,8 +132,7 @@ class TestSessionRights(CommonRightsTest):
     RIGHTS = {
         'anonymous': {
             'get': False,
-            'post': [('admin', True), ('user1', True)],
-            'delete': False,
+            'post': [('admin', True), ('user1', True)]
         },
         'admin': {
             'get': True,
