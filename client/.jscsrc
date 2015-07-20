@@ -39,9 +39,6 @@
     },
     "requireSpaceBeforeBlockStatements"             : true,
     "requireSpacesInConditionalExpression"          : true,
-    "disallowSpacesInNamedFunctionExpression": {
-        "beforeOpeningRoundBrace"                   : true
-    },
     "disallowSpacesInFunctionDeclaration": {
         "beforeOpeningRoundBrace"                   : true
     },
