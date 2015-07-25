@@ -6,6 +6,7 @@ module.exports = function (config) {
         plugins: [
             'karma-chrome-launcher',
             'karma-firefox-launcher',
+            'karma-phantomjs-launcher',
             'karma-jasmine',
             'karma-coverage'
         ],
@@ -38,7 +39,7 @@ module.exports = function (config) {
 
         autoWatch: true,
 
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
 
         customLaunchers: {
             Chrome_travis_ci: {
