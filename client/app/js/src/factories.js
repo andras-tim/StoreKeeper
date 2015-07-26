@@ -3,8 +3,8 @@
 var appFactories = angular.module('appFactories', []);
 
 
-appFactories.factory('CommonFactory', ['$rootScope', '$alert', 'gettextCatalog', 'ConfigFactory',
-    function ($rootScope, $alert, gettextCatalog, ConfigFactory) {
+appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', 'gettextCatalog', 'ConfigFactory',
+    function ($rootScope, $alert, $log, gettextCatalog, ConfigFactory) {
         function showErrorPopup(title, content) {
             $alert({
                 title: title,
@@ -19,12 +19,12 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', 'gettextCatalog',
 
         function printToConsole(data) {
             if (ConfigFactory.getDebug()) {
-                console.debug(data);
+                $log.debug(data);
             }
         }
 
         function showResponseError(resp) {
-            printToConsole(resp);
+            $log.error(resp);
             showErrorPopup(
                 gettextCatalog.getString('Error {{status}}', {status: resp.status}),
                 resp.statusText + '<br />' + resp.data
