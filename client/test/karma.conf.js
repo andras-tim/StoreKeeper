@@ -8,6 +8,7 @@ module.exports = function (config) {
             'karma-firefox-launcher',
             'karma-phantomjs-launcher',
             'karma-jasmine',
+            'karma-mocha-reporter',
             'karma-coverage'
         ],
 
@@ -41,6 +42,8 @@ module.exports = function (config) {
 
         browsers: ['PhantomJS'],
 
+        browserNoActivityTimeout: 30000,
+
         customLaunchers: {
             Chrome_travis_ci: {
                 base: 'Chrome',
@@ -58,7 +61,11 @@ module.exports = function (config) {
             'app/js/storekeeper.js': 'coverage'
         },
 
-        reporters: ['progress', 'dots', 'coverage'],
+        reporters: ['mocha', 'coverage'],
+
+        'mochaReporter': {
+            'ignoreSkipped': true
+        },
 
         coverageReporter: {
             reporters: [
