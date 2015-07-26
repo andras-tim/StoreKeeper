@@ -42,7 +42,9 @@ module.exports = function (config) {
 
         browsers: ['PhantomJS'],
 
-        browserNoActivityTimeout: 30000,
+        captureTimeout: 30000,
+
+        browserNoActivityTimeout: 60000,
 
         customLaunchers: {
             Chrome_travis_ci: {
@@ -55,7 +57,7 @@ module.exports = function (config) {
 
         logLevel: config.LOG_INFO,
 
-        reportSlowerThan: 500,
+        reportSlowerThan: 200,
 
         preprocessors: {
             'app/js/src/**/*.js': ['coverage']
