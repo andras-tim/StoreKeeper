@@ -42,5 +42,5 @@ script:
 after_success:
   - case ${MODULE} in
       server) (cd server; coveralls --rcfile .coveragerc);;
-      client) (cd client; find tmp/coverage -name lcov.info -exec cat {} \; | codeclimate);;
+      client) (cd client; find tmp/coverage -name lcov.info -exec cat {} \; | codeclimate-test-reporter);;
     esac
