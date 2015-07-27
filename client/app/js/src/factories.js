@@ -72,20 +72,14 @@ appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
         };
 
         function getConfig() {
-            var result = $q.defer();
-
             if (config.app_name !== undefined) {
-                result.resolve(config);
-            } else {
-                ConfigService.one().get().then(function (resp) {
-                    config = Restangular.stripRestangular(resp);
-                    result.resolve(config);
-                }, function () {
-                    result.reject(config);
-                });
+                return $q.when(config);
             }
 
-            return result.promise;
+            return ConfigService.one().get().then(function (resp) {
+                config = Restangular.stripRestangular(resp);
+                return config;
+            });
         }
 
         function getDebug() {
