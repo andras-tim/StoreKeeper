@@ -96,7 +96,7 @@ appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
 appFactories.factory('PageFactory', ['ConfigFactory',
     function (ConfigFactory) {
         var appTitle,
-            windowTitle;
+            windowTitle = '';
 
         function getTitleSuffix(pageTitle) {
             if (pageTitle === undefined) {
