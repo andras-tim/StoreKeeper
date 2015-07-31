@@ -1,6 +1,6 @@
 |Logo|
 
-|Build| |Docs| |CoverageServer| |CoverageClient| |License|
+|Build| |Docs| |DependencyStatus| |CodeQuality| |CoverageServer| |CoverageClient| |License|
 
 StoreKeeper is an open source, multilingual warehouse/store management software
 
@@ -69,6 +69,9 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
 .. |Build| image:: https://travis-ci.org/andras-tim/StoreKeeper.svg?branch=master
    :target: https://travis-ci.org/andras-tim/StoreKeeper
    :alt: Build Status
+.. |DependencyStatus| image:: https://gemnasium.com/andras-tim/StoreKeeper.svg
+   :target: https://gemnasium.com/andras-tim/StoreKeeper
+   :alt: Dependency Status
 .. |Docs| image:: https://readthedocs.org/projects/storekeeper/badge/?version=latest
    :target: https://readthedocs.org/projects/storekeeper/?badge=latest
    :alt: Documentation Status
@@ -76,6 +79,9 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
    :target: https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE
    :alt: License
 
+.. |CodeQuality| image:: https://www.codacy.com/project/badge/6c9fb93d1b1d4333a8146e8aeb55b11f
+   :target: https://www.codacy.com/app/andras-tim/StoreKeeper
+   :alt: Code Quality
 .. |CodeClimate| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/gpa.svg
    :target: https://codeclimate.com/github/andras-tim/StoreKeeper
    :alt: Code Climate
@@ -85,6 +91,9 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
 .. |CoverageClient| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/coverage.svg
    :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
    :alt: Client Test Coverage
+.. |IssueStats| image:: https://img.shields.io/github/issues/andras-tim/StoreKeeper.svg
+   :target: http://issuestats.com/github/andras-tim/StoreKeeper
+   :alt: Issue Stats
 
 .. |TranslationState| image:: https://www.transifex.com/projects/p/storekeeper/resource/client/chart/image_png
    :target: https://www.transifex.com/projects/p/storekeeper/
