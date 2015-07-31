@@ -31,6 +31,7 @@ module.exports = function (config) {
             'app/bower_components/angular-smart-table/dist/smart-table.js',
 
             'app/bower_components/angular-mocks/angular-mocks.js',
+            'app/bower_components/jasmine-promise-matchers/dist/jasmine-promise-matchers.js',
 
             'app/js/src/**/*.js',
             'test/unit/**/*.js'
