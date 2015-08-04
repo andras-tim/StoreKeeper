@@ -65,13 +65,6 @@ describe('CommonController', function () {
             },
 
             injectController = function () {
-                module(function ($provide) {
-                    for (var name in dependencies) {
-                        if (dependencies.hasOwnProperty(name)) {
-                            $provide.value(name, dependencies[name]);
-                        }
-                    }
-                });
                 spyOn(mocks.CommonFactory, 'showResponseError').and.stub();
                 spyOn(mocks.gettextCatalog, 'setCurrentLanguage').and.stub();
                 spyOn(mocks.SessionFactory, 'isAuthenticated').and.callThrough();
