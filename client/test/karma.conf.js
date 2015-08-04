@@ -34,7 +34,8 @@ module.exports = function (config) {
             'app/bower_components/jasmine-promise-matchers/dist/jasmine-promise-matchers.js',
 
             'app/js/src/**/*.js',
-            'test/unit/**/*.js'
+            'test/unit/**/*.js',
+            'test/functional/**/*.js'
         ],
 
         exclude: [],
