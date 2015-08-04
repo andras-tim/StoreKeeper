@@ -33,10 +33,7 @@ appDirectives.directive('appDetailsModal', function () {
         transclude: true,
         replace: true,
         scope: true,
-        templateUrl: 'partials/widgets/details_modal.html',
-        link: function (scope, element, attrs) {
-            scope.title = attrs.title;
-        }
+        templateUrl: 'partials/widgets/details_modal.html'
     };
 });
 

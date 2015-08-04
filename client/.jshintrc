@@ -98,6 +98,7 @@
         "element": false,
         "exports": false,
         "module": false,
-        "process": false
+        "process": false,
+        "installPromiseMatchers": false
     }
 }

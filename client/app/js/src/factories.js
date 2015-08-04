@@ -96,7 +96,7 @@ appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
 appFactories.factory('PageFactory', ['ConfigFactory',
     function (ConfigFactory) {
         var appTitle,
-            windowTitle;
+            windowTitle = '';
 
         function getTitleSuffix(pageTitle) {
             if (pageTitle === undefined) {
@@ -134,11 +134,11 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
 
         function clearSession() {
             session = {
-                id: 0,
-                username: null,
-                email: null,
-                admin: false,
-                disabled: false
+                'id': 0,
+                'username': null,
+                'email': null,
+                'admin': false,
+                'disabled': false
             };
         }
 
@@ -150,13 +150,11 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
                 initialized = true;
                 result.resolve(session);
             }, function (resp) {
-                if (resp.status === 401) {
-                    clearSession();
-                } else {
+                if (resp.status !== 401) {
                     CommonFactory.showResponseError(resp);
                 }
                 initialized = true;
-                result.reject(resp);
+                result.reject(session);
             });
 
             return result.promise;
@@ -164,10 +162,15 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
 
         function login(username, password, remember) {
             var result = $q.defer(),
-                credentials = { username: username, password: password, remember: remember };
+                credentials = {
+                    'username': username,
+                    'password': password,
+                    'remember': remember
+                };
 
             SessionService.post(credentials).then(function (resp) {
                 session = Restangular.stripRestangular(resp);
+                initialized = true;
                 result.resolve(session);
             }, function (resp) {
                 CommonFactory.showResponseError(resp);

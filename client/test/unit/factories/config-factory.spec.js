@@ -3,36 +3,67 @@
 describe('ConfigFactory', function () {
     var test;
 
-    beforeEach(module('storekeeperApp'));
+    beforeEach(module('appFactories'));
 
-    beforeEach(inject(function ($injector, $http, $httpBackend) {
+    beforeEach(function () {
         test = this;
-
-        test.$httpBackend = $httpBackend;
 
         var afterInjects = [],
 
             data = {
-                'valid_config': {
+                'validConfig': {
                     'app_name': 'storekeeper_test',
                     'app_title': 'StoreKeeperTest',
                     'debug': false,
                     'forced_language': 'hu'
                 },
-                'valid_config_w_debug': {
+                'validConfigWithDebug': {
                     'app_name': 'storekeeper_test',
                     'app_title': 'StoreKeeperTest',
                     'debug': true,
                     'forced_language': 'hu'
                 },
-                'invalid_config': {
+                'invalidConfig': {
                     'app_name': 'storekeeper_test',
                     'app_title': 'StoreKeeperTest'
                 }
             },
 
+            mocks = {
+                'ConfigService': {
+                    'one': function () {
+                        return this;
+                    },
+                    'get': function () {
+                        var deferred = test.$q.defer();
+                        if (test.resultsResolved) {
+                            deferred.resolve(test.results);
+                        } else {
+                            deferred.reject(test.results);
+                        }
+                        return deferred.promise;
+                    }
+                },
+                'Restangular': {
+                    'stripRestangular': function (data) {
+                        return data;
+                    }
+                }
+            },
+
             injectFactory = function () {
-                test.ConfigFactory = $injector.get('ConfigFactory');
+                module(function ($provide) {
+                    $provide.value('ConfigService', mocks.ConfigService);
+                    $provide.value('Restangular', mocks.Restangular);
+                });
+                spyOn(mocks.ConfigService, 'get').and.callThrough();
+
+                installPromiseMatchers();
+
+                inject(function ($injector, $q) {
+                    test.$q = $q;
+                    test.ConfigFactory = $injector.get('ConfigFactory');
+                });
 
                 afterInjects.forEach(function (afterInject) {
                     afterInject();
@@ -41,112 +72,114 @@ describe('ConfigFactory', function () {
 
         this.afterInjects = afterInjects;
         this.data = data;
+        this.mocks = mocks;
         this.injectFactory = injectFactory;
-    }));
+    });
 
-    afterEach(function () {
-        test.$httpBackend.verifyNoOutstandingExpectation();
-        test.$httpBackend.verifyNoOutstandingRequest();
+    beforeEach(function () {
+        this.afterInjects.push(function () {
+            test.results = null;
+            test.resultsResolved = true;
+        });
     });
 
     describe('getConfig()', function () {
 
-        describe('call with valid config', function () {
+        describe('get valid config', function () {
 
             beforeEach(function () {
                 this.afterInjects.push(function () {
-                    test.authRequestHandler = test.$httpBackend.when('GET', 'api/config')
-                        .respond(test.data.valid_config);
+                    test.results = test.data.validConfig;
                 });
             });
 
             it('once', function () {
+                var promise;
                 this.injectFactory();
 
-                test.$httpBackend.expectGET('api/config');
-                test.ConfigFactory.getConfig().then(
-                    function (data) {
-                        expect(data).toEqual(test.data.valid_config);
-                    }, function (data) {
-                        expect(data).not.toBeDefined();
-                    });
-                test.$httpBackend.flush();
+                promise = test.ConfigFactory.getConfig();
+                expect(promise).toBeResolvedWith(test.data.validConfig);
+                expect(test.mocks.ConfigService.get.calls.count()).toEqual(1);
             });
 
             it('twice; the second have not to use http', function () {
+                var promise;
                 this.injectFactory();
 
-                test.$httpBackend.expectGET('api/config');
-                test.ConfigFactory.getConfig().then(
-                    function (data) {
-                        expect(data).toEqual(test.data.valid_config);
-                    }, function (data) {
-                        expect(data).not.toBeDefined();
-                    });
-                test.$httpBackend.flush();
+                promise = test.ConfigFactory.getConfig();
+                expect(promise).toBeResolvedWith(test.data.validConfig);
+                expect(test.mocks.ConfigService.get.calls.count()).toEqual(1);
 
-                test.ConfigFactory.getConfig().then(
-                    function (data) {
-                        expect(data).toEqual(test.data.valid_config);
-                    }, function (data) {
-                        expect(data).not.toBeDefined();
-                    });
+                promise = test.ConfigFactory.getConfig();
+                expect(promise).toBeResolvedWith(test.data.validConfig);
+                expect(test.mocks.ConfigService.get.calls.count()).toEqual(1);
             });
         });
 
-        describe('call with invalid config', function () {
+        describe('get invalid config', function () {
 
             beforeEach(function () {
                 this.afterInjects.push(function () {
-                    test.authRequestHandler = test.$httpBackend.when('GET', 'api/config')
-                        .respond(test.data.invalid_config);
+                    test.results = test.data.invalidConfig;
                 });
             });
 
             it('do not drop error yet', function () {
+                var promise;
                 this.injectFactory();
 
-                test.$httpBackend.expectGET('api/config');
-                test.ConfigFactory.getConfig().then(
-                    function (data) {
-                        expect(data).toEqual(test.data.invalid_config);
-                    }, function (data) {
-                        expect(data).not.toBeDefined();
-                    });
-                test.$httpBackend.flush();
+                promise = test.ConfigFactory.getConfig();
+                expect(promise).toBeResolvedWith(test.data.invalidConfig);
             });
         });
 
+        describe('get invalid response', function () {
+
+            beforeEach(function () {
+                this.afterInjects.push(function () {
+                    test.resultsResolved = false;
+                });
+            });
+
+            it('do not drop error yet', function () {
+                var promise;
+                this.injectFactory();
+
+                promise = test.ConfigFactory.getConfig();
+                expect(promise).toBeRejected();
+            });
+        });
     });
 
-
     describe('getDebug()', function () {
+
         beforeEach(function () {
             this.afterInjects.push(function () {
-                test.authRequestHandler = test.$httpBackend.when('GET', 'api/config')
-                    .respond(test.data.valid_config_w_debug);
+                test.results = test.data.validConfigWithDebug;
             });
         });
 
         it('can call before fetch config from server', function () {
+            var debug;
             this.injectFactory();
 
-            expect(test.ConfigFactory.getDebug()).toBeFalsy();
-            test.$httpBackend.flush();
+            debug = test.ConfigFactory.getDebug();
+            expect(debug).toBeFalsy();
+            expect(test.mocks.ConfigService.get.calls.count()).toEqual(0);
         });
 
         it('return value from config after fetch', function () {
+            var promise,
+                debug;
             this.injectFactory();
 
-            test.$httpBackend.expectGET('api/config');
-            test.ConfigFactory.getConfig().then(
-                function (data) {
-                    expect(test.ConfigFactory.getDebug()).toBeTruthy();
-                }, function (data) {
-                    expect(data).not.toBeDefined();
-                });
-            test.$httpBackend.flush();
+            promise = test.ConfigFactory.getConfig();
+            expect(promise).toBeResolvedWith(test.data.validConfigWithDebug);
+            expect(test.mocks.ConfigService.get.calls.count()).toEqual(1);
+
+            debug = test.ConfigFactory.getDebug();
+            expect(debug).toBeTruthy();
+            expect(test.mocks.ConfigService.get.calls.count()).toEqual(1);
         });
     });
-
 });
