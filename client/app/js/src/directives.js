@@ -18,7 +18,7 @@ appDirectives.directive('appPager', function () {
     return {
         restrict: 'E',
         template: '<input type="text" class="select-page" ng-model="inputPage" ng-change="selectPage(inputPage)">',
-        link: function (scope, element, attrs) {
+        link: function (scope) {
             scope.$watch('currentPage', function (newValue) {
                 scope.inputPage = newValue;
             });

@@ -6,7 +6,7 @@ var appControllers = angular.module('appControllers', []);
 appControllers.controller('CommonController', ['$scope', 'gettextCatalog', 'ConfigFactory', 'PageFactory',
                                                'SessionFactory', 'CommonFactory',
     function ($scope, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
-        var initializeLanguages = function initializeLanguages () {
+        function initializeLanguages() {
             $scope.languages = [
                 {
                     'language': 'en',
@@ -25,7 +25,7 @@ appControllers.controller('CommonController', ['$scope', 'gettextCatalog', 'Conf
             $scope.changeLanguage = function changeLanguage (lang) {
                 gettextCatalog.setCurrentLanguage(lang);
             };
-        };
+        }
 
 
         $scope.isAuthenticated = SessionFactory.isAuthenticated;
