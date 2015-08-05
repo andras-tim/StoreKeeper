@@ -53,9 +53,9 @@ function do_clear()
 
 function do_test()
 {
+    run check_style
     run test_single_run
     run protractor
-    run check_style
 }
 
 function do_test_continously()
