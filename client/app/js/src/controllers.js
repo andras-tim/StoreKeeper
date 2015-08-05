@@ -3,9 +3,21 @@
 var appControllers = angular.module('appControllers', []);
 
 
-appControllers.controller('CommonController', ['$scope', 'gettextCatalog', 'ConfigFactory', 'PageFactory',
-                                               'SessionFactory', 'CommonFactory',
-    function ($scope, gettextCatalog, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
+appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory',
+                          'CommonFactory',
+    function ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
+        $scope.isAuthenticated = SessionFactory.isAuthenticated;
+
+        ConfigFactory.getConfig().then(function (config) {
+            $scope.appTitle = config.app_title;
+        }, CommonFactory.showResponseError);
+
+        $scope.getWindowTitle = PageFactory.getWindowTitle;
+    }]);
+
+
+appControllers.controller('MainMenuController', ['$scope', 'gettextCatalog', 'ConfigFactory', 'CommonFactory',
+    function ($scope, gettextCatalog, ConfigFactory, CommonFactory) {
         function initializeLanguages() {
             $scope.languages = [
                 {
@@ -27,21 +39,15 @@ appControllers.controller('CommonController', ['$scope', 'gettextCatalog', 'Conf
             };
         }
 
-
-        $scope.isAuthenticated = SessionFactory.isAuthenticated;
-
-
         ConfigFactory.getConfig().then(function (config) {
-            $scope.appTitle = config.app_title;
             if (config.forced_language === null) {
                 initializeLanguages();
             }
         }, CommonFactory.showResponseError);
-        $scope.getWindowTitle = PageFactory.getWindowTitle;
     }]);
 
 
-appControllers.controller('UserMenu', ['$scope', '$location', 'SessionFactory', 'CommonFactory',
+appControllers.controller('UserMenuController', ['$scope', '$location', 'SessionFactory', 'CommonFactory',
     function ($scope, $location, SessionFactory, CommonFactory) {
         $scope.logout = function () {
             CommonFactory.handlePromise(
