@@ -99,6 +99,7 @@
         "exports": false,
         "module": false,
         "process": false,
-        "installPromiseMatchers": false
+        "installPromiseMatchers": false,
+        "helper": true
     }
 }

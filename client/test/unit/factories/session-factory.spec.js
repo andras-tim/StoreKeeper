@@ -62,13 +62,7 @@ describe('SessionFactory', function () {
                         return this.promiseResults();
                     },
                     'promiseResults': function () {
-                        var deferred = test.$q.defer();
-                        if (test.resultsResolved) {
-                            deferred.resolve(test.results);
-                        } else {
-                            deferred.reject(test.results);
-                        }
-                        return deferred.promise;
+                        return helper.promiseMock(test, 'resultsResolved', test.results, test.results);
                     }
                 },
                 'CommonFactory': {

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('CommonController', function () {
+describe('MainMenuController', function () {
     var test;
 
     beforeEach(module('appControllers'));
@@ -26,19 +26,13 @@ describe('CommonController', function () {
             },
 
             mocks = {
+                'gettextCatalog': {
+                    'currentLanguage': 'hu',
+                    'setCurrentLanguage': function () {}
+                },
                 'ConfigFactory': {
                     'getConfig': function () {
                         return helper.promiseMock(test, 'configResolved', test.config, test.config);
-                    }
-                },
-                'PageFactory': {
-                    'getWindowTitle': function () {
-                        return 'Foo';
-                    }
-                },
-                'SessionFactory': {
-                    'isAuthenticated': function () {
-                        return true;
                     }
                 },
                 'CommonFactory': {
@@ -47,16 +41,14 @@ describe('CommonController', function () {
             },
 
             dependencies = {
+                'gettextCatalog': mocks.gettextCatalog,
                 'ConfigFactory': mocks.ConfigFactory,
-                'PageFactory': mocks.PageFactory,
-                'SessionFactory': mocks.SessionFactory,
                 'CommonFactory': mocks.CommonFactory
             },
 
             injectController = function () {
                 spyOn(mocks.CommonFactory, 'showResponseError').and.stub();
-                spyOn(mocks.SessionFactory, 'isAuthenticated').and.callThrough();
-                spyOn(mocks.PageFactory, 'getWindowTitle').and.callThrough();
+                spyOn(mocks.gettextCatalog, 'setCurrentLanguage').and.stub();
 
                 beforeInjects.forEach(function (beforeInject) {
                     beforeInject();
@@ -69,7 +61,7 @@ describe('CommonController', function () {
 
                     dependencies.$scope = test.$scope;
 
-                    $controller('CommonController', dependencies);
+                    $controller('MainMenuController', dependencies);
                 });
 
                 test.$rootScope.$apply();
@@ -102,29 +94,51 @@ describe('CommonController', function () {
         });
     });
 
-    describe('authentication', function () {
-        it('isAuthenticated() is same as isAuthenticated() of SessionFactory', function () {
-            test.injectController();
+    describe('language', function () {
 
-            expect(test.mocks.SessionFactory.isAuthenticated).not.toHaveBeenCalled();
-            expect(test.$scope.isAuthenticated()).toBeTruthy();
-            expect(test.mocks.SessionFactory.isAuthenticated).toHaveBeenCalled();
+        describe('without forced language', function () {
+
+            it('get list of available languages', function () {
+                test.injectController();
+
+                expect(test.$scope.languages).toBeDefined();
+
+                expect(test.$scope.languages.length).toBeGreaterThan(0);
+            });
+
+            it('get current language', function () {
+                test.injectController();
+
+                expect(test.$scope.getCurrentLanguage).toBeDefined();
+
+                expect(test.$scope.getCurrentLanguage()).toBe('hu');
+            });
+
+            it('set language', function () {
+                test.injectController();
+
+                expect(test.$scope.changeLanguage).toBeDefined();
+
+                test.$scope.changeLanguage('en');
+                expect(test.mocks.gettextCatalog.setCurrentLanguage).toHaveBeenCalledWith('en');
+            });
         });
-    });
 
-    describe('titles', function () {
-        it('check appTitle', function () {
-            test.injectController();
+        describe('with forced language', function () {
 
-            expect(test.$scope.appTitle).toBe(test.data.config.app_title);
-        });
+            beforeEach(function () {
+                this.beforeInjects.push(function () {
+                    test.config = test.data.configWithForcedLanguage;
+                });
+            });
 
-        it('check getWindowTitle()', function () {
-            test.injectController();
+            it('can not available any language related element', function () {
+                test.injectController();
 
-            expect(test.mocks.PageFactory.getWindowTitle).not.toHaveBeenCalled();
-            expect(test.$scope.getWindowTitle()).toBe('Foo');
-            expect(test.mocks.PageFactory.getWindowTitle).toHaveBeenCalled();
+                expect(test.$scope.languages).not.toBeDefined();
+                expect(test.$scope.getCurrentLanguage).not.toBeDefined();
+                expect(test.$scope.changeLanguage).not.toBeDefined();
+            });
         });
     });
 });

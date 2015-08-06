@@ -80,6 +80,13 @@ then
     esac
 fi
 
+run_pep8_check
+
+#if [ "${QUICK}" != 'true' ]
+#then
+#    run_pylint
+#fi
+
 if [ "${FAST}" == 'true' ]
 then
     run_test_with_coverage -m 'not single_threaded' $(get_parallel_run_options) "$@"
@@ -89,13 +96,6 @@ then
 else
     run_test_with_coverage "$@"
 fi
-
-run_pep8_check
-
-#if [ "${QUICK}" != 'true' ]
-#then
-#    run_pylint
-#fi
 
 echo -e "\nAll done"
 exit 0
