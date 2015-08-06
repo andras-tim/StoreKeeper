@@ -5,7 +5,7 @@ var appDirectives = angular.module('appDirectives', []);
 
 appDirectives.directive('appSpinner', function () {
     return {
-        restrict: 'AE',
+        restrict: 'A',
         scope: {
             spinning: '=appSpinner'
         },

@@ -3,38 +3,34 @@
 describe('appSpinner', function () {
     var test;
 
-    beforeEach(module('appDirectives'));
+    beforeEach(module('appDirectives', 'partials'));
 
     beforeEach(function () {
         test = this;
 
-        var mocks = {
-                'PageFactory': {
-                    'setPageTitle': function () {}
-                }
-            },
-
-            injectFilter = function () {
-                module(function ($provide) {
-                    $provide.value('PageFactory', mocks.PageFactory);
-                });
-                //spyOn(mocks.PageFactory, 'setPageTitle').and.stub();
-
-                inject(function ($compile) {
+        var injectDirective = function () {
+                inject(function ($compile, $rootScope) {
                     test.$compile = $compile;
+                    test.$scope = $rootScope.$new();
 
-                    test.appSpinner = $filter('appSpinner');
+                    test.container = helper.compileTemplate(test, '<span app-spinner="fooSpinner" />');
                 });
             };
 
-        this.mocks = mocks;
-        this.injectFilter = injectFilter;
+        this.injectDirective = injectDirective;
     });
 
-    //it('setTitle() can set the title of page', function () {
-    //    test.injectFilter();
-    //
-    //    expect(test.setTitle('foo')).toEqual('foo');
-    //    expect(test.mocks.PageFactory.setPageTitle).toHaveBeenCalledWith('foo');
-    //});
+    it('show spinner only when spinning is true', function () {
+        test.injectDirective();
+
+        expect(test.container.find('.fa-spinner').length).toBe(0);
+
+        test.$scope.fooSpinner = false;
+        test.$scope.$apply();
+        expect(test.container.find('.fa-spinner').length).toBe(0);
+
+        test.$scope.fooSpinner = true;
+        test.$scope.$apply();
+        expect(test.container.find('.fa-spinner').length).toBe(1);
+    });
 });

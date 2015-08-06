@@ -12,5 +12,16 @@ var helper = {
         }
 
         return deferred.promise;
+    },
+
+    'compileTemplate': function compileTemplate (test, htmlTemplate, $scope) {
+        if ($scope === undefined) {
+            $scope = test.$scope;
+        }
+
+        var compiledHtml = test.$compile(angular.element(htmlTemplate))(test.$scope);
+        $scope.$digest();
+
+        return compiledHtml;
     }
 };
