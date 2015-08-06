@@ -9,7 +9,8 @@ module.exports = function (config) {
             'karma-phantomjs-launcher',
             'karma-jasmine',
             'karma-mocha-reporter',
-            'karma-coverage'
+            'karma-coverage',
+            'karma-ng-html2js-preprocessor'
         ],
 
         frameworks: ['jasmine'],
@@ -34,6 +35,8 @@ module.exports = function (config) {
             'app/bower_components/jasmine-promise-matchers/dist/jasmine-promise-matchers.js',
 
             'app/js/src/**/*.js',
+            'app/partials/**/*.html',
+
             'test/unit/**/*.js',
             'test/functional/**/*.js'
         ],
@@ -62,7 +65,13 @@ module.exports = function (config) {
         reportSlowerThan: 200,
 
         preprocessors: {
-            'app/js/src/**/*.js': ['coverage']
+            'app/js/src/**/*.js': ['coverage'],
+            'app/partials/**/*.html': ['ng-html2js']
+        },
+
+        ngHtml2JsPreprocessor: {
+            stripPrefix: 'app/',
+            moduleName: 'partials'
         },
 
         reporters: ['mocha', 'coverage'],
