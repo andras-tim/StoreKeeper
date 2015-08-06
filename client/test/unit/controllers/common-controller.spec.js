@@ -28,13 +28,7 @@ describe('CommonController', function () {
             mocks = {
                 'ConfigFactory': {
                     'getConfig': function () {
-                        var deferred = test.$q.defer();
-                        if (test.configResolved) {
-                            deferred.resolve(test.config);
-                        } else {
-                            deferred.reject(test.config);
-                        }
-                        return deferred.promise;
+                        return helper.promiseMock(test, 'configResolved', test.config, test.config);
                     }
                 },
                 'PageFactory': {

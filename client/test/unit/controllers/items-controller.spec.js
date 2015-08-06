@@ -16,13 +16,7 @@ describe('ItemsController', function () {
                 '$scope': {},
                 'ItemService': {
                     'getList': function () {
-                        var deferred = test.$q.defer();
-                        if (test.getListResolved) {
-                            deferred.resolve(data.items);
-                        } else {
-                            deferred.reject();
-                        }
-                        return deferred.promise;
+                        return helper.promiseMock(test, 'getListResolved', data.items);
                     }
                 },
                 'CommonFactory': {

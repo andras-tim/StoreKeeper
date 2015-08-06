@@ -34,13 +34,7 @@ describe('LoginController', function () {
                 },
                 'SessionFactory': {
                     'login': function () {
-                        var deferred = test.$q.defer();
-                        if (test.loginResolved) {
-                            deferred.resolve();
-                        } else {
-                            deferred.reject();
-                        }
-                        return deferred.promise;
+                        return helper.promiseMock(test, 'loginResolved');
                     }
                 },
                 'CommonFactory': {

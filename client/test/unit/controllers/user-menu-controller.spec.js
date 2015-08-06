@@ -14,13 +14,7 @@ describe('UserMenuController', function () {
                 },
                 'SessionFactory': {
                     'logout': function () {
-                        var deferred = test.$q.defer();
-                        if (test.logoutResolved) {
-                            deferred.resolve();
-                        } else {
-                            deferred.reject();
-                        }
-                        return deferred.promise;
+                        return helper.promiseMock(test, 'logoutResolved');
                     }
                 },
                 'CommonFactory': {
