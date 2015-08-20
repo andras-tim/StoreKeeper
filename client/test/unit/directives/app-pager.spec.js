@@ -32,6 +32,7 @@ describe('appPager', function () {
     it('input box have to always contain the number of current page', function () {
         test.injectDirective();
 
+        expect(test.container.find('input').length).toBe(1);
         expect(test.container.find('input').val()).toEqual('');
 
         test.$scope.currentPage = 1;
@@ -46,6 +47,7 @@ describe('appPager', function () {
     it('input change have to synced to current page', function () {
         test.injectDirective();
 
+        expect(test.container.find('input').length).toBe(1);
         expect(test.mocks.selectPage).not.toHaveBeenCalled();
 
         test.container.find('input').val('1');
@@ -56,4 +58,5 @@ describe('appPager', function () {
         test.container.find('input').triggerHandler('change');
         expect(test.mocks.selectPage).toHaveBeenCalledWith('42');
     });
+
 });
