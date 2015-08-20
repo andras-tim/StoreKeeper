@@ -67,12 +67,12 @@ storekeeperApp.config(['RestangularProvider',
     }]);
 
 
-storekeeperApp.run(['gettextCatalog', 'ConfigFactory', 'CommonFactory',
-    function (gettextCatalog, ConfigFactory, CommonFactory) {
+storekeeperApp.run(['$window', 'gettextCatalog', 'ConfigFactory', 'CommonFactory',
+    function ($window, gettextCatalog, ConfigFactory, CommonFactory) {
         ConfigFactory.getConfig().then(function (config) {
             var language = config.forced_language;
             if (language === null) {
-                language = window.navigator.userLanguage || window.navigator.language; // "en" or "en-US"
+                language = $window.navigator.userLanguage || $window.navigator.language; // "en" or "en-US"
                 language = language.split('-')[0];
             }
             gettextCatalog.baseLanguage = 'en';
