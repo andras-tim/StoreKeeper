@@ -48,8 +48,8 @@ DefaultConfig:
 
       SERVER: bar.com
       PORT: 25
-      USERNAME: None
-      PASSWORD: None
+      USERNAME: NULL
+      PASSWORD: NULL
 
       SENDER: no-reply@storekeeper
       RECIPIENTS:
