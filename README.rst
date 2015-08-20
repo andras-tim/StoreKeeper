@@ -73,7 +73,7 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
    :target: https://gemnasium.com/andras-tim/StoreKeeper
    :alt: Dependency Status
 .. |Docs| image:: https://readthedocs.org/projects/storekeeper/badge/?version=latest
-   :target: https://readthedocs.org/projects/storekeeper/?badge=latest
+   :target: http://storekeeper.readthedocs.org/latest/
    :alt: Documentation Status
 .. |License| image:: https://img.shields.io/badge/license-GPL%202.0-blue.svg
    :target: https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE
@@ -83,10 +83,10 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
    :target: https://www.codacy.com/app/andras-tim/StoreKeeper
    :alt: Code Quality
 .. |CodeClimate| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/gpa.svg
-   :target: https://codeclimate.com/github/andras-tim/StoreKeeper
+   :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
    :alt: Code Climate
-.. |CoverageServer| image:: https://coveralls.io/repos/andras-tim/StoreKeeper/badge.svg?branch=master
-   :target: https://coveralls.io/r/andras-tim/StoreKeeper?branch=master
+.. |CoverageServer| image:: https://coveralls.io/repos/andras-tim/StoreKeeper/badge.svg?branch=master&service=github
+   :target: https://coveralls.io/r/andras-tim/StoreKeeper?branch=master&service=github
    :alt: Server Test Coverage
 .. |CoverageClient| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/coverage.svg
    :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
