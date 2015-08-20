@@ -44,7 +44,7 @@ appDirectives.directive('appDetailsModal',
 appDirectives.directive('appDetailsModalNavbar',
     function appDetailsModalNavbar () {
         return {
-            require: '^appDetails',
+            require: '^appDetailsModal',
             restrict: 'A',
             transclude: true,
             replace: true,
