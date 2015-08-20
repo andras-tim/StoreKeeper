@@ -4,7 +4,7 @@ var appFilters = angular.module('appFilters', []);
 
 
 appFilters.filter('setTitle', ['PageFactory',
-    function (PageFactory) {
+    function setTitle (PageFactory) {
         return function (title) {
             PageFactory.setPageTitle(title);
             return title;
@@ -12,14 +12,14 @@ appFilters.filter('setTitle', ['PageFactory',
     }]);
 
 
-appFilters.filter('nestedIsContained', ['$parse', '$filter',
-    function ($parse, $filter) {
+appFilters.filter('isContainedInNested', ['$parse', '$filter',
+    function isContainedInNested ($parse, $filter) {
         function filterInAllFields(items, filters) {
-            var f = $filter('filter');
-            return f(items, {'$': filters.$});
+            var filter = $filter('filter');
+            return filter(items, {'$': filters.$});
         }
 
-        return function (items, filters) {
+        function filter(items, filters) {
             var itemsLeft;
             if ('$' in filters) {
                 itemsLeft = filterInAllFields(items, filters);
@@ -31,6 +31,7 @@ appFilters.filter('nestedIsContained', ['$parse', '$filter',
                 if (model === '$') {
                     return false;
                 }
+
                 var expected = filters[model].toLowerCase(),
                     getter = $parse(model);
 
@@ -41,5 +42,7 @@ appFilters.filter('nestedIsContained', ['$parse', '$filter',
             });
 
             return itemsLeft;
-        };
+        }
+
+        return filter;
     }]);

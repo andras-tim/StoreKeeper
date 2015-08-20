@@ -5,7 +5,7 @@ var appControllers = angular.module('appControllers', []);
 
 appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory',
                           'CommonFactory',
-    function ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
+    function CommonController ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
         $scope.isAuthenticated = SessionFactory.isAuthenticated;
 
         ConfigFactory.getConfig().then(function (config) {
@@ -17,9 +17,9 @@ appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageF
 
 
 appControllers.controller('MainMenuController', ['$scope', 'gettextCatalog', 'ConfigFactory', 'CommonFactory',
-    function ($scope, gettextCatalog, ConfigFactory, CommonFactory) {
+    function MainMenuController ($scope, gettextCatalog, ConfigFactory, CommonFactory) {
         function initializeLanguages() {
-            $scope.languages = [
+            var languages = [
                 {
                     'language': 'en',
                     'title': 'English',
@@ -30,13 +30,17 @@ appControllers.controller('MainMenuController', ['$scope', 'gettextCatalog', 'Co
                 }
             ];
 
-            $scope.getCurrentLanguage = function getCurrentLanguage () {
+            function getCurrentLanguage() {
                 return gettextCatalog.currentLanguage;
-            };
+            }
 
-            $scope.changeLanguage = function changeLanguage (lang) {
+            function changeLanguage(lang) {
                 gettextCatalog.setCurrentLanguage(lang);
-            };
+            }
+
+            $scope.languages = languages;
+            $scope.getCurrentLanguage = getCurrentLanguage;
+            $scope.changeLanguage = changeLanguage;
         }
 
         ConfigFactory.getConfig().then(function (config) {
@@ -48,21 +52,23 @@ appControllers.controller('MainMenuController', ['$scope', 'gettextCatalog', 'Co
 
 
 appControllers.controller('UserMenuController', ['$scope', '$location', 'SessionFactory', 'CommonFactory',
-    function ($scope, $location, SessionFactory, CommonFactory) {
-        $scope.logout = function () {
+    function UserMenuController ($scope, $location, SessionFactory, CommonFactory) {
+        function logout() {
             CommonFactory.handlePromise(
                 SessionFactory.logout(),
                 null,
                 function () {
                     $location.path('/login');
                 });
-        };
+        }
+
+        $scope.logout = logout;
     }]);
 
 
 appControllers.controller('LoginController', ['$scope', '$location', 'SessionFactory', 'CommonFactory',
-    function ($scope, $location, SessionFactory, CommonFactory) {
-        $scope.login = function () {
+    function LoginController ($scope, $location, SessionFactory, CommonFactory) {
+        function login() {
             $scope.$broadcast('show-errors-check-validity');
             if (!$scope.userForm.$valid) {
                 return;
@@ -75,14 +81,15 @@ appControllers.controller('LoginController', ['$scope', '$location', 'SessionFac
                     $scope.userForm.$setPristine();
                     $location.path('/');
                 });
-        };
+        }
 
-        $scope.user = { username: '', password: '', remember: false };
+        $scope.user = {'username': '', 'password': '', 'remember': false};
+        $scope.login = login;
     }]);
 
 
 appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFactory',
-    function ($scope, ItemService, CommonFactory) {
+    function ItemsController ($scope, ItemService, CommonFactory) {
         CommonFactory.handlePromise(
             ItemService.getList(),
             null,
@@ -93,7 +100,35 @@ appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFa
 
 
 appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorService', 'UnitService', 'CommonFactory',
-    function ($scope, Restangular, VendorService, UnitService, CommonFactory) {
+    function ItemController ($scope, Restangular, VendorService, UnitService, CommonFactory) {
+        function isFilled(modelRef) {
+            return typeof modelRef === 'object';
+        }
+
+        function createVendor() {
+            var completedNewVendor = {'name': $scope.vendor};
+
+            CommonFactory.handlePromise(
+                VendorService.post(Restangular.copy(completedNewVendor)),
+                'creatingVendor',
+                function (resp) {
+                    $scope.vendors.push(resp);
+                    $scope.vendor = resp;
+                });
+        }
+
+        function createUnit() {
+            var completedNewUnit = { 'unit': $scope.unit };
+
+            CommonFactory.handlePromise(
+                UnitService.post(Restangular.copy(completedNewUnit)),
+                'creatingUnit',
+                function (resp) {
+                    $scope.units.push(resp);
+                    $scope.unit = resp;
+                });
+        }
+
         CommonFactory.handlePromise(
             VendorService.getList(),
             null,
@@ -108,31 +143,7 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
                 $scope.units = units;
             });
 
-        $scope.isFilled = function (modelRef) {
-            return typeof modelRef === 'object';
-        };
-
-        $scope.createVendor = function () {
-            var completedNewVendor = {'name': $scope.vendor};
-            CommonFactory.handlePromise(
-                VendorService.post(Restangular.copy(completedNewVendor)),
-                'creatingVendor',
-                function (resp) {
-                    $scope.vendors.push(resp);
-                    $scope.vendor = resp;
-                });
-        };
-
-        $scope.createUnit = function () {
-            var completedNewUnit = { 'unit': $scope.unit };
-
-            CommonFactory.handlePromise(
-                UnitService.post(Restangular.copy(completedNewUnit)),
-                'creatingUnit',
-                function (resp) {
-                    $scope.units.push(resp);
-                    $scope.unit = resp;
-                });
-        };
-
+        $scope.isFilled = isFilled;
+        $scope.createVendor = createVendor;
+        $scope.createUnit = createUnit;
     }]);

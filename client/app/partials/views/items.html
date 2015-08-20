@@ -5,7 +5,7 @@
     <!--Body content-->
     <h2><i class="fa fa-cube"></i> <span translate>Items</span></h2>
 
-    <table st-table="displayedItems" st-safe-src="items" st-set-filter="nestedIsContained" class="table table-striped table-hover">
+    <table st-table="displayedItems" st-safe-src="items" st-set-filter="isContainedInNested" class="table table-striped table-hover">
       <thead>
         <tr>
           <th st-sort="vendor.name" translate>Vendor</th>
