@@ -8,9 +8,9 @@ appDirectives.directive('appSpinner',
         return {
             restrict: 'A',
             scope: {
-                spinning: '=appSpinner'
+                appSpinner: '='
             },
-            templateUrl: 'partials/widgets/spinner.html'
+            template: ' <i ng-if="appSpinner" class="fa fa-spinner fa-pulse"></i>'
         };
     });
 
