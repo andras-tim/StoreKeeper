@@ -14,7 +14,7 @@
     <div class="navbar-collapse" bs-collapse-target>
       <ul class="nav navbar-nav" ng-if="isAuthenticated()" bs-navbar>
         <li>
-          <a href data-template="partials/sidebars/quick_search.html" data-placement="left" data-container="body" bs-aside>
+          <a href data-template-url="partials/sidebars/quick_search.html" data-placement="left" data-container="body" bs-aside>
             <i class="fa fa-search"></i>
           </a>
         </li>
@@ -24,12 +24,12 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li ng-if="isAuthenticated()">
-          <a href data-template="partials/widgets/user_menu.html" role="button" aria-expanded="false" bs-dropdown>
+          <a href data-template-url="partials/widgets/user_menu.html" role="button" aria-expanded="false" bs-dropdown>
             <i class="fa fa-user"></i> <span ng-bind="session.username"></span> <span class="caret"></span>
           </a>
         </li>
         <li ng-if="changeLanguage">
-          <a href data-template="partials/widgets/language_menu.html" role="button" aria-expanded="false" bs-dropdown="languages">
+          <a href data-template-url="partials/widgets/language_menu.html" role="button" aria-expanded="false" bs-dropdown="languages">
             <i class="fa fa-flag"></i> <span ng-bind="getCurrentLanguage()"></span> <span class="caret"></span>
           </a>
         </li>

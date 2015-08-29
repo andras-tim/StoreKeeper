@@ -13,6 +13,7 @@ before_install:
   - case ${MODULE} in
       server) pip install coveralls;;
       client) export NPM_CONFIG_SPIN=false;
+              export NPM_CONFIG_PYTHON=python2;
               npm install -g codeclimate-test-reporter;
               export CHROME_BIN=chromium-browser;
               export DISPLAY=:99.0;

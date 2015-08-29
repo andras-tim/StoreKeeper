@@ -19,7 +19,7 @@ describe('Login view', function () {
         elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
-            expect(url.split('#')[1]).toBe('/login');
+            expect(url).toBe('/login');
         });
     });
 
@@ -29,7 +29,7 @@ describe('Login view', function () {
         elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
-            expect(url.split('#')[1]).toBe('/login');
+            expect(url).toBe('/login');
         });
     });
 
@@ -39,7 +39,7 @@ describe('Login view', function () {
         elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
-            expect(url.split('#')[1]).toBe('/login');
+            expect(url).toBe('/login');
         });
     });
 
@@ -50,7 +50,7 @@ describe('Login view', function () {
         elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
-            expect(url.split('#')[1]).toBe('/items');
+            expect(url).toBe('/items');
         });
     });
 
@@ -64,7 +64,7 @@ describe('Login view', function () {
         elements.login.click();
 
         browser.getLocationAbsUrl().then(function (url) {
-            expect(url.split('#')[1]).toBe('/items');
+            expect(url).toBe('/items');
         });
     });
 

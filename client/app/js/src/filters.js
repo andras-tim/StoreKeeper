@@ -32,12 +32,12 @@ appFilters.filter('isContainedInNested', ['$parse', '$filter',
                     return false;
                 }
 
-                var expected = filters[model].toLowerCase(),
+                var expected = filters[model].name.toLowerCase(),
                     getter = $parse(model);
 
                 itemsLeft = itemsLeft.filter(function (item) {
                     var actual = getter(item);
-                    return actual.toLowerCase().indexOf(expected) !== -1;
+                    return actual.name.toLowerCase().indexOf(expected) !== -1;
                 });
             });
 
