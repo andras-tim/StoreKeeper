@@ -1,4 +1,3 @@
-import re
 from flask import request
 from marshmallow import Serializer
 from sqlalchemy.exc import IntegrityError
@@ -77,48 +76,10 @@ class PopulateModelOnSubmit:
 
 
 class SqlErrorParser:
-    __INTEGRITY_ERROR_TEMPLATE = re.compile(r'^\(IntegrityError\) (?P<message>.*)$')
-    __UNIQUE_INTEGRITY_ERROR_TEMPLATES = [
-        re.compile(r'^UNIQUE constraint failed: (?P<table_fields>.*)$'),
-        re.compile(r'^columns? (?P<table_fields>.*) (is|are) not unique$'),
-    ]
-    __FIELD_LIST_SPLITTER = re.compile(r'[^ ,]+')
-    __SHORT_FIELD_NAME_TEMPLATE = re.compile(r'(?P<short_name>[^.]+$)')
-
     @classmethod
     def parse(cls, err: Exception) -> (str, dict):
         raw_message = err.args[0]
-
-        matches = cls.__INTEGRITY_ERROR_TEMPLATE.search(raw_message)
-        if not matches:
-            return 'Can not commit changes; error={!r}'.format(raw_message)
-        integrity_error = matches.group('message')
-
-        matches = None
-        for unique_integrity_error_template in cls.__UNIQUE_INTEGRITY_ERROR_TEMPLATES:
-            matches = unique_integrity_error_template.search(integrity_error)
-            if matches:
-                break
-        if not matches:
-            return 'Can not commit changes; error={!r}'.format(integrity_error)
-        table_fields = matches.group('table_fields')
-
-        standardized_fields = cls.__standardize_fields(table_fields)
-        return {standardized_fields: ['Already exists.']}
-
-    @classmethod
-    def __standardize_fields(cls, fields: str) -> str:
-        """
-        Make shorted and ordered filed list
-
-        Remove table name from field name and order the results for it can be asserted.
-        """
-        split_fields = cls.__FIELD_LIST_SPLITTER.findall(fields)
-        if not split_fields:
-            return fields
-
-        split_fields = [cls.__SHORT_FIELD_NAME_TEMPLATE.search(field).group('short_name') for field in split_fields]
-        return ', '.join(sorted(split_fields))
+        return 'Can not commit changes; error={!r}'.format(raw_message)
 
 
 def get_validated_request(deserializer: Serializer) -> (dict, list, None):
