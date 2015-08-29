@@ -15,7 +15,7 @@ appDirectives.directive('appSpinner',
     });
 
 
-appDirectives.directive('appPager',
+appDirectives.directive('appPageInput',
     function appPager () {
         return {
             restrict: 'E',
