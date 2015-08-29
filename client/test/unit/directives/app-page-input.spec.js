@@ -1,6 +1,6 @@
 'use strict';
 
-describe('appPager', function () {
+describe('appPageInput', function () {
     var test;
 
     beforeEach(module('appDirectives', 'partials'));
@@ -21,7 +21,7 @@ describe('appPager', function () {
 
                     test.$scope.selectPage = mocks.selectPage;
 
-                    test.container = helper.compileTemplate(test, '<app-pager />');
+                    test.container = helper.compileTemplate(test, '<app-page-input />');
                 });
             };
 

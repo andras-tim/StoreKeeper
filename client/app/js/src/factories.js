@@ -4,7 +4,7 @@ var appFactories = angular.module('appFactories', []);
 
 
 appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', 'gettextCatalog', 'ConfigFactory',
-    function ($rootScope, $alert, $log, gettextCatalog, ConfigFactory) {
+    function CommonFactory ($rootScope, $alert, $log, gettextCatalog, ConfigFactory) {
         function showErrorPopup(title, content) {
             $alert({
                 title: title,
@@ -63,7 +63,7 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', 'gettextC
 
 
 appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
-    function ($q, Restangular, ConfigService) {
+    function ConfigFactory ($q, Restangular, ConfigService) {
         var config = {
             app_name: undefined,
             app_title: undefined,
@@ -94,7 +94,7 @@ appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
 
 
 appFactories.factory('PageFactory', ['ConfigFactory',
-    function (ConfigFactory) {
+    function PageFactory (ConfigFactory) {
         var appTitle,
             windowTitle = '';
 
@@ -128,7 +128,7 @@ appFactories.factory('PageFactory', ['ConfigFactory',
 
 
 appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', 'CommonFactory',
-    function ($q, Restangular, SessionService, CommonFactory) {
+    function SessionFactory ($q, Restangular, SessionService, CommonFactory) {
         var session = {},
             initialized = false;
 

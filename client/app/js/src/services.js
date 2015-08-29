@@ -16,48 +16,48 @@ var appServices = angular.module('appServices', []);
 
 
 appServices.factory('ConfigService', ['Restangular',
-    function (Restangular) {
+    function ConfigService (Restangular) {
         return Restangular.service('config');
     }]);
 
 
 //appServices.factory('CustomerService', ['Restangular',
-//    function (Restangular) {
+//    function CustomerService (Restangular) {
 //        return Restangular.service('customers');
 //    }]);
 
 
 appServices.factory('ItemService', ['Restangular',
-    function (Restangular) {
+    function ItemService (Restangular) {
         return Restangular.service('items');
     }]);
 
 
 appServices.factory('SessionService', ['Restangular',
-    function (Restangular) {
+    function SessionService (Restangular) {
         return Restangular.service('session');
     }]);
 
 
 //appServices.factory('StocktakingService', ['Restangular',
-//    function (Restangular) {
+//    function StocktakingService (Restangular) {
 //        return Restangular.service('stocktaking');
 //    }]);
 
 
 appServices.factory('UnitService', ['Restangular',
-    function (Restangular) {
+    function UnitService (Restangular) {
         return Restangular.service('units');
     }]);
 
 
 appServices.factory('VendorService', ['Restangular',
-    function (Restangular) {
+    function VendorService (Restangular) {
         return Restangular.service('vendors');
     }]);
 
 
 //appServices.factory('WorkService', ['Restangular',
-//    function (Restangular) {
+//    function WorkService (Restangular) {
 //        return Restangular.service('works');
 //    }]);
