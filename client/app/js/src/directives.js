@@ -3,6 +3,16 @@
 var appDirectives = angular.module('appDirectives', []);
 
 
+/**
+ * @ngdoc directive
+ * @name appSpinner
+ * @restrict A
+ *
+ * @param {boolean} appSpinner spinning is on
+ *
+ * @description
+ * Input box for go to page in a pager
+ */
 appDirectives.directive('appSpinner',
     function appSpinner () {
         return {
@@ -15,8 +25,16 @@ appDirectives.directive('appSpinner',
     });
 
 
+/**
+ * @ngdoc directive
+ * @name appPageInput
+ * @restrict E
+ *
+ * @description
+ * Input box for go to page in a pager
+ */
 appDirectives.directive('appPageInput',
-    function appPager () {
+    function appPageInput () {
         return {
             restrict: 'E',
             template: '<input type="text" class="select-page" ng-model="inputPage" ng-change="selectPage(inputPage)">',
@@ -29,6 +47,14 @@ appDirectives.directive('appPageInput',
     });
 
 
+/**
+ * @ngdoc directive
+ * @name appDetailsModal
+ * @restrict A
+ *
+ * @description
+ * Root object for AngularStrap style modals
+ */
 appDirectives.directive('appDetailsModal',
     function appDetailsModal () {
         return {
@@ -41,6 +67,14 @@ appDirectives.directive('appDetailsModal',
     });
 
 
+/**
+ * @ngdoc directive
+ * @name appDetailsModal
+ * @restrict A
+ *
+ * @description
+ * Common navbar object for modals
+ */
 appDirectives.directive('appDetailsModalNavbar',
     function appDetailsModalNavbar () {
         return {
