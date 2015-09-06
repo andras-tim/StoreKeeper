@@ -22,7 +22,7 @@
       </thead>
 
       <tbody>
-        <tr class="clickable" data-template-url="partials/views/item.html" bs-modal="item" ng-repeat="item in displayedItems">
+        <tr ng-repeat="item in displayedItems" app-details-row="item" data-template-url="partials/views/item.html">
           <td>{{ item.vendor.name }}</td>
           <td>{{ item.article_number }}</td>
           <td>{{ item.name }}</td>

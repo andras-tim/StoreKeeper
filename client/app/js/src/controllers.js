@@ -106,28 +106,41 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
         }
 
         function createVendor() {
-            var completedNewVendor = {'name': $scope.vendor};
+            var completedNewVendor = {'name': $scope.item.vendor};
 
             CommonFactory.handlePromise(
                 VendorService.post(Restangular.copy(completedNewVendor)),
                 'creatingVendor',
                 function (resp) {
                     $scope.vendors.push(resp);
-                    $scope.vendor = resp;
+                    $scope.item.vendor = resp;
                 });
         }
 
         function createUnit() {
-            var completedNewUnit = { 'unit': $scope.unit };
+            var completedNewUnit = { 'unit': $scope.item.unit };
 
             CommonFactory.handlePromise(
                 UnitService.post(Restangular.copy(completedNewUnit)),
                 'creatingUnit',
                 function (resp) {
                     $scope.units.push(resp);
-                    $scope.unit = resp;
+                    $scope.item.unit = resp;
                 });
         }
+
+        function saveChanges() {
+            CommonFactory.handlePromise(
+                $scope.item.put(),
+                'savingItem',
+                function () {
+                    angular.merge($scope.rowData, $scope.item);
+                    $scope.$hide();
+                }
+            );
+        }
+
+        $scope.item = Restangular.copy($scope.rowData);
 
         CommonFactory.handlePromise(
             VendorService.getList(),
@@ -146,4 +159,5 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
         $scope.isFilled = isFilled;
         $scope.createVendor = createVendor;
         $scope.createUnit = createUnit;
+        $scope.saveChanges = saveChanges;
     }]);

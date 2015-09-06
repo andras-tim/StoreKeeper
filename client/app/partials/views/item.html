@@ -3,8 +3,8 @@
 
     <div class="modal-body">
       <app-details-modal-navbar>
-        <span class="navbar-brand"><i class="fa fa-cube"></i> {{ 'Item' | translate }} #{{ id }}</span>
-        <span class="navbar-brand" ng-bind="name"></span>
+        <span class="navbar-brand"><i class="fa fa-cube"></i> {{ 'Item' | translate }} #{{ rowData.id }}</span>
+        <span class="navbar-brand" ng-bind="rowData.name"></span>
       </app-details-modal-navbar>
 
       <div class="details-modal-content">
@@ -25,9 +25,9 @@
                           <label class="col-sm-4 control-label" for="vendor" ><span translate>Vendor</span> <span app-spinner="creatingVendor"></span></label>
                           <div class="col-sm-8" ng-class="{'has-error': itemForm.vendor.$dirty && itemForm.vendor.$error.required}">
                             <div class="input-group">
-                              <input type="text" class="form-control" id="vendor" name="vendor" ng-model="vendor" data-min-length="0" data-auto-select="true" bs-options="vendor as vendor.name for vendor in vendors" placeholder="{{ 'Enter vendor' | translate }}" autocomplete="off" bs-typeahead required>
+                              <input type="text" class="form-control" id="vendor" name="vendor" ng-model="item.vendor" data-min-length="0" data-auto-select="true" bs-options="vendor as vendor.name for vendor in vendors" placeholder="{{ 'Enter vendor' | translate }}" autocomplete="off" bs-typeahead required>
                               <span class="input-group-btn">
-                                <button class="btn btn-success" ng-disabled="vendor == '' || isFilled(vendor)" ng-click="createVendor()"><i class="fa fa-plus"></i></button>
+                                <button class="btn btn-success" ng-disabled="vendor == '' || isFilled(item.vendor)" ng-click="createVendor()"><i class="fa fa-plus"></i></button>
                               </span>
                             </div>
                             <p class="help-block" ng-if="itemForm.vendor.$dirty && itemForm.vendor.$error.required" translate>The vendor of item is required</p>
@@ -37,14 +37,14 @@
                         <div class="form-group" show-errors>
                           <label class="col-sm-4 control-label" for="articleNumber" translate>Article no.</label>
                           <div class="col-sm-8">
-                            <input type="text" class="form-control" id="articleNumber" name="articleNumber" placeholder="{{ 'Enter article number' | translate }}" ng-model="article_number">
+                            <input type="text" class="form-control" id="articleNumber" name="articleNumber" placeholder="{{ 'Enter article number' | translate }}" ng-model="item.article_number">
                           </div>
                         </div>
 
                         <div class="form-group" show-errors>
                           <label class="col-sm-4 control-label" for="name" translate>Name</label>
                           <div class="col-sm-8">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="{{ 'Enter name of item' | translate }}" ng-model="name">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="{{ 'Enter name of item' | translate }}" ng-model="item.name">
                           </div>
                         </div>
 
@@ -52,9 +52,9 @@
                           <label class="col-sm-4 control-label" for="unit"><span translate>Unit</span> <span app-spinner="creatingUnit"></span></label>
                           <div class="col-sm-8" ng-class="{'has-error': itemForm.unit.$dirty && itemForm.unit.$error.required}">
                             <div class="input-group">
-                              <input type="text" class="form-control" id="unit" name="unit" ng-model="unit" data-min-length="0" data-auto-select="true" bs-options="unit as unit.unit for unit in units" placeholder="{{ 'Enter unit' | translate }}" autocomplete="off" bs-typeahead required>
+                              <input type="text" class="form-control" id="unit" name="unit" ng-model="item.unit" data-min-length="0" data-auto-select="true" bs-options="unit as unit.unit for unit in units" placeholder="{{ 'Enter unit' | translate }}" autocomplete="off" bs-typeahead required>
                               <span class="input-group-btn">
-                                <button class="btn btn-success" ng-disabled="unit == '' || isFilled(unit)" ng-click="createUnit()"><i class="fa fa-plus"></i></button>
+                                <button class="btn btn-success" ng-disabled="unit == '' || isFilled(item.unit)" ng-click="createUnit()"><i class="fa fa-plus"></i></button>
                               </span>
                             </div>
                             <p class="help-block" ng-if="itemForm.unit.$dirty && itemForm.unit.$error.required" translate>The unit of item is required</p>
@@ -76,7 +76,7 @@
                     <div class="panel-body">
                       <label class="col-sm-4 control-label" translate>Current Quantity</label>
                       <div class="col-sm-8">
-                        <p class="form-control-static">{{ quantity }} {{ unit.unit }}</p>
+                        <p class="form-control-static">{{ item.quantity }} {{ item.unit.unit }}</p>
                       </div>
                     </div>
                   </div>
@@ -90,7 +90,8 @@
     </div>
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" ng-disabled="!itemForm.$dirty" translate>Save</button>
+      <div app-spinner="savingItem"></div>
+      <button type="button" class="btn btn-primary" ng-disabled="!itemForm.$dirty" ng-click="saveChanges()" translate>Save</button>
       <button type="button" class="btn btn-default" ng-click="$hide()" translate>Close</button>
     </div>
 
