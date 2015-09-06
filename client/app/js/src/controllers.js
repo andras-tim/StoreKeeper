@@ -92,7 +92,7 @@ appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFa
     function ItemsController ($scope, ItemService, CommonFactory) {
         CommonFactory.handlePromise(
             ItemService.getList(),
-            null,
+            'loadingItems',
             function (items) {
                 $scope.items = items;
             });
@@ -144,14 +144,14 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
 
         CommonFactory.handlePromise(
             VendorService.getList(),
-            null,
+            'loadingVendors',
             function (vendors) {
                 $scope.vendors = vendors;
             });
 
         CommonFactory.handlePromise(
             UnitService.getList(),
-            null,
+            'loadingUnits',
             function (units) {
                 $scope.units = units;
             });

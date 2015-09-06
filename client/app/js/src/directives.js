@@ -6,21 +6,16 @@ var appDirectives = angular.module('appDirectives', []);
 /**
  * @ngdoc directive
  * @name appSpinner
- * @restrict A
- *
- * @param {boolean} appSpinner spinning is on
+ * @restrict EA
  *
  * @description
- * Input box for go to page in a pager
+ * Append a spinner
  */
 appDirectives.directive('appSpinner',
     function appSpinner () {
         return {
-            restrict: 'A',
-            scope: {
-                appSpinner: '='
-            },
-            template: ' <i ng-if="appSpinner" class="fa fa-spinner fa-pulse"></i>'
+            restrict: 'EA',
+            template: ' <i class="fa fa-spinner fa-pulse"></i> '
         };
     });
 

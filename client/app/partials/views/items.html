@@ -22,6 +22,9 @@
       </thead>
 
       <tbody>
+        <tr ng-if="loadingItems">
+          <td colspan="5" class="text-center" app-spinner></td>
+        </tr>
         <tr ng-repeat="item in displayedItems" app-details-row="item" data-template-url="partials/views/item.html">
           <td>{{ item.vendor.name }}</td>
           <td>{{ item.article_number }}</td>
