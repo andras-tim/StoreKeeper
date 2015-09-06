@@ -1,11 +1,11 @@
-<div app-details-modal>
+<app-details-modal>
   <span ng-controller="ItemController">
 
     <div class="modal-body">
-      <div app-details-modal-navbar>
+      <app-details-modal-navbar>
         <span class="navbar-brand"><i class="fa fa-cube"></i> {{ 'Item' | translate }} #{{ id }}</span>
         <span class="navbar-brand" ng-bind="name"></span>
-      </div>
+      </app-details-modal-navbar>
 
       <div class="details-modal-content">
         <div class="container-fluid">
@@ -95,4 +95,4 @@
     </div>
 
   </span>
-</div>
+</app-details-modal>

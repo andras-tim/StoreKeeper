@@ -50,7 +50,7 @@ appDirectives.directive('appPageInput',
 /**
  * @ngdoc directive
  * @name appDetailsModal
- * @restrict A
+ * @restrict EA
  *
  * @description
  * Root object for AngularStrap style modals
@@ -58,7 +58,7 @@ appDirectives.directive('appPageInput',
 appDirectives.directive('appDetailsModal',
     function appDetailsModal () {
         return {
-            restrict: 'A',
+            restrict: 'EA',
             transclude: true,
             replace: true,
             scope: true,
@@ -70,7 +70,7 @@ appDirectives.directive('appDetailsModal',
 /**
  * @ngdoc directive
  * @name appDetailsModal
- * @restrict A
+ * @restrict EA
  *
  * @description
  * Common navbar object for modals
@@ -79,7 +79,7 @@ appDirectives.directive('appDetailsModalNavbar',
     function appDetailsModalNavbar () {
         return {
             require: '^appDetailsModal',
-            restrict: 'A',
+            restrict: 'EA',
             transclude: true,
             replace: true,
             scope: true,
