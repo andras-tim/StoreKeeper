@@ -22,6 +22,117 @@ appDirectives.directive('appSpinner',
 
 /**
  * @ngdoc directive
+ * @name appInput
+ * @restrict E
+ *
+ * @param {string} appName
+ * @param {object} appModel
+ * @param {string} [appType=text]
+ * @param {expression} appLabel
+ * @param {expression} appPlaceholder
+ * @param {expression} appRequired
+ * @param {string} [appAutocomplete]
+ * @param {string} [appLabelClass=col-sm-4]
+ * @param {string} [appInputClass=col-sm-8]
+ *
+ * @description
+ * Input text with formatting extras + error handling
+ */
+appDirectives.directive('appInput',
+    function appInput () {
+        return {
+            require: '^form',
+            restrict: 'E',
+            scope: {
+                'appName': '@',
+                'appModel': '=',
+                'appType': '@',
+                'appLabel': '=',
+                'appPlaceholder': '=',
+                'appRequired': '=',
+                'appAutocomplete': '@',
+                'appLabelClass': '@',
+                'appInputClass': '@'
+            },
+            templateUrl: 'partials/widgets/input.html',
+            compile: function (element, attrs) {
+                if (!attrs.appType) {
+                    attrs.appType = 'text';
+                }
+                if (!attrs.appAutocomplete) {
+                    attrs.appAutocomplete = attrs.appType === 'text' ? 'on' : 'off';
+                }
+                if (!attrs.appLabelClass) {
+                    attrs.appLabelClass = 'col-sm-4';
+                }
+                if (!attrs.appInputClass) {
+                    attrs.appInputClass = 'col-sm-8';
+                }
+            }
+        };
+    });
+
+
+/**
+ * @ngdoc directive
+ * @name appCheckbox
+ * @restrict E
+ *
+ * @param {string} appName
+ * @param {object} appModel
+ * @param {expression} appLabel
+ * @param {expression} appTooltip
+ *
+ * @description
+ * Checkbox with label and tooltip
+ */
+appDirectives.directive('appCheckbox',
+    function appCheckbox () {
+        return {
+            require: '^form',
+            restrict: 'E',
+            scope: {
+                'appName': '@',
+                'appModel': '=',
+                'appLabel': '=',
+                'appTooltip': '='
+            },
+            templateUrl: 'partials/widgets/checkbox.html'
+        };
+    });
+
+
+/**
+ * @ngdoc directive
+ * @name appIndentedFormGroup
+ * @restrict E
+ *
+ * @param {string} [appClass=col-sm-offset-4 col-sm-8]
+ *
+ * @description
+ * For easy indent objects without left-side label
+ */
+appDirectives.directive('appIndentedFormGroup',
+    function appIndentedFormGroup () {
+        return {
+            require: '^form',
+            restrict: 'E',
+            transclude: true,
+            scope: {
+                'appClass': '@'
+            },
+            template: '<div class="form-group"><div class="{{ appClass }}" ng-transclude></div></div>',
+            compile: function (element, attrs) {
+                if (!attrs.appClass) {
+                    attrs.appClass = 'col-sm-offset-4 col-sm-8';
+                }
+            }
+        };
+    });
+
+
+/**
+ * @ngdoc directive
  * @name appPageInput
  * @restrict E
  *
