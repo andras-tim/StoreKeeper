@@ -195,24 +195,6 @@ describe('ItemController', function () {
         });
     });
 
-    describe('test isFilled() on model values of input box', function () {
-
-        beforeEach(function () {
-            test.injectController();
-            test.$rootScope.$apply();
-        });
-
-        it('string content means it is not filled', function () {
-            expect(test.mocks.$scope.isFilled('')).toBeFalsy();
-            expect(test.mocks.$scope.isFilled('foo')).toBeFalsy();
-        });
-
-        it('dict content means it is filled', function () {
-            expect(test.mocks.$scope.isFilled({})).toBeTruthy();
-            expect(test.mocks.$scope.isFilled({'name': 'foo'})).toBeTruthy();
-        });
-    });
-
     describe('create a new vendor', function () {
 
         beforeEach(function () {

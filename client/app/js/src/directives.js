@@ -22,6 +22,44 @@ appDirectives.directive('appSpinner',
 
 /**
  * @ngdoc directive
+ * @name appLabel
+ * @restrict E
+ *
+ * @param {string} appObjectId
+ * @param {expression} appLabel
+ * @param {string} [appLabelClass=col-sm-4]
+ * @param {string} [appObjectClass=col-sm-8]
+ *
+ * @description
+ * Make label for anything
+ */
+appDirectives.directive('appLabel',
+    function appLabel () {
+        return {
+            require: '^form',
+            restrict: 'E',
+            transclude: true,
+            scope: {
+                'appObjectId': '@',
+                'appLabel': '=',
+                'appLabelClass': '@',
+                'appObjectClass': '@'
+            },
+            templateUrl: 'partials/widgets/label.html',
+            compile: function (element, attrs) {
+                if (!attrs.appLabelClass) {
+                    attrs.appLabelClass = 'col-sm-4';
+                }
+                if (!attrs.appObjectClass) {
+                    attrs.appObjectClass = 'col-sm-8';
+                }
+            }
+        };
+    });
+
+
+/**
+ * @ngdoc directive
  * @name appInput
  * @restrict E
  *
@@ -60,7 +98,7 @@ appDirectives.directive('appInput',
                     attrs.appType = 'text';
                 }
                 if (!attrs.appAutocomplete) {
-                    attrs.appAutocomplete = attrs.appType === 'text' ? 'on' : 'off';
+                    attrs.appAutocomplete = attrs.appType === 'password' ? 'off' : 'on';
                 }
                 if (!attrs.appLabelClass) {
                     attrs.appLabelClass = 'col-sm-4';
@@ -69,6 +107,65 @@ appDirectives.directive('appInput',
                     attrs.appInputClass = 'col-sm-8';
                 }
             }
+        };
+    });
+
+
+/**
+ * @ngdoc directive
+ * @name appTypeahead
+ * @restrict E
+ *
+ * @param {string} appName
+ * @param {object} appModel
+ * @param {string} appDataSource
+ * @param {expression} appLabel
+ * @param {expression} appPlaceholder
+ * @param {expression} appRequired
+ * @param {function} appCreateCallback
+ * @param {object} [appLoadingSpinner]
+ * @param {object} [appCreatingSpinner]
+ * @param {string} [appLabelClass=col-sm-4]
+ * @param {string} [appInputClass=col-sm-8]
+ *
+ * @description
+ * Typeahead with formatting extras + error handling
+ */
+appDirectives.directive('appTypeahead',
+    function appTypeahead () {
+        return {
+            require: '^form',
+            restrict: 'E',
+            scope: {
+                'appName': '@',
+                'appModel': '=',
+                'appDataSource': '@',
+                'appLabel': '=',
+                'appPlaceholder': '=',
+                'appRequired': '=',
+                'appCreateCallback': '&',
+                'appLoadingSpinner': '=',
+                'appCreatingSpinner': '=',
+                'appLabelClass': '@',
+                'appInputClass': '@'
+            },
+            templateUrl: 'partials/widgets/typeahead.html',
+            compile: function (element, attrs) {
+                if (!attrs.appLabelClass) {
+                    attrs.appLabelClass = 'col-sm-4';
+                }
+                if (!attrs.appInputClass) {
+                    attrs.appInputClass = 'col-sm-8';
+                }
+            },
+            controller: ['$scope',
+                function ($scope) {
+                    var isFilled = function isFilled (modelRef) {
+                        return typeof modelRef === 'object';
+                    };
+
+                    $scope.isFilled = isFilled;
+                }]
         };
     });
 
@@ -220,5 +317,26 @@ appDirectives.directive('appDetailsModalNavbar',
             replace: true,
             scope: true,
             templateUrl: 'partials/widgets/details_modal_navbar.html'
+        };
+    });
+
+
+/**
+ * @ngdoc directive
+ * @name appDetailsModalPanel
+ * @restrict E
+ *
+ * @description
+ * Common navbar object for modals
+ */
+appDirectives.directive('appDetailsModalPanel',
+    function appDetailsModalPanel () {
+        return {
+            require: '^appDetailsModal',
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            scope: true,
+            templateUrl: 'partials/widgets/details_modal_panel.html'
         };
     });

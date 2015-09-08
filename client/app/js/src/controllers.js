@@ -101,10 +101,6 @@ appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFa
 
 appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorService', 'UnitService', 'CommonFactory',
     function ItemController ($scope, Restangular, VendorService, UnitService, CommonFactory) {
-        function isFilled(modelRef) {
-            return typeof modelRef === 'object';
-        }
-
         function createVendor() {
             var completedNewVendor = {'name': $scope.item.vendor};
 
@@ -156,7 +152,6 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
                 $scope.units = units;
             });
 
-        $scope.isFilled = isFilled;
         $scope.createVendor = createVendor;
         $scope.createUnit = createUnit;
         $scope.saveChanges = saveChanges;
