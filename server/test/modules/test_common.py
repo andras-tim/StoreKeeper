@@ -21,3 +21,21 @@ class TestListInListHelpers(unittest.TestCase):
         assert common.any_in(self.EXTENDED, self.REFERENCE)
         assert common.any_in(self.OVERLAPPED, self.REFERENCE)
         assert not common.any_in(self.DISJUNCT, self.REFERENCE)
+
+
+class TestDictInListHelpers(unittest.TestCase):
+    DATA = {
+        'apple': 1,
+        'orange': 2,
+        'peach': 3,
+    }
+
+    def test_filter_dict(self):
+        assert common.filter_dict(self.DATA, {'apple', 'orange'}) == {
+            'apple': 1,
+            'orange': 2,
+        }
+        assert common.filter_dict(self.DATA, {'apple', 'peach'}) == {
+            'apple': 1,
+            'peach': 3,
+        }

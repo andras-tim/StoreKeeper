@@ -1,6 +1,8 @@
 from datetime import datetime
 import json
 
+from app.modules.common import filter_dict
+
 
 class FilterableDict:
     def __init__(self, commons: (dict, None)=None, getters: (dict, None)=None, setters: (dict, None)=None):
@@ -14,10 +16,10 @@ class FilterableDict:
         result.update(self.__setters)
         return result[item]
 
-    def get(self, fields_in_result: (list, None)=None, change: (dict, None)=None) -> dict:
+    def get(self, fields_in_result: (list, set, None)=None, change: (dict, None)=None) -> dict:
         return self.__get_results(self.__getters, fields_in_result, change)
 
-    def set(self, fields_in_result: (list, None)=None, change: (dict, None)=None) -> dict:
+    def set(self, fields_in_result: (list, set, None)=None, change: (dict, None)=None) -> dict:
         return self.__get_results(self.__setters, fields_in_result, change)
 
     def get_changed(self, commons: (dict, None)=None, getters: (dict, None)=None,
@@ -33,7 +35,7 @@ class FilterableDict:
 
         return FilterableDict(commons=new_commons, getters=new_getters, setters=new_setters)
 
-    def __get_results(self, call_specific_data: dict, fields_in_result: (list, None),
+    def __get_results(self, call_specific_data: dict, fields_in_result: (list, set, None),
                       changed_fields: (dict, None)) -> dict:
         result = dict(self.__commons)
         result.update(call_specific_data)
@@ -42,7 +44,7 @@ class FilterableDict:
             result.update(changed_fields)
 
         if fields_in_result is not None:
-            result = dict((k, v) for k, v in result.items() if k in fields_in_result)
+            result = filter_dict(result, fields_in_result)
 
         return result
 
@@ -147,6 +149,13 @@ class ExampleBarcodes:
     BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32, 'item_id': 1, 'main': True},
                               getters={'id': 1})
     BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1, 'item_id': 1, 'main': False},
+                              getters={'id': 2})
+
+
+class ExampleItemBarcodes:
+    BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32, 'main': True},
+                              getters={'id': 1})
+    BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1, 'main': False},
                               getters={'id': 2})
 
 
