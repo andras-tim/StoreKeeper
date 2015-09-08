@@ -2,9 +2,10 @@
 cd "$(dirname "$0")/.."
 while true
 do
-    inotifywait -qq -e modify,create,delete app/css/src app/js/src
+    inotifywait -r -qq -e modify,create,delete app/css/src app/js/src
     sleep 1
 
+    echo -e '\n[client] Minifing resource files...'
     set +e
     utils/res_minify.sh
     set -e
