@@ -88,7 +88,7 @@ def _check_only_one_main_barcode_per_item(barcode: Barcode):
     if not barcode.main:
         return
     if Barcode.query.filter(Barcode.id != barcode.id,
-                            Barcode.item_id == barcode.item.id,
+                            Barcode.item_id == barcode.item_id,
                             Barcode.main).count() > 0:
         abort(422, message={'main': ['Can not set more than one main barcode to an item.']})
 

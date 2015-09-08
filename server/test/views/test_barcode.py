@@ -6,7 +6,7 @@ from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 # I do not want to check the output of printing, therefore this feature is tested only by rights
 
 @append_mandatory_field_tests(item_name='barcode', base_item=Barcodes.BARCODE1,
-                              mandatory_fields=['barcode', 'item'])
+                              mandatory_fields=['barcode', 'item_id'])
 class TestBarcodeWithBrandNewDb(CommonApiTest):
     ENDPOINT = '/barcodes'
     INIT_PUSH = [
@@ -73,10 +73,10 @@ class TestBarcodeWithPreFilledDb(CommonApiTest):
     def test_update_barcode(self):
         request = Barcodes.BARCODE2.set(change={'barcode': 'XX{:s}XX'.format(Barcodes.BARCODE2['barcode']),
                                                 'quantity': Barcodes.BARCODE2['quantity'] + 1,
-                                                'item': Items.ITEM2.get(),
+                                                'item_id': Items.ITEM2.get()['id'],
                                                 'main': True})
         response = Barcodes.BARCODE2.get(change={'barcode': request['barcode'], 'quantity': request['quantity'],
-                                                 'item': request['item'], 'main': request['main']})
+                                                 'item_id': request['item_id'], 'main': request['main']})
 
         self.assertApiPut(Barcodes.BARCODE2['id'], data=request, expected_data=response)
         self.assertApiGet(expected_data=[Barcodes.BARCODE1, response])
