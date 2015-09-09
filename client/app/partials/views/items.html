@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <h2><i class="fa fa-cube"></i> <span ng-bind="'Items' | translate | setTitle"></span></h2>
 
-    <table st-table="displayedItems" st-safe-src="items" st-set-filter="isContainedInNested" class="table table-striped table-hover">
+    <table st-table="displayedItems" st-safe-src="items" st-set-filter="isContainedInNested" app-table-persist="items" class="table table-striped table-hover">
       <thead>
         <tr class="clickable">
           <th st-sort="vendor.name" translate>Vendor</th>
