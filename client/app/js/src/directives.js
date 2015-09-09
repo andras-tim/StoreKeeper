@@ -201,6 +201,35 @@ appDirectives.directive('appFormCheckbox',
 
 /**
  * @ngdoc directive
+ * @name appCheckbox
+ * @restrict E
+ *
+ * @param {string} appName
+ * @param {object} appModel
+ * @param {expression} appLabel
+ * @param {expression} appTooltip
+ *
+ * @description
+ * Checkbox with label and tooltip
+ */
+appDirectives.directive('appCheckbox',
+    function appCheckbox () {
+        return {
+            require: '^form',
+            restrict: 'E',
+            scope: {
+                'appName': '@',
+                'appModel': '=',
+                'appLabel': '=',
+                'appTooltip': '='
+            },
+            templateUrl: 'partials/widgets/checkbox.html'
+        };
+    });
+
+
+/**
+ * @ngdoc directive
  * @name appIndentedFormGroup
  * @restrict E
  *
