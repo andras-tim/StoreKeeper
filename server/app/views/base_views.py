@@ -203,7 +203,7 @@ class BaseNestedListView(BaseListView):
         return _initialize_parent_item(self._parent_model, parent_id)
 
 
-class BaseNestedModelView(BaseView):
+class BaseNestedView(BaseView):
     _parent_model = None
 
     def _get(self, **filter) -> 'RPC response':
@@ -258,7 +258,7 @@ class BaseNestedModelView(BaseView):
         return _initialize_parent_item(self._parent_model, parent_id)
 
 
-class BaseNestedModelViewWithDiff(BaseNestedModelView):
+class BaseNestedViewWithDiff(BaseNestedView):
     __differ = ModelDataDiffer()
 
     def _save_original_before_populate(self, id: int):

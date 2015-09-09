@@ -2,7 +2,7 @@ from flask import g
 from flask.ext.restful import abort
 
 from app.models import User, UserConfig
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
+from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
 from app.modules.example_data import ExampleUsers, ExampleUserConfigs
 from app.serializers import UserSerializer, UserDeserializer, UserConfigSerializer, UserConfigDeserializer
 from app.views.common import api_func
@@ -92,7 +92,7 @@ class UserConfigListView(BaseNestedListView):
         return self._post(user_id=id)
 
 
-class UserConfigView(BaseNestedModelView):
+class UserConfigView(BaseNestedView):
     _model = UserConfig
     _parent_model = User
     _serializer = UserConfigSerializer()
