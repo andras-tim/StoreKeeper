@@ -22,10 +22,38 @@
             </app-details-modal-panel>
 
             <app-details-modal-panel>
-              <!-- Meta, barcodes -->
-              <app-label app-label="'Current Quantity' | translate">
-                <p class="form-control-static">{{ item.quantity }} {{ item.unit.unit }}</p>
+              <!-- Meta -->
+              <app-label app-label="'Current Quantity' | translate" app-object-id="foo">
+                <p id="foo" class="form-control-static">{{ item.quantity }} {{ item.unit.unit }}</p>
               </app-label>
+            </app-details-modal-panel>
+
+            <app-details-modal-panel>
+              <!-- Barcodes -->
+              <form name="barcodesForm">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th translate>Barcode</th>
+                      <th translate>Quantity</th>
+                      <th translate>On Labels</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="barcode in barcodes">
+                      <td>{{ barcode.barcode }}</td>
+                      <td>{{ barcode.quantity }} {{ item.unit.unit }}</td>
+                      <td>
+                        <app-checkbox app-name="itemMain" app-model="barcode.main" app-tooltip="'Use the selected on labels' | translate"></app-checkbox>
+                      </td>
+                      <td>
+                        <button type="button" ng-click="downloadLabel(barcode.id)" class="btn btn-default btn-xs"><i class="fa fa-barcode"></i></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </form>
             </app-details-modal-panel>
 
           </div>

@@ -136,7 +136,19 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
             );
         }
 
+        function downloadLabel(barcodeId) {
+            window.location.href = 'api/items/' + $scope.item.id + '/barcodes/' + barcodeId + '/print';
+            //console.log($scope.item.one('barcodes', barcodeId));
+        }
+
         $scope.item = Restangular.copy($scope.rowData);
+
+        CommonFactory.handlePromise(
+            $scope.item.getList('barcodes'),
+            'loadingBarcodes',
+            function (barcodes) {
+                $scope.barcodes = barcodes;
+            });
 
         CommonFactory.handlePromise(
             VendorService.getList(),
@@ -154,5 +166,6 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
 
         $scope.createVendor = createVendor;
         $scope.createUnit = createUnit;
+        $scope.downloadLabel = downloadLabel;
         $scope.saveChanges = saveChanges;
     }]);
