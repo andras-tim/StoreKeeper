@@ -1,7 +1,7 @@
 <app-indented-form-group>
 
   <div class="checkbox">
-    <label ng-if="appTooltip" data-type="info" data-title="{{'User will not logged out after close this window' | translate}}" bs-tooltip>
+    <label ng-if="appTooltip" data-type="info" data-title="{{ appTooltip }}" bs-tooltip>
       <input name="{{ appName }}" id="{{ appName }}Checkbox" type="checkbox" ng-model="appModel"> {{ appLabel }}
     </label>
     <label ng-if="!appTooltip">
