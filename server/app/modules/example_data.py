@@ -150,6 +150,8 @@ class ExampleBarcodes:
                               getters={'id': 1})
     BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1, 'item_id': 1, 'main': False},
                               getters={'id': 2})
+    BARCODE3 = FilterableDict(commons={'barcode': '34457688643', 'quantity': 35, 'item_id': 2, 'main': True},
+                              getters={'id': 3})
 
 
 class ExampleItemBarcodes:

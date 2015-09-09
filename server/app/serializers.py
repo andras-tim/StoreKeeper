@@ -113,6 +113,17 @@ class ItemSerializer(BasicSerializer):
     }
 
 
+class ItemBarcodeSerializer(BasicSerializer):
+    fields = ('id', 'barcode', 'quantity', 'main')
+
+
+class ItemBarcodeDeserializer(Serializer):
+    id = fields.Int()
+    barcode = fields.Str(required=True, validate=_not_blank)
+    quantity = fields.Int(validate=_greater_than_zero)
+    main = fields.Bool()
+
+
 class ItemDeserializer(Serializer):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
