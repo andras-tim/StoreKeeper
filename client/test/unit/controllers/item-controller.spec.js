@@ -24,7 +24,39 @@ describe('ItemController', function () {
                         'id': 3,
                         'name': 'Foo Bar'
                     }
-                }
+                },
+                'vendors': [
+                    {
+                        'id': 3,
+                        'name': 'Foo Bar.'
+                    },
+                    {
+                        'id': 4,
+                        'name': 'Kiwi Co.'
+                    }],
+                'units': [
+                    {
+                        'id': 5,
+                        'unit': 'pcs'
+                    },
+                    {
+                        'id': 2,
+                        'unit': 'kg'
+                    }],
+                'barcodes': [
+                    {
+                        'barcode': 'SK227571',
+                        'id': 46,
+                        'main': true,
+                        'quantity': 1
+                    },
+                    {
+                        'barcode': 'SK665157',
+                        'id': 47,
+                        'main': false,
+                        'quantity': 15
+                    }
+                ]
             },
 
             mocks = {
@@ -33,6 +65,9 @@ describe('ItemController', function () {
                     'rowData': {
                         'put': function (item) {
                             return helper.promiseMock(test, 'itemPutResolved', item);
+                        },
+                        'getList': function () {
+                            return helper.promiseMock(test, 'itemGetListResolved', mocks.barcodeList);
                         }
                     }
                 },
@@ -41,9 +76,9 @@ describe('ItemController', function () {
                         return angular.extend({}, data);
                     }
                 },
-                'vendorList': {
+                'vendorList': angular.extend({
                     'push': function () {}
-                },
+                }, data.vendors),
                 'VendorService': {
                     'getList': function () {
                         return helper.promiseMock(test, 'vendorsGetListResolved', mocks.vendorList);
@@ -52,9 +87,9 @@ describe('ItemController', function () {
                         return helper.promiseMock(test, 'vendorPostResolved', newVendor);
                     }
                 },
-                'unitList': {
+                'unitList': angular.extend({
                     'push': function () {}
-                },
+                }, data.units),
                 'UnitService': {
                     'getList': function () {
                         return helper.promiseMock(test, 'unitsGetListResolved', mocks.unitList);
@@ -63,6 +98,9 @@ describe('ItemController', function () {
                         return helper.promiseMock(test, 'unitPostResolved', newUnit);
                     }
                 },
+                'barcodeList': angular.extend({
+                    'push': function () {}
+                }, data.barcodes),
                 'CommonFactory': {
                     'handlePromise': function (promise, spinner, resolve, reject) {
                         promise.then(resolve, reject);
@@ -82,6 +120,7 @@ describe('ItemController', function () {
             injectController = function () {
                 spyOn(test.mocks.$scope, '$hide').and.stub();
                 spyOn(test.mocks.$scope.rowData, 'put').and.callThrough();
+                spyOn(test.mocks.$scope.rowData, 'getList').and.callThrough();
                 spyOn(test.mocks.Restangular, 'copy').and.callThrough();
                 spyOn(test.mocks.VendorService, 'getList').and.callThrough();
                 spyOn(test.mocks.vendorList, 'push').and.stub();
@@ -108,6 +147,7 @@ describe('ItemController', function () {
 
     beforeEach(function () {
         test.itemPutResolved = true;
+        test.itemGetListResolved = true;
         test.vendorsGetListResolved = true;
         test.vendorPostResolved = true;
         test.unitsGetListResolved = true;
@@ -152,11 +192,15 @@ describe('ItemController', function () {
 
             expect(test.mocks.UnitService.getList).toHaveBeenCalled();
             expect(test.mocks.$scope.units).toBe(test.mocks.unitList);
+
+            expect(test.mocks.$scope.rowData.getList).toHaveBeenCalledWith('barcodes');
+            expect(test.mocks.$scope.barcodes).toBe(test.mocks.barcodeList);
         });
 
         it('can not load by server error', function () {
             test.vendorsGetListResolved = false;
             test.unitsGetListResolved = false;
+            test.itemGetListResolved = false;
             test.injectController();
             test.$rootScope.$apply();
 
@@ -165,6 +209,9 @@ describe('ItemController', function () {
 
             expect(test.mocks.UnitService.getList).toHaveBeenCalled();
             expect(test.mocks.$scope.units).not.toBeDefined();
+
+            expect(test.mocks.$scope.rowData.getList).toHaveBeenCalledWith('barcodes');
+            expect(test.mocks.$scope.barcodes).not.toBeDefined();
         });
 
         it('can save then closes window', function () {
