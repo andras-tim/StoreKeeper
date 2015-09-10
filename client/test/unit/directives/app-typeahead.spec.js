@@ -29,7 +29,7 @@ describe('AppTypeahead', function () {
                     test.$scope.loadingVendors = mocks.loadingVendors;
                     test.$scope.creatingVendor = mocks.creatingVendor;
 
-                    test.container = helper.compileTemplate(test, '<app-typeahead ' +
+                    test.container = helper.compileTemplate(test, '<app-form-typeahead ' +
                         'app-name="foo" ' +
                         'app-model="item.vendor" ' +
                         'app-label="\'bar\'" ' +
@@ -38,7 +38,7 @@ describe('AppTypeahead', function () {
                         'app-placeholder="\'kakao\'" ' +
                         'app-required="\'Vendor is required\'" ' +
                         'app-loading-spinner="loadingVendors" ' +
-                        'app-creating-spinner="creatingVendor"></app-typeahead>');
+                        'app-creating-spinner="creatingVendor"></app-form-typeahead>');
                 });
             };
 

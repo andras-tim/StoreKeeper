@@ -60,7 +60,7 @@ appDirectives.directive('appLabel',
 
 /**
  * @ngdoc directive
- * @name appInput
+ * @name appFormInput
  * @restrict E
  *
  * @param {string} appName
@@ -74,10 +74,10 @@ appDirectives.directive('appLabel',
  * @param {string} [appInputClass=col-sm-8]
  *
  * @description
- * Input text with formatting extras + error handling
+ * Input text for forms
  */
-appDirectives.directive('appInput',
-    function appInput () {
+appDirectives.directive('appFormInput',
+    function appFormInput () {
         return {
             require: '^form',
             restrict: 'E',
@@ -92,7 +92,7 @@ appDirectives.directive('appInput',
                 'appLabelClass': '@',
                 'appInputClass': '@'
             },
-            templateUrl: 'partials/widgets/input.html',
+            templateUrl: 'partials/widgets/form-input.html',
             compile: function (element, attrs) {
                 if (!attrs.appType) {
                     attrs.appType = 'text';
@@ -113,7 +113,7 @@ appDirectives.directive('appInput',
 
 /**
  * @ngdoc directive
- * @name appTypeahead
+ * @name appFormTypeahead
  * @restrict E
  *
  * @param {string} appName
@@ -129,10 +129,10 @@ appDirectives.directive('appInput',
  * @param {string} [appInputClass=col-sm-8]
  *
  * @description
- * Typeahead with formatting extras + error handling
+ * Typeahead for forms
  */
-appDirectives.directive('appTypeahead',
-    function appTypeahead () {
+appDirectives.directive('appFormTypeahead',
+    function appFormTypeahead () {
         return {
             require: '^form',
             restrict: 'E',
@@ -149,7 +149,7 @@ appDirectives.directive('appTypeahead',
                 'appLabelClass': '@',
                 'appInputClass': '@'
             },
-            templateUrl: 'partials/widgets/typeahead.html',
+            templateUrl: 'partials/widgets/form-typeahead.html',
             compile: function (element, attrs) {
                 if (!attrs.appLabelClass) {
                     attrs.appLabelClass = 'col-sm-4';
@@ -172,7 +172,7 @@ appDirectives.directive('appTypeahead',
 
 /**
  * @ngdoc directive
- * @name appCheckbox
+ * @name appFormCheckbox
  * @restrict E
  *
  * @param {string} appName
@@ -183,8 +183,8 @@ appDirectives.directive('appTypeahead',
  * @description
  * Checkbox with label and tooltip
  */
-appDirectives.directive('appCheckbox',
-    function appCheckbox () {
+appDirectives.directive('appFormCheckbox',
+    function appFormCheckbox () {
         return {
             require: '^form',
             restrict: 'E',
@@ -194,7 +194,7 @@ appDirectives.directive('appCheckbox',
                 'appLabel': '=',
                 'appTooltip': '='
             },
-            templateUrl: 'partials/widgets/checkbox.html'
+            templateUrl: 'partials/widgets/form-checkbox.html'
         };
     });
 
