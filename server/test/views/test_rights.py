@@ -4,6 +4,7 @@ from app.modules.example_data import (
     ExampleBarcodes as Barcodes,
     ExampleCustomers as Customers,
     ExampleItems as Items,
+    ExampleItemBarcodes as ItemBarcodes,
     ExampleUnits as Units,
     ExampleStocktakings as Stocktakings,
     ExampleStocktakingItems as StocktakingItems,
@@ -60,26 +61,14 @@ class TestAcquisitionItemRights(CommonRightsTest):
 
 
 @use_as_rights_data_provider('/barcodes')
-class TestBarcodeRights(CommonRightsTest):
+class TestItemBarcodeRights(CommonRightsTest):
     INIT_PUSH = [
         ('/vendors', [Vendors.VENDOR1]),
         ('/units', [Units.UNIT1, Units.UNIT2]),
         ('/items', [Items.ITEM1]),
-        ('/barcodes', [Barcodes.BARCODE1]),
+        ('/items/1/barcodes', [Barcodes.BARCODE1]),
     ]
-    DATA_MAP = {'barcode1': Barcodes.BARCODE1, 'barcode2': Barcodes.BARCODE2}
-    RIGHTS = _get_all_rights_for_logged_in_users('barcode1', 'barcode2')
-
-
-@use_as_rights_data_provider('/barcodes/1/print')
-class TestBarcodeLabelPrintingRights(CommonRightsTest):
-    INIT_PUSH = [
-        ('/vendors', [Vendors.VENDOR1]),
-        ('/units', [Units.UNIT1, Units.UNIT2]),
-        ('/items', [Items.ITEM1]),
-        ('/barcodes', [Barcodes.BARCODE1]),
-    ]
-    RIGHTS = {  # Can not test PUT (printing on printer) while it was not mocked
+    RIGHTS = {
         'anonymous': {
             'get': False,
         },
@@ -123,6 +112,39 @@ class TestItemRights(CommonRightsTest):
     ]
     DATA_MAP = {'item1': Items.ITEM1, 'item2': Items.ITEM2}
     RIGHTS = _get_all_rights_for_logged_in_users('item1', 'item2')
+
+
+@use_as_rights_data_provider('/items/1/barcodes')
+class TestBarcodeRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/vendors', [Vendors.VENDOR1]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1]),
+        ('/items/1/barcodes', [ItemBarcodes.BARCODE1]),
+    ]
+    DATA_MAP = {'barcode1': ItemBarcodes.BARCODE1, 'barcode2': ItemBarcodes.BARCODE2}
+    RIGHTS = _get_all_rights_for_logged_in_users('barcode1', 'barcode2')
+
+
+@use_as_rights_data_provider('/items/1/barcodes/1/print')
+class TestBarcodeLabelPrintingRights(CommonRightsTest):
+    INIT_PUSH = [
+        ('/vendors', [Vendors.VENDOR1]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1]),
+        ('/items/1/barcodes', [Barcodes.BARCODE1]),
+    ]
+    RIGHTS = {  # Can not test PUT (printing on printer) while it was not mocked
+        'anonymous': {
+            'get': False,
+        },
+        'admin': {
+            'get': True,
+        },
+        'user1': {
+            'get': True,
+        },
+    }
 
 
 @use_as_rights_data_provider('/session')

@@ -4,3 +4,7 @@ def list_in_list(list1: list, list2: list) -> list:
 
 def any_in(list1: list, list2: list) -> bool:
     return any(list_in_list(list1, list2))
+
+
+def filter_dict(dictionary: dict, fields: (list, set)) -> dict:
+    return dict((k, v) for k, v in dictionary.items() if k in fields)

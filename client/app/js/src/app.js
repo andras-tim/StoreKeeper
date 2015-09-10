@@ -93,4 +93,5 @@ storekeeperApp.config(['$tooltipProvider',
 storekeeperApp.config(['stConfig',
     function (stConfig) {
         stConfig.pagination.template = 'partials/widgets/table_pager.html';
+        stConfig.pagination.itemsByPage = 20;
     }]);

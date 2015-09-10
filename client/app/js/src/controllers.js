@@ -92,7 +92,7 @@ appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFa
     function ItemsController ($scope, ItemService, CommonFactory) {
         CommonFactory.handlePromise(
             ItemService.getList(),
-            null,
+            'loadingItems',
             function (items) {
                 $scope.items = items;
             });
@@ -101,49 +101,71 @@ appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFa
 
 appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorService', 'UnitService', 'CommonFactory',
     function ItemController ($scope, Restangular, VendorService, UnitService, CommonFactory) {
-        function isFilled(modelRef) {
-            return typeof modelRef === 'object';
-        }
-
         function createVendor() {
-            var completedNewVendor = {'name': $scope.vendor};
+            var completedNewVendor = {'name': $scope.item.vendor};
 
             CommonFactory.handlePromise(
                 VendorService.post(Restangular.copy(completedNewVendor)),
                 'creatingVendor',
                 function (resp) {
                     $scope.vendors.push(resp);
-                    $scope.vendor = resp;
+                    $scope.item.vendor = resp;
                 });
         }
 
         function createUnit() {
-            var completedNewUnit = { 'unit': $scope.unit };
+            var completedNewUnit = { 'unit': $scope.item.unit };
 
             CommonFactory.handlePromise(
                 UnitService.post(Restangular.copy(completedNewUnit)),
                 'creatingUnit',
                 function (resp) {
                     $scope.units.push(resp);
-                    $scope.unit = resp;
+                    $scope.item.unit = resp;
                 });
         }
 
+        function saveChanges() {
+            CommonFactory.handlePromise(
+                $scope.item.put(),
+                'savingItem',
+                function () {
+                    angular.merge($scope.rowData, $scope.item);
+                    $scope.$hide();
+                }
+            );
+        }
+
+        function downloadLabel(barcodeId) {
+            window.location.href = 'api/items/' + $scope.item.id + '/barcodes/' + barcodeId + '/print';
+            //console.log($scope.item.one('barcodes', barcodeId));
+        }
+
+        $scope.item = Restangular.copy($scope.rowData);
+
+        CommonFactory.handlePromise(
+            $scope.item.getList('barcodes'),
+            'loadingBarcodes',
+            function (barcodes) {
+                $scope.barcodes = barcodes;
+            });
+
         CommonFactory.handlePromise(
             VendorService.getList(),
-            null,
+            'loadingVendors',
             function (vendors) {
                 $scope.vendors = vendors;
             });
 
         CommonFactory.handlePromise(
             UnitService.getList(),
-            null,
+            'loadingUnits',
             function (units) {
                 $scope.units = units;
             });
 
-        $scope.isFilled = isFilled;
         $scope.createVendor = createVendor;
         $scope.createUnit = createUnit;
+        $scope.downloadLabel = downloadLabel;
+        $scope.saveChanges = saveChanges;
     }]);

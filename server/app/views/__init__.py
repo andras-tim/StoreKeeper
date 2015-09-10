@@ -13,8 +13,6 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
         'acquisition_item': (acquisition.AcquisitionItemView, '/acquisitions/<int:id>/items/<int:item_id>'),
 
         'barcode_list': (barcode.BarcodeListView, '/barcodes'),
-        'barcode': (barcode.BarcodeView, '/barcodes/<int:id>'),
-        'barcode_print': (barcode.BarcodePrintView, '/barcodes/<int:id>/print'),
 
         'config': (config.ConfigView, '/config'),
 
@@ -23,6 +21,9 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
 
         'item_list': (item.ItemListView, '/items'),
         'item': (item.ItemView, '/items/<int:id>'),
+        'item_barcode_list': (item.ItemBarcodeListView, '/items/<int:id>/barcodes'),
+        'item_barcode': (item.ItemBarcodeView, '/items/<int:item_id>/barcodes/<int:id>'),
+        'item_barcode_print': (item.ItemBarcodePrintView, '/items/<int:item_id>/barcodes/<int:id>/print'),
 
         'session': (session.SessionView, '/session'),
 

@@ -1,5 +1,5 @@
 from app.models import Stocktaking, StocktakingItem
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
+from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
 from app.modules.example_data import ExampleStocktakings, ExampleStocktakingItems
 from app.serializers import StocktakingSerializer, StocktakingDeserializer, StocktakingItemSerializer, \
     StocktakingItemDeserializer
@@ -68,7 +68,7 @@ class StocktakingItemListView(BaseNestedListView):
         return self._post(stocktaking_id=id)
 
 
-class StocktakingItemView(BaseNestedModelView):
+class StocktakingItemView(BaseNestedView):
     _model = StocktakingItem
     _parent_model = Stocktaking
     _serializer = StocktakingItemSerializer()

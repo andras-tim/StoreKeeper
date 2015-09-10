@@ -1,5 +1,5 @@
 from app.models import Acquisition, AcquisitionItem
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedModelView
+from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
 from app.modules.example_data import ExampleAcquisitions, ExampleAcquisitionItems
 from app.serializers import AcquisitionSerializer, AcquisitionDeserializer, AcquisitionItemSerializer, \
     AcquisitionItemDeserializer
@@ -68,7 +68,7 @@ class AcquisitionItemListView(BaseNestedListView):
         return self._post(acquisition_id=id)
 
 
-class AcquisitionItemView(BaseNestedModelView):
+class AcquisitionItemView(BaseNestedView):
     _model = AcquisitionItem
     _parent_model = Acquisition
     _serializer = AcquisitionItemSerializer()

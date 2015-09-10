@@ -50,7 +50,7 @@ function get_count_of_cpu_cores()
 
 function get_parallel_run_options()
 {
-    echo "-n $[$(get_count_of_cpu_cores) - 1]"
+    echo "-n $(get_count_of_cpu_cores)"
 }
 
 

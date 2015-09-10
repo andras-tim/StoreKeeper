@@ -7,9 +7,9 @@ describe('Login view', function () {
     beforeEach(function () {
         browser.get('storekeeper/index.html#/login');
 
-        elements.username = element(by.model('user.username'));
-        elements.password = element(by.model('user.password'));
-        elements.remember = element(by.model('user.remember'));
+        elements.username = element(by.id('usernameInput'));
+        elements.password = element(by.id('passwordInput'));
+        elements.remember = element(by.id('rememberCheckbox'));
         elements.login = element(by.id('login'));
     });
 
