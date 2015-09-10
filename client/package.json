@@ -1,9 +1,18 @@
 {
   "name": "storekeeper",
-  "description": "StoreKeeper",
+  "description": "Multilingual warehouse/store management software",
   "version": "0.1.0",
+  "author": "Andras Tim <andras.tim@gmail.com>",
+  "contributors": [],
+  "license": "GPLv2",
   "private": true,
-  "repository": "https://github.com/andras-tim/StoreKeeper.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andras-tim/StoreKeeper"
+  },
+  "bugs": {
+    "url": "https://github.com/andras-tim/StoreKeeper/issues"
+  },
   "engine": "node >= 0.10.25",
   "dependencies": {
     "bower": "~1.5.2",
