@@ -1,7 +1,6 @@
-node_modules/
 app/bower_components/
-*.log
+node_modules/
 tmp/
+*.log
 
-app/js/dist/
-app/css/dist/
+app/dist/

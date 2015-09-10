@@ -1,7 +1,0 @@
-'use strict';
-
-angular.module('gettext').run(['gettextCatalog', function (gettextCatalog) {
-/* jshint -W100 */
-    gettextCatalog.setStrings('hu', {"Article Number":"Cikkszám","Article no.":"Cikkszám","Article number is required":"A cikkszámot kötelező megadni","Barcode":"Vonalkód","Close":"Bezárás","Current Quantity":"Aktuális mennyiség","Enter unit":"Írja be a mennyiségi egységet","Enter vendor":"Írja be a gyártót","Error {{status}}":"Hiba {{status}}","Item":"Elem","Items":"Elemek","Login":"Bejelentkezés","Name":"Megnevezés","Name is required":"A felhasználónevet kötelező megadni","On Labels":"Címkén","Password":"Jelszó","Quantity":"Mennyiség","Quick Search":"Gyors keresés","Remember me":"Emlékezz rám","Save":"Mentés","Sign in":"Bejelentkezés","The user's password is required":"A jelszót kötelező megadni","The user's username is required":"A felhasználónevet kötelező megadni","Toggle menu":"Menü megjelenítése/elrejtése","Unit":"Mennyiségi egység","Use the selected on labels":"A kiválasztottat fogja használni a címkéken","Username":"Felhasználónév","Vendor":"Gyártó","engine under <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE\">GPLv2</a>":"motor <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE\">GPLv2</a> alatt","global search":"globális szűrő","search for vendor":"szűrés gyártó szerint"});
-/* jshint +W100 */
-}]);
