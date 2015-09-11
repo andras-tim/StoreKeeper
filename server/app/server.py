@@ -18,7 +18,7 @@ app = Flask(__name__, **flask_args)
 app.config.update(config['Flask'])
 
 # logging
-if not app.debug and not app.testing:
+if not app.debug and not app.testing and not doc_mode:
     log.initialize(app, config)
 
 check_warnings_in_config(app, config)
