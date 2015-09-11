@@ -31,7 +31,7 @@ def initialize(app: Flask, config: ConfigObject):
     for config_name, log_handler_getter in log_handler_getters.items():
         if config.Log[config_name]['ENABLED']:
             log_handler = log_handler_getter(config)
-            application_log_level = max(application_log_level, log_handler.level)
+            application_log_level = min(application_log_level, log_handler.level)
 
             app.logger.addHandler(log_handler)
 
@@ -53,6 +53,17 @@ def __get_file_handler(config: ConfigObject) -> RotatingFileHandler:
 
 def __get_email_handler(config: ConfigObject) -> SMTPHandler:
     mail_subject = '{} Failure'.format(config.App.TITLE)
+    log_format = '''
+Message type:       %(levelname)s
+Location:           %(pathname)s:%(lineno)d
+Module:             %(module)s
+Function:           %(funcName)s
+Time:               %(asctime)s
+
+Message:
+
+%(message)s
+'''
 
     mail_handler = SMTPHandler((config.Log.ToEmail.SERVER, config.Log.ToEmail.PORT),
                                fromaddr=config.Log.ToEmail.SENDER,
@@ -60,6 +71,7 @@ def __get_email_handler(config: ConfigObject) -> SMTPHandler:
                                subject=mail_subject,
                                credentials=__get_smpt_credentials(config))
     mail_handler.setLevel(LOG_LEVELS[config.Log.ToEmail.LEVEL])
+    mail_handler.setFormatter(logging.Formatter(log_format))
 
     return mail_handler
 
