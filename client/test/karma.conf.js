@@ -18,23 +18,23 @@ module.exports = function (config) {
         basePath: '../',
 
         files: [
-            'app/bower_components/jquery/dist/jquery.js',
-            'app/bower_components/lodash/lodash.js',
-            'app/bower_components/angular/angular.js',
-            'app/bower_components/angular-route/angular-route.js',
-            'app/bower_components/angular-route/angular-route.js',
-            'app/bower_components/angular-animate/angular-animate.js',
-            'app/bower_components/angular-sanitize/angular-sanitize.js',
-            'app/bower_components/restangular/dist/restangular.js',
-            'app/bower_components/angular-strap/dist/angular-strap.js',
-            'app/bower_components/angular-strap/dist/angular-strap.tpl.js',
-            'app/bower_components/angular-gettext/dist/angular-gettext.js',
-            'app/bower_components/angular-smart-table/dist/smart-table.js',
+            'bower_components/jquery/dist/jquery.js',
+            'bower_components/lodash/lodash.js',
+            'bower_components/angular/angular.js',
+            'bower_components/angular-route/angular-route.js',
+            'bower_components/angular-route/angular-route.js',
+            'bower_components/angular-animate/angular-animate.js',
+            'bower_components/angular-sanitize/angular-sanitize.js',
+            'bower_components/restangular/dist/restangular.js',
+            'bower_components/angular-strap/dist/angular-strap.js',
+            'bower_components/angular-strap/dist/angular-strap.tpl.js',
+            'bower_components/angular-gettext/dist/angular-gettext.js',
+            'bower_components/angular-smart-table/dist/smart-table.js',
 
-            'app/bower_components/angular-mocks/angular-mocks.js',
-            'app/bower_components/jasmine-promise-matchers/dist/jasmine-promise-matchers.js',
+            'bower_components/angular-mocks/angular-mocks.js',
+            'bower_components/jasmine-promise-matchers/dist/jasmine-promise-matchers.js',
 
-            'app/js/src/**/*.js',
+            'app/js/**/*.js',
             'app/partials/**/*.html',
 
             'test/unit/**/*.js',
@@ -65,7 +65,7 @@ module.exports = function (config) {
         reportSlowerThan: 200,
 
         preprocessors: {
-            'app/js/src/**/*.js': ['coverage'],
+            'app/js/**/*.js': ['coverage'],
             'app/partials/**/*.html': ['ng-html2js']
         },
 

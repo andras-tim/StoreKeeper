@@ -1,6 +1,7 @@
 {
     "excludeFiles": [
-        "app/js/src/translations.js"
+        "app/js/translations.tmp.js",
+        "app/js/partials.tmp.js"
     ],
     "requireCurlyBraces": [
         "if",

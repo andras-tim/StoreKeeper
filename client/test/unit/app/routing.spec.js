@@ -59,50 +59,32 @@ describe('App: routing', function () {
                 });
 
                 // inject() calls run() and config() directives
-                inject(function ($rootScope, $route, $location, $httpBackend) {
+                inject(function ($rootScope, $route, $location) {
                     test.$rootScope = $rootScope;
                     test.$route = $route;
                     test.$location = $location;
-                    test.$httpBackend = $httpBackend;
                 });
-            },
-
-            mockUrl = function (mockedUrl, response) {
-                if (!response) {
-                    response = '';
-                }
-                test.requestHandler = test.$httpBackend.when('GET', mockedUrl).respond(200, response);
-                test.$httpBackend.expectGET(mockedUrl);
             };
 
         this.data = data;
         this.mocks = mocks;
         this.injectApp = injectApp;
-        this.mockUrl = mockUrl;
     });
 
     pages = [
         {
             'entryPoint': '/login',
-            'templateUrl': 'partials/views/login.html',
             'controller': 'LoginController',
             'sessionRequired': false
         },
         {
             'entryPoint': '/items',
-            'templateUrl': 'partials/views/items.html',
             'controller': 'ItemsController',
             'sessionRequired': true
         }
     ];
     loginPage = pages[0];
     mainPage = pages[1];
-
-    afterEach(function () {
-        test.$httpBackend.flush();
-        test.$httpBackend.verifyNoOutstandingExpectation();
-        test.$httpBackend.verifyNoOutstandingRequest();
-    });
 
     describe('without session', function () {
 
@@ -112,15 +94,11 @@ describe('App: routing', function () {
 
         it('redirect / URL to login page', function () {
             test.injectApp();
-            test.mockUrl(mainPage.templateUrl);
-            test.mockUrl(loginPage.templateUrl);
-
             expect(test.$route.current).toBeUndefined();
 
             test.$location.path('/');
             test.$rootScope.$apply();
 
-            expect(test.$route.current.loadedTemplateUrl).toBe(loginPage.templateUrl);
             expect(test.$route.current.controller).toBe(loginPage.controller);
         });
 
@@ -130,15 +108,12 @@ describe('App: routing', function () {
             if (data.sessionRequired) {
                 it('redirect ' + data.entryPoint + ' URL to login page', function () {
                     test.injectApp();
-                    test.mockUrl(data.templateUrl);
-                    test.mockUrl(loginPage.templateUrl);
 
                     expect(test.$route.current).toBeUndefined();
 
                     test.$location.path(mainPage.entryPoint);
                     test.$rootScope.$apply();
 
-                    expect(test.$route.current.loadedTemplateUrl).toBe(loginPage.templateUrl);
                     expect(test.$route.current.controller).toBe(loginPage.controller);
                 });
                 return;
@@ -146,14 +121,12 @@ describe('App: routing', function () {
 
             it('load ' + data.entryPoint + ' URL', function () {
                 test.injectApp();
-                test.mockUrl(data.templateUrl);
 
                 expect(test.$route.current).toBeUndefined();
 
                 test.$location.path(data.entryPoint);
                 test.$rootScope.$apply();
 
-                expect(test.$route.current.loadedTemplateUrl).toBe(data.templateUrl);
                 expect(test.$route.current.controller).toBe(data.controller);
             });
         });
@@ -167,14 +140,12 @@ describe('App: routing', function () {
 
         it('redirect / URL to main page', function () {
             test.injectApp();
-            test.mockUrl(mainPage.templateUrl);
 
             expect(test.$route.current).toBeUndefined();
 
             test.$location.path('/');
             test.$rootScope.$apply();
 
-            expect(test.$route.current.loadedTemplateUrl).toBe(mainPage.templateUrl);
             expect(test.$route.current.controller).toBe(mainPage.controller);
         });
 
@@ -182,14 +153,12 @@ describe('App: routing', function () {
         pages.forEach(function (data) {
             it('load ' + data.entryPoint + ' URL', function () {
                 test.injectApp();
-                test.mockUrl(data.templateUrl);
 
                 expect(test.$route.current).toBeUndefined();
 
                 test.$location.path(data.entryPoint);
                 test.$rootScope.$apply();
 
-                expect(test.$route.current.loadedTemplateUrl).toBe(data.templateUrl);
                 expect(test.$route.current.controller).toBe(data.controller);
             });
         });

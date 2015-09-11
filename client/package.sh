@@ -37,18 +37,25 @@ function do_install()
     fi
 
     mkdir -p tmp
-    run minify
+    run resources
 }
 
-function do_minify()
+function do_resources()
 {
-    utils/res_minify.sh
+    if [ "${PRODUCTION}" == true ]
+    then
+        node_modules/grunt-cli/bin/grunt "$@" --production
+    else
+        node_modules/grunt-cli/bin/grunt "$@"
+    fi
 }
 
 function do_clear()
 {
+    purge app/dist
     purge node_modules
-    purge app/bower_components
+    purge bower_components
+    purge tmp
 }
 
 function do_test()
