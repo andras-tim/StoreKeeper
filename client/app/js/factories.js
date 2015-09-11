@@ -7,13 +7,13 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', 'gettextC
     function CommonFactory ($rootScope, $alert, $log, gettextCatalog, ConfigFactory) {
         function showErrorPopup(title, content) {
             $alert({
-                title: title,
-                content: content,
-                container: 'body',
-                placement: 'top-right',
-                type: 'danger',
-                duration: 10,
-                show: true
+                'title': title,
+                'content': content,
+                'container': 'body',
+                'placement': 'top-right',
+                'type': 'danger',
+                'duration': 10,
+                'show': true
             });
         }
 
@@ -26,7 +26,7 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', 'gettextC
         function showResponseError(resp) {
             $log.error(resp);
             showErrorPopup(
-                gettextCatalog.getString('Error {{status}}', {status: resp.status}),
+                gettextCatalog.getString('Error {{status}}', {'status': resp.status}),
                 resp.statusText + '<br />' + resp.data
             );
         }
@@ -55,9 +55,9 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', 'gettextC
         }
 
         return {
-            showResponseError: showResponseError,
-            printToConsole: printToConsole,
-            handlePromise: handlePromise
+            'showResponseError': showResponseError,
+            'printToConsole': printToConsole,
+            'handlePromise': handlePromise
         };
     }]);
 
@@ -65,10 +65,10 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', 'gettextC
 appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
     function ConfigFactory ($q, Restangular, ConfigService) {
         var config = {
-            app_name: undefined,
-            app_title: undefined,
-            forced_language: undefined,
-            debug: false
+            'app_name': undefined,
+            'app_title': undefined,
+            'forced_language': undefined,
+            'debug': false
         };
 
         function getConfig() {
@@ -87,8 +87,8 @@ appFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
             }
 
         return {
-            getConfig: getConfig,
-            getDebug: getDebug
+            'getConfig': getConfig,
+            'getDebug': getDebug
         };
     }]);
 
@@ -121,8 +121,8 @@ appFactories.factory('PageFactory', ['ConfigFactory',
         }
 
         return {
-            getWindowTitle: getWindowTitle,
-            setPageTitle: setPageTitle
+            'getWindowTitle': getWindowTitle,
+            'setPageTitle': setPageTitle
         };
     }]);
 
@@ -222,9 +222,9 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
 
         clearSession();
         return {
-            isAuthenticated: isAuthenticated,
-            getSession: getCachedSession,
-            login: login,
-            logout: logout
+            'isAuthenticated': isAuthenticated,
+            'getSession': getCachedSession,
+            'login': login,
+            'logout': logout
         };
     }]);

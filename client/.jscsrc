@@ -62,6 +62,7 @@
     "disallowMixedSpacesAndTabs"                    : true,
     "disallowTrailingWhitespace"                    : true,
     "requireParenthesesAroundIIFE"                  : true,
+    "requireQuotedKeysInObjects"                    : true,
     "requireMultipleVarDecl"                        : "onevar",
     "requireBlocksOnNewline"                        : true,
     "disallowEmptyBlocks"                           : true,

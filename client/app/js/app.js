@@ -19,7 +19,7 @@ var storekeeperApp = angular.module('storekeeperApp', [
 storekeeperApp.config(['$modalProvider',
     function ($modalProvider) {
         angular.extend($modalProvider.defaults, {
-            html: true
+            'html': true
         });
     }]);
 
@@ -47,16 +47,16 @@ storekeeperApp.config(['$routeProvider',
 
         $routeProvider.
             when('/login', {
-                templateUrl: 'partials/views/login.html',
-                controller: 'LoginController'
+                'templateUrl': 'partials/views/login.html',
+                'controller': 'LoginController'
             }).
             when('/items', {
-                templateUrl: 'partials/views/items.html',
-                controller: 'ItemsController',
-                resolve: sessionRequired
+                'templateUrl': 'partials/views/items.html',
+                'controller': 'ItemsController',
+                'resolve': sessionRequired
             }).
             otherwise({
-                redirectTo: '/items'
+                'redirectTo': '/items'
             });
     }]);
 
@@ -85,7 +85,10 @@ storekeeperApp.run(['$window', 'gettextCatalog', 'ConfigFactory', 'CommonFactory
 storekeeperApp.config(['$tooltipProvider',
     function ($tooltipProvider) {
         angular.extend($tooltipProvider.defaults, {
-            delay: { show: 600, hide: 100 }
+            'delay': {
+                'show': 600,
+                'hide': 100
+            }
         });
     }]);
 
