@@ -14,8 +14,8 @@ var appDirectives = angular.module('appDirectives', []);
 appDirectives.directive('appSpinner',
     function appSpinner () {
         return {
-            restrict: 'EA',
-            template: ' <i class="fa fa-spinner fa-pulse"></i> '
+            'restrict': 'EA',
+            'template': ' <i class="fa fa-spinner fa-pulse"></i> '
         };
     });
 
@@ -36,17 +36,17 @@ appDirectives.directive('appSpinner',
 appDirectives.directive('appLabel',
     function appLabel () {
         return {
-            require: '^form',
-            restrict: 'E',
-            transclude: true,
-            scope: {
+            'require': '^form',
+            'restrict': 'E',
+            'transclude': true,
+            'scope': {
                 'appObjectId': '@',
                 'appLabel': '=',
                 'appLabelClass': '@',
                 'appObjectClass': '@'
             },
-            templateUrl: 'partials/widgets/label.html',
-            compile: function (element, attrs) {
+            'templateUrl': 'partials/widgets/label.html',
+            'compile': function (element, attrs) {
                 if (!attrs.appLabelClass) {
                     attrs.appLabelClass = 'col-sm-4';
                 }
@@ -79,9 +79,9 @@ appDirectives.directive('appLabel',
 appDirectives.directive('appFormInput',
     function appFormInput () {
         return {
-            require: '^form',
-            restrict: 'E',
-            scope: {
+            'require': '^form',
+            'restrict': 'E',
+            'scope': {
                 'appName': '@',
                 'appModel': '=',
                 'appType': '@',
@@ -92,8 +92,8 @@ appDirectives.directive('appFormInput',
                 'appLabelClass': '@',
                 'appInputClass': '@'
             },
-            templateUrl: 'partials/widgets/form-input.html',
-            compile: function (element, attrs) {
+            'templateUrl': 'partials/widgets/form-input.html',
+            'compile': function (element, attrs) {
                 if (!attrs.appType) {
                     attrs.appType = 'text';
                 }
@@ -134,9 +134,9 @@ appDirectives.directive('appFormInput',
 appDirectives.directive('appFormTypeahead',
     function appFormTypeahead () {
         return {
-            require: '^form',
-            restrict: 'E',
-            scope: {
+            'require': '^form',
+            'restrict': 'E',
+            'scope': {
                 'appName': '@',
                 'appModel': '=',
                 'appDataSource': '@',
@@ -149,8 +149,8 @@ appDirectives.directive('appFormTypeahead',
                 'appLabelClass': '@',
                 'appInputClass': '@'
             },
-            templateUrl: 'partials/widgets/form-typeahead.html',
-            compile: function (element, attrs) {
+            'templateUrl': 'partials/widgets/form-typeahead.html',
+            'compile': function (element, attrs) {
                 if (!attrs.appLabelClass) {
                     attrs.appLabelClass = 'col-sm-4';
                 }
@@ -158,7 +158,7 @@ appDirectives.directive('appFormTypeahead',
                     attrs.appInputClass = 'col-sm-8';
                 }
             },
-            controller: ['$scope',
+            'controller': ['$scope',
                 function ($scope) {
                     var isFilled = function isFilled (modelRef) {
                         return typeof modelRef === 'object';
@@ -186,15 +186,15 @@ appDirectives.directive('appFormTypeahead',
 appDirectives.directive('appFormCheckbox',
     function appFormCheckbox () {
         return {
-            require: '^form',
-            restrict: 'E',
-            scope: {
+            'require': '^form',
+            'restrict': 'E',
+            'scope': {
                 'appName': '@',
                 'appModel': '=',
                 'appLabel': '=',
                 'appTooltip': '='
             },
-            templateUrl: 'partials/widgets/form-checkbox.html'
+            'templateUrl': 'partials/widgets/form-checkbox.html'
         };
     });
 
@@ -215,15 +215,15 @@ appDirectives.directive('appFormCheckbox',
 appDirectives.directive('appCheckbox',
     function appCheckbox () {
         return {
-            require: '^form',
-            restrict: 'E',
-            scope: {
+            'require': '^form',
+            'restrict': 'E',
+            'scope': {
                 'appName': '@',
                 'appModel': '=',
                 'appLabel': '=',
                 'appTooltip': '='
             },
-            templateUrl: 'partials/widgets/checkbox.html'
+            'templateUrl': 'partials/widgets/checkbox.html'
         };
     });
 
@@ -241,14 +241,14 @@ appDirectives.directive('appCheckbox',
 appDirectives.directive('appIndentedFormGroup',
     function appIndentedFormGroup () {
         return {
-            require: '^form',
-            restrict: 'E',
-            transclude: true,
-            scope: {
+            'require': '^form',
+            'restrict': 'E',
+            'transclude': true,
+            'scope': {
                 'appClass': '@'
             },
-            template: '<div class="form-group"><div class="{{ appClass }}" ng-transclude></div></div>',
-            compile: function (element, attrs) {
+            'template': '<div class="form-group"><div class="{{ appClass }}" ng-transclude></div></div>',
+            'compile': function (element, attrs) {
                 if (!attrs.appClass) {
                     attrs.appClass = 'col-sm-offset-4 col-sm-8';
                 }
@@ -270,12 +270,12 @@ appDirectives.directive('appIndentedFormGroup',
 appDirectives.directive('appTablePersist',
     function appTablePersist () {
         return {
-            require: '^stTable',
-            restrict: 'A',
-            scope: {
+            'require': '^stTable',
+            'restrict': 'A',
+            'scope': {
                 'appTablePersist': '@'
             },
-            link: function (scope, element, attr, ctrl) {
+            'link': function (scope, element, attr, ctrl) {
                 var configId = 'table_' + attr.appTablePersist;
 
                 function backupState(newValue, oldValue) {
@@ -332,9 +332,10 @@ appDirectives.directive('appTablePersist',
 appDirectives.directive('appPageInput',
     function appPageInput () {
         return {
-            restrict: 'E',
-            template: '<input type="text" class="select-page" ng-model="inputPage" ng-change="selectPage(inputPage)">',
-            link: function (scope) {
+            'restrict': 'E',
+            'template': '<input type="text" class="select-page" ng-model="inputPage" ' +
+                        'ng-change="selectPage(inputPage)">',
+            'link': function (scope) {
                 scope.$watch('currentPage', function (newValue) {
                     scope.inputPage = newValue;
                 });
@@ -359,10 +360,10 @@ appDirectives.directive('appPageInput',
 appDirectives.directive('appDetailsRow',
     function appDetailsRow () {
         return {
-            require: 'tr',
-            restrict: 'A',
-            priority: 5000,
-            compile: function (element, attrs) {
+            'require': 'tr',
+            'restrict': 'A',
+            'priority': 5000,
+            'compile': function (element, attrs) {
                 if (!attrs.appDetailsRow || !attrs.templateUrl) {
                     return;
                 }
@@ -384,11 +385,11 @@ appDirectives.directive('appDetailsRow',
 appDirectives.directive('appDetailsModal',
     function appDetailsModal () {
         return {
-            restrict: 'EA',
-            transclude: true,
-            replace: true,
-            scope: true,
-            templateUrl: 'partials/widgets/details_modal.html'
+            'restrict': 'EA',
+            'transclude': true,
+            'replace': true,
+            'scope': true,
+            'templateUrl': 'partials/widgets/details_modal.html'
         };
     });
 
@@ -404,12 +405,12 @@ appDirectives.directive('appDetailsModal',
 appDirectives.directive('appDetailsModalNavbar',
     function appDetailsModalNavbar () {
         return {
-            require: '^appDetailsModal',
-            restrict: 'EA',
-            transclude: true,
-            replace: true,
-            scope: true,
-            templateUrl: 'partials/widgets/details_modal_navbar.html'
+            'require': '^appDetailsModal',
+            'restrict': 'EA',
+            'transclude': true,
+            'replace': true,
+            'scope': true,
+            'templateUrl': 'partials/widgets/details_modal_navbar.html'
         };
     });
 
@@ -425,11 +426,11 @@ appDirectives.directive('appDetailsModalNavbar',
 appDirectives.directive('appDetailsModalPanel',
     function appDetailsModalPanel () {
         return {
-            require: '^appDetailsModal',
-            restrict: 'E',
-            transclude: true,
-            replace: true,
-            scope: true,
-            templateUrl: 'partials/widgets/details_modal_panel.html'
+            'require': '^appDetailsModal',
+            'restrict': 'E',
+            'transclude': true,
+            'replace': true,
+            'scope': true,
+            'templateUrl': 'partials/widgets/details_modal_panel.html'
         };
     });

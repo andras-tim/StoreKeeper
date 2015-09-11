@@ -10,14 +10,14 @@ describe('LoginController', function () {
 
         var data = {
                 'userFormWithoutRemember': {
-                    username: 'foo',
-                    password: 'bar',
-                    remember: false
+                    'username': 'foo',
+                    'password': 'bar',
+                    'remember': false
                 },
                 'userFormWithRemember': {
-                    username: 'foo2',
-                    password: 'bar2',
-                    remember: true
+                    'username': 'foo2',
+                    'password': 'bar2',
+                    'remember': true
                 }
             },
 

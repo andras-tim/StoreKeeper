@@ -3,7 +3,7 @@
 module.exports = function (config) {
     var configuration = {
 
-        plugins: [
+        'plugins': [
             'karma-chrome-launcher',
             'karma-firefox-launcher',
             'karma-phantomjs-launcher',
@@ -13,11 +13,11 @@ module.exports = function (config) {
             'karma-ng-html2js-preprocessor'
         ],
 
-        frameworks: ['jasmine'],
+        'frameworks': ['jasmine'],
 
-        basePath: '../',
+        'basePath': '../',
 
-        files: [
+        'files': [
             'bower_components/jquery/dist/jquery.js',
             'bower_components/lodash/lodash.js',
             'bower_components/angular/angular.js',
@@ -41,50 +41,50 @@ module.exports = function (config) {
             'test/functional/**/*.js'
         ],
 
-        exclude: [],
+        'exclude': [],
 
-        autoWatch: true,
+        'autoWatch': true,
 
-        browsers: ['PhantomJS'],
+        'browsers': ['PhantomJS'],
 
-        captureTimeout: 30000,
+        'captureTimeout': 30000,
 
-        browserNoActivityTimeout: 60000,
+        'browserNoActivityTimeout': 60000,
 
-        customLaunchers: {
-            Chrome_travis_ci: {
-                base: 'Chrome',
-                flags: ['--no-sandbox']
+        'customLaunchers': {
+            'Chrome_travis_ci': {
+                'base': 'Chrome',
+                'flags': ['--no-sandbox']
             }
         },
 
-        colors: true,
+        'colors': true,
 
-        logLevel: config.LOG_INFO,
+        'logLevel': config.LOG_INFO,
 
-        reportSlowerThan: 200,
+        'reportSlowerThan': 200,
 
-        preprocessors: {
+        'preprocessors': {
             'app/js/**/*.js': ['coverage'],
             'app/partials/**/*.html': ['ng-html2js']
         },
 
-        ngHtml2JsPreprocessor: {
-            stripPrefix: 'app/',
-            moduleName: 'partials'
+        'ngHtml2JsPreprocessor': {
+            'stripPrefix': 'app/',
+            'moduleName': 'partials'
         },
 
-        reporters: ['mocha', 'coverage'],
+        'reporters': ['mocha', 'coverage'],
 
         'mochaReporter': {
             'ignoreSkipped': true
         },
 
-        coverageReporter: {
-            reporters: [
-                {type: 'lcovonly', dir: 'tmp/coverage/'},
-                {type: 'text-summary'},
-                {type: 'text'}
+        'coverageReporter': {
+            'reporters': [
+                {'type': 'lcovonly', 'dir': 'tmp/coverage/'},
+                {'type': 'text-summary'},
+                {'type': 'text'}
             ]
         }
 
