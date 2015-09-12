@@ -5,12 +5,34 @@ var appControllers = angular.module('appControllers', []);
 
 appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
     function CommonController ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
-        $scope.isAuthenticated = SessionFactory.isAuthenticated;
+        function initializeModalHandler() {
+            var modals = [];
+
+            function registerNewModal(event, $modal) {
+                if (modals.indexOf($modal) === -1) {
+                    modals.push($modal);
+                }
+            }
+
+            function closeAllOpenedModals() {
+                if (modals.length) {
+                    angular.forEach(modals, function ($modal) {
+                        $modal.$promise.then($modal.hide);
+                    });
+                }
+            }
+
+            $scope.$on('modal.show', registerNewModal);
+            $scope.$on('$routeChangeSuccess', closeAllOpenedModals);
+        }
 
         ConfigFactory.getConfig().then(function (config) {
             $scope.appTitle = config.app_title;
         }, CommonFactory.showResponseError);
 
+        initializeModalHandler();
+
+        $scope.isAuthenticated = SessionFactory.isAuthenticated;
         $scope.getWindowTitle = PageFactory.getWindowTitle;
     }]);
 

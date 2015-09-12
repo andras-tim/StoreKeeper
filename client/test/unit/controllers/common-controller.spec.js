@@ -24,7 +24,22 @@ describe('CommonController', function () {
             },
 
             mocks = {
-                '$scope': {},
+                '$scope': {
+                    '$on': function (name, func) {
+                        test.eventListeners[name] = func;
+                    }
+                },
+                '$event': {
+                    'preventDefault': function () {}
+                },
+                '$modal': {
+                    '$promise': {
+                        'then': function (func) {
+                            return func();
+                        }
+                    },
+                    'hide': function () {}
+                },
                 'ConfigFactory': {
                     'getConfig': function () {
                         return helper.promiseMock(test, 'configResolved', test.config, test.config);
@@ -54,6 +69,8 @@ describe('CommonController', function () {
             },
 
             injectController = function () {
+                spyOn(mocks.$event, 'preventDefault').and.stub();
+                spyOn(mocks.$modal, 'hide').and.stub();
                 spyOn(mocks.CommonFactory, 'showResponseError').and.stub();
                 spyOn(mocks.SessionFactory, 'isAuthenticated').and.callThrough();
                 spyOn(mocks.PageFactory, 'getWindowTitle').and.callThrough();
@@ -78,6 +95,7 @@ describe('CommonController', function () {
     beforeEach(function () {
         test.config = test.data.config;
         test.configResolved = true;
+        test.eventListeners = {};
     });
 
     describe('config', function () {
@@ -112,6 +130,30 @@ describe('CommonController', function () {
             expect(test.mocks.PageFactory.getWindowTitle).not.toHaveBeenCalled();
             expect(test.mocks.$scope.getWindowTitle()).toBe('Foo');
             expect(test.mocks.PageFactory.getWindowTitle).toHaveBeenCalled();
+        });
+    });
+
+    describe('modal handling', function () {
+        beforeEach(function () {
+            test.injectController();
+        });
+
+        it('can open new modal', function () {
+            test.eventListeners['modal.show'](test.mocks.$event, test.mocks.$modal, null);
+            expect(test.mocks.$event.preventDefault).not.toHaveBeenCalled();
+            expect(test.mocks.$modal.hide).not.toHaveBeenCalled();
+        });
+
+        it('can change url when has not opened any modal', function () {
+            test.eventListeners.$routeChangeSuccess(test.mocks.$event, null, null);
+            expect(test.mocks.$event.preventDefault).not.toHaveBeenCalled();
+        });
+
+        it('close the one opened modal when change url', function () {
+            test.eventListeners['modal.show'](test.mocks.$event, test.mocks.$modal, null);
+            test.eventListeners.$routeChangeSuccess(test.mocks.$event, null, null);
+            expect(test.mocks.$event.preventDefault).not.toHaveBeenCalled();
+            expect(test.mocks.$modal.hide).toHaveBeenCalled();
         });
     });
 });
