@@ -333,8 +333,7 @@ appDirectives.directive('appPageInput',
     function appPageInput () {
         return {
             'restrict': 'E',
-            'template': '<input type="text" class="select-page" ng-model="inputPage" ' +
-                        'ng-change="selectPage(inputPage)">',
+            'template': '<input type="text" class="select-page" ng-model="inputPage" ng-change="selectPage(inputPage)">',
             'link': function (scope) {
                 scope.$watch('currentPage', function (newValue) {
                     scope.inputPage = newValue;

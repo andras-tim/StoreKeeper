@@ -3,8 +3,7 @@
 var appControllers = angular.module('appControllers', []);
 
 
-appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory',
-                          'CommonFactory',
+appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
     function CommonController ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
         $scope.isAuthenticated = SessionFactory.isAuthenticated;
 

@@ -70,11 +70,6 @@
     "requireOperatorBeforeLineBreak"                : true,
     "requireCamelCaseOrUpperCaseIdentifiers"        : "ignoreProperties",
     "validateIndentation"                           : 4,
-    "maximumLineLength": {
-        "value"                                     : 120,
-        "allowComments"                             : true,
-        "allowRegex"                                : true
-    },
     "validateQuoteMarks"                            : "'",
     "validateParameterSeparator"                    : ", ",
     "disallowTrailingComma"                         : true,
