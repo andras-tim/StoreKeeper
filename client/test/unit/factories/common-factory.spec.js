@@ -10,6 +10,14 @@ describe('CommonFactory', function () {
 
         var afterInjects = [],
 
+            data = {
+                'badResponse': {
+                    'status': '404',
+                    'statusText': 'foo',
+                    'data': 'bar'
+                }
+            },
+
             mocks = {
                 '$alert': function () {},
                 'gettextCatalog': {
@@ -30,7 +38,7 @@ describe('CommonFactory', function () {
                     $provide.value('gettextCatalog', mocks.gettextCatalog);
                     $provide.value('ConfigFactory', mocks.ConfigFactory);
                 });
-                spyOn(mocks, '$alert');
+                spyOn(mocks, '$alert').and.stub();
 
                 inject(function ($injector, $rootScope, $log, $q) {
                     test.$rootScope = $rootScope;
@@ -45,6 +53,7 @@ describe('CommonFactory', function () {
                 });
             };
 
+        this.data = data;
         this.afterInjects = afterInjects;
         this.mocks = mocks;
         this.injectFactory = injectFactory;
@@ -83,13 +92,7 @@ describe('CommonFactory', function () {
     describe('showResponseError()', function () {
 
         beforeEach(function () {
-            this.afterInjects.push(function () {
-                test.response = {
-                    'status': '404',
-                    'statusText': 'foo',
-                    'data': 'bar'
-                };
-            });
+            test.response = test.data.badResponse;
         });
 
         it('display response in console log and in a popup message', function () {
