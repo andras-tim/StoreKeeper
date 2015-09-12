@@ -109,14 +109,39 @@ appControllers.controller('LoginController', ['$scope', '$location', 'SessionFac
     }]);
 
 
-appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFactory',
-    function ItemsController ($scope, ItemService, CommonFactory) {
+appControllers.controller('ItemsController', ['$scope', '$location', '$modal', 'ItemService', 'CommonFactory',
+    function ItemsController ($scope, $location, $modal, ItemService, CommonFactory) {
+        function openItem(item) {
+            var newScope = $scope.$new();
+
+            newScope.rowData = item;
+            $modal({
+                'id': 'item',
+                'templateUrl': 'partials/views/item.html',
+                'scope': newScope,
+                'show': true
+            });
+            $location.search('id', item.id);
+        }
+
+        $scope.$on('modal.hide', function (event, $modal) {
+            if ($modal.$id === 'item') {
+                $location.search('id', null);
+            }
+        });
+
         CommonFactory.handlePromise(
             ItemService.getList(),
             'loadingItems',
             function (items) {
+                var item = CommonFactory.getObjectById(items, $location.search().id);
+                if (item) {
+                    openItem(item);
+                }
                 $scope.items = items;
             });
+
+        $scope.openItem = openItem;
     }]);
 
 

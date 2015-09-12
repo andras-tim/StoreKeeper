@@ -345,36 +345,6 @@ appDirectives.directive('appPageInput',
 
 /**
  * @ngdoc directive
- * @name appDetailsRow
- * @element tr
- * @restrict A
- * @priority 5000
- *
- * @param {object} appDetailsRow data object for row
- * @param {string} dataTemplateUrl template for modal
- *
- * @description
- * Editable row object
- */
-appDirectives.directive('appDetailsRow',
-    function appDetailsRow () {
-        return {
-            'require': 'tr',
-            'restrict': 'A',
-            'priority': 5000,
-            'compile': function (element, attrs) {
-                if (!attrs.appDetailsRow || !attrs.templateUrl) {
-                    return;
-                }
-                attrs.$set('bsModal', '{\'rowData\': ' + attrs.appDetailsRow + '}');
-                attrs.$addClass('clickable');
-            }
-        };
-    });
-
-
-/**
- * @ngdoc directive
  * @name appDetailsModal
  * @restrict EA
  *

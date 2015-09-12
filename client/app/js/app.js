@@ -53,7 +53,8 @@ storekeeperApp.config(['$routeProvider',
             when('/items', {
                 'templateUrl': 'partials/views/items.html',
                 'controller': 'ItemsController',
-                'resolve': sessionRequired
+                'resolve': sessionRequired,
+                'reloadOnSearch': false
             }).
             otherwise({
                 'redirectTo': '/items'
