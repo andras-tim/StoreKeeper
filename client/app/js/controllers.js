@@ -125,14 +125,24 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
         }
 
         function saveChanges() {
+            $scope.$broadcast('show-errors-check-validity');
+            if (!$scope.itemForm.$dirty || !$scope.itemForm.$valid) {
+                return;
+            }
+
             CommonFactory.handlePromise(
                 $scope.item.put(),
                 'savingItem',
                 function () {
                     angular.merge($scope.rowData, $scope.item);
+                    $scope.itemForm.$setPristine();
                     $scope.$hide();
-                }
-            );
+                });
+        }
+
+        function discardChanges() {
+            $scope.itemForm.$setPristine();
+            $scope.$hide();
         }
 
         function downloadLabel(barcodeId) {
@@ -167,4 +177,5 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
         $scope.createUnit = createUnit;
         $scope.downloadLabel = downloadLabel;
         $scope.saveChanges = saveChanges;
+        $scope.discardChanges = discardChanges;
     }]);

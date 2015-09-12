@@ -1,6 +1,5 @@
 <app-details-modal>
   <span ng-controller="ItemController">
-
     <div class="modal-body">
       <app-details-modal-navbar>
         <span class="navbar-brand"><i class="fa fa-cube"></i> {{ 'Item' | translate }} #{{ rowData.id }}</span>
@@ -11,26 +10,26 @@
         <div class="container-fluid">
           <div class="row">
 
-            <app-details-modal-panel>
-              <!-- Item details -->
-              <form name="itemForm" class="form-horizontal">
+            <!-- Item details -->
+            <form name="itemForm" class="form-horizontal">
+              <app-details-modal-panel>
                 <app-form-typeahead app-name="vendor" app-model="item.vendor" app-label="'Vendor' | translate" app-data-source="vendor as vendor.name for vendor in $parent.vendors" app-create-callback="createVendor()" app-placeholder="'Enter vendor' | translate" app-required="'Vendor is required' | translate" app-loading-spinner="loadingVendors" app-creating-spinner="creatingVendor"></app-form-typeahead>
                 <app-form-input app-name="articleNumber" app-model="item.article_number" app-label="'Article no.' | translate" app-placeholder="'Enter article number' | translate" app-required="'Article number is required' | translate"></app-form-input>
                 <app-form-input app-name="name" app-model="item.name" app-label="'Name' | translate" app-placeholder="'Enter name of item' | translate" app-required="'Name is required' | translate"></app-form-input>
                 <app-form-typeahead app-name="unit" app-model="item.unit" app-label="'Unit' | translate" app-data-source="unit as unit.unit for unit in $parent.units" app-create-callback="createUnit()" app-placeholder="'Enter unit' | translate" app-required="'Unit is required' | translate" app-loading-spinner="loadingUnits" app-creating-spinner="creatingUnit"></app-form-typeahead>
-              </form>
-            </app-details-modal-panel>
+              </app-details-modal-panel>
+            </form>
 
+            <!-- Meta -->
             <app-details-modal-panel>
-              <!-- Meta -->
               <app-label app-label="'Current Quantity' | translate" app-object-id="foo">
                 <p id="foo" class="form-control-static">{{ item.quantity }} {{ item.unit.unit }}</p>
               </app-label>
             </app-details-modal-panel>
 
-            <app-details-modal-panel>
-              <!-- Barcodes -->
-              <form name="barcodesForm">
+            <!-- Barcodes -->
+            <form name="barcodesForm">
+              <app-details-modal-panel>
                 <table class="table">
                   <thead>
                     <tr>
@@ -53,8 +52,8 @@
                     </tr>
                   </tbody>
                 </table>
-              </form>
-            </app-details-modal-panel>
+              </app-details-modal-panel>
+            </form>
 
           </div>
         </div>
@@ -64,7 +63,7 @@
     <div class="modal-footer">
       <app-spinner ng-if="savingItem"></app-spinner>
       <button type="button" class="btn btn-primary" ng-disabled="!itemForm.$dirty || savingItem" ng-click="saveChanges()" translate>Save</button>
-      <button type="button" class="btn btn-default" ng-click="$hide()" translate>Close</button>
+      <button type="button" class="btn btn-default" ng-click="discardChanges()" translate>Cancel</button>
     </div>
 
   </span>

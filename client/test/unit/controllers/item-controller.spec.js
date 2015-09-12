@@ -69,6 +69,12 @@ describe('ItemController', function () {
                         'getList': function () {
                             return helper.promiseMock(test, 'itemGetListResolved', mocks.barcodeList);
                         }
+                    },
+                    '$broadcast': function () {},
+                    'itemForm': {
+                        '$setPristine': function () {
+                            mocks.$scope.itemForm.$dirty = false;
+                        }
                     }
                 },
                 'Restangular': {
@@ -118,8 +124,10 @@ describe('ItemController', function () {
 
             injectController = function () {
                 spyOn(test.mocks.$scope, '$hide').and.stub();
+                spyOn(test.mocks.$scope, '$broadcast').and.stub();
                 spyOn(test.mocks.$scope.rowData, 'put').and.callThrough();
                 spyOn(test.mocks.$scope.rowData, 'getList').and.callThrough();
+                spyOn(test.mocks.$scope.itemForm, '$setPristine').and.callThrough();
                 spyOn(test.mocks.Restangular, 'copy').and.callThrough();
                 spyOn(test.mocks.VendorService, 'getList').and.callThrough();
                 spyOn(test.mocks.vendorList, 'push').and.stub();
@@ -152,8 +160,65 @@ describe('ItemController', function () {
         test.unitsGetListResolved = true;
         test.unitPostResolved = true;
 
+        test.mocks.$scope.itemForm.$dirty = false;
+        test.mocks.$scope.itemForm.$valid = true;
+
         test.beforeInjects.push(function () {
             angular.merge(test.mocks.$scope.rowData, test.data.item);
+        });
+    });
+
+    describe('states of Item form', function () {
+        it('do nothing while form is not dirty', function () {
+            test.injectController();
+            test.$rootScope.$apply();
+
+            test.mocks.$scope.saveChanges();
+            test.$rootScope.$apply();
+            expect(test.mocks.$scope.$broadcast).toHaveBeenCalledWith('show-errors-check-validity');
+            expect(test.mocks.$scope.rowData.put).not.toHaveBeenCalled();
+
+            test.mocks.$scope.itemForm.$dirty = true;
+
+            test.mocks.$scope.saveChanges();
+            test.$rootScope.$apply();
+            expect(test.mocks.$scope.$broadcast).toHaveBeenCalledWith('show-errors-check-validity');
+            expect(test.mocks.$scope.rowData.put).toHaveBeenCalled();
+            expect(test.mocks.$scope.itemForm.$setPristine).toHaveBeenCalled();
+        });
+
+        it('do nothing while form is invalid', function () {
+            test.injectController();
+            test.$rootScope.$apply();
+
+            test.mocks.$scope.itemForm.$dirty = true;
+            test.mocks.$scope.itemForm.$valid = false;
+
+            test.mocks.$scope.saveChanges();
+            test.$rootScope.$apply();
+            expect(test.mocks.$scope.$broadcast).toHaveBeenCalledWith('show-errors-check-validity');
+            expect(test.mocks.$scope.rowData.put).not.toHaveBeenCalled();
+
+            test.mocks.$scope.itemForm.$valid = true;
+
+            test.mocks.$scope.saveChanges();
+            test.$rootScope.$apply();
+            expect(test.mocks.$scope.$broadcast).toHaveBeenCalledWith('show-errors-check-validity');
+            expect(test.mocks.$scope.rowData.put).toHaveBeenCalled();
+            expect(test.mocks.$scope.itemForm.$setPristine).toHaveBeenCalled();
+        });
+
+        it('discard will un-dirty form then close window', function () {
+            test.injectController();
+            test.$rootScope.$apply();
+
+            test.mocks.$scope.itemForm.$dirty = true;
+
+            test.mocks.$scope.discardChanges();
+            test.$rootScope.$apply();
+            expect(test.mocks.$scope.$broadcast).not.toHaveBeenCalledWith('show-errors-check-validity');
+            expect(test.mocks.$scope.rowData.put).not.toHaveBeenCalled();
+            expect(test.mocks.$scope.$hide).toHaveBeenCalled();
         });
     });
 
@@ -172,6 +237,7 @@ describe('ItemController', function () {
 
         it('rowData does not change until saving', function () {
             test.mocks.$scope.item.name = 'New Name';
+            test.mocks.$scope.itemForm.$dirty = true;
             expect(test.mocks.$scope.item).not.toEqual(test.mocks.$scope.rowData);
 
             test.mocks.$scope.saveChanges();
@@ -218,6 +284,7 @@ describe('ItemController', function () {
             test.$rootScope.$apply();
 
             test.mocks.$scope.item.name = 'New Name';
+            test.mocks.$scope.itemForm.$dirty = true;
             test.mocks.$scope.saveChanges();
             test.$rootScope.$apply();
 
@@ -232,6 +299,7 @@ describe('ItemController', function () {
             test.$rootScope.$apply();
 
             test.mocks.$scope.item.name = 'New Name';
+            test.mocks.$scope.itemForm.$dirty = true;
             test.mocks.$scope.saveChanges();
             test.$rootScope.$apply();
 
@@ -248,6 +316,7 @@ describe('ItemController', function () {
             test.$rootScope.$apply();
 
             test.mocks.$scope.item.vendor = 'New Apple';
+            test.mocks.$scope.itemForm.$dirty = true;
         });
 
         it('can add a new vendor', function () {
@@ -276,6 +345,7 @@ describe('ItemController', function () {
             test.$rootScope.$apply();
 
             test.mocks.$scope.item.unit = 'pcs';
+            test.mocks.$scope.itemForm.$dirty = true;
         });
 
         it('can add a new unit', function () {
