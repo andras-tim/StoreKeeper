@@ -142,6 +142,32 @@ describe('CommonFactory', function () {
                 expect(test.$rootScope.testSpinner).toBeFalsy();
             });
 
+            describe('return with the got promise', function () {
+
+                beforeEach(function () {
+                    test.injectFactory();
+                });
+
+                it('what never resolved', function () {
+                    expect(test.CommonFactory.handlePromise(test.promise)).toBe(test.promise);
+                });
+
+                it('what resolved before used', function () {
+                    test.deferred.resolve();
+                    test.$rootScope.$apply();
+
+                    expect(test.CommonFactory.handlePromise(test.promise)).toBe(test.promise);
+                });
+
+                it('what rejected before used', function () {
+                    test.deferred.reject();
+                    test.$rootScope.$apply();
+
+                    expect(test.CommonFactory.handlePromise(test.promise)).toBe(test.promise);
+                });
+
+            });
+
             describe('check callbacks', function () {
 
                 beforeEach(function () {

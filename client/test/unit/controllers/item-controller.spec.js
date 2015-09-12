@@ -103,8 +103,7 @@ describe('ItemController', function () {
                 }, data.barcodes),
                 'CommonFactory': {
                     'handlePromise': function (promise, spinner, resolve, reject) {
-                        promise.then(resolve, reject);
-
+                        return promise.then(resolve, reject);
                     }
                 }
             },

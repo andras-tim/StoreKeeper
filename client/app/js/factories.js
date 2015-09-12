@@ -52,6 +52,8 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', 'gettextC
                 showResponseError(resp);
                 setSpinner(spinnerName, false);
             });
+
+            return promise;
         }
 
         return {
