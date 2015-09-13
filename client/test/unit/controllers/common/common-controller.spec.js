@@ -1,9 +1,9 @@
 'use strict';
 
-describe('CommonController', function () {
+describe('Controllers/Common: CommonController', function () {
     var test;
 
-    beforeEach(module('appControllers'));
+    beforeEach(module('appControllers.common'));
 
     beforeEach(function () {
         test = this;

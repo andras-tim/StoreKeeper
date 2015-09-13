@@ -1,6 +1,6 @@
 'use strict';
 
-describe('setTitleFilter', function () {
+describe('Filters: setTitleFilter', function () {
     var test;
 
     beforeEach(module('appFilters'));

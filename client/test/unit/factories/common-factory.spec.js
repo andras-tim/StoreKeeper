@@ -1,6 +1,6 @@
 'use strict';
 
-describe('CommonFactory', function () {
+describe('Factories: CommonFactory', function () {
     var test;
 
     beforeEach(module('appFactories'));

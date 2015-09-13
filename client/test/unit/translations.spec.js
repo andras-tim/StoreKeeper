@@ -1,6 +1,6 @@
 'use strict';
 
-describe('translations', function () {
+describe('Translations', function () {
     var test,
         externalLanguages;
 

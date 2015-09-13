@@ -1,9 +1,9 @@
 'use strict';
 
-describe('appPageInput', function () {
+describe('Directives/Table: appPageInput', function () {
     var test;
 
-    beforeEach(module('appDirectives', 'partials'));
+    beforeEach(module('appDirectives.table', 'partials'));
 
     beforeEach(function () {
         test = this;

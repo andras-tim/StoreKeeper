@@ -1,9 +1,9 @@
 'use strict';
 
-describe('UserMenuController', function () {
+describe('Controllers/Common: UserMenuController', function () {
     var test;
 
-    beforeEach(module('appControllers'));
+    beforeEach(module('appControllers.common'));
 
     beforeEach(function () {
         test = this;

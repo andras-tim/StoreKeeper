@@ -1,6 +1,6 @@
 'use strict';
 
-describe('SessionFactory', function () {
+describe('Factories: SessionFactory', function () {
     var test;
 
     beforeEach(module('appFactories'));

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('ConfigFactory', function () {
+describe('Factories: ConfigFactory', function () {
     var test;
 
     beforeEach(module('appFactories'));

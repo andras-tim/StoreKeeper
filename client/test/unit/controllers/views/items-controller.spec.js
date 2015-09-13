@@ -1,9 +1,9 @@
 'use strict';
 
-describe('ItemsController', function () {
+describe('Controllers/Views: ItemsController', function () {
     var test;
 
-    beforeEach(module('appControllers'));
+    beforeEach(module('appControllers.views.item'));
 
     beforeEach(function () {
         test = this;
