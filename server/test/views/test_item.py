@@ -1,5 +1,5 @@
 from app.modules.example_data import ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units, \
-    ExampleItemBarcodes as ItemBarcodes, ExampleBarcodes as Barcodes
+    ExampleItemBarcodes as ItemBarcodes
 from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
