@@ -88,7 +88,7 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), nullable=False, unique=True)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
-    article_number = db.Column(db.Integer)
+    article_number = db.Column(db.String(20))
     quantity = db.Column(db.Integer, nullable=False, default=0)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
 

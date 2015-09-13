@@ -12,6 +12,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(basedir, '..'))
 base_record_count_per_table = 150
 commit_batch_size = 50
+letters = 'abcdefghijklmnopqsrtuvwxyz'
 
 from app.server import db
 from app.models import Unit, Vendor, Item, User, UserConfig, Customer, Barcode, Work, WorkItem, Acquisition, \
@@ -105,7 +106,7 @@ def iterate_items(data: dict):
                 item=random.choice(data['items'])
             ).capitalize(),
             vendor_id=random.randrange(vendor_count) + 1,
-            article_number=random.randint(1000, 999999),
+            article_number='{}{!s}'.format((''.join(random.sample(letters, 2))).upper(), random.randint(1000, 999999)),
             quantity=random.randint(0, 1000),
             unit_id=random.randrange(unit_count) + 1
         )

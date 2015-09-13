@@ -33,6 +33,11 @@ def _greater_than_or_equal_zero(number: int):
         raise ValidationError('Must be greater than or equal 0.')
 
 
+class UppercaseString(fields.String):
+    def _deserialize(self, value):
+        return super()._deserialize(value).upper()
+
+
 class UserSerializer(BasicSerializer):
     fields = ('id', 'username', 'email', 'admin', 'disabled')
 
@@ -117,7 +122,7 @@ class ItemDeserializer(Serializer):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
     vendor = fields.Nested(VendorDeserializer(), required=True)
-    article_number = fields.Int()
+    article_number = UppercaseString()
     quantity = fields.Int(required=True)
     unit = fields.Nested(UnitDeserializer(), required=True)
 
