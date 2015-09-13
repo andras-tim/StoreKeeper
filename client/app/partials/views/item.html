@@ -23,7 +23,7 @@
             <!-- Meta -->
             <app-details-modal-panel>
               <app-label app-label="'Current Quantity' | translate" app-object-id="foo">
-                <p id="foo" class="form-control-static">{{ item.quantity }} {{ item.unit.unit }}</p>
+                <input name="current_quantity" type="string" class="form-control field-quantity" value="{{ item.quantity }} {{ item.unit.unit }}" disabled>
               </app-label>
             </app-details-modal-panel>
 
@@ -33,21 +33,27 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th translate>Barcode</th>
-                      <th translate>Quantity</th>
-                      <th translate>On Labels</th>
-                      <th></th>
+                      <th class="field-barcode" translate>Barcode</th>
+                      <th class="field-quantity field-title" translate>Quantity</th>
+                      <th class="field-simple-checkbox" translate>On Labels</th>
+                      <th class="field-simple-button"></th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr ng-repeat="barcode in barcodes">
-                      <td>{{ barcode.barcode }}</td>
-                      <td>{{ barcode.quantity }} {{ item.unit.unit }}</td>
-                      <td>
+                      <td class="field-barcode">
+                        <input name="barcode" ng-model="barcode.barcode" type="string" class="form-control field-barcode" placeholder="'Barcode' | translate" autocomplete="off" required />
+                      </td>
+                      <td class="field-quantity">
+                        <div class="input-group">
+                          <input name="quantity" ng-model="barcode.quantity" type="number" min="1" class="form-control field-quantity" placeholder="'Barcode quantity' | translate" required />
+                          <div class="input-group-addon field-unit" ng-bind="item.unit.unit"></div>
+                        </div>
+                      <td class="field-simple-checkbox">
                         <app-checkbox app-name="itemMain" app-model="barcode.main" app-tooltip="'Use the selected on labels' | translate"></app-checkbox>
                       </td>
-                      <td>
-                        <button type="button" ng-click="downloadLabel(barcode.id)" class="btn btn-default btn-xs"><i class="fa fa-barcode"></i></button>
+                      <td class="field-simple-button">
+                        <button type="button" ng-click="downloadLabel(barcode.id)" class="btn btn-default btn-sm"><i class="fa fa-barcode"></i></button>
                       </td>
                     </tr>
                   </tbody>

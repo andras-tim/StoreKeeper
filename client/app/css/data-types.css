@@ -1,0 +1,50 @@
+.field-vendor {}
+
+.field-article-number {}
+
+.field-name {}
+
+.field-quantity {
+    text-align: right;
+    max-width: 10em;
+}
+
+.field-quantity.field-title {
+    text-align: center;
+}
+
+.field-unit {
+    text-align: center;
+}
+
+.field-unit-beside-quantity {
+    text-align: left;
+}
+
+.field-barcode {
+    max-width: 12em;
+}
+
+.field-simple-checkbox {
+    text-align: center;
+}
+
+.table > tbody > tr > td.field-simple-checkbox {
+    vertical-align: middle;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.field-simple-button {
+    text-align: center;
+}
+
+.table > tbody > tr > td.field-simple-button {
+    vertical-align: middle;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.field-simple-button button {
+    
+}
