@@ -178,13 +178,13 @@ module.exports = function (grunt) {
                     'app/partials/**/*.html',
                     'po/*.po'
                 ],
-                'tasks': ['app-js']
+                'tasks': ['nggettext_extract', 'app-js']
             },
             'html': {
                 'files': [
                     'app/index.html'
                 ],
-                'tasks': ['app-html']
+                'tasks': ['nggettext_extract', 'app-html']
             }
         }
     });
