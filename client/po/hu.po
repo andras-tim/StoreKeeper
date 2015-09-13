@@ -40,6 +40,14 @@ msgstr "Bezárás"
 msgid "Current Quantity"
 msgstr "Aktuális mennyiség"
 
+#: app/partials/views/item.html:17
+msgid "Enter article number"
+msgstr "Írja be a cikkszámot"
+
+#: app/partials/views/item.html:18
+msgid "Enter name of item"
+msgstr "Írja be a nevét"
+
 #: app/partials/views/item.html:19
 msgid "Enter unit"
 msgstr "Írja be a mennyiségi egységet"
@@ -124,9 +132,17 @@ msgstr "Menü megjelenítése/elrejtése"
 msgid "Unit"
 msgstr "Mennyiségi egység"
 
+#: app/partials/views/item.html:19
+msgid "Unit is required"
+msgstr "A mennyiségi egységet kötelező megadni"
+
 #: app/partials/views/item.html:47
 msgid "Use the selected on labels"
 msgstr "A kiválasztottat fogja használni a címkéken"
+
+#: app/partials/views/login.html:11
+msgid "User will not logged out after close this window"
+msgstr "A felhasználó nem lesz kijelentkeztetve a böngésző bezárása után"
 
 #: app/partials/views/login.html:9
 msgid "Username"
@@ -135,6 +151,10 @@ msgstr "Felhasználónév"
 #: app/partials/views/item.html:16 app/partials/views/items.html:8
 msgid "Vendor"
 msgstr "Gyártó"
+
+#: app/partials/views/item.html:16
+msgid "Vendor is required"
+msgstr "A gyártót kötelező megadni"
 
 #: app/partials/footer.html:3
 msgid ""
@@ -148,9 +168,17 @@ msgstr ""
 msgid "global search"
 msgstr "globális szűrő"
 
+#: app/partials/views/login.html:10
+msgid "password"
+msgstr "Jelszó"
+
 #: app/partials/views/items.html:18
 msgid "search for vendor"
 msgstr "szűrés gyártó szerint"
+
+#: app/partials/views/login.html:9
+msgid "username"
+msgstr "Felhasználónév"
 
 #, fuzzy
 #~ msgid "The form is dirty, do you want to stay on the page?"
