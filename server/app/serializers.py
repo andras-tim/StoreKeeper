@@ -113,6 +113,15 @@ class ItemSerializer(BasicSerializer):
     }
 
 
+class ItemDeserializer(Serializer):
+    id = fields.Int()
+    name = fields.Str(required=True, validate=_not_blank)
+    vendor = fields.Nested(VendorDeserializer(), required=True)
+    article_number = fields.Int()
+    quantity = fields.Int(required=True)
+    unit = fields.Nested(UnitDeserializer(), required=True)
+
+
 class ItemBarcodeSerializer(BasicSerializer):
     fields = ('id', 'barcode', 'quantity', 'main')
 
@@ -122,15 +131,6 @@ class ItemBarcodeDeserializer(Serializer):
     barcode = fields.Str(required=True, validate=_not_blank)
     quantity = fields.Int(validate=_greater_than_zero)
     main = fields.Bool()
-
-
-class ItemDeserializer(Serializer):
-    id = fields.Int()
-    name = fields.Str(required=True, validate=_not_blank)
-    vendor = fields.Nested(VendorDeserializer(), required=True)
-    article_number = fields.Int()
-    quantity = fields.Int(required=True)
-    unit = fields.Nested(UnitDeserializer(), required=True)
 
 
 class AcquisitionItemSerializer(BasicSerializer):
