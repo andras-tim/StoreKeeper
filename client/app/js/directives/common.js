@@ -60,7 +60,6 @@ appCommonDirectives.directive('appConfirmOnExit', ['$rootScope', '$window', 'get
                 }
 
                 function handleCloseModal(event, $modal) {
-                    console.log(scope.appModalId);
                     if ($modal.$id !== scope.appModalId) {
                         return;
                     }
