@@ -111,12 +111,15 @@ appControllers.controller('LoginController', ['$scope', '$location', 'SessionFac
 
 appControllers.controller('ItemsController', ['$scope', '$location', '$modal', 'ItemService', 'CommonFactory',
     function ItemsController ($scope, $location, $modal, ItemService, CommonFactory) {
+        var modalId = 'item';
+
         function openItem(item) {
             var newScope = $scope.$new();
-
             newScope.rowData = item;
+            newScope.modalId = modalId;
+
             $modal({
-                'id': 'item',
+                'id': modalId,
                 'templateUrl': 'partials/views/item.html',
                 'scope': newScope,
                 'show': true
@@ -125,7 +128,7 @@ appControllers.controller('ItemsController', ['$scope', '$location', '$modal', '
         }
 
         $scope.$on('modal.hide', function (event, $modal) {
-            if ($modal.$id === 'item') {
+            if ($modal.$id === modalId) {
                 $location.search('id', null);
             }
         });

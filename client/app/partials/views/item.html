@@ -11,7 +11,7 @@
           <div class="row">
 
             <!-- Item details -->
-            <form name="itemForm" class="form-horizontal">
+            <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" app-modal-id="modalId">
               <app-details-modal-panel>
                 <app-form-typeahead app-name="vendor" app-model="item.vendor" app-label="'Vendor' | translate" app-data-source="vendor as vendor.name for vendor in $parent.vendors" app-create-callback="createVendor()" app-placeholder="'Enter vendor' | translate" app-required="'Vendor is required' | translate" app-loading-spinner="loadingVendors" app-creating-spinner="creatingVendor"></app-form-typeahead>
                 <app-form-input app-name="articleNumber" app-model="item.article_number" app-label="'Article no.' | translate" app-placeholder="'Enter article number' | translate" app-required="'Article number is required' | translate"></app-form-input>
