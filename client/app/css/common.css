@@ -10,3 +10,11 @@
 .clickable {
     cursor: pointer;
 }
+
+.tooltip-inner {
+    border: solid 1px #ccc;
+}
+
+.tooltip {
+    font-size: small;
+}

@@ -16,40 +16,43 @@ msgstr ""
 msgid "Article Number"
 msgstr "Cikkszám"
 
-#: app/partials/views/item.html:18
+#: app/partials/views/item.html:17
 msgid "Article no."
 msgstr "Cikkszám"
 
-#: app/partials/views/item.html:18
+#: app/partials/views/item.html:17
 msgid "Article number is required"
 msgstr "A cikkszámot kötelező megadni"
 
-#: app/partials/views/item.html:37
+#: app/partials/views/item.html:36
 msgid "Barcode"
 msgstr "Vonalkód"
 
-#: app/partials/views/item.html:67
+#: app/partials/views/item.html:66
+msgid "Cancel"
+msgstr "Mégse"
+
 #: app/partials/widgets/details_modal_navbar.html:17
 msgid "Close"
 msgstr "Bezárás"
 
-#: app/partials/views/item.html:26
+#: app/partials/views/item.html:25
 msgid "Current Quantity"
 msgstr "Aktuális mennyiség"
 
-#: app/partials/views/item.html:20
+#: app/partials/views/item.html:19
 msgid "Enter unit"
 msgstr "Írja be a mennyiségi egységet"
 
-#: app/partials/views/item.html:17
+#: app/partials/views/item.html:16
 msgid "Enter vendor"
 msgstr "Írja be a gyártót"
 
-#: app/js/dist/storekeeper.js:689 app/js/src/factories.js:29
+#: app/js/factories.js:29
 msgid "Error {{status}}"
 msgstr "Hiba {{status}}"
 
-#: app/partials/views/item.html:6
+#: app/partials/views/item.html:5
 msgid "Item"
 msgstr "Elem"
 
@@ -61,15 +64,15 @@ msgstr "Elemek"
 msgid "Login"
 msgstr "Bejelentkezés"
 
-#: app/partials/views/item.html:19 app/partials/views/items.html:10
+#: app/partials/views/item.html:18 app/partials/views/items.html:10
 msgid "Name"
 msgstr "Megnevezés"
 
-#: app/partials/views/item.html:19
+#: app/partials/views/item.html:18
 msgid "Name is required"
 msgstr "A felhasználónevet kötelező megadni"
 
-#: app/partials/views/item.html:39
+#: app/partials/views/item.html:38
 msgid "On Labels"
 msgstr "Címkén"
 
@@ -77,7 +80,7 @@ msgstr "Címkén"
 msgid "Password"
 msgstr "Jelszó"
 
-#: app/partials/views/item.html:38 app/partials/views/items.html:11
+#: app/partials/views/item.html:37 app/partials/views/items.html:11
 msgid "Quantity"
 msgstr "Mennyiség"
 
@@ -89,13 +92,21 @@ msgstr "Gyors keresés"
 msgid "Remember me"
 msgstr "Emlékezz rám"
 
-#: app/partials/views/item.html:66
+#: app/partials/views/item.html:65
 msgid "Save"
 msgstr "Mentés"
 
 #: app/partials/views/login.html:14
 msgid "Sign in"
 msgstr "Bejelentkezés"
+
+#: app/js/app.js:92
+msgid "The form is dirty."
+msgstr "Az űrlap még nincs mentve."
+
+#: app/js/directives.js:397
+msgid "The form is dirty. Do you want to stay on the page?"
+msgstr "Az űrlap még nincs mentve. Biztos el akarja hagyni az oldalt?"
 
 #: app/partials/views/login.html:10
 msgid "The user's password is required"
@@ -109,11 +120,11 @@ msgstr "A felhasználónevet kötelező megadni"
 msgid "Toggle menu"
 msgstr "Menü megjelenítése/elrejtése"
 
-#: app/partials/views/item.html:20
+#: app/partials/views/item.html:19
 msgid "Unit"
 msgstr "Mennyiségi egység"
 
-#: app/partials/views/item.html:48
+#: app/partials/views/item.html:47
 msgid "Use the selected on labels"
 msgstr "A kiválasztottat fogja használni a címkéken"
 
@@ -121,17 +132,17 @@ msgstr "A kiválasztottat fogja használni a címkéken"
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: app/partials/views/item.html:17 app/partials/views/items.html:8
+#: app/partials/views/item.html:16 app/partials/views/items.html:8
 msgid "Vendor"
 msgstr "Gyártó"
 
 #: app/partials/footer.html:3
 msgid ""
 "engine under <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/"
-"LICENSE\">GPLv2</a>"
+"LICENSE\" target=\"_blank\">GPLv2</a>"
 msgstr ""
 "motor <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE"
-"\">GPLv2</a> alatt"
+"\" target=\"_blank\">GPLv2</a> alatt"
 
 #: app/partials/views/items.html:15
 msgid "global search"
@@ -140,3 +151,7 @@ msgstr "globális szűrő"
 #: app/partials/views/items.html:18
 msgid "search for vendor"
 msgstr "szűrés gyártó szerint"
+
+#, fuzzy
+#~ msgid "The form is dirty, do you want to stay on the page?"
+#~ msgstr "Az űrlap még nincs mentve. Biztos el akarja hagyni az oldalt?"

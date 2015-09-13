@@ -10,8 +10,22 @@ describe('CommonFactory', function () {
 
         var afterInjects = [],
 
+            data = {
+                'badResponse': {
+                    'status': '404',
+                    'statusText': 'foo',
+                    'data': 'bar'
+                }
+            },
+
             mocks = {
                 '$alert': function () {},
+                'filterFilter': function () {
+                    return test.filterResults;
+                },
+                '$filter': function () {
+                    return mocks.filterFilter;
+                },
                 'gettextCatalog': {
                     'getString': function (string) {
                         return string;
@@ -27,10 +41,12 @@ describe('CommonFactory', function () {
             injectFactory = function () {
                 module(function ($provide) {
                     $provide.value('$alert', mocks.$alert);
+                    $provide.value('$filter', mocks.$filter);
                     $provide.value('gettextCatalog', mocks.gettextCatalog);
                     $provide.value('ConfigFactory', mocks.ConfigFactory);
                 });
-                spyOn(mocks, '$alert');
+                spyOn(mocks, '$alert').and.stub();
+                spyOn(mocks, 'filterFilter').and.callThrough();
 
                 inject(function ($injector, $rootScope, $log, $q) {
                     test.$rootScope = $rootScope;
@@ -45,6 +61,7 @@ describe('CommonFactory', function () {
                 });
             };
 
+        this.data = data;
         this.afterInjects = afterInjects;
         this.mocks = mocks;
         this.injectFactory = injectFactory;
@@ -83,13 +100,7 @@ describe('CommonFactory', function () {
     describe('showResponseError()', function () {
 
         beforeEach(function () {
-            this.afterInjects.push(function () {
-                test.response = {
-                    'status': '404',
-                    'statusText': 'foo',
-                    'data': 'bar'
-                };
-            });
+            test.response = test.data.badResponse;
         });
 
         it('display response in console log and in a popup message', function () {
@@ -142,6 +153,32 @@ describe('CommonFactory', function () {
                 expect(test.$rootScope.testSpinner).toBeFalsy();
             });
 
+            describe('return with the got promise', function () {
+
+                beforeEach(function () {
+                    test.injectFactory();
+                });
+
+                it('what never resolved', function () {
+                    expect(test.CommonFactory.handlePromise(test.promise)).toBe(test.promise);
+                });
+
+                it('what resolved before used', function () {
+                    test.deferred.resolve();
+                    test.$rootScope.$apply();
+
+                    expect(test.CommonFactory.handlePromise(test.promise)).toBe(test.promise);
+                });
+
+                it('what rejected before used', function () {
+                    test.deferred.reject();
+                    test.$rootScope.$apply();
+
+                    expect(test.CommonFactory.handlePromise(test.promise)).toBe(test.promise);
+                });
+
+            });
+
             describe('check callbacks', function () {
 
                 beforeEach(function () {
@@ -191,6 +228,44 @@ describe('CommonFactory', function () {
                     expect(test.mocks.$alert).toHaveBeenCalled();
                 });
             });
+        });
+    });
+
+    describe('getObjectById()', function () {
+
+        beforeEach(function () {
+            test.filterResults = [];
+            test.objectList = 'foo';
+
+            test.injectFactory();
+        });
+
+        it('return with null when id can not parse as integer', function () {
+            var result = test.CommonFactory.getObjectById(test.objectList, 'bar');
+            expect(test.mocks.filterFilter).not.toHaveBeenCalled();
+            expect(result).toBeNull();
+        });
+
+        it('return with null when result set is empty', function () {
+            var result = test.CommonFactory.getObjectById(test.objectList, 1);
+            expect(test.mocks.filterFilter).toHaveBeenCalledWith(test.objectList, {'id': 1}, true);
+            expect(result).toBeNull();
+        });
+
+        it('return with null when result set contains more than one object', function () {
+            test.filterResults = ['apple', 'banana'];
+
+            var result = test.CommonFactory.getObjectById(test.objectList, 1);
+            expect(test.mocks.filterFilter).toHaveBeenCalledWith(test.objectList, {'id': 1}, true);
+            expect(result).toBeNull();
+        });
+
+        it('return with proper object', function () {
+            test.filterResults = ['apple'];
+
+            var result = test.CommonFactory.getObjectById(test.objectList, 2);
+            expect(test.mocks.filterFilter).toHaveBeenCalledWith(test.objectList, {'id': 2}, true);
+            expect(result).toEqual('apple');
         });
     });
 });

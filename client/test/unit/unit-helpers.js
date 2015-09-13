@@ -20,7 +20,7 @@ var helper = {
         }
 
         var compiledHtml = test.$compile(angular.element(htmlTemplate))(test.$scope);
-        $scope.$digest();
+        $scope.$apply();
 
         return compiledHtml;
     }

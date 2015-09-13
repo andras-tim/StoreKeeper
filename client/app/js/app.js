@@ -53,7 +53,8 @@ storekeeperApp.config(['$routeProvider',
             when('/items', {
                 'templateUrl': 'partials/views/items.html',
                 'controller': 'ItemsController',
-                'resolve': sessionRequired
+                'resolve': sessionRequired,
+                'reloadOnSearch': false
             }).
             otherwise({
                 'redirectTo': '/items'
@@ -82,6 +83,20 @@ storekeeperApp.run(['$window', 'gettextCatalog', 'ConfigFactory', 'CommonFactory
     }]);
 
 
+storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog',
+    function ($rootScope, $window, gettextCatalog) {
+        function onWindowBeforeUnload() {
+            var event = $rootScope.$broadcast('windowBeforeUnload');
+
+            if (event.defaultPrevented) {
+                return gettextCatalog.getString('The form is dirty.');
+            }
+        }
+
+        $window.onbeforeunload = onWindowBeforeUnload;
+    }]);
+
+
 storekeeperApp.config(['$tooltipProvider',
     function ($tooltipProvider) {
         angular.extend($tooltipProvider.defaults, {
@@ -97,4 +112,12 @@ storekeeperApp.config(['stConfig',
     function (stConfig) {
         stConfig.pagination.template = 'partials/widgets/table_pager.html';
         stConfig.pagination.itemsByPage = 20;
+    }]);
+
+
+storekeeperApp.config(['$modalProvider',
+    function ($modalProvider) {
+        angular.extend($modalProvider.defaults, {
+            'keyboard': false
+        });
     }]);

@@ -3,15 +3,36 @@
 var appControllers = angular.module('appControllers', []);
 
 
-appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory',
-                          'CommonFactory',
+appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
     function CommonController ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
-        $scope.isAuthenticated = SessionFactory.isAuthenticated;
+        function initializeModalHandler() {
+            var modals = [];
+
+            function registerNewModal(event, $modal) {
+                if (modals.indexOf($modal) === -1) {
+                    modals.push($modal);
+                }
+            }
+
+            function closeAllOpenedModals() {
+                if (modals.length) {
+                    angular.forEach(modals, function ($modal) {
+                        $modal.$promise.then($modal.hide);
+                    });
+                }
+            }
+
+            $scope.$on('modal.show', registerNewModal);
+            $scope.$on('$routeChangeSuccess', closeAllOpenedModals);
+        }
 
         ConfigFactory.getConfig().then(function (config) {
             $scope.appTitle = config.app_title;
         }, CommonFactory.showResponseError);
 
+        initializeModalHandler();
+
+        $scope.isAuthenticated = SessionFactory.isAuthenticated;
         $scope.getWindowTitle = PageFactory.getWindowTitle;
     }]);
 
@@ -88,14 +109,42 @@ appControllers.controller('LoginController', ['$scope', '$location', 'SessionFac
     }]);
 
 
-appControllers.controller('ItemsController', ['$scope', 'ItemService', 'CommonFactory',
-    function ItemsController ($scope, ItemService, CommonFactory) {
+appControllers.controller('ItemsController', ['$scope', '$location', '$modal', 'ItemService', 'CommonFactory',
+    function ItemsController ($scope, $location, $modal, ItemService, CommonFactory) {
+        var modalId = 'item';
+
+        function openItem(item) {
+            var newScope = $scope.$new();
+            newScope.rowData = item;
+            newScope.modalId = modalId;
+
+            $modal({
+                'id': modalId,
+                'templateUrl': 'partials/views/item.html',
+                'scope': newScope,
+                'show': true
+            });
+            $location.search('id', item.id);
+        }
+
+        $scope.$on('modal.hide', function (event, $modal) {
+            if ($modal.$id === modalId) {
+                $location.search('id', null);
+            }
+        });
+
         CommonFactory.handlePromise(
             ItemService.getList(),
             'loadingItems',
             function (items) {
+                var item = CommonFactory.getObjectById(items, $location.search().id);
+                if (item) {
+                    openItem(item);
+                }
                 $scope.items = items;
             });
+
+        $scope.openItem = openItem;
     }]);
 
 
@@ -126,14 +175,24 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
         }
 
         function saveChanges() {
+            $scope.$broadcast('show-errors-check-validity');
+            if (!$scope.itemForm.$dirty || !$scope.itemForm.$valid) {
+                return;
+            }
+
             CommonFactory.handlePromise(
                 $scope.item.put(),
                 'savingItem',
                 function () {
                     angular.merge($scope.rowData, $scope.item);
+                    $scope.itemForm.$setPristine();
                     $scope.$hide();
-                }
-            );
+                });
+        }
+
+        function discardChanges() {
+            $scope.itemForm.$setPristine();
+            $scope.$hide();
         }
 
         function downloadLabel(barcodeId) {
@@ -168,4 +227,5 @@ appControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorSer
         $scope.createUnit = createUnit;
         $scope.downloadLabel = downloadLabel;
         $scope.saveChanges = saveChanges;
+        $scope.discardChanges = discardChanges;
     }]);

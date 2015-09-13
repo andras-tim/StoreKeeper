@@ -8,9 +8,7 @@ describe('CommonController', function () {
     beforeEach(function () {
         test = this;
 
-        var beforeInjects = [],
-
-            data = {
+        var data = {
                 'config': {
                     'app_name': 'storekeeper_test',
                     'app_title': 'StoreKeeperTest',
@@ -26,6 +24,22 @@ describe('CommonController', function () {
             },
 
             mocks = {
+                '$scope': {
+                    '$on': function (name, func) {
+                        test.eventListeners[name] = func;
+                    }
+                },
+                '$event': {
+                    'preventDefault': function () {}
+                },
+                '$modal': {
+                    '$promise': {
+                        'then': function (func) {
+                            return func();
+                        }
+                    },
+                    'hide': function () {}
+                },
                 'ConfigFactory': {
                     'getConfig': function () {
                         return helper.promiseMock(test, 'configResolved', test.config, test.config);
@@ -47,6 +61,7 @@ describe('CommonController', function () {
             },
 
             dependencies = {
+                '$scope': mocks.$scope,
                 'ConfigFactory': mocks.ConfigFactory,
                 'PageFactory': mocks.PageFactory,
                 'SessionFactory': mocks.SessionFactory,
@@ -54,20 +69,17 @@ describe('CommonController', function () {
             },
 
             injectController = function () {
+                spyOn(mocks.$event, 'preventDefault').and.stub();
+                spyOn(mocks.$modal, 'hide').and.stub();
                 spyOn(mocks.CommonFactory, 'showResponseError').and.stub();
                 spyOn(mocks.SessionFactory, 'isAuthenticated').and.callThrough();
                 spyOn(mocks.PageFactory, 'getWindowTitle').and.callThrough();
 
-                beforeInjects.forEach(function (beforeInject) {
-                    beforeInject();
-                });
-
                 inject(function ($controller, $rootScope, $q) {
                     test.$rootScope = $rootScope;
-                    test.$scope = $rootScope.$new();
                     test.$q = $q;
 
-                    dependencies.$scope = test.$scope;
+                    dependencies.$scope = mocks.$scope;
 
                     $controller('CommonController', dependencies);
                 });
@@ -75,27 +87,20 @@ describe('CommonController', function () {
                 test.$rootScope.$apply();
             };
 
-        this.beforeInjects = beforeInjects;
         this.data = data;
         this.mocks = mocks;
         this.injectController = injectController;
     });
 
     beforeEach(function () {
-        this.beforeInjects.push(function () {
-            test.config = test.data.config;
-            test.configResolved = true;
-        });
+        test.config = test.data.config;
+        test.configResolved = true;
+        test.eventListeners = {};
     });
 
     describe('config', function () {
-        beforeEach(function () {
-            this.beforeInjects.push(function () {
-                test.configResolved = false;
-            });
-        });
-
         it('drop error when can not load config', function () {
+            test.configResolved = false;
             test.injectController();
 
             expect(test.mocks.CommonFactory.showResponseError).toHaveBeenCalledWith(test.data.config);
@@ -107,24 +112,48 @@ describe('CommonController', function () {
             test.injectController();
 
             expect(test.mocks.SessionFactory.isAuthenticated).not.toHaveBeenCalled();
-            expect(test.$scope.isAuthenticated()).toBeTruthy();
+            expect(test.mocks.$scope.isAuthenticated()).toBeTruthy();
             expect(test.mocks.SessionFactory.isAuthenticated).toHaveBeenCalled();
         });
     });
 
     describe('titles', function () {
-        it('check appTitle', function () {
+        beforeEach(function () {
             test.injectController();
+        });
 
-            expect(test.$scope.appTitle).toBe(test.data.config.app_title);
+        it('check appTitle', function () {
+            expect(test.mocks.$scope.appTitle).toBe(test.data.config.app_title);
         });
 
         it('check getWindowTitle()', function () {
-            test.injectController();
-
             expect(test.mocks.PageFactory.getWindowTitle).not.toHaveBeenCalled();
-            expect(test.$scope.getWindowTitle()).toBe('Foo');
+            expect(test.mocks.$scope.getWindowTitle()).toBe('Foo');
             expect(test.mocks.PageFactory.getWindowTitle).toHaveBeenCalled();
+        });
+    });
+
+    describe('modal handling', function () {
+        beforeEach(function () {
+            test.injectController();
+        });
+
+        it('can open new modal', function () {
+            test.eventListeners['modal.show'](test.mocks.$event, test.mocks.$modal, null);
+            expect(test.mocks.$event.preventDefault).not.toHaveBeenCalled();
+            expect(test.mocks.$modal.hide).not.toHaveBeenCalled();
+        });
+
+        it('can change url when has not opened any modal', function () {
+            test.eventListeners.$routeChangeSuccess(test.mocks.$event, null, null);
+            expect(test.mocks.$event.preventDefault).not.toHaveBeenCalled();
+        });
+
+        it('close the one opened modal when change url', function () {
+            test.eventListeners['modal.show'](test.mocks.$event, test.mocks.$modal, null);
+            test.eventListeners.$routeChangeSuccess(test.mocks.$event, null, null);
+            expect(test.mocks.$event.preventDefault).not.toHaveBeenCalled();
+            expect(test.mocks.$modal.hide).toHaveBeenCalled();
         });
     });
 });

@@ -333,8 +333,7 @@ appDirectives.directive('appPageInput',
     function appPageInput () {
         return {
             'restrict': 'E',
-            'template': '<input type="text" class="select-page" ng-model="inputPage" ' +
-                        'ng-change="selectPage(inputPage)">',
+            'template': '<input type="text" class="select-page" ng-model="inputPage" ng-change="selectPage(inputPage)">',
             'link': function (scope) {
                 scope.$watch('currentPage', function (newValue) {
                     scope.inputPage = newValue;
@@ -346,32 +345,73 @@ appDirectives.directive('appPageInput',
 
 /**
  * @ngdoc directive
- * @name appDetailsRow
- * @element tr
+ * @name appConfirmOnExit
  * @restrict A
- * @priority 5000
  *
- * @param {object} appDetailsRow data object for row
- * @param {string} dataTemplateUrl template for modal
+ * @param {function} appConfirmOnExit dirty validator
+ * @param {expression} [appModalId] name of parent modal
  *
  * @description
- * Editable row object
+ * Confirm of leaving dirty form
  */
-appDirectives.directive('appDetailsRow',
-    function appDetailsRow () {
+appDirectives.directive('appConfirmOnExit', ['$rootScope', '$window', 'gettextCatalog',
+    function appConfirmOnExit ($rootScope, $window, gettextCatalog) {
         return {
-            'require': 'tr',
+            'scope': {
+                'appConfirmOnExit': '&',
+                'appModalId': '='
+            },
             'restrict': 'A',
-            'priority': 5000,
-            'compile': function (element, attrs) {
-                if (!attrs.appDetailsRow || !attrs.templateUrl) {
-                    return;
+            'link': function (scope, element, attr) {
+                var dirtyOnExitQuestion,
+                    windowBeforeUnloadUnbind,
+                    modalHideUnbind,
+                    locationChangeUnbind;
+
+                function handleWindowUnload(event) {
+                    if (scope.appConfirmOnExit()) {
+                        event.preventDefault();
+                    }
                 }
-                attrs.$set('bsModal', '{\'rowData\': ' + attrs.appDetailsRow + '}');
-                attrs.$addClass('clickable');
+
+                function handleLocationChange(event) {
+                    if (scope.appConfirmOnExit()) {
+                        if (!$window.confirm(dirtyOnExitQuestion)) {
+                            event.preventDefault();
+                        }
+                    }
+                }
+
+                function handleCloseModal(event, $modal) {
+                    console.log(scope.appModalId);
+                    if ($modal.$id !== scope.appModalId) {
+                        return;
+                    }
+                    if (scope.appConfirmOnExit()) {
+                        if (!$window.confirm(dirtyOnExitQuestion)) {
+                            event.preventDefault();
+                        }
+                    }
+                }
+
+                dirtyOnExitQuestion = gettextCatalog.getString('The form is dirty. Do you want to stay on the page?');
+
+                modalHideUnbind = $rootScope.$on('modal.hide.before', handleCloseModal);
+                locationChangeUnbind = $rootScope.$on('$locationChangeStart', handleLocationChange);
+                if (attr.appModalId !== undefined) {
+                    windowBeforeUnloadUnbind = $rootScope.$on('windowBeforeUnload', handleWindowUnload);
+                }
+
+                scope.$on('$destroy', function () {
+                    modalHideUnbind();
+                    locationChangeUnbind();
+                    if (windowBeforeUnloadUnbind) {
+                        windowBeforeUnloadUnbind();
+                    }
+                });
             }
         };
-    });
+    }]);
 
 
 /**

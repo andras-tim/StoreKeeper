@@ -140,7 +140,7 @@ module.exports = function (grunt) {
         },
 
         'replace': {
-            'html': {
+            'index-html': {
                 'src': 'app/index.html',
                 'dest': 'app/index.html',
                 'replacements': [{
@@ -148,7 +148,7 @@ module.exports = function (grunt) {
                     'to': '.$2"'
                 }]
             },
-            'html-min': {
+            'index-html-min': {
                 'src': 'app/index.html',
                 'dest': 'app/index.html',
                 'replacements': [{
@@ -178,13 +178,19 @@ module.exports = function (grunt) {
                     'app/partials/**/*.html',
                     'po/*.po'
                 ],
-                'tasks': ['app-js']
+                'tasks': ['nggettext_extract', 'app-js']
             },
             'html': {
                 'files': [
+                    'app/partials/**/*.html'
+                ],
+                'tasks': ['nggettext_extract']
+            },
+            'index-html': {
+                'files': [
                     'app/index.html'
                 ],
-                'tasks': ['app-html']
+                'tasks': ['nggettext_extract', 'index-html']
             }
         }
     });
@@ -216,11 +222,11 @@ module.exports = function (grunt) {
             grunt.task.run('uglify');
         }
     });
-    grunt.registerTask('app-html', 'Prepare HTML files', function () {
+    grunt.registerTask('app-index-html', 'Prepare HTML files', function () {
         if (production) {
-            grunt.task.run('replace:html-min');
+            grunt.task.run('replace:index-html-min');
         } else {
-            grunt.task.run('replace:html');
+            grunt.task.run('replace:index-html');
         }
     });
     grunt.registerTask('prepare', 'Prepare environment (you can use [-p, --production])', [
@@ -228,7 +234,7 @@ module.exports = function (grunt) {
         'app-res',
         'app-css',
         'app-js',
-        'app-html'
+        'app-index-html'
     ]);
     grunt.registerTask('default', [
         'prepare'
