@@ -60,7 +60,7 @@ class TestItemWithPreFilledDb(CommonApiTest):
 
     def test_update_item(self):
         request = Items.ITEM2.set(change={'name': 'Spray222', 'vendor': Vendors.VENDOR1.get(), 'article_number': 'B222',
-                                          'quantity': 222, 'unit': Units.UNIT2.get()})
+                                          'quantity': 222.0, 'unit': Units.UNIT2.get()})
         response = Items.ITEM2.get(change={'name': request['name'], 'vendor': request['vendor'],
                                            'article_number': request['article_number'], 'quantity': request['quantity'],
                                            'unit': request['unit']})

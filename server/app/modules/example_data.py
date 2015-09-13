@@ -120,45 +120,45 @@ class ExampleStocktakings:
 
 
 class ExampleItems:
-    ITEM1 = FilterableDict(commons={'name': 'Spray', 'vendor': ExampleVendors.VENDOR1.get(), 'quantity': 132,
+    ITEM1 = FilterableDict(commons={'name': 'Spray', 'vendor': ExampleVendors.VENDOR1.get(), 'quantity': 132.3,
                                     'unit': ExampleUnits.UNIT2.get()},
                            setters={'article_number': 'sk132465'},
                            getters={'id': 1, 'article_number': 'SK132465'})
     ITEM2 = FilterableDict(commons={'name': 'Pipe', 'vendor': ExampleVendors.VENDOR2.get(),
-                                    'article_number': 'FO213546', 'quantity': 32, 'unit': ExampleUnits.UNIT1.get()},
+                                    'article_number': 'FO213546', 'quantity': 32.6, 'unit': ExampleUnits.UNIT1.get()},
                            getters={'id': 2})
     ITEM3 = FilterableDict(commons={'name': 'Screw', 'vendor': ExampleVendors.VENDOR2.get(),
-                                    'article_number': 'BA45678', 'quantity': 12, 'unit': ExampleUnits.UNIT2.get()},
+                                    'article_number': 'BA45678', 'quantity': 12.1, 'unit': ExampleUnits.UNIT2.get()},
                            getters={'id': 3})
 
 
 class ExampleAcquisitionItems:
-    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132},
+    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132.4},
                            getters={'id': 1})
-    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 32},
+    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 32.1},
                            getters={'id': 2})
 
 
 class ExampleStocktakingItems:
-    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132},
+    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132.2},
                            getters={'id': 1})
-    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 32},
+    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 32.3},
                            getters={'id': 2})
 
 
 class ExampleBarcodes:
-    BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32, 'item_id': 1, 'main': True},
+    BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32.0, 'item_id': 1, 'main': True},
                               getters={'id': 1})
-    BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1, 'item_id': 1, 'main': False},
+    BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1.5, 'item_id': 1, 'main': False},
                               getters={'id': 2})
-    BARCODE3 = FilterableDict(commons={'barcode': '34457688643', 'quantity': 35, 'item_id': 2, 'main': True},
+    BARCODE3 = FilterableDict(commons={'barcode': '34457688643', 'quantity': 35.0, 'item_id': 2, 'main': True},
                               getters={'id': 3})
 
 
 class ExampleItemBarcodes:
-    BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32, 'main': True},
+    BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32.7, 'main': True},
                               getters={'id': 1})
-    BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1, 'main': False},
+    BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 14.0, 'main': False},
                               getters={'id': 2})
 
 
@@ -184,9 +184,10 @@ class ExampleWorks:
 
 
 class ExampleWorkItems:
-    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'outbound_quantity': 132},
+    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'outbound_quantity': 132.8},
                            getters={'id': 1, 'returned_quantity': None})
-    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 32, 'returned_quantity': 0},
+    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 32.2,
+                                    'returned_quantity': 0.0},
                            getters={'id': 2})
 
 

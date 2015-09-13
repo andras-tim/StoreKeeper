@@ -54,7 +54,7 @@ def iterate_acquisition_items(data: dict):
             yield AcquisitionItem(
                 acquisition_id=acquisition_id,
                 item_id=random.choice(item_ids),  # TODO: UNIQUE
-                quantity=random.randint(1, 20)
+                quantity=round(random.uniform(1, 20), 2)
             )
 
 
@@ -68,7 +68,7 @@ def iterate_barcodes(data: dict):
             barcode='SK{number}'.format(
                 number=random.randint(100000, 999999)
             ),
-            quantity=1,
+            quantity=1.0,
             item_id=item_id,
             main=True
         )
@@ -77,7 +77,7 @@ def iterate_barcodes(data: dict):
                 barcode='SK{number}'.format(
                     number=random.randint(100000, 999999)
                 ),
-                quantity=random.randint(1, 10) * 5,
+                quantity=round(random.uniform(1, 10) * 5, 2),
                 item_id=item_id,
                 main=False
             )
@@ -107,7 +107,7 @@ def iterate_items(data: dict):
             ).capitalize(),
             vendor_id=random.randrange(vendor_count) + 1,
             article_number='{}{!s}'.format((''.join(random.sample(letters, 2))).upper(), random.randint(1000, 999999)),
-            quantity=random.randint(0, 1000),
+            quantity=round(random.uniform(0, 10000), 2),
             unit_id=random.randrange(unit_count) + 1
         )
 
@@ -135,7 +135,7 @@ def iterate_stocktaking_items(data: dict):
             yield StocktakingItem(
                 stocktaking_id=stocktaking_id,
                 item_id=random.choice(item_ids),  # TODO: UNIQUE
-                quantity=random.randint(0, 20)
+                quantity=round(random.uniform(0, 20), 2)
             )
 
 
@@ -217,8 +217,8 @@ def iterate_work_items(data: dict):
             yield WorkItem(
                 work_id=work_id,
                 item_id=random.choice(item_ids),  # TODO: UNIQUE
-                outbound_quantity=random.randint(1, 20),
-                returned_quantity=random.randint(0, 3) * 6
+                outbound_quantity=round(random.uniform(1, 20), 2),
+                returned_quantity=round(random.uniform(0, 3) * 6, 2)
             )
 
 

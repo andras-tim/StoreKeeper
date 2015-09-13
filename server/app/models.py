@@ -89,7 +89,7 @@ class Item(db.Model):
     name = db.Column(db.String(60), nullable=False, unique=True)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
     article_number = db.Column(db.String(20))
-    quantity = db.Column(db.Integer, nullable=False, default=0)
+    quantity = db.Column(db.Float, nullable=False, default=0)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
 
     vendor = db.relationship('Vendor', lazy='joined')
@@ -104,7 +104,7 @@ class Item(db.Model):
 class Barcode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     barcode = db.Column(db.String(15), nullable=False, unique=True)
-    quantity = db.Column(db.Integer, nullable=False, default=1)
+    quantity = db.Column(db.Float, nullable=False, default=1)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     main = db.Column(db.Boolean, default=False)
 
@@ -161,8 +161,8 @@ class WorkItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     work_id = db.Column(db.Integer, db.ForeignKey('work.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-    outbound_quantity = db.Column(db.Integer, nullable=False)
-    returned_quantity = db.Column(db.Integer)
+    outbound_quantity = db.Column(db.Float, nullable=False)
+    returned_quantity = db.Column(db.Float)
 
     work = db.relationship('Work', lazy='joined')
     item = db.relationship('Item', lazy='joined')
@@ -191,7 +191,7 @@ class AcquisitionItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     acquisition_id = db.Column(db.Integer, db.ForeignKey('acquisition.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
+    quantity = db.Column(db.Float, nullable=False)
 
     acquisition = db.relationship('Acquisition', lazy='joined')
     item = db.relationship('Item', lazy='joined')
@@ -220,7 +220,7 @@ class StocktakingItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     stocktaking_id = db.Column(db.Integer, db.ForeignKey('stocktaking.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
+    quantity = db.Column(db.Float, nullable=False)
 
     stocktaking = db.relationship('Stocktaking', lazy='joined')
     item = db.relationship('Item', lazy='joined')

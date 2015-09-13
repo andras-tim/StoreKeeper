@@ -123,7 +123,7 @@ class ItemDeserializer(Serializer):
     name = fields.Str(required=True, validate=_not_blank)
     vendor = fields.Nested(VendorDeserializer(), required=True)
     article_number = UppercaseString()
-    quantity = fields.Int(required=True)
+    quantity = fields.Float(required=True)
     unit = fields.Nested(UnitDeserializer(), required=True)
 
 
@@ -134,7 +134,7 @@ class ItemBarcodeSerializer(BasicSerializer):
 class ItemBarcodeDeserializer(Serializer):
     id = fields.Int()
     barcode = fields.Str(required=True, validate=_not_blank)
-    quantity = fields.Int(validate=_greater_than_zero)
+    quantity = fields.Float(validate=_greater_than_zero)
     main = fields.Bool()
 
 
@@ -148,7 +148,7 @@ class AcquisitionItemSerializer(BasicSerializer):
 class AcquisitionItemDeserializer(Serializer):
     id = fields.Int()
     item = fields.Nested(ItemDeserializer(), required=True)
-    quantity = fields.Int(required=True, validate=_greater_than_zero)
+    quantity = fields.Float(required=True, validate=_greater_than_zero)
 
 
 class StocktakingItemSerializer(BasicSerializer):
@@ -161,7 +161,7 @@ class StocktakingItemSerializer(BasicSerializer):
 class StocktakingItemDeserializer(Serializer):
     id = fields.Int()
     item = fields.Nested(ItemDeserializer(), required=True)
-    quantity = fields.Int(required=True)
+    quantity = fields.Float(required=True)
 
 
 class BarcodeSerializer(BasicSerializer):
@@ -171,7 +171,7 @@ class BarcodeSerializer(BasicSerializer):
 class BarcodeDeserializer(Serializer):
     id = fields.Int()
     barcode = fields.Str(required=True, validate=_not_blank)
-    quantity = fields.Int(validate=_greater_than_zero)
+    quantity = fields.Float(validate=_greater_than_zero)
     item_id = fields.Int(required=True)
     main = fields.Bool()
 
@@ -202,8 +202,8 @@ class WorkItemSerializer(BasicSerializer):
 class WorkItemDeserializer(Serializer):
     id = fields.Int()
     item = fields.Nested(ItemDeserializer(), required=True)
-    outbound_quantity = fields.Int(required=True, validate=_greater_than_zero)
-    returned_quantity = fields.Int(validate=_greater_than_or_equal_zero)
+    outbound_quantity = fields.Float(required=True, validate=_greater_than_zero)
+    returned_quantity = fields.Float(validate=_greater_than_or_equal_zero)
 
 
 class UserConfigSerializer(BasicSerializer):
