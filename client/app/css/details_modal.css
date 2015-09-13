@@ -11,3 +11,7 @@
 .details-modal-content {
     padding: 15px;
 }
+
+.details-modal-content .form-horizontal .control-label {
+    text-align: left;
+}
