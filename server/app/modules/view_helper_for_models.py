@@ -77,7 +77,7 @@ class PopulateModelOnSubmit:
 
 
 class SqlErrorParser:
-    __INTEGRITY_ERROR_TEMPLATE = re.compile(r'^\(IntegrityError\) (?P<message>.*)$')
+    __INTEGRITY_ERROR_TEMPLATE = re.compile(r'^\(.*IntegrityError\) (?P<message>.*)$', re.IGNORECASE)
     __UNIQUE_INTEGRITY_ERROR_TEMPLATES = [
         re.compile(r'^UNIQUE constraint failed: (?P<table_fields>.*)$'),
         re.compile(r'^columns? (?P<table_fields>.*) (is|are) not unique$'),
