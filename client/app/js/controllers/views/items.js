@@ -1,6 +1,6 @@
 'use strict';
 
-var appItemViewControllers = angular.module('appControllers.views.item', []);
+var appItemViewControllers = angular.module('appControllers.views.items', []);
 
 
 appItemViewControllers.controller('ItemsController', ['$scope', '$location', '$modal', 'ItemService', 'CommonFactory',

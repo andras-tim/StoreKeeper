@@ -3,7 +3,7 @@
 describe('Controllers/Views: ItemsController', function () {
     var test;
 
-    beforeEach(module('appControllers.views.item'));
+    beforeEach(module('appControllers.views.items'));
 
     beforeEach(function () {
         test = this;

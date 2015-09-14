@@ -10,7 +10,7 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'smart-table',
     'appControllers.common',
     'appControllers.views.login',
-    'appControllers.views.item',
+    'appControllers.views.items',
     'appControllers.sidebar.barcode',
     'appDirectives.common',
     'appDirectives.form',
