@@ -214,3 +214,10 @@ class UserConfigDeserializer(Serializer):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
     value = fields.Str(required=True)
+
+
+class ErrorDeserializer(Serializer):
+    name = fields.Str()
+    message = fields.Str(required=True)
+    stack = fields.Str()
+    cause = fields.Str()

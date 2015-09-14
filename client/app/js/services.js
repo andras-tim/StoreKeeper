@@ -27,6 +27,12 @@ appServices.factory('ConfigService', ['Restangular',
 //    }]);
 
 
+appServices.factory('ErrorService', ['Restangular',
+    function ErrorService (Restangular) {
+        return Restangular.service('error');
+    }]);
+
+
 appServices.factory('ItemService', ['Restangular',
     function ItemService (Restangular) {
         return Restangular.service('items');

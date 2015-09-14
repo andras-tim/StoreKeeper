@@ -126,3 +126,31 @@ storekeeperApp.config(['$modalProvider',
             'keyboard': false
         });
     }]);
+
+
+storekeeperApp.config(['$provide',
+    function ($provide) {
+
+        $provide.decorator('$exceptionHandler', ['$delegate', '$injector',
+            function ($delegate, $injector) {
+                return function (exception, cause) {
+                    var $rootScope = $injector.get('$rootScope');
+                    $rootScope.sendErrorToServer(exception, cause);
+                    $delegate(exception, cause);
+                };
+            }]);
+
+    }]);
+
+
+storekeeperApp.run(['$rootScope', 'ErrorService',
+    function ($rootScope, ErrorService) {
+        $rootScope.sendErrorToServer = function sendErrorToServer (exception, cause) {
+            ErrorService.post({
+                'name': exception.name,
+                'message': exception.message,
+                'stack': exception.stack,
+                'cause': cause
+            });
+        };
+    }]);

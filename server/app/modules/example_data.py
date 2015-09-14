@@ -205,3 +205,10 @@ class ExampleConfigs:
 class ExampleUserConfigs:
     CONFIG1 = FilterableDict(commons={'name': 'lang', 'value': 'hu'})
     CONFIG2 = FilterableDict(commons={'name': 'fruits', 'value': json.dumps(['apple', 'orange', 'banana'])})
+
+
+class ExampleErrors:
+    ERROR1 = FilterableDict(setters={'name': 'ReferenceError', 'message': 'foo is not defined',
+                                     'stack': 'ReferenceError: foo is not defined\n'
+                                              '    at Scope.printLabel (http://.../storekeeper.js:58678:21)\n'
+                                              '    at ...'})
