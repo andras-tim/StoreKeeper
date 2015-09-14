@@ -1,18 +1,43 @@
 <div class="aside" tabindex="-1" role="dialog">
   <div class="aside-dialog">
-    <div class="aside-content">
+    <div class="aside-content" ng-controller="BarcodeSidebarController">
 
-      <div class="aside-header noselect">
-        <button type="button" class="close" ng-click="$hide()">&times;</button>
+      <div class="aside-header">
         <h4 class="aside-title"><i class="fa fa-barcode"></i> <span translate>Barcode Reader</span></h4>
       </div>
 
       <div class="aside-body">
-        foo
+        <div class="row">
+          <div class="col-md-offset-1 col-md-10">
+
+            <form name="barcodeForm">
+              <div class="input-group">
+                <input id="barcodeText" name="barcode" type="text" class="form-control" placeholder="{{ 'Enter barcode' | translate }}" />
+                <span class="input-group-btn">
+                  <button class="btn btn-success" ng-click="addNewBarcode(barcodeForm.barcode)">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </span>
+              </div>
+              <label for="summarizeMultipleItemsCheckbox">
+                <input id="summarizeMultipleItemsCheckbox" name="summarizeMultipleItems" type="checkbox"> {{ 'Summarize items' | translate }}
+              </label>
+            </form>
+
+          </div>
+        </div>
+
+        <div class="row" ng-repeat="readItem in readItems">
+          <pre ng-bind="readItem | json"></pre>
+        </div>
       </div>
 
       <div class="aside-footer">
-        footer
+        <div class="btn-group" role="group">
+          <a class="btn btn-default btn-sm">Print</a>
+          <a class="btn btn-default btn-sm">Cleanup</a>
+          <a class="btn btn-default btn-sm">Add to view</a>
+        </div>
       </div>
 
     </div>

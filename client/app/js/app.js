@@ -73,8 +73,7 @@ storekeeperApp.run(['$rootScope',
         $rootScope.sidebars = {
             'barcode': {
                 'templateUrl': 'partials/sidebars/barcode.html',
-                'placement': 'left',
-                'controller': 'BarcodeSidebarController'
+                'placement': 'left'
             }
         };
     }]);

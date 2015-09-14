@@ -29,6 +29,7 @@ describe('Controllers/Common: CommonController', function () {
                         test.eventListeners[name] = func;
                     }
                 },
+                '$aside': {},
                 '$event': {
                     'preventDefault': function () {}
                 },
@@ -62,6 +63,7 @@ describe('Controllers/Common: CommonController', function () {
 
             dependencies = {
                 '$scope': mocks.$scope,
+                '$aside': mocks.$aside,
                 'ConfigFactory': mocks.ConfigFactory,
                 'PageFactory': mocks.PageFactory,
                 'SessionFactory': mocks.SessionFactory,

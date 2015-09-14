@@ -28,6 +28,10 @@ msgstr "A cikkszámot kötelező megadni"
 msgid "Barcode"
 msgstr "Vonalkód"
 
+#: app/partials/sidebars/barcode.html:6
+msgid "Barcode Reader"
+msgstr "Voalkód olvasó"
+
 #: app/partials/views/item.html:66
 msgid "Barcode quantity"
 msgstr "Vonalkódhoz rendelt mennyiség"
@@ -41,7 +45,7 @@ msgstr "Bezárás"
 msgid "Commands"
 msgstr "Műveletek"
 
-#: app/js/controllers/views/item.js:223
+#: app/js/controllers/views/items.js:223
 msgid "Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})"
 msgstr ""
 "Biztosan törölni szeretnék a {{ barcode }} ({{ quantity }} {{ unit }}) "
@@ -54,6 +58,10 @@ msgstr "Címke fájl letöltése"
 #: app/partials/views/item.html:17
 msgid "Enter article number"
 msgstr "Írja be a cikkszámot"
+
+#: app/partials/sidebars/barcode.html:15
+msgid "Enter barcode"
+msgstr "Írja be a vonalkódot"
 
 #: app/partials/views/item.html:18
 msgid "Enter name of item"
@@ -115,10 +123,6 @@ msgstr "Mennyiség"
 msgid "Quantity ({{ item.unit.unit }})"
 msgstr "Mennyiség"
 
-#: app/partials/sidebars/quick_search.html:6
-msgid "Quick Search"
-msgstr "Gyors keresés"
-
 #: app/partials/views/login.html:11
 msgid "Remember me"
 msgstr "Emlékezz rám"
@@ -135,7 +139,11 @@ msgstr "Mentés"
 msgid "Sign in"
 msgstr "Bejelentkezés"
 
-#: app/js/app.js:97
+#: app/partials/sidebars/barcode.html:23
+msgid "Summarize items"
+msgstr "Tételek összegzése"
+
+#: app/js/app.js:109
 msgid "The form is dirty."
 msgstr "Az űrlap még nincs mentve."
 
@@ -202,3 +210,6 @@ msgstr "szűrés gyártó szerint"
 #: app/partials/views/login.html:9
 msgid "username"
 msgstr "Felhasználónév"
+
+#~ msgid "Quick Search"
+#~ msgstr "Gyors keresés"
