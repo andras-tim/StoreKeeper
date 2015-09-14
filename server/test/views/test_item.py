@@ -112,7 +112,7 @@ class TestItemBarcodeWithBrandNewDb(CommonApiTest):
     def test_can_not_add_more_than_once_an_barcode_to_a_item(self):
         self.assertApiPost(data=ItemBarcodes.BARCODE1)
         self.assertApiPost(data=ItemBarcodes.BARCODE2.set(change={'barcode': ItemBarcodes.BARCODE1['barcode']}),
-                           expected_data={'message': {'barcode_id, item_id': ['Already exists.']}},
+                           expected_data={'message': {'barcode': ['Already exists.']}},
                            expected_status_codes=422)
 
     def test_can_not_add_more_than_one_main_barcode(self):
