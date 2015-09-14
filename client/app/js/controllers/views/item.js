@@ -141,7 +141,7 @@ appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 
             });
 
             _.forEach($scope.barcodes, function (barcode) {
-                if (!barcode.deleted && barcode.dirty && !barcode.main) {
+                if (!barcode.deleted && barcode.dirty && !barcode.master) {
                     promise.then(function () {
                         console.log('updating item');
                         promise = CommonFactory.handlePromise(
@@ -156,7 +156,7 @@ appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 
             });
 
             _.forEach($scope.barcodes, function (barcode) {
-                if (!barcode.deleted && barcode.dirty && barcode.main) {
+                if (!barcode.deleted && barcode.dirty && barcode.master) {
                     promise.then(function () {
                         console.log('updating2 item');
                         promise = CommonFactory.handlePromise(
@@ -184,7 +184,7 @@ appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 
         }
 
         function createBarcode() {
-            var emptyBarcode = {'main': false};
+            var emptyBarcode = {'master': false};
 
             CommonFactory.handlePromise(
                 $scope.barcodes.post(Restangular.copy(emptyBarcode)),
@@ -236,12 +236,12 @@ appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 
         function togglePostCheck(currentBarcode) {
             console.log(currentBarcode);
 
-            if (!currentBarcode.main) {
+            if (!currentBarcode.master) {
                 return;
             }
             _.forEach($scope.barcodes, function (barcode) {
-                if (barcode !== currentBarcode && barcode.main) {
-                    barcode.main = false;
+                if (barcode !== currentBarcode && barcode.master) {
+                    barcode.master = false;
                     setBarcodeDirty(barcode);
                 }
             });

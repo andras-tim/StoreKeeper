@@ -52,8 +52,8 @@
 
                       <td class="field-checkbox">
                         <div class="checkbox noselect">
-                          <label data-type="info" data-title="{{ 'Default barcode for this item' | translate }}" bs-tooltip>
-                            <input name="main" type="checkbox" ng-model="barcode.main" ng-change="togglePostCheck(barcode); setBarcodeDirty(barcode)">
+                          <label data-type="info" data-title="{{ 'Master barcode for this item' | translate }}" bs-tooltip>
+                            <input name="master" type="checkbox" ng-model="barcode.master" ng-change="togglePostCheck(barcode); setBarcodeDirty(barcode)" ng-disabled="!barcode.main">
                           </label>
                         </div>
                       </td>
@@ -68,9 +68,9 @@
 
                       <td class="field-button field-triple-button">
                         <div class="btn-group" role="group">
-                          <button type="button" ng-click="printLabel(barcode)" ng-disabled="barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i class="fa fa-print"></i></button>
-                          <button type="button" ng-click="downloadLabel(barcode)" ng-disabled="barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i class="fa fa-download"></i></button>
-                          <button type="button" ng-click="deleteBarcode(barcode)" class="btn btn-default btn-sm btn-danger" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i class="fa fa-trash-o"></i></button>
+                          <a ng-click="printLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i class="fa fa-print"></i></a>
+                          <a ng-click="downloadLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i class="fa fa-download"></i></a>
+                          <a ng-click="deleteBarcode(barcode)" class="btn btn-default btn-sm btn-danger" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i class="fa fa-trash-o"></i></a>
                         </div>
                       </td>
 
