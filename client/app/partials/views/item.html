@@ -22,42 +22,68 @@
 
             <!-- Meta -->
             <app-details-modal-panel>
-              <app-label app-label="'Current Quantity' | translate" app-object-id="foo">
-                <input name="current_quantity" type="string" class="form-control field-quantity" value="{{ item.quantity }} {{ item.unit.unit }}" disabled>
+              <app-label app-label="'Currently available' | translate" app-object-id="current_quantity">
+                <div class="input-group field-quantity">
+                  <input id="current_quantity" name="current_quantity" type="text" class="form-control field-quantity" ng-value="item.quantity" readonly>
+                  <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>
+                </div>
               </app-label>
             </app-details-modal-panel>
 
             <!-- Barcodes -->
-            <form name="barcodesForm">
+            <form name="barcodesForm" app-confirm-on-exit="barcodesForm.$dirty" app-modal-id="modalId">
               <app-details-modal-panel>
-                <table class="table">
+                <table class="table table-condensed">
+
                   <thead>
                     <tr>
+                      <th class="field-checkbox"></th>
                       <th class="field-barcode" translate>Barcode</th>
-                      <th class="field-quantity field-title" translate>Quantity</th>
-                      <th class="field-simple-checkbox" translate>On Labels</th>
-                      <th class="field-simple-button"></th>
+                      <th class="field-quantity field-title" translate>Quantity ({{ item.unit.unit }})</th>
+                      <th class="field-button" translate>Commands</th>
                     </tr>
                   </thead>
+
                   <tbody>
-                    <tr ng-repeat="barcode in barcodes">
-                      <td class="field-barcode">
-                        <input name="barcode" ng-model="barcode.barcode" type="string" class="form-control field-barcode" placeholder="'Barcode' | translate" autocomplete="off" required />
-                      </td>
-                      <td class="field-quantity">
-                        <div class="input-group">
-                          <input name="quantity" ng-model="barcode.quantity" type="number" min="1" class="form-control field-quantity" placeholder="'Barcode quantity' | translate" required />
-                          <div class="input-group-addon field-unit" ng-bind="item.unit.unit"></div>
+                    <tr ng-if="loadingBarcodes">
+                      <td colspan="4" class="text-center" app-spinner></td>
+                    </tr>
+                    <tr ng-repeat="barcode in barcodes | filter:filterAvailable" ng-class="{'warning': barcode.dirty}">
+
+                      <td class="field-checkbox">
+                        <div class="checkbox noselect">
+                          <label data-type="info" data-title="{{ 'Default barcode for this item' | translate }}" bs-tooltip>
+                            <input name="main" type="checkbox" ng-model="barcode.main" ng-change="togglePostCheck(barcode); setBarcodeDirty(barcode)">
+                          </label>
                         </div>
-                      <td class="field-simple-checkbox">
-                        <app-checkbox app-name="itemMain" app-model="barcode.main" app-tooltip="'Use the selected on labels' | translate"></app-checkbox>
                       </td>
-                      <td class="field-simple-button">
-                        <button type="button" ng-click="downloadLabel(barcode.id)" class="btn btn-default btn-sm"><i class="fa fa-barcode"></i></button>
+
+                      <td class="field-barcode">
+                        <input name="barcode" ng-value="barcode.barcode" type="text" class="form-control field-barcode" readonly />
                       </td>
+
+                      <td class="field-quantity">
+                        <input name="quantity" ng-model="barcode.quantity" ng-change="setBarcodeDirty(barcode, true)" type="number" min="1" class="form-control field-quantity" placeholder="{{ 'Barcode quantity' | translate }}" required />
+                      </td>
+
+                      <td class="field-button field-triple-button">
+                        <div class="btn-group" role="group">
+                          <button type="button" ng-click="printLabel(barcode)" ng-disabled="barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i class="fa fa-print"></i></button>
+                          <button type="button" ng-click="downloadLabel(barcode)" ng-disabled="barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i class="fa fa-download"></i></button>
+                          <button type="button" ng-click="deleteBarcode(barcode)" class="btn btn-default btn-sm btn-danger" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i class="fa fa-trash-o"></i></button>
+                        </div>
+                      </td>
+
+                    </tr>
+                    <tr ng-if="creatingBarcode">
+                      <td colspan="4" class="text-center" app-spinner></td>
                     </tr>
                   </tbody>
                 </table>
+
+                <button ng-disabled="creatingBarcode" class="btn btn-success btn-sm pull-right pull-bottom" ng-click="createBarcode()">
+                  <i class="fa fa-plus"></i>
+                </button>
               </app-details-modal-panel>
             </form>
 
@@ -68,8 +94,8 @@
 
     <div class="modal-footer">
       <app-spinner ng-if="savingItem"></app-spinner>
-      <button type="button" class="btn btn-primary" ng-disabled="!itemForm.$dirty || savingItem" ng-click="saveChanges()" translate>Save</button>
-      <button type="button" class="btn btn-default" ng-click="discardChanges()" translate>Cancel</button>
+      <button type="button" class="btn btn-primary" ng-disabled="(!itemForm.$dirty && !barcodesForm.$dirty) || savingItem" ng-click="saveChanges()" translate>Save</button>
+      <button type="button" class="btn btn-default" ng-click="closeModal()" translate>Close</button>
     </div>
 
   </span>

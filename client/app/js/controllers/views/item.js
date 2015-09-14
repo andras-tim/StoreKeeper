@@ -47,8 +47,8 @@ appItemViewControllers.controller('ItemsController', ['$scope', '$location', '$m
     }]);
 
 
-appItemViewControllers.controller('ItemController', ['$scope', 'Restangular', 'VendorService', 'UnitService', 'CommonFactory',
-    function ItemController ($scope, Restangular, VendorService, UnitService, CommonFactory) {
+appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Restangular', 'gettextCatalog', 'VendorService', 'UnitService', 'CommonFactory',
+    function ItemController ($scope, $window, $q, Restangular, gettextCatalog, VendorService, UnitService, CommonFactory) {
         function createVendor() {
             var completedNewVendor = {'name': $scope.item.vendor};
 
@@ -75,28 +75,176 @@ appItemViewControllers.controller('ItemController', ['$scope', 'Restangular', 'V
 
         function saveChanges() {
             $scope.$broadcast('show-errors-check-validity');
-            if (!$scope.itemForm.$dirty || !$scope.itemForm.$valid) {
-                return;
-            }
 
             CommonFactory.handlePromise(
-                $scope.item.put(),
+                saveItemChanges().then(saveBarcodesChanges),
                 'savingItem',
                 function () {
-                    angular.merge($scope.rowData, $scope.item);
-                    $scope.itemForm.$setPristine();
-                    $scope.$hide();
+                    console.log('done');
                 });
         }
 
-        function discardChanges() {
-            $scope.itemForm.$setPristine();
+        function saveItemChanges() {
+            var result = $q.defer(),
+                promise = result.promise;
+
+            if (!$scope.itemForm.$dirty) {
+                result.resolve();
+                return promise;
+
+            } else if (!$scope.itemForm.$valid) {
+                result.reject();
+                return promise;
+            }
+
+            return CommonFactory.handlePromise(
+                $scope.item.put(),
+                null,
+                function () {
+                    console.log('saving item');
+                    angular.merge($scope.rowData, $scope.item);
+                    $scope.itemForm.$setPristine();
+                });
+        }
+
+        function saveBarcodesChanges() {
+            var result = $q.defer(),
+                promise = result.promise;
+
+            if (!$scope.barcodesForm.$dirty) {
+                result.resolve();
+                return promise;
+
+            } else if (!$scope.barcodesForm.$valid) {
+                result.reject();
+                return promise;
+            }
+            result.resolve();
+
+            if (!$scope.barcodesForm.$dirty || !$scope.barcodesForm.$valid) {
+                return;
+            }
+
+            _.forEach($scope.barcodes, function (barcode, i) {
+                if (barcode.deleted) {
+                    console.log('deleting item');
+                    promise.then(function () {
+                        promise = CommonFactory.handlePromise(
+                            barcode.remove(),
+                            null,
+                            function () {
+                                delete $scope.barcodes[i];
+                            }
+                        );
+                    });
+                }
+            });
+
+            _.forEach($scope.barcodes, function (barcode) {
+                if (!barcode.deleted && barcode.dirty && !barcode.main) {
+                    promise.then(function () {
+                        console.log('updating item');
+                        promise = CommonFactory.handlePromise(
+                            barcode.put(),
+                            null,
+                            function () {
+                                barcode.dirty = false;
+                                barcode.dirtyForLabel = false;
+                            });
+                    });
+                }
+            });
+
+            _.forEach($scope.barcodes, function (barcode) {
+                if (!barcode.deleted && barcode.dirty && barcode.main) {
+                    promise.then(function () {
+                        console.log('updating2 item');
+                        promise = CommonFactory.handlePromise(
+                            barcode.put(),
+                            null,
+                            function () {
+                                barcode.dirty = false;
+                                barcode.dirtyForLabel = false;
+                            });
+                    });
+                }
+            });
+
+            return CommonFactory.handlePromise(
+                promise,
+                null,
+                function () {
+                    console.log('saving barcodes');
+                    $scope.barcodesForm.$setPristine();
+                });
+        }
+
+        function closeModal() {
             $scope.$hide();
         }
 
-        function downloadLabel(barcodeId) {
-            window.location.href = 'api/items/' + $scope.item.id + '/barcodes/' + barcodeId + '/print';
-            //console.log($scope.item.one('barcodes', barcodeId));
+        function createBarcode() {
+            var emptyBarcode = {'main': false};
+
+            CommonFactory.handlePromise(
+                $scope.barcodes.post(Restangular.copy(emptyBarcode)),
+                'creatingBarcode',
+                function (resp) {
+                    $scope.barcodes.push(resp);
+                });
+        }
+
+        function setBarcodeDirty(barcode, dirtiedForLabel) {
+            if (!barcode) {
+                return;
+            }
+            barcode.dirty = true;
+            if (dirtiedForLabel) {
+                barcode.dirtyForLabel = true;
+            }
+        }
+
+        function filterAvailable(barcode) {
+            return !barcode.deleted;
+        }
+
+        function printLabel(barcode) {
+            CommonFactory.handlePromise(
+                barcode.customPUT(null, 'print'),
+                'printingBarcode'
+            );
+        }
+
+        function downloadLabel(barcode) {
+            window.location.href = 'api/items/' + $scope.item.id + '/barcodes/' + barcode.id + '/print';
+        }
+
+        function deleteBarcode(barcode) {
+            var message = gettextCatalog.getString(
+                'Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})', {
+                    'barcode': barcode.barcode,
+                    'quantity': barcode.quantity,
+                    'unit': $scope.item.unit.unit
+                });
+
+            if ($window.confirm(message)) {
+                $scope.barcodesForm.$setDirty();
+                barcode.deleted = true;
+            }
+        }
+
+        function togglePostCheck(currentBarcode) {
+            console.log(currentBarcode);
+
+            if (!currentBarcode.main) {
+                return;
+            }
+            _.forEach($scope.barcodes, function (barcode) {
+                if (barcode !== currentBarcode && barcode.main) {
+                    barcode.main = false;
+                    setBarcodeDirty(barcode);
+                }
+            });
         }
 
         $scope.item = Restangular.copy($scope.rowData);
@@ -124,7 +272,13 @@ appItemViewControllers.controller('ItemController', ['$scope', 'Restangular', 'V
 
         $scope.createVendor = createVendor;
         $scope.createUnit = createUnit;
+        $scope.createBarcode = createBarcode;
+        $scope.filterAvailable = filterAvailable;
+        $scope.setBarcodeDirty = setBarcodeDirty;
+        $scope.togglePostCheck = togglePostCheck;
+        $scope.printLabel = printLabel;
         $scope.downloadLabel = downloadLabel;
+        $scope.deleteBarcode = deleteBarcode;
         $scope.saveChanges = saveChanges;
-        $scope.discardChanges = discardChanges;
+        $scope.closeModal = closeModal;
     }]);

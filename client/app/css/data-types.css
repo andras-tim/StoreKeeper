@@ -25,26 +25,30 @@
     max-width: 12em;
 }
 
-.field-simple-checkbox {
+.field-checkbox {
     text-align: center;
 }
 
-.table > tbody > tr > td.field-simple-checkbox {
+.table > tbody > tr > td.field-checkbox {
     vertical-align: middle;
     padding-top: 0;
     padding-bottom: 0;
 }
 
-.field-simple-button {
+.field-button {
     text-align: center;
 }
 
-.table > tbody > tr > td.field-simple-button {
+.table > tbody > tr > td.field-button {
     vertical-align: middle;
     padding-top: 0;
     padding-bottom: 0;
 }
 
-.field-simple-button button {
-    
+.table > tbody > tr > td.field-button.field-double-button .btn-group {
+    min-width: 70px;
+}
+
+.table > tbody > tr > td.field-button.field-triple-button .btn-group {
+    min-width: 105px;
 }

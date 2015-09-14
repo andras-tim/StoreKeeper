@@ -15,3 +15,14 @@
 .details-modal-content .form-horizontal .control-label {
     text-align: left;
 }
+
+.details-modal-content .table {
+    margin-bottom: 10px;
+}
+
+.details-modal .pull-bottom.pull-right {
+    margin-right: -15px;
+    margin-bottom: -15px;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
