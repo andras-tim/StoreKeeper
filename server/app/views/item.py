@@ -1,14 +1,17 @@
 import random
 from flask import send_file
 from flask.ext.restful import abort
+from app.modules.view_helper_for_models import get_validated_request
+from app.modules.view_helper_for_models import RequestProcessingError
 
 from app.server import config
 from app.models import Item, Barcode
 from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
-from app.modules.example_data import ExampleItems, ExampleItemBarcodes
+from app.modules.example_data import ExampleItems, ExampleItemBarcodes, ExampleItemBarcodePrints
 from app.modules.label_printer import LabelPrinter
 from app.modules.printer import MissingCups
-from app.serializers import ItemSerializer, ItemDeserializer, ItemBarcodeDeserializer, ItemBarcodeSerializer
+from app.serializers import ItemSerializer, ItemDeserializer, ItemBarcodeDeserializer, ItemBarcodeSerializer, \
+    ItemBarcodePrintDeserializer
 from app.views.common import api_func
 
 
@@ -121,7 +124,7 @@ class ItemBarcodePrintView(BaseNestedView):
     _model = Barcode
     _parent_model = Item
     _serializer = ItemBarcodeSerializer()
-    _deserializer = ItemBarcodeDeserializer()
+    _deserializer = ItemBarcodePrintDeserializer()
 
     @api_func('Generate barcode label to PDF with some details, and starts downloading that.',
               item_name='barcode', url_tail='/items/1/barcodes/1/print',
@@ -138,19 +141,29 @@ class ItemBarcodePrintView(BaseNestedView):
         return send_file(file_path, as_attachment=True)
 
     @api_func('Print barcode label with some details', item_name='barcode', url_tail='/items/1/barcodes/1/print',
+              request=ExampleItemBarcodePrints.PRINT1.set(),
               response=None,
               status_codes={400: 'missing pycups python3 module'},
               queries={'item_id': 'ID of item',
                        'id': 'ID of selected barcode for get'})
     def put(self, item_id: int, id: int):
         self._initialize_parent_item(item_id)
+        try:
+            data = get_validated_request(self._deserializer)
+        except RequestProcessingError as e:
+            return abort(422, message=e.message)
+
         barcode = self._get_item_by_filter(item_id=item_id, id=id)
+
+        copies = 1
+        if hasattr(data, 'copies'):
+            copies = data.copies
 
         try:
             label_printer = _get_label_printer(barcode)
         except MissingCups as e:
             return abort(400, message=str(e))
-        label_printer.print()
+        label_printer.print(copies=copies)
 
 
 def _get_barcode_generator(barcode_prefix: str, count_of_numbers: int, base_barcode: Barcode) -> callable:

@@ -138,6 +138,10 @@ class ItemBarcodeDeserializer(Serializer):
     main = fields.Bool()
 
 
+class ItemBarcodePrintDeserializer(Serializer):
+    copies = fields.Int()
+
+
 class AcquisitionItemSerializer(BasicSerializer):
     fields = ('id', 'quantity')
     nested_fields = {

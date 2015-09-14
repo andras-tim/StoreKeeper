@@ -168,6 +168,10 @@ class ExampleItemBarcodes:
                               getters={'id': 3, 'barcode': '{}{}'.format(BARCODE_PREFIX, '2' * BARCODE_NUMBERS)})
 
 
+class ExampleItemBarcodePrints:
+    PRINT1 = FilterableDict(setters={'copies': 3})
+
+
 class ExampleWorks:
     WORK1 = FilterableDict(commons={'customer': ExampleCustomers.CUSTOMER1.get(), 'comment': 'First work'},
                            getters={'id': 1, 'outbound_close_timestamp': None,
