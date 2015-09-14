@@ -1,6 +1,8 @@
+import random
 from flask import send_file
 from flask.ext.restful import abort
 
+from app.server import config
 from app.models import Item, Barcode
 from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
 from app.modules.example_data import ExampleItems, ExampleItemBarcodes
@@ -62,15 +64,21 @@ class ItemBarcodeListView(BaseNestedListView):
         self._initialize_parent_item(id)
         return self._get(item_id=id)
 
-    @api_func('Create barcode', url_tail='/items/1/barcodes',
+    @api_func('Create barcode (if missing ``barcode`` then server will generate one)', url_tail='/items/1/barcodes',
               request=ExampleItemBarcodes.BARCODE1.set(),
               response=ExampleItemBarcodes.BARCODE1.get(),
-              status_codes={422: '{{ original }} / can not add one barcode twice'},
+              status_codes={422: '{{ original }} / can not add one barcode twice / '
+                                 'can not generate unique new barcode'},
               queries={'id': 'ID of item'})
     def post(self, id: int):
         self._initialize_parent_item(id)
         barcode = self._post_populate(item_id=id)
         _check_only_one_main_barcode_per_item(barcode)
+
+        if barcode.barcode is None:
+            return self._post_retryable_commit(_get_barcode_generator(barcode_prefix=config.App.BARCODE_PREFIX,
+                                                                      count_of_numbers=int(config.App.BARCODE_NUMBERS),
+                                                                      base_barcode=barcode))
         return self._post_commit(barcode)
 
 
@@ -143,6 +151,15 @@ class ItemBarcodePrintView(BaseNestedView):
         except MissingCups as e:
             return abort(400, message=str(e))
         label_printer.print()
+
+
+def _get_barcode_generator(barcode_prefix: str, count_of_numbers: int, base_barcode: Barcode) -> callable:
+    def generator():
+        barcode = '{}{}'.format(barcode_prefix, ''.join(random.sample('0123456789', count_of_numbers)))
+        return Barcode(barcode=barcode.upper(), quantity=base_barcode.quantity, item_id=base_barcode.item_id,
+                       main=base_barcode.main)
+
+    return generator
 
 
 def _check_only_one_main_barcode_per_item(barcode: Barcode):

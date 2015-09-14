@@ -3,6 +3,9 @@ import json
 
 from app.modules.common import filter_dict
 
+BARCODE_PREFIX = 'SK-TEST-'
+BARCODE_NUMBERS = 7
+
 
 class FilterableDict:
     def __init__(self, commons: (dict, None)=None, getters: (dict, None)=None, setters: (dict, None)=None):
@@ -147,19 +150,22 @@ class ExampleStocktakingItems:
 
 
 class ExampleBarcodes:
-    BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32.0, 'item_id': 1, 'main': True},
+    BARCODE1 = FilterableDict(commons={'barcode': 'SK56456786416', 'quantity': 32.0, 'item_id': 1, 'main': True},
                               getters={'id': 1})
-    BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1.5, 'item_id': 1, 'main': False},
+    BARCODE2 = FilterableDict(commons={'barcode': '9843-184125', 'quantity': 1.5, 'item_id': 1, 'main': False},
                               getters={'id': 2})
-    BARCODE3 = FilterableDict(commons={'barcode': '34457688643', 'quantity': 35.0, 'item_id': 2, 'main': True},
+    BARCODE3 = FilterableDict(commons={'barcode': '344-57688643', 'quantity': 35.0, 'item_id': 2, 'main': True},
                               getters={'id': 3})
 
 
 class ExampleItemBarcodes:
-    BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32.7, 'main': True},
-                              getters={'id': 1})
-    BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 14.0, 'main': False},
+    BARCODE1 = FilterableDict(commons={'quantity': 32.7, 'main': True},
+                              setters={'barcode': 'sk56456786416'},
+                              getters={'id': 1, 'barcode': 'SK56456786416'})
+    BARCODE2 = FilterableDict(commons={'barcode': '9843-184125', 'quantity': 14.0, 'main': False},
                               getters={'id': 2})
+    BARCODE3 = FilterableDict(commons={'quantity': 35.0, 'main': False},
+                              getters={'id': 3, 'barcode': '{}{}'.format(BARCODE_PREFIX, '2' * BARCODE_NUMBERS)})
 
 
 class ExampleWorks:

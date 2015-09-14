@@ -17,6 +17,9 @@ DefaultConfig:
     LABEL_PRINTER: DEFAULT
     LABEL_BORDER: False
 
+    BARCODE_PREFIX: "SK"
+    BARCODE_NUMBERS: 8
+
   Flask:
     DEBUG: False
     TESTING: False
@@ -102,6 +105,9 @@ TestingConfig:
 
   App:
     MIGRATE_REPO_PATH: "$SERVER/tmp/test_db_repository"
+
+    BARCODE_PREFIX: "SK-TEST-"
+    BARCODE_NUMBERS: 7
 
   Flask:
     WTF_CSRF_ENABLED: False

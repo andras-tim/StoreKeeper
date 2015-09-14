@@ -75,7 +75,7 @@ class TestItemWithPreFilledDb(CommonApiTest):
 
 
 @append_mandatory_field_tests(item_name='barcode', base_item=ItemBarcodes.BARCODE1,
-                              mandatory_fields=['barcode'])
+                              mandatory_fields=[])
 class TestItemBarcodeWithBrandNewDb(CommonApiTest):
     ENDPOINT = '/items/1/barcodes'
     BAD_ENDPOINT = '/items/3/barcodes'
@@ -95,6 +95,7 @@ class TestItemBarcodeWithBrandNewDb(CommonApiTest):
     def test_adding_new_item_barcodes(self):
         self.assertApiPost(data=ItemBarcodes.BARCODE1, expected_data=ItemBarcodes.BARCODE1)
         self.assertApiPost(data=ItemBarcodes.BARCODE2, expected_data=ItemBarcodes.BARCODE2)
+        self.assertApiPost(data=ItemBarcodes.BARCODE3, expected_data=ItemBarcodes.BARCODE3)
 
     def test_can_not_adding_new_barcode_to_a_non_existed_item(self):
         self.assertApiPost(data=ItemBarcodes.BARCODE1, endpoint=self.BAD_ENDPOINT,

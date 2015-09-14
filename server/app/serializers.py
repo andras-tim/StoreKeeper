@@ -133,7 +133,7 @@ class ItemBarcodeSerializer(BasicSerializer):
 
 class ItemBarcodeDeserializer(Serializer):
     id = fields.Int()
-    barcode = fields.Str(required=True, validate=_not_blank)
+    barcode = UppercaseString(validate=_not_blank)
     quantity = fields.Float(validate=_greater_than_zero)
     main = fields.Bool()
 
