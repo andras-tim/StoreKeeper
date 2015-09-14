@@ -24,25 +24,44 @@ msgstr "Cikkszám"
 msgid "Article number is required"
 msgstr "A cikkszámot kötelező megadni"
 
-#: app/partials/views/item.html:36
+#: app/partials/views/item.html:41
 msgid "Barcode"
 msgstr "Vonalkód"
 
-#: app/partials/views/item.html:66
-msgid "Cancel"
-msgstr "Mégse"
+#: app/partials/sidebars/barcode.html:6
+msgid "Barcode Reader"
+msgstr "Voalkód olvasó"
 
+#: app/partials/views/item.html:66
+msgid "Barcode quantity"
+msgstr "Vonalkódhoz rendelt mennyiség"
+
+#: app/partials/views/item.html:98
 #: app/partials/widgets/details_modal_navbar.html:17
 msgid "Close"
 msgstr "Bezárás"
 
-#: app/partials/views/item.html:25
-msgid "Current Quantity"
-msgstr "Aktuális mennyiség"
+#: app/partials/views/item.html:43
+msgid "Commands"
+msgstr "Műveletek"
+
+#: app/js/controllers/views/items.js:223
+msgid "Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})"
+msgstr ""
+"Biztosan törölni szeretnék a {{ barcode }} ({{ quantity }} {{ unit }}) "
+"vonalkódot?"
+
+#: app/partials/views/item.html:72
+msgid "Download label file"
+msgstr "Címke fájl letöltése"
 
 #: app/partials/views/item.html:17
 msgid "Enter article number"
 msgstr "Írja be a cikkszámot"
+
+#: app/partials/sidebars/barcode.html:15
+msgid "Enter barcode"
+msgstr "Írja be a vonalkódot"
 
 #: app/partials/views/item.html:18
 msgid "Enter name of item"
@@ -60,6 +79,10 @@ msgstr "Írja be a gyártót"
 msgid "Error {{status}}"
 msgstr "Hiba {{status}}"
 
+#: app/partials/views/item.html:25
+msgid "In Stock"
+msgstr "Raktáron"
+
 #: app/partials/views/item.html:5
 msgid "Item"
 msgstr "Elem"
@@ -72,6 +95,10 @@ msgstr "Elemek"
 msgid "Login"
 msgstr "Bejelentkezés"
 
+#: app/partials/views/item.html:55
+msgid "Master barcode for this item"
+msgstr "Fő címke ehhez az elemhez"
+
 #: app/partials/views/item.html:18 app/partials/views/items.html:10
 msgid "Name"
 msgstr "Megnevezés"
@@ -80,27 +107,31 @@ msgstr "Megnevezés"
 msgid "Name is required"
 msgstr "A felhasználónevet kötelező megadni"
 
-#: app/partials/views/item.html:38
-msgid "On Labels"
-msgstr "Címkén"
-
 #: app/partials/views/login.html:10
 msgid "Password"
 msgstr "Jelszó"
 
-#: app/partials/views/item.html:37 app/partials/views/items.html:11
+#: app/partials/views/item.html:71
+msgid "Print label"
+msgstr "Címke nyomtatása"
+
+#: app/partials/views/items.html:11
 msgid "Quantity"
 msgstr "Mennyiség"
 
-#: app/partials/sidebars/quick_search.html:6
-msgid "Quick Search"
-msgstr "Gyors keresés"
+#: app/partials/views/item.html:42
+msgid "Quantity ({{ item.unit.unit }})"
+msgstr "Mennyiség"
 
 #: app/partials/views/login.html:11
 msgid "Remember me"
 msgstr "Emlékezz rám"
 
-#: app/partials/views/item.html:65
+#: app/partials/views/item.html:73
+msgid "Remove label"
+msgstr "Címke törlése"
+
+#: app/partials/views/item.html:97
 msgid "Save"
 msgstr "Mentés"
 
@@ -108,11 +139,15 @@ msgstr "Mentés"
 msgid "Sign in"
 msgstr "Bejelentkezés"
 
-#: app/js/app.js:92
+#: app/partials/sidebars/barcode.html:23
+msgid "Summarize items"
+msgstr "Tételek összegzése"
+
+#: app/js/app.js:109
 msgid "The form is dirty."
 msgstr "Az űrlap még nincs mentve."
 
-#: app/js/directives.js:397
+#: app/js/directives/common.js:73
 msgid "The form is dirty. Do you want to stay on the page?"
 msgstr "Az űrlap még nincs mentve. Biztos el akarja hagyni az oldalt?"
 
@@ -135,10 +170,6 @@ msgstr "Mennyiségi egység"
 #: app/partials/views/item.html:19
 msgid "Unit is required"
 msgstr "A mennyiségi egységet kötelező megadni"
-
-#: app/partials/views/item.html:47
-msgid "Use the selected on labels"
-msgstr "A kiválasztottat fogja használni a címkéken"
 
 #: app/partials/views/login.html:11
 msgid "User will not logged out after close this window"
@@ -180,6 +211,5 @@ msgstr "szűrés gyártó szerint"
 msgid "username"
 msgstr "Felhasználónév"
 
-#, fuzzy
-#~ msgid "The form is dirty, do you want to stay on the page?"
-#~ msgstr "Az űrlap még nincs mentve. Biztos el akarja hagyni az oldalt?"
+#~ msgid "Quick Search"
+#~ msgstr "Gyors keresés"

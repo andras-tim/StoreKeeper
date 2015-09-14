@@ -1,13 +1,13 @@
-from flask.ext import restful
-from flask.ext.restful import abort
+from flask.ext.restful import abort, Resource
 from sqlalchemy.orm import Query
+from sqlalchemy.exc import IntegrityError
 
-from app.modules.view_helper_for_models import PopulateModelOnSubmit, ModelDataDiffer
+from app.modules.view_helper_for_models import PopulateModelOnSubmit, ModelDataDiffer, SqlErrorParser
 from app.server import db
-from app.views.common import commit_with_error_handling
+from app.views.common import commit_with_error_handling, commit_and_rollback_on_error
 
 
-class _BaseModelResource(restful.Resource):
+class _BaseModelResource(Resource):
     _model = None
     _serializer = None
     _deserializer = None
@@ -80,6 +80,21 @@ class BaseListView(_BaseModelResource):
         db.session.add(item)
         commit_with_error_handling(db)
         return self._serialize(item)
+
+    def _post_retryable_commit(self, item_generator: callable, retry_count: int=10) -> 'RPC response':
+        """
+        Generate a new object and try to save (trying, because want to skip collision)
+        """
+        last_exception = None
+        for retried_count in range(retry_count):
+            item = item_generator()
+            db.session.add(item)
+            try:
+                commit_and_rollback_on_error(db)
+                return self._serialize(item)
+            except IntegrityError as e:
+                last_exception = e
+        return abort(422, message='Can not generate unique item; {}'.format(SqlErrorParser.parse(last_exception)))
 
 
 class BaseView(_BaseModelResource):

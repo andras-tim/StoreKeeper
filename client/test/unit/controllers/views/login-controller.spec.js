@@ -1,9 +1,9 @@
 'use strict';
 
-describe('LoginController', function () {
+describe('Controllers/Views: LoginController', function () {
     var test;
 
-    beforeEach(module('appControllers'));
+    beforeEach(module('appControllers.views.login'));
 
     beforeEach(function () {
         test = this;

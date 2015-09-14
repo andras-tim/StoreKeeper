@@ -39,8 +39,12 @@ class Printer:
         else:
             self.conn = cups.Connection(name)
 
-    def print_pdf(self, pdf_path: str, printer_name: (str, None)=None):
+    def print_pdf(self, pdf_path: str, printer_name: (str, None)=None, options: (dict, None)=None):
         printer_name = printer_name or self.conn.getDefault()
         job_title = '{} - {}'.format(config.App.TITLE, os.path.basename(pdf_path))
 
-        self.conn.printFile(printer_name, pdf_path, job_title, self.printer_options)
+        current_options = self.printer_options.copy()
+        if options:
+            current_options.update(options)
+
+        self.conn.printFile(printer_name, pdf_path, job_title, current_options)

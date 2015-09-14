@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 
 from app.modules.common import filter_dict
+from app.modules.types import BarcodeType
 
 
 class FilterableDict:
@@ -66,6 +67,15 @@ class ExampleTimestamp:
         return datetime.utcnow().strftime(cls.REST_API_DATE_FORMAT)
 
 
+class ExampleBarcode:
+    BARCODE_PREFIX = 'SK-TEST-'
+    BARCODE_NUMBERS = 7
+
+    @classmethod
+    def generate_main(cls) -> str:
+        return BarcodeType.generate(cls.BARCODE_PREFIX, cls.BARCODE_NUMBERS)
+
+
 class ExampleUsers:
     ADMIN = ExampleUser(commons={'username': 'admin', 'email': 'admin@test.com'},
                         setters={'password': 'secret'},
@@ -120,45 +130,52 @@ class ExampleStocktakings:
 
 
 class ExampleItems:
-    ITEM1 = FilterableDict(commons={'name': 'Spray', 'vendor': ExampleVendors.VENDOR1.get(), 'article_number': 132465,
-                                    'quantity': 132, 'unit': ExampleUnits.UNIT2.get()},
-                           getters={'id': 1})
-    ITEM2 = FilterableDict(commons={'name': 'Pipe', 'vendor': ExampleVendors.VENDOR2.get(), 'article_number': 213546,
-                                    'quantity': 32, 'unit': ExampleUnits.UNIT1.get()},
+    ITEM1 = FilterableDict(commons={'name': 'Spray', 'vendor': ExampleVendors.VENDOR1.get(), 'quantity': 132.3,
+                                    'unit': ExampleUnits.UNIT2.get()},
+                           setters={'article_number': 'sk132465'},
+                           getters={'id': 1, 'article_number': 'SK132465'})
+    ITEM2 = FilterableDict(commons={'name': 'Pipe', 'vendor': ExampleVendors.VENDOR2.get(),
+                                    'article_number': 'FO213546', 'quantity': 32.6, 'unit': ExampleUnits.UNIT1.get()},
                            getters={'id': 2})
-    ITEM3 = FilterableDict(commons={'name': 'Screw', 'vendor': ExampleVendors.VENDOR2.get(), 'article_number': 45678,
-                                    'quantity': 12, 'unit': ExampleUnits.UNIT2.get()},
+    ITEM3 = FilterableDict(commons={'name': 'Screw', 'vendor': ExampleVendors.VENDOR2.get(),
+                                    'article_number': 'BA45678', 'quantity': 12.1, 'unit': ExampleUnits.UNIT2.get()},
                            getters={'id': 3})
 
 
 class ExampleAcquisitionItems:
-    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132},
+    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132.4},
                            getters={'id': 1})
-    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 32},
+    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 32.1},
                            getters={'id': 2})
 
 
 class ExampleStocktakingItems:
-    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132},
+    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132.2},
                            getters={'id': 1})
-    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 32},
+    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 32.3},
                            getters={'id': 2})
 
 
 class ExampleBarcodes:
-    BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32, 'item_id': 1, 'main': True},
-                              getters={'id': 1})
-    BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1, 'item_id': 1, 'main': False},
-                              getters={'id': 2})
-    BARCODE3 = FilterableDict(commons={'barcode': '34457688643', 'quantity': 35, 'item_id': 2, 'main': True},
-                              getters={'id': 3})
+    BARCODE1 = FilterableDict(getters={'id': 1, 'barcode': ExampleBarcode.generate_main(), 'quantity': 32.7,
+                                       'item_id': 1, 'master': True, 'main': True})
+    BARCODE2 = FilterableDict(getters={'id': 2, 'barcode': '9843-184125', 'quantity': 1.5,
+                                       'item_id': 1, 'master': False, 'main': False})
+    BARCODE3 = FilterableDict(getters={'id': 3, 'barcode': ExampleBarcode.generate_main(), 'quantity': 35.0,
+                                       'item_id': 2, 'master': False, 'main': True})
 
 
 class ExampleItemBarcodes:
-    BARCODE1 = FilterableDict(commons={'barcode': '56456786416', 'quantity': 32, 'main': True},
-                              getters={'id': 1})
-    BARCODE2 = FilterableDict(commons={'barcode': '9843184125', 'quantity': 1, 'main': False},
-                              getters={'id': 2})
+    BARCODE1 = FilterableDict(commons={'barcode': ExampleBarcode.generate_main(), 'quantity': 32.7, 'master': True},
+                              getters={'id': 1, 'main': True})
+    BARCODE2 = FilterableDict(commons={'barcode': '9843-184125', 'quantity': 1.5, 'master': False},
+                              getters={'id': 2, 'main': False})
+    BARCODE3 = FilterableDict(commons={'quantity': 35.0, 'master': False},
+                              getters={'id': 3, 'main': True, 'barcode': ExampleBarcode.generate_main()})
+
+
+class ExampleItemBarcodePrints:
+    PRINT1 = FilterableDict(setters={'copies': 3})
 
 
 class ExampleWorks:
@@ -183,17 +200,25 @@ class ExampleWorks:
 
 
 class ExampleWorkItems:
-    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'outbound_quantity': 132},
+    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'outbound_quantity': 132.8},
                            getters={'id': 1, 'returned_quantity': None})
-    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 32, 'returned_quantity': 0},
+    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 32.2,
+                                    'returned_quantity': 0.0},
                            getters={'id': 2})
 
 
 class ExampleConfigs:
-    CONFIG1 = FilterableDict(getters={'app_name': 'storekeeper', 'app_title': 'StoreKeeper', 'forced_language': 'hu',
+    CONFIG1 = FilterableDict(getters={'app_name': 'storekeeper', 'app_title': 'StoreKeeper', 'forced_language': None,
                                       'debug': False})
 
 
 class ExampleUserConfigs:
     CONFIG1 = FilterableDict(commons={'name': 'lang', 'value': 'hu'})
     CONFIG2 = FilterableDict(commons={'name': 'fruits', 'value': json.dumps(['apple', 'orange', 'banana'])})
+
+
+class ExampleErrors:
+    ERROR1 = FilterableDict(setters={'name': 'ReferenceError', 'message': 'foo is not defined',
+                                     'stack': 'ReferenceError: foo is not defined\n'
+                                              '    at Scope.printLabel (http://.../storekeeper.js:58678:21)\n'
+                                              '    at ...'})

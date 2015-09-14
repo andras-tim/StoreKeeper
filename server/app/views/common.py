@@ -156,9 +156,16 @@ def api_func(title: str,
     return wrapper
 
 
-def commit_with_error_handling(db):
+def commit_and_rollback_on_error(db):
     try:
         db.session.commit()
-    except IntegrityError as e:
+    except IntegrityError:
         db.session.rollback()
+        raise
+
+
+def commit_with_error_handling(db):
+    try:
+        commit_and_rollback_on_error(db)
+    except IntegrityError as e:
         abort(422, message=SqlErrorParser.parse(e))

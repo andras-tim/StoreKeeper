@@ -1,8 +1,8 @@
 from app.modules.yaml_config import ConfigObject
 from app.modules.restful_api import RestfulApiWithoutSimpleAuth
 
-from app.views import common, acquisition, barcode, config, customer, item, session, stocktaking, unit, user, vendor, \
-    work
+from app.views import common, acquisition, barcode, config, customer, error, item, session, stocktaking, unit, user, \
+    vendor, work
 
 
 def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleAuth):
@@ -18,6 +18,8 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
 
         'customer_list': (customer.CustomerListView, '/customers'),
         'customer': (customer.CustomerView, '/customers/<int:id>'),
+
+        'error': (error.ErrorView, '/error'),
 
         'item_list': (item.ItemListView, '/items'),
         'item': (item.ItemView, '/items/<int:id>'),

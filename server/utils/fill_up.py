@@ -12,6 +12,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(basedir, '..'))
 base_record_count_per_table = 150
 commit_batch_size = 50
+letters = 'abcdefghijklmnopqsrtuvwxyz'
 
 from app.server import db
 from app.models import Unit, Vendor, Item, User, UserConfig, Customer, Barcode, Work, WorkItem, Acquisition, \
@@ -53,7 +54,7 @@ def iterate_acquisition_items(data: dict):
             yield AcquisitionItem(
                 acquisition_id=acquisition_id,
                 item_id=random.choice(item_ids),  # TODO: UNIQUE
-                quantity=random.randint(1, 20)
+                quantity=round(random.uniform(1, 20), 2)
             )
 
 
@@ -67,8 +68,9 @@ def iterate_barcodes(data: dict):
             barcode='SK{number}'.format(
                 number=random.randint(100000, 999999)
             ),
-            quantity=1,
+            quantity=1.0,
             item_id=item_id,
+            master=True,
             main=True
         )
         for i in range(random.randint(0, 2)):
@@ -76,9 +78,10 @@ def iterate_barcodes(data: dict):
                 barcode='SK{number}'.format(
                     number=random.randint(100000, 999999)
                 ),
-                quantity=random.randint(1, 10) * 5,
+                quantity=round(random.uniform(1, 10) * 5, 2),
                 item_id=item_id,
-                main=False
+                master=False,
+                main=(random.uniform(1, 10) > 5)
             )
 
 
@@ -105,8 +108,8 @@ def iterate_items(data: dict):
                 item=random.choice(data['items'])
             ).capitalize(),
             vendor_id=random.randrange(vendor_count) + 1,
-            article_number=random.randint(1000, 999999),
-            quantity=random.randint(0, 1000),
+            article_number='{}{!s}'.format((''.join(random.sample(letters, 2))).upper(), random.randint(1000, 999999)),
+            quantity=round(random.uniform(0, 10000), 2),
             unit_id=random.randrange(unit_count) + 1
         )
 
@@ -134,7 +137,7 @@ def iterate_stocktaking_items(data: dict):
             yield StocktakingItem(
                 stocktaking_id=stocktaking_id,
                 item_id=random.choice(item_ids),  # TODO: UNIQUE
-                quantity=random.randint(0, 20)
+                quantity=round(random.uniform(0, 20), 2)
             )
 
 
@@ -216,8 +219,8 @@ def iterate_work_items(data: dict):
             yield WorkItem(
                 work_id=work_id,
                 item_id=random.choice(item_ids),  # TODO: UNIQUE
-                outbound_quantity=random.randint(1, 20),
-                returned_quantity=random.randint(0, 3) * 6
+                outbound_quantity=round(random.uniform(1, 20), 2),
+                returned_quantity=round(random.uniform(0, 3) * 6, 2)
             )
 
 

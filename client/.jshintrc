@@ -27,7 +27,7 @@
     "strict"        : true,
     "maxparams"     : false,
     "maxdepth"      : 7,
-    "maxstatements" : 25,
+    "maxstatements" : 35,
     "maxcomplexity" : 10,
 
 
@@ -91,6 +91,7 @@
     // Custom Globals
 
     "globals": {
+        "_": false,
         "angular": false,
         "browser": false,
         "by": false,

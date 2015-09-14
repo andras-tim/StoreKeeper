@@ -23,6 +23,7 @@ Endpoints
    barcodes
    config
    customers
+   error
    items
    session
    stocktakings

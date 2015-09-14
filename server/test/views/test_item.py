@@ -1,5 +1,5 @@
 from app.modules.example_data import ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units, \
-    ExampleItemBarcodes as ItemBarcodes, ExampleBarcodes as Barcodes
+    ExampleItemBarcodes as ItemBarcodes
 from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
@@ -59,8 +59,8 @@ class TestItemWithPreFilledDb(CommonApiTest):
                                          Items.ITEM2])
 
     def test_update_item(self):
-        request = Items.ITEM2.set(change={'name': 'Spray222', 'vendor': Vendors.VENDOR1.get(), 'article_number': 222,
-                                          'quantity': 222, 'unit': Units.UNIT2.get()})
+        request = Items.ITEM2.set(change={'name': 'Spray222', 'vendor': Vendors.VENDOR1.get(), 'article_number': 'B222',
+                                          'quantity': 222.0, 'unit': Units.UNIT2.get()})
         response = Items.ITEM2.get(change={'name': request['name'], 'vendor': request['vendor'],
                                            'article_number': request['article_number'], 'quantity': request['quantity'],
                                            'unit': request['unit']})
@@ -75,7 +75,7 @@ class TestItemWithPreFilledDb(CommonApiTest):
 
 
 @append_mandatory_field_tests(item_name='barcode', base_item=ItemBarcodes.BARCODE1,
-                              mandatory_fields=['barcode'])
+                              mandatory_fields=[])
 class TestItemBarcodeWithBrandNewDb(CommonApiTest):
     ENDPOINT = '/items/1/barcodes'
     BAD_ENDPOINT = '/items/3/barcodes'
@@ -95,6 +95,7 @@ class TestItemBarcodeWithBrandNewDb(CommonApiTest):
     def test_adding_new_item_barcodes(self):
         self.assertApiPost(data=ItemBarcodes.BARCODE1, expected_data=ItemBarcodes.BARCODE1)
         self.assertApiPost(data=ItemBarcodes.BARCODE2, expected_data=ItemBarcodes.BARCODE2)
+        self.assertApiPost(data=ItemBarcodes.BARCODE3, expected_data=ItemBarcodes.BARCODE3)
 
     def test_can_not_adding_new_barcode_to_a_non_existed_item(self):
         self.assertApiPost(data=ItemBarcodes.BARCODE1, endpoint=self.BAD_ENDPOINT,
@@ -111,13 +112,20 @@ class TestItemBarcodeWithBrandNewDb(CommonApiTest):
     def test_can_not_add_more_than_once_an_barcode_to_a_item(self):
         self.assertApiPost(data=ItemBarcodes.BARCODE1)
         self.assertApiPost(data=ItemBarcodes.BARCODE2.set(change={'barcode': ItemBarcodes.BARCODE1['barcode']}),
-                           expected_data={'message': {'barcode_id, item_id': ['Already exists.']}},
+                           expected_data={'message': {'barcode': ['Already exists.']}},
                            expected_status_codes=422)
 
-    def test_can_not_add_more_than_one_main_barcode(self):
+    def test_can_not_adding_new_master_non_main_barcode(self):
+        self.assertApiPost(data=ItemBarcodes.BARCODE2.set(change={'master': True}),
+                           expected_data={'message': {'master': [
+                               'Can not set non-main barcode as master barcode.']}},
+                           expected_status_codes=422)
+
+    def test_can_not_add_more_than_one_master_barcode(self):
         self.assertApiPost(data=ItemBarcodes.BARCODE1)
-        self.assertApiPost(data=ItemBarcodes.BARCODE2.set(change={'main': True}),
-                           expected_data={'message': {'main': ['Can not set more than one main barcode to an item.']}},
+        self.assertApiPost(data=ItemBarcodes.BARCODE3.set(change={'master': True}),
+                           expected_data={'message': {'master': [
+                               'Can not set more than one master barcode to an item.']}},
                            expected_status_codes=422)
 
 
@@ -164,7 +172,7 @@ class TestItemBarcodeWithPreFilledDb(CommonApiTest):
         request = ItemBarcodes.BARCODE2.set(change={'barcode': 'XX{:s}XX'.format(ItemBarcodes.BARCODE2['barcode']),
                                                     'quantity': ItemBarcodes.BARCODE2['quantity'] + 1})
         response = ItemBarcodes.BARCODE2.get(change={'barcode': request['barcode'], 'quantity': request['quantity'],
-                                                     'main': request['main']})
+                                                     'master': request['master']})
 
         self.assertApiPut(ItemBarcodes.BARCODE2['id'], data=request, expected_data=response)
         self.assertApiGet(expected_data=[ItemBarcodes.BARCODE1, response])
@@ -172,3 +180,8 @@ class TestItemBarcodeWithPreFilledDb(CommonApiTest):
     def test_can_not_update_item_barcode_of_a_non_existed_item(self):
         self.assertApiPut(ItemBarcodes.BARCODE1['id'], data=ItemBarcodes.BARCODE1, endpoint=self.BAD_ENDPOINT,
                           expected_status_codes=404)
+
+    def test_can_not_make_main_barcode_from_a_not_main_barcode(self):
+        self.assertApiPut(ItemBarcodes.BARCODE2['id'], data=ItemBarcodes.BARCODE2.set(change={'main': True}),
+                          expected_data=ItemBarcodes.BARCODE2,
+                          expected_status_codes=200)

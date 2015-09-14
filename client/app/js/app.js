@@ -8,8 +8,14 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'restangular',
     'gettext',
     'smart-table',
-    'appControllers',
-    'appDirectives',
+    'appControllers.common',
+    'appControllers.views.login',
+    'appControllers.views.items',
+    'appControllers.sidebar.barcode',
+    'appDirectives.common',
+    'appDirectives.form',
+    'appDirectives.modal',
+    'appDirectives.table',
     'appFactories',
     'appFilters',
     'appServices'
@@ -59,6 +65,17 @@ storekeeperApp.config(['$routeProvider',
             otherwise({
                 'redirectTo': '/items'
             });
+    }]);
+
+
+storekeeperApp.run(['$rootScope',
+    function ($rootScope) {
+        $rootScope.sidebars = {
+            'barcode': {
+                'templateUrl': 'partials/sidebars/barcode.html',
+                'placement': 'left'
+            }
+        };
     }]);
 
 
@@ -120,4 +137,32 @@ storekeeperApp.config(['$modalProvider',
         angular.extend($modalProvider.defaults, {
             'keyboard': false
         });
+    }]);
+
+
+storekeeperApp.config(['$provide',
+    function ($provide) {
+
+        $provide.decorator('$exceptionHandler', ['$delegate', '$injector',
+            function ($delegate, $injector) {
+                return function (exception, cause) {
+                    var $rootScope = $injector.get('$rootScope');
+                    $rootScope.sendErrorToServer(exception, cause);
+                    $delegate(exception, cause);
+                };
+            }]);
+
+    }]);
+
+
+storekeeperApp.run(['$rootScope', 'ErrorService',
+    function ($rootScope, ErrorService) {
+        $rootScope.sendErrorToServer = function sendErrorToServer (exception, cause) {
+            ErrorService.post({
+                'name': exception.name,
+                'message': exception.message,
+                'stack': exception.stack,
+                'cause': cause
+            });
+        };
     }]);

@@ -1,9 +1,9 @@
 'use strict';
 
-describe('ItemController', function () {
+describe('Controllers/Views: ItemController', function () {
     var test;
 
-    beforeEach(module('appControllers'));
+    beforeEach(module('appControllers.views.items'));
 
     beforeEach(function () {
         test = this;
@@ -75,13 +75,23 @@ describe('ItemController', function () {
                         '$setPristine': function () {
                             mocks.$scope.itemForm.$dirty = false;
                         }
+                    },
+                    'barcodesForm': {
+                        '$dirty': function () {
+                            mocks.$scope.barcodesForm.$dirty = true;
+                        },
+                        '$setPristine': function () {
+                            mocks.$scope.barcodesForm.$dirty = false;
+                        }
                     }
                 },
+                '$window': {},
                 'Restangular': {
                     'copy': function (data) {
                         return angular.extend({}, data);
                     }
                 },
+                'gettextCatalog': {},
                 'vendorList': angular.extend({
                     'push': function () {}
                 }, data.vendors),
@@ -116,7 +126,10 @@ describe('ItemController', function () {
 
             dependencies = {
                 '$scope': mocks.$scope,
+                '$window': mocks.$window,
+                //'$q': test.$q,
                 'Restangular': mocks.Restangular,
+                'gettextCatalog': mocks.gettextCatalog,
                 'VendorService': mocks.VendorService,
                 'UnitService': mocks.UnitService,
                 'CommonFactory': mocks.CommonFactory
@@ -141,6 +154,8 @@ describe('ItemController', function () {
                 inject(function ($controller, $rootScope, $q) {
                     test.$rootScope = $rootScope;
                     test.$q = $q;
+
+                    dependencies.$q = $q;
 
                     $controller('ItemController', dependencies);
                 });
@@ -207,19 +222,6 @@ describe('ItemController', function () {
             expect(test.mocks.$scope.rowData.put).toHaveBeenCalled();
             expect(test.mocks.$scope.itemForm.$setPristine).toHaveBeenCalled();
         });
-
-        it('discard will un-dirty form then close window', function () {
-            test.injectController();
-            test.$rootScope.$apply();
-
-            test.mocks.$scope.itemForm.$dirty = true;
-
-            test.mocks.$scope.discardChanges();
-            test.$rootScope.$apply();
-            expect(test.mocks.$scope.$broadcast).not.toHaveBeenCalledWith('show-errors-check-validity');
-            expect(test.mocks.$scope.rowData.put).not.toHaveBeenCalled();
-            expect(test.mocks.$scope.$hide).toHaveBeenCalled();
-        });
     });
 
     describe('rowData', function () {
@@ -279,7 +281,7 @@ describe('ItemController', function () {
             expect(test.mocks.$scope.barcodes).not.toBeDefined();
         });
 
-        it('can save then closes window', function () {
+        it('can save', function () {
             test.injectController();
             test.$rootScope.$apply();
 
@@ -290,7 +292,6 @@ describe('ItemController', function () {
 
             expect(test.mocks.$scope.rowData.put).toHaveBeenCalled();
             expect(test.mocks.$scope.rowData).toEqual(test.mocks.$scope.item);
-            expect(test.mocks.$scope.$hide).toHaveBeenCalled();
         });
 
         it('can not save', function () {

@@ -1,5 +1,7 @@
 import json
+from operator import itemgetter
 import re
+from collections import OrderedDict
 from flask import Response
 
 import app
@@ -21,6 +23,9 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
 
     # Pattern for timestamp; e.g: '2015-03-14T07:38:08.430655+00:00'
     __API_TIMESTAMP = re.compile(r'(?P<quote>["\'])\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}\.\d{6}\+\d{2}:\d{2}["\']')
+    # Pattern for timestamp; e.g: 'SK-TEST-1234567'
+    __API_BARCODE = re.compile(r'(?P<quote>["\'])' + re.escape(config.App.BARCODE_PREFIX) +
+                               '[0-9]{%d}' % config.App.BARCODE_NUMBERS + '["\']')
 
     def setUp(self):
         super().setUp()
@@ -44,15 +49,14 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
         """
         "request" parameter will be shown on assertion error
         """
-        response_string = self.__make_testable_data(response.data.decode('utf-8'))
-        parsed_response = self.__get_parsed_response(response_string)
+        parsed_data = self.__make_testable_data(self.__get_parsed_response(response.data.decode('utf-8')))
         expected_data = self.__make_testable_data(expected_data)
 
         try:
-            self.assertCountEqual(expected_data, parsed_response)
+            self.assertEqual(expected_data, parsed_data)
         except AssertionError as e:
             assert False, '{!s}\n\nrequest={!r}\nresponse={!r}\nstatus_code={}'\
-                .format(e, request, parsed_response, response.status_code)
+                .format(e, request, parsed_data, response.status_code)
 
     def __get_parsed_response(self, response_string: str) -> (str, list, dict, None):
         try:
@@ -74,12 +78,23 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
     def __make_testable_data(self, data: (str, list, dict)) -> (str, list, dict):
         data_type = type(data)
         if not data_type == str:
-            data = json.dumps(data, default=str)
+            data = json.dumps(data, default=str, sort_keys=True)
 
         data = self.__API_TIMESTAMP.sub('\g<quote><TS>\g<quote>', data)
+        data = self.__API_BARCODE.sub('\g<quote><BC>\g<quote>', data)
 
         if not data_type == str:
-            data = json.loads(data)
+            data = json.loads(data, object_pairs_hook=OrderedDict)
+
+        if data and type(data) == list:
+            if type(data[0]) in {dict, OrderedDict}:
+                if 'id' in data[0].keys():
+                    data = sorted(data, key=itemgetter('id'))
+                elif 'name' in data[0].keys():
+                    data = sorted(data, key=itemgetter('name'))
+            else:
+                data = sorted(data)
+
         return data
 
 

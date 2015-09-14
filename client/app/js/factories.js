@@ -56,24 +56,10 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', '$filter'
             return promise;
         }
 
-        function getObjectById(objects, id) {
-            var objectId = parseInt(id),
-                results;
-
-            if (objectId) {
-                results = $filter('filter')(objects, {'id': objectId}, true);
-                if (results.length === 1) {
-                    return results[0];
-                }
-            }
-            return null;
-        }
-
         return {
             'showResponseError': showResponseError,
             'printToConsole': printToConsole,
-            'handlePromise': handlePromise,
-            'getObjectById': getObjectById
+            'handlePromise': handlePromise
         };
     }]);
 

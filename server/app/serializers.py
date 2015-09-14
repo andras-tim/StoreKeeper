@@ -33,6 +33,11 @@ def _greater_than_or_equal_zero(number: int):
         raise ValidationError('Must be greater than or equal 0.')
 
 
+class UppercaseString(fields.String):
+    def _deserialize(self, value):
+        return super()._deserialize(value).upper()
+
+
 class UserSerializer(BasicSerializer):
     fields = ('id', 'username', 'email', 'admin', 'disabled')
 
@@ -113,24 +118,28 @@ class ItemSerializer(BasicSerializer):
     }
 
 
-class ItemBarcodeSerializer(BasicSerializer):
-    fields = ('id', 'barcode', 'quantity', 'main')
-
-
-class ItemBarcodeDeserializer(Serializer):
-    id = fields.Int()
-    barcode = fields.Str(required=True, validate=_not_blank)
-    quantity = fields.Int(validate=_greater_than_zero)
-    main = fields.Bool()
-
-
 class ItemDeserializer(Serializer):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
     vendor = fields.Nested(VendorDeserializer(), required=True)
-    article_number = fields.Int()
-    quantity = fields.Int(required=True)
+    article_number = UppercaseString()
+    quantity = fields.Float(required=True)
     unit = fields.Nested(UnitDeserializer(), required=True)
+
+
+class ItemBarcodeSerializer(BasicSerializer):
+    fields = ('id', 'barcode', 'quantity', 'master', 'main')
+
+
+class ItemBarcodeDeserializer(Serializer):
+    id = fields.Int()
+    barcode = UppercaseString(validate=_not_blank)
+    quantity = fields.Float(validate=_greater_than_zero)
+    master = fields.Bool()
+
+
+class ItemBarcodePrintDeserializer(Serializer):
+    copies = fields.Int()
 
 
 class AcquisitionItemSerializer(BasicSerializer):
@@ -143,7 +152,7 @@ class AcquisitionItemSerializer(BasicSerializer):
 class AcquisitionItemDeserializer(Serializer):
     id = fields.Int()
     item = fields.Nested(ItemDeserializer(), required=True)
-    quantity = fields.Int(required=True, validate=_greater_than_zero)
+    quantity = fields.Float(required=True, validate=_greater_than_zero)
 
 
 class StocktakingItemSerializer(BasicSerializer):
@@ -156,19 +165,11 @@ class StocktakingItemSerializer(BasicSerializer):
 class StocktakingItemDeserializer(Serializer):
     id = fields.Int()
     item = fields.Nested(ItemDeserializer(), required=True)
-    quantity = fields.Int(required=True)
+    quantity = fields.Float(required=True)
 
 
 class BarcodeSerializer(BasicSerializer):
-    fields = ('id', 'barcode', 'quantity', 'main', 'item_id')
-
-
-class BarcodeDeserializer(Serializer):
-    id = fields.Int()
-    barcode = fields.Str(required=True, validate=_not_blank)
-    quantity = fields.Int(validate=_greater_than_zero)
-    item_id = fields.Int(required=True)
-    main = fields.Bool()
+    fields = ('id', 'barcode', 'quantity', 'main', 'master', 'item_id')
 
 
 class WorkSerializer(BasicSerializer):
@@ -197,8 +198,8 @@ class WorkItemSerializer(BasicSerializer):
 class WorkItemDeserializer(Serializer):
     id = fields.Int()
     item = fields.Nested(ItemDeserializer(), required=True)
-    outbound_quantity = fields.Int(required=True, validate=_greater_than_zero)
-    returned_quantity = fields.Int(validate=_greater_than_or_equal_zero)
+    outbound_quantity = fields.Float(required=True, validate=_greater_than_zero)
+    returned_quantity = fields.Float(validate=_greater_than_or_equal_zero)
 
 
 class UserConfigSerializer(BasicSerializer):
@@ -209,3 +210,10 @@ class UserConfigDeserializer(Serializer):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
     value = fields.Str(required=True)
+
+
+class ErrorDeserializer(Serializer):
+    name = fields.Str()
+    message = fields.Str(required=True)
+    stack = fields.Str()
+    cause = fields.Str()

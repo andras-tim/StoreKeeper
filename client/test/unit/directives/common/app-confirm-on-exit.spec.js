@@ -1,9 +1,9 @@
 'use strict';
 
-describe('appConfirmOnExit', function () {
+describe('Directives/Common: appConfirmOnExit', function () {
     var test;
 
-    beforeEach(module('appDirectives', 'partials'));
+    beforeEach(module('appDirectives.common', 'partials'));
 
     beforeEach(function () {
         test = this;

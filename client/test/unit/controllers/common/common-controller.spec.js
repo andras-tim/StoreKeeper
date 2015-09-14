@@ -1,9 +1,9 @@
 'use strict';
 
-describe('CommonController', function () {
+describe('Controllers/Common: CommonController', function () {
     var test;
 
-    beforeEach(module('appControllers'));
+    beforeEach(module('appControllers.common'));
 
     beforeEach(function () {
         test = this;
@@ -29,6 +29,7 @@ describe('CommonController', function () {
                         test.eventListeners[name] = func;
                     }
                 },
+                '$aside': {},
                 '$event': {
                     'preventDefault': function () {}
                 },
@@ -62,6 +63,7 @@ describe('CommonController', function () {
 
             dependencies = {
                 '$scope': mocks.$scope,
+                '$aside': mocks.$aside,
                 'ConfigFactory': mocks.ConfigFactory,
                 'PageFactory': mocks.PageFactory,
                 'SessionFactory': mocks.SessionFactory,
