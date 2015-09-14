@@ -106,12 +106,13 @@ class Barcode(db.Model):
     barcode = db.Column(db.String(15), nullable=False, unique=True)
     quantity = db.Column(db.Float, nullable=False, default=1)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+    master = db.Column(db.Boolean, default=False)
     main = db.Column(db.Boolean, default=False)
 
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return '{!s} [quantity={!r}]'.format(self.barcode, self.quantity)
+        return '{!s} [quantity={!r}, main={!s}]'.format(self.barcode, self.quantity, self.main)
 
 
 @nested_fields(customer=Customer, outbound_close_user=User, returned_close_user=User)

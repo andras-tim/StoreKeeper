@@ -70,6 +70,7 @@ def iterate_barcodes(data: dict):
             ),
             quantity=1.0,
             item_id=item_id,
+            master=True,
             main=True
         )
         for i in range(random.randint(0, 2)):
@@ -79,7 +80,8 @@ def iterate_barcodes(data: dict):
                 ),
                 quantity=round(random.uniform(1, 10) * 5, 2),
                 item_id=item_id,
-                main=False
+                master=False,
+                main=(random.uniform(1, 10) > 5)
             )
 
 

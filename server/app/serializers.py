@@ -128,14 +128,14 @@ class ItemDeserializer(Serializer):
 
 
 class ItemBarcodeSerializer(BasicSerializer):
-    fields = ('id', 'barcode', 'quantity', 'main')
+    fields = ('id', 'barcode', 'quantity', 'master', 'main')
 
 
 class ItemBarcodeDeserializer(Serializer):
     id = fields.Int()
     barcode = UppercaseString(validate=_not_blank)
     quantity = fields.Float(validate=_greater_than_zero)
-    main = fields.Bool()
+    master = fields.Bool()
 
 
 class ItemBarcodePrintDeserializer(Serializer):
@@ -169,15 +169,7 @@ class StocktakingItemDeserializer(Serializer):
 
 
 class BarcodeSerializer(BasicSerializer):
-    fields = ('id', 'barcode', 'quantity', 'main', 'item_id')
-
-
-class BarcodeDeserializer(Serializer):
-    id = fields.Int()
-    barcode = fields.Str(required=True, validate=_not_blank)
-    quantity = fields.Float(validate=_greater_than_zero)
-    item_id = fields.Int(required=True)
-    main = fields.Bool()
+    fields = ('id', 'barcode', 'quantity', 'main', 'master', 'item_id')
 
 
 class WorkSerializer(BasicSerializer):

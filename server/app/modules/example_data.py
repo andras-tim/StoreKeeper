@@ -2,9 +2,7 @@ from datetime import datetime
 import json
 
 from app.modules.common import filter_dict
-
-BARCODE_PREFIX = 'SK-TEST-'
-BARCODE_NUMBERS = 7
+from app.modules.types import BarcodeType
 
 
 class FilterableDict:
@@ -67,6 +65,15 @@ class ExampleTimestamp:
     @classmethod
     def utcnow(cls) -> str:
         return datetime.utcnow().strftime(cls.REST_API_DATE_FORMAT)
+
+
+class ExampleBarcode:
+    BARCODE_PREFIX = 'SK-TEST-'
+    BARCODE_NUMBERS = 7
+
+    @classmethod
+    def generate_main(cls) -> str:
+        return BarcodeType.generate(cls.BARCODE_PREFIX, cls.BARCODE_NUMBERS)
 
 
 class ExampleUsers:
@@ -150,22 +157,21 @@ class ExampleStocktakingItems:
 
 
 class ExampleBarcodes:
-    BARCODE1 = FilterableDict(commons={'barcode': 'SK56456786416', 'quantity': 32.0, 'item_id': 1, 'main': True},
-                              getters={'id': 1})
-    BARCODE2 = FilterableDict(commons={'barcode': '9843-184125', 'quantity': 1.5, 'item_id': 1, 'main': False},
-                              getters={'id': 2})
-    BARCODE3 = FilterableDict(commons={'barcode': '344-57688643', 'quantity': 35.0, 'item_id': 2, 'main': True},
-                              getters={'id': 3})
+    BARCODE1 = FilterableDict(getters={'id': 1, 'barcode': ExampleBarcode.generate_main(), 'quantity': 32.7,
+                                       'item_id': 1, 'master': True, 'main': True})
+    BARCODE2 = FilterableDict(getters={'id': 2, 'barcode': '9843-184125', 'quantity': 1.5,
+                                       'item_id': 1, 'master': False, 'main': False})
+    BARCODE3 = FilterableDict(getters={'id': 3, 'barcode': ExampleBarcode.generate_main(), 'quantity': 35.0,
+                                       'item_id': 2, 'master': False, 'main': True})
 
 
 class ExampleItemBarcodes:
-    BARCODE1 = FilterableDict(commons={'quantity': 32.7, 'main': True},
-                              setters={'barcode': 'sk56456786416'},
-                              getters={'id': 1, 'barcode': 'SK56456786416'})
-    BARCODE2 = FilterableDict(commons={'barcode': '9843-184125', 'quantity': 14.0, 'main': False},
-                              getters={'id': 2})
-    BARCODE3 = FilterableDict(commons={'quantity': 35.0, 'main': False},
-                              getters={'id': 3, 'barcode': '{}{}'.format(BARCODE_PREFIX, '2' * BARCODE_NUMBERS)})
+    BARCODE1 = FilterableDict(commons={'barcode': ExampleBarcode.generate_main(), 'quantity': 32.7, 'master': True},
+                              getters={'id': 1, 'main': True})
+    BARCODE2 = FilterableDict(commons={'barcode': '9843-184125', 'quantity': 1.5, 'master': False},
+                              getters={'id': 2, 'main': False})
+    BARCODE3 = FilterableDict(commons={'quantity': 35.0, 'master': False},
+                              getters={'id': 3, 'main': True, 'barcode': ExampleBarcode.generate_main()})
 
 
 class ExampleItemBarcodePrints:

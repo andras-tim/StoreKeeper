@@ -1,6 +1,7 @@
-import random
+import re
 from flask import send_file
 from flask.ext.restful import abort
+from app.modules.types import BarcodeType
 from app.modules.view_helper_for_models import get_validated_request
 from app.modules.view_helper_for_models import RequestProcessingError
 
@@ -13,6 +14,9 @@ from app.modules.printer import MissingCups
 from app.serializers import ItemSerializer, ItemDeserializer, ItemBarcodeDeserializer, ItemBarcodeSerializer, \
     ItemBarcodePrintDeserializer
 from app.views.common import api_func
+
+__MAIN_BARCODE_FORMAT = re.compile(r'^' + re.escape(config.App.BARCODE_PREFIX) +
+                                   '[0-9]{%d}' % config.App.BARCODE_NUMBERS + '$')
 
 
 class ItemListView(BaseListView):
@@ -76,7 +80,9 @@ class ItemBarcodeListView(BaseNestedListView):
     def post(self, id: int):
         self._initialize_parent_item(id)
         barcode = self._post_populate(item_id=id)
-        _check_only_one_main_barcode_per_item(barcode)
+        if barcode.barcode and _is_main_barcode(barcode.barcode):
+            barcode.main = True
+        _can_be_master_barcode(barcode)
 
         if barcode.barcode is None:
             return self._post_retryable_commit(_get_barcode_generator(barcode_prefix=config.App.BARCODE_PREFIX,
@@ -108,7 +114,7 @@ class ItemBarcodeView(BaseNestedView):
     def put(self, item_id: int, id: int):
         self._initialize_parent_item(item_id)
         barcode = self._put_populate(item_id=item_id, id=id)
-        _check_only_one_main_barcode_per_item(barcode)
+        _can_be_master_barcode(barcode)
         return self._put_commit(barcode)
 
     @api_func('Delete barcode', item_name='barcode', url_tail='/items/1/barcodes/1',
@@ -168,20 +174,26 @@ class ItemBarcodePrintView(BaseNestedView):
 
 def _get_barcode_generator(barcode_prefix: str, count_of_numbers: int, base_barcode: Barcode) -> callable:
     def generator():
-        barcode = '{}{}'.format(barcode_prefix, ''.join(random.sample('0123456789', count_of_numbers)))
-        return Barcode(barcode=barcode.upper(), quantity=base_barcode.quantity, item_id=base_barcode.item_id,
-                       main=base_barcode.main)
+        barcode = BarcodeType.generate(barcode_prefix, count_of_numbers)
+        return Barcode(barcode=barcode, quantity=base_barcode.quantity, item_id=base_barcode.item_id,
+                       master=base_barcode.master, main=True)
 
     return generator
 
 
-def _check_only_one_main_barcode_per_item(barcode: Barcode):
-    if not barcode.main:
+def _is_main_barcode(barcode: str) -> bool:
+    return __MAIN_BARCODE_FORMAT.match(barcode)
+
+
+def _can_be_master_barcode(barcode: Barcode):
+    if not barcode.master:
         return
+    if barcode.master and barcode.barcode and not barcode.main:
+        abort(422, message={'master': ['Can not set non-main barcode as master barcode.']})
     if Barcode.query.filter(Barcode.id != barcode.id,
                             Barcode.item_id == barcode.item_id,
-                            Barcode.main).count() > 0:
-        abort(422, message={'main': ['Can not set more than one main barcode to an item.']})
+                            Barcode.master).count() > 0:
+        abort(422, message={'master': ['Can not set more than one master barcode to an item.']})
 
 
 def _get_label_printer(barcode: Barcode) -> LabelPrinter:
