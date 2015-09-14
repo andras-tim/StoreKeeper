@@ -91,6 +91,7 @@
     // Custom Globals
 
     "globals": {
+        "_": false,
         "angular": false,
         "browser": false,
         "by": false,

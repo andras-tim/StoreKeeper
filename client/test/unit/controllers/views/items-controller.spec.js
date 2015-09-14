@@ -9,10 +9,14 @@ describe('Controllers/Views: ItemsController', function () {
         test = this;
 
         var data = {
-                'items': ['foo', 'bar'],
-                'itemWithId': {
-                    'id': 123
-                },
+                'items': [
+                    {
+                        'id': 123
+                    },
+                    {
+                        'id': 456
+                    }
+                ],
                 'itemModal': {
                     '$id': 'item'
                 },
@@ -41,6 +45,11 @@ describe('Controllers/Views: ItemsController', function () {
                 '$modal': function (modal) {
                     test.openedModals.push(modal);
                 },
+                '_': {
+                    'findIndex': function () {
+                        return test.filterResult;
+                    }
+                },
                 'ItemService': {
                     'getList': function () {
                         return helper.promiseMock(test, 'getListResolved', data.items);
@@ -49,9 +58,6 @@ describe('Controllers/Views: ItemsController', function () {
                 'CommonFactory': {
                     'handlePromise': function (promise, spinner, resolve, reject) {
                         return promise.then(resolve, reject);
-                    },
-                    'getObjectById': function () {
-                        return test.filterResult;
                     }
                 }
             },
@@ -59,6 +65,7 @@ describe('Controllers/Views: ItemsController', function () {
             dependencies = {
                 '$scope': mocks.$scope,
                 '$location': mocks.$location,
+                '_': mocks._.findIndex,
                 '$modal': mocks.$modal,
                 'ItemService': mocks.ItemService,
                 'CommonFactory': mocks.CommonFactory
@@ -66,10 +73,10 @@ describe('Controllers/Views: ItemsController', function () {
 
             injectController = function () {
                 spyOn(test.mocks.ItemService, 'getList').and.callThrough();
+                spyOn(test.mocks._, 'findIndex').and.callThrough();
                 spyOn(test.mocks.$scope, '$new').and.callThrough();
                 spyOn(test.mocks.$location, 'search').and.callThrough();
                 spyOn(test.mocks.$event, 'preventDefault').and.stub();
-                spyOn(test.mocks.CommonFactory, 'getObjectById').and.callThrough();
 
                 inject(function ($controller, $rootScope, $q) {
                     test.$rootScope = $rootScope;
@@ -90,7 +97,7 @@ describe('Controllers/Views: ItemsController', function () {
         test.openedModals = [];
         test.locationSearch = {};
         test.eventListeners = {};
-        test.filterResult = null;
+        test.filterResult = -1;
     });
 
     it('can get items from server side', function () {
@@ -120,9 +127,9 @@ describe('Controllers/Views: ItemsController', function () {
                 test.injectController();
                 test.$rootScope.$apply();
 
-                test.mocks.$scope.openItem(test.data.itemWithId);
+                test.mocks.$scope.openItem(test.data.items[0]);
                 expect(test.mocks.$scope.$new).toHaveBeenCalled();
-                expect(test.newScope.rowData).toBe(test.data.itemWithId);
+                expect(test.newScope.rowData).toBe(test.data.items[0]);
             });
 
             it('is opened modal', function () {
@@ -131,7 +138,7 @@ describe('Controllers/Views: ItemsController', function () {
                 test.injectController();
                 test.$rootScope.$apply();
 
-                test.mocks.$scope.openItem(test.data.itemWithId);
+                test.mocks.$scope.openItem(test.data.items[0]);
                 expect(test.openedModals.length).toEqual(1);
                 expect(test.openedModals[0].id).toEqual('item');
             });
@@ -140,7 +147,8 @@ describe('Controllers/Views: ItemsController', function () {
         it('via location search', function () {
             expect(test.openedModals.length).toEqual(0);
 
-            test.filterResult = test.data.itemWithId;
+            test.filterResult = 1;
+            test.locationSearch.id = test.data.items[test.filterResult].id;
             test.injectController();
             test.$rootScope.$apply();
 
@@ -154,7 +162,7 @@ describe('Controllers/Views: ItemsController', function () {
             test.injectController();
             test.$rootScope.$apply();
 
-            test.mocks.$scope.openItem(test.data.itemWithId);
+            test.mocks.$scope.openItem(test.data.items[0]);
             expect(test.mocks.$location.search).toHaveBeenCalledWith('id', 123);
         });
 

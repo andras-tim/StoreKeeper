@@ -230,42 +230,4 @@ describe('Factories: CommonFactory', function () {
             });
         });
     });
-
-    describe('getObjectById()', function () {
-
-        beforeEach(function () {
-            test.filterResults = [];
-            test.objectList = 'foo';
-
-            test.injectFactory();
-        });
-
-        it('return with null when id can not parse as integer', function () {
-            var result = test.CommonFactory.getObjectById(test.objectList, 'bar');
-            expect(test.mocks.filterFilter).not.toHaveBeenCalled();
-            expect(result).toBeNull();
-        });
-
-        it('return with null when result set is empty', function () {
-            var result = test.CommonFactory.getObjectById(test.objectList, 1);
-            expect(test.mocks.filterFilter).toHaveBeenCalledWith(test.objectList, {'id': 1}, true);
-            expect(result).toBeNull();
-        });
-
-        it('return with null when result set contains more than one object', function () {
-            test.filterResults = ['apple', 'banana'];
-
-            var result = test.CommonFactory.getObjectById(test.objectList, 1);
-            expect(test.mocks.filterFilter).toHaveBeenCalledWith(test.objectList, {'id': 1}, true);
-            expect(result).toBeNull();
-        });
-
-        it('return with proper object', function () {
-            test.filterResults = ['apple'];
-
-            var result = test.CommonFactory.getObjectById(test.objectList, 2);
-            expect(test.mocks.filterFilter).toHaveBeenCalledWith(test.objectList, {'id': 2}, true);
-            expect(result).toEqual('apple');
-        });
-    });
 });

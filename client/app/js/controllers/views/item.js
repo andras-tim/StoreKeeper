@@ -31,9 +31,14 @@ appItemViewControllers.controller('ItemsController', ['$scope', '$location', '$m
             ItemService.getList(),
             'loadingItems',
             function (items) {
-                var item = CommonFactory.getObjectById(items, $location.search().id);
-                if (item) {
-                    openItem(item);
+                var index,
+                    desiredId = parseInt($location.search().id);
+
+                if (!isNaN(desiredId)) {
+                    index = _.findIndex(items, 'id', desiredId);
+                    if (index !== -1) {
+                        openItem(items[index]);
+                    }
                 }
                 $scope.items = items;
             });
