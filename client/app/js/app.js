@@ -11,6 +11,7 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appControllers.common',
     'appControllers.views.login',
     'appControllers.views.item',
+    'appControllers.sidebar.barcode',
     'appDirectives.common',
     'appDirectives.form',
     'appDirectives.modal',
@@ -64,6 +65,18 @@ storekeeperApp.config(['$routeProvider',
             otherwise({
                 'redirectTo': '/items'
             });
+    }]);
+
+
+storekeeperApp.run(['$rootScope',
+    function ($rootScope) {
+        $rootScope.sidebars = {
+            'barcode': {
+                'templateUrl': 'partials/sidebars/barcode.html',
+                'placement': 'left',
+                'controller': 'BarcodeSidebarController'
+            }
+        };
     }]);
 
 

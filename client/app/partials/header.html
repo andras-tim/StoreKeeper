@@ -10,11 +10,11 @@
       </button>
       <a class="navbar-brand" href="#/"><img id="logo" src="img/logo.png" alt="Logo"> <span ng-bind="appTitle"></span></a>
     </div>
-
     <div class="navbar-collapse" bs-collapse-target>
+
       <ul class="nav navbar-nav" ng-if="isAuthenticated()" bs-navbar>
         <li>
-          <a href data-template-url="partials/sidebars/quick_search.html" data-placement="left" data-container="body" bs-aside>
+          <a href ng-click="openSidebar('barcode')">
             <i class="fa fa-search"></i>
           </a>
         </li>
@@ -22,6 +22,7 @@
           <a href="#/items" translate>Items</a>
         </li>
       </ul>
+
       <ul class="nav navbar-nav navbar-right">
         <li ng-if="isAuthenticated()">
           <a href data-template-url="partials/widgets/user_menu.html" role="button" aria-expanded="false" bs-dropdown>
@@ -34,7 +35,7 @@
           </a>
         </li>
       </ul>
-    </div>
 
+    </div>
   </div>
 </nav>

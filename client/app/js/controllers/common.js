@@ -3,8 +3,8 @@
 var appControllers = angular.module('appControllers.common', []);
 
 
-appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
-    function CommonController ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
+appControllers.controller('CommonController', ['$scope', '$aside', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
+    function CommonController ($scope, $aside, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
         function initializeModalHandler() {
             var modals = [];
 
@@ -26,6 +26,18 @@ appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageF
             $scope.$on('$routeChangeSuccess', closeAllOpenedModals);
         }
 
+        function openSidebar(type) {
+            var options = $scope.sidebars[type];
+            if (options === undefined) {
+                CommonFactory.printToConsole('Missing sidebar \'' + type + '\'');
+                return;
+            }
+
+            $aside(angular.merge({
+                'show': true
+            }, options));
+        }
+
         ConfigFactory.getConfig().then(function (config) {
             $scope.appTitle = config.app_title;
         }, CommonFactory.showResponseError);
@@ -34,6 +46,7 @@ appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageF
 
         $scope.isAuthenticated = SessionFactory.isAuthenticated;
         $scope.getWindowTitle = PageFactory.getWindowTitle;
+        $scope.openSidebar = openSidebar;
     }]);
 
 
