@@ -141,7 +141,7 @@ appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 
             });
 
             _.forEach($scope.barcodes, function (barcode) {
-                if (!barcode.deleted && barcode.dirty && !barcode.master) {
+                if ((barcode !== undefined) && !barcode.deleted && barcode.dirty && !barcode.master) {
                     promise.then(function () {
                         console.log('updating item');
                         promise = CommonFactory.handlePromise(
@@ -156,7 +156,7 @@ appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 
             });
 
             _.forEach($scope.barcodes, function (barcode) {
-                if (!barcode.deleted && barcode.dirty && barcode.master) {
+                if ((barcode !== undefined) && !barcode.deleted && barcode.dirty && barcode.master) {
                     promise.then(function () {
                         console.log('updating2 item');
                         promise = CommonFactory.handlePromise(
@@ -240,7 +240,7 @@ appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 
                 return;
             }
             _.forEach($scope.barcodes, function (barcode) {
-                if (barcode !== currentBarcode && barcode.master) {
+                if ((barcode !== undefined) && !barcode.deleted && barcode.master && (barcode !== currentBarcode)) {
                     barcode.master = false;
                     setBarcodeDirty(barcode);
                 }
