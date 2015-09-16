@@ -14,7 +14,7 @@ The following features are only available via API now.
 
 * Manage users, sessions (login, logout), handle permissions
 * Manage items and its barcodes, units, vendors
-* Can make acquisition, amd stocktaking
+* Can make acquisition and stocktaking
 * Can crate works and its customers (handle outbound, returned items)
 
 
