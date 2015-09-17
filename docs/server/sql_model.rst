@@ -6,23 +6,29 @@ SQL Model
 .. index:: sql
 
 This software is SQL independent (thank you for `SQL Alchemy`_), and we want to hold it in future. However,
-requirements, installer scripts, tests were prepared for and ran on MySQL and SQLite databases only.
+requirements, installer scripts, tests were prepared for and ran on PostgreSQL, MySQL and SQLite databases.
 
-.. image:: ../_static/server/model/sql_model.*
+.. image:: ../_build/images/server_sql-model.*
    :width: 636px
-   :height: 590px
+   :height: 351px
    :alt: SQL Model
 
-You can download this as `MySQL Workbench Model file`_ too.
-
-.. _MySQL Workbench Model file: ../_static/server/model/sql_model.mwb
 .. _SQL Alchemy: http://www.sqlalchemy.org/
 
 
 Model with indexes
 ------------------
 
-.. image:: ../_static/server/model/sql_model_with_indexes.*
+.. image:: ../_build/images/server_sql-model-w-index.*
    :width: 636px
-   :height: 699px
+   :height: 252px
    :alt: SQL Model with indexes
+
+
+Model with active properties and methods
+----------------------------------------
+
+.. image:: ../_build/images/server_sql-model-w-active.*
+   :width: 636px
+   :height: 515px
+   :alt: SQL Model with active properties and methods

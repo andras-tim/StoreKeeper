@@ -12,7 +12,7 @@ import shutil
 import sys
 
 OBSOLETED_LIST = [
-    'server/config.yml',
+    'config/config.yml',
 ]
 
 
