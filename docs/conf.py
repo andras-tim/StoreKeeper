@@ -19,10 +19,13 @@ import os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
+sys.path.insert(0, os.path.abspath('utils'))
 sys.path.insert(0, os.path.abspath('../server'))
 import app
 app.doc_mode = True
 import app.server
+
+from db_model_renderer import DbModelRenderer
 
 # Read the Docs - https://readthedocs.org/
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
@@ -273,3 +276,29 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+
+# -- Render images from db models ----------------------------------------------
+render_options = [
+    {
+        'filename': 'server_sql-model',
+        'index': False,
+        'active': False
+    },
+    {
+        'filename': 'server_sql-model-w-index',
+        'index': True,
+        'active': False
+    },
+    {
+        'filename': 'server_sql-model-w-active',
+        'index': False,
+        'active': True
+    },
+]
+for option in render_options:
+    DbModelRenderer(output_filename=option['filename'], output_directory='_build/images',
+                    show_indexes=option['index'], show_active_components=option['active'])\
+        .load_db_models()\
+        .render_image('svg')\
+        .render_image('png', last_output_file=True)
