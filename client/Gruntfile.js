@@ -190,7 +190,7 @@ module.exports = function (grunt) {
                 'files': [
                     'app/index.html'
                 ],
-                'tasks': ['nggettext_extract', 'index-html']
+                'tasks': ['nggettext_extract', 'app-index-html']
             }
         }
     });
