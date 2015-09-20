@@ -13,21 +13,21 @@ module.exports = function (grunt) {
         },
 
         'copy': {
-            'res-font-awesome': {
+            'res_font_awesome': {
                 'expand': true,
                 'nonull': true,
                 'cwd': 'bower_components/font-awesome/fonts/',
                 'src': ['**'],
                 'dest': 'app/dist/fonts/'
             },
-            'res-bootstrap': {
+            'res_bootstrap': {
                 'expand': true,
                 'nonull': true,
                 'cwd': 'bower_components/bootstrap/dist/fonts/',
                 'src': ['**'],
                 'dest': 'app/dist/fonts/'
             },
-            'res-flag-icon-css': {
+            'res_flag_icon_css': {
                 'expand': true,
                 'nonull': true,
                 'cwd': 'bower_components/flag-icon-css/flags/4x3/',
@@ -140,7 +140,7 @@ module.exports = function (grunt) {
         },
 
         'replace': {
-            'index-html': {
+            'index_html': {
                 'src': 'app/index.html',
                 'dest': 'app/index.html',
                 'replacements': [{
@@ -148,7 +148,7 @@ module.exports = function (grunt) {
                     'to': '.$2"'
                 }]
             },
-            'index-html-min': {
+            'index_html_min': {
                 'src': 'app/index.html',
                 'dest': 'app/index.html',
                 'replacements': [{
@@ -170,7 +170,7 @@ module.exports = function (grunt) {
                 'files': [
                     'app/css/**/*.css'
                 ],
-                'tasks': ['app-css']
+                'tasks': ['app_css']
             },
             'js': {
                 'files': [
@@ -178,7 +178,7 @@ module.exports = function (grunt) {
                     'app/partials/**/*.html',
                     'po/*.po'
                 ],
-                'tasks': ['nggettext_extract', 'app-js']
+                'tasks': ['nggettext_extract', 'app_js']
             },
             'html': {
                 'files': [
@@ -186,11 +186,11 @@ module.exports = function (grunt) {
                 ],
                 'tasks': ['nggettext_extract']
             },
-            'index-html': {
+            'index_html': {
                 'files': [
                     'app/index.html'
                 ],
-                'tasks': ['nggettext_extract', 'app-index-html']
+                'tasks': ['nggettext_extract', 'app_index_html']
             }
         }
     });
@@ -205,16 +205,16 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-text-replace');
 
-    grunt.registerTask('app-res', 'Prepare external resources', [
+    grunt.registerTask('app_res', 'Prepare external resources', [
         'copy'
     ]);
-    grunt.registerTask('app-css', 'Prepare CSS files', function () {
+    grunt.registerTask('app_css', 'Prepare CSS files', function () {
         grunt.task.run('concat:css');
         if (production) {
             grunt.task.run('cssmin');
         }
     });
-    grunt.registerTask('app-js', 'Prepare JS files', function () {
+    grunt.registerTask('app_js', 'Prepare JS files', function () {
         grunt.task.run('nggettext_compile');
         grunt.task.run('ngtemplates');
         grunt.task.run('concat:js');
@@ -222,19 +222,19 @@ module.exports = function (grunt) {
             grunt.task.run('uglify');
         }
     });
-    grunt.registerTask('app-index-html', 'Prepare HTML files', function () {
+    grunt.registerTask('app_index_html', 'Prepare HTML files', function () {
         if (production) {
-            grunt.task.run('replace:index-html-min');
+            grunt.task.run('replace:index_html_min');
         } else {
-            grunt.task.run('replace:index-html');
+            grunt.task.run('replace:index_html');
         }
     });
     grunt.registerTask('prepare', 'Prepare environment (you can use [-p, --production])', [
         'clean',
-        'app-res',
-        'app-css',
-        'app-js',
-        'app-index-html'
+        'app_res',
+        'app_css',
+        'app_js',
+        'app_index_html'
     ]);
     grunt.registerTask('default', [
         'prepare'
