@@ -47,20 +47,8 @@ appItemViewControllers.controller('ItemsController', ['$scope', '$location', '$m
     }]);
 
 
-appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Restangular', 'gettextCatalog', 'UnitService', 'CommonFactory',
-    function ItemController ($scope, $window, $q, Restangular, gettextCatalog, UnitService, CommonFactory) {
-        function createUnit() {
-            var completedNewUnit = { 'unit': $scope.item.unit };
-
-            CommonFactory.handlePromise(
-                UnitService.post(Restangular.copy(completedNewUnit)),
-                'creatingUnit',
-                function (resp) {
-                    $scope.units.push(resp);
-                    $scope.item.unit = resp;
-                });
-        }
-
+appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Restangular', 'gettextCatalog', 'CommonFactory',
+    function ItemController ($scope, $window, $q, Restangular, gettextCatalog, CommonFactory) {
         function saveChanges() {
             $scope.$broadcast('show-errors-check-validity');
 
@@ -244,14 +232,6 @@ appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 
                 $scope.barcodes = barcodes;
             });
 
-        CommonFactory.handlePromise(
-            UnitService.getList(),
-            'loadingUnits',
-            function (units) {
-                $scope.units = units;
-            });
-
-        $scope.createUnit = createUnit;
         $scope.createBarcode = createBarcode;
         $scope.filterAvailable = filterAvailable;
         $scope.setBarcodeDirty = setBarcodeDirty;

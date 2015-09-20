@@ -15,11 +15,11 @@ describe('Controllers/Views: ItemController', function () {
                     'article_number': 1234,
                     'id': 1,
                     'name': 'Orange',
-                    'quantity': 10,
-                    'unit': {
-                        'id': 2,
-                        'unit': 'kg'
-                    }
+                    'quantity': 10
+                    //'unit': {
+                    //    'id': 2,
+                    //    'unit': 'kg'
+                    //},
                     //'vendor': {
                     //    'id': 3,
                     //    'name': 'Foo Bar'
@@ -34,15 +34,15 @@ describe('Controllers/Views: ItemController', function () {
                 //        'id': 4,
                 //        'name': 'Kiwi Co.'
                 //    }],
-                'units': [
-                    {
-                        'id': 5,
-                        'unit': 'pcs'
-                    },
-                    {
-                        'id': 2,
-                        'unit': 'kg'
-                    }],
+                //'units': [
+                //    {
+                //        'id': 5,
+                //        'unit': 'pcs'
+                //    },
+                //    {
+                //        'id': 2,
+                //        'unit': 'kg'
+                //    }],
                 'barcodes': [
                     {
                         'barcode': 'SK227571',
@@ -103,17 +103,17 @@ describe('Controllers/Views: ItemController', function () {
                 //        return helper.promiseMock(test, 'vendorPostResolved', newVendor);
                 //    }
                 //},
-                'unitList': angular.extend({
-                    'push': function () {}
-                }, data.units),
-                'UnitService': {
-                    'getList': function () {
-                        return helper.promiseMock(test, 'unitsGetListResolved', mocks.unitList);
-                    },
-                    'post': function (newUnit) {
-                        return helper.promiseMock(test, 'unitPostResolved', newUnit);
-                    }
-                },
+                //'unitList': angular.extend({
+                //    'push': function () {}
+                //}, data.units),
+                //'UnitService': {
+                //    'getList': function () {
+                //        return helper.promiseMock(test, 'unitsGetListResolved', mocks.unitList);
+                //    },
+                //    'post': function (newUnit) {
+                //        return helper.promiseMock(test, 'unitPostResolved', newUnit);
+                //    }
+                //},
                 'barcodeList': angular.extend({
                     'push': function () {}
                 }, data.barcodes),
@@ -131,7 +131,7 @@ describe('Controllers/Views: ItemController', function () {
                 'Restangular': mocks.Restangular,
                 'gettextCatalog': mocks.gettextCatalog,
                 //'VendorService': mocks.VendorService,
-                'UnitService': mocks.UnitService,
+                //'UnitService': mocks.UnitService,
                 'CommonFactory': mocks.CommonFactory
             },
 
@@ -144,8 +144,8 @@ describe('Controllers/Views: ItemController', function () {
                 spyOn(test.mocks.Restangular, 'copy').and.callThrough();
                 //spyOn(test.mocks.VendorService, 'getList').and.callThrough();
                 //spyOn(test.mocks.vendorList, 'push').and.stub();
-                spyOn(test.mocks.UnitService, 'getList').and.callThrough();
-                spyOn(test.mocks.unitList, 'push').and.stub();
+                //spyOn(test.mocks.UnitService, 'getList').and.callThrough();
+                //spyOn(test.mocks.unitList, 'push').and.stub();
 
                 beforeInjects.forEach(function (beforeInject) {
                     beforeInject();
@@ -172,8 +172,8 @@ describe('Controllers/Views: ItemController', function () {
         test.itemGetListResolved = true;
         //test.vendorsGetListResolved = true;
         //test.vendorPostResolved = true;
-        test.unitsGetListResolved = true;
-        test.unitPostResolved = true;
+        //test.unitsGetListResolved = true;
+        //test.unitPostResolved = true;
 
         test.mocks.$scope.itemForm.$dirty = false;
         test.mocks.$scope.itemForm.$valid = true;
@@ -257,8 +257,8 @@ describe('Controllers/Views: ItemController', function () {
             //expect(test.mocks.VendorService.getList).toHaveBeenCalled();
             //expect(test.mocks.$scope.vendors).toBe(test.mocks.vendorList);
 
-            expect(test.mocks.UnitService.getList).toHaveBeenCalled();
-            expect(test.mocks.$scope.units).toBe(test.mocks.unitList);
+            //expect(test.mocks.UnitService.getList).toHaveBeenCalled();
+            //expect(test.mocks.$scope.units).toBe(test.mocks.unitList);
 
             expect(test.mocks.$scope.rowData.getList).toHaveBeenCalledWith('barcodes');
             expect(test.mocks.$scope.barcodes).toBe(test.mocks.barcodeList);
@@ -266,7 +266,7 @@ describe('Controllers/Views: ItemController', function () {
 
         it('can not load by server error', function () {
             //test.vendorsGetListResolved = false;
-            test.unitsGetListResolved = false;
+            //test.unitsGetListResolved = false;
             test.itemGetListResolved = false;
             test.injectController();
             test.$rootScope.$apply();
@@ -274,8 +274,8 @@ describe('Controllers/Views: ItemController', function () {
             //expect(test.mocks.VendorService.getList).toHaveBeenCalled();
             //expect(test.mocks.$scope.vendors).not.toBeDefined();
 
-            expect(test.mocks.UnitService.getList).toHaveBeenCalled();
-            expect(test.mocks.$scope.units).not.toBeDefined();
+            //expect(test.mocks.UnitService.getList).toHaveBeenCalled();
+            //expect(test.mocks.$scope.units).not.toBeDefined();
 
             expect(test.mocks.$scope.rowData.getList).toHaveBeenCalledWith('barcodes');
             expect(test.mocks.$scope.barcodes).not.toBeDefined();
@@ -339,32 +339,32 @@ describe('Controllers/Views: ItemController', function () {
     //    });
     //});
 
-    describe('create a new unit', function () {
-
-        beforeEach(function () {
-            test.injectController();
-            test.$rootScope.$apply();
-
-            test.mocks.$scope.item.unit = 'pcs';
-            test.mocks.$scope.itemForm.$dirty = true;
-        });
-
-        it('can add a new unit', function () {
-            test.mocks.$scope.createUnit();
-            test.$rootScope.$apply();
-
-            expect(test.mocks.unitList.push).toHaveBeenCalledWith({'unit': 'pcs'});
-            expect(test.mocks.$scope.item.unit).toEqual({'unit': 'pcs'});
-        });
-
-        it('can not add a new unit by server error', function () {
-            test.unitPostResolved = false;
-
-            test.mocks.$scope.createUnit();
-            test.$rootScope.$apply();
-
-            expect(test.mocks.unitList.push).not.toHaveBeenCalled();
-            expect(test.mocks.$scope.item.unit).toEqual('pcs');
-        });
-    });
+    //describe('create a new unit', function () {
+    //
+    //    beforeEach(function () {
+    //        test.injectController();
+    //        test.$rootScope.$apply();
+    //
+    //        test.mocks.$scope.item.unit = 'pcs';
+    //        test.mocks.$scope.itemForm.$dirty = true;
+    //    });
+    //
+    //    it('can add a new unit', function () {
+    //        test.mocks.$scope.createUnit();
+    //        test.$rootScope.$apply();
+    //
+    //        expect(test.mocks.unitList.push).toHaveBeenCalledWith({'unit': 'pcs'});
+    //        expect(test.mocks.$scope.item.unit).toEqual({'unit': 'pcs'});
+    //    });
+    //
+    //    it('can not add a new unit by server error', function () {
+    //        test.unitPostResolved = false;
+    //
+    //        test.mocks.$scope.createUnit();
+    //        test.$rootScope.$apply();
+    //
+    //        expect(test.mocks.unitList.push).not.toHaveBeenCalled();
+    //        expect(test.mocks.$scope.item.unit).toEqual('pcs');
+    //    });
+    //});
 });

@@ -27,9 +27,7 @@
                 </app-input-form>
 
                 <app-input-form a-label="{{ 'Unit' | translate }}" a-required="{{ 'Unit is required' | translate }}">
-                  <app-typeahead-helper a-create-callback="createUnit()" a-loading-spinner="loadingUnits" a-creating-spinner="creatingUnit">
-                    <input name="unit" id="unitTypeahead" ng-model="item.unit" bs-options="unit as unit.unit for unit in units" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter unit' | translate }}" required bs-typeahead />
-                  </app-typeahead-helper>
+                  <app-unit-input a-model="item.unit"></app-unit-input>
                 </app-input-form>
 
               </app-details-modal-panel>

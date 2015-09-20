@@ -54,3 +54,56 @@ appFieldsDirectives.directive('appVendorInput',
                 }]
         };
     });
+
+
+/**
+ * @ngdoc directive
+ * @name appUnitInput
+ * @restrict E
+ *
+ * @param {object} aModel
+ *
+ * @description
+ * Self-managed unit controller
+ *
+ * @example
+ * <app-input-form a-label="{{ 'Unit' | translate }}" a-required="{{ 'Unit is required' | translate }}">
+ *   <app-unit-input a-model="item.unit"></app-unit-input>
+ * </app-input-form>
+ */
+appFieldsDirectives.directive('appUnitInput',
+    function appUnitInput () {
+        return {
+            'restrict': 'E',
+            'scope': {
+                'aModel': '='
+            },
+            'templateUrl': 'partials/widgets/fields/unit-input.html',
+            'controller': ['$scope', 'Restangular', 'UnitService', 'CommonFactory',
+                function ($scope, Restangular, UnitService, CommonFactory) {
+                    $scope.data = {};
+
+                    function createUnit() {
+                        var completedNewUnit = {'unit': $scope.data.unit};
+
+                        CommonFactory.handlePromise(
+                            UnitService.post(Restangular.copy(completedNewUnit)),
+                            'creatingUnit',
+                            function (resp) {
+                                $scope.data.unitList.push(resp);
+                                $scope.data.unit = resp;
+                            });
+                    }
+
+                    CommonFactory.handlePromise(
+                        UnitService.getList(),
+                        'loadingUnits',
+                        function (units) {
+                            $scope.data.unitList = units;
+                        });
+
+                    $scope.data.unit = $scope.aModel;
+                    $scope.createUnit = createUnit;
+                }]
+        };
+    });
