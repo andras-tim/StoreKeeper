@@ -74,6 +74,30 @@ appFormDirectives.directive('appInputForm',
 
 /**
  * @ngdoc directive
+ * @name appCheckboxLabel
+ * @restrict E
+ *
+ * @param {string} aLabel
+ *
+ * @description
+ * Label for input[@type="checkbox"] elements
+ */
+appFormDirectives.directive('appCheckboxLabel',
+    function appCheckboxLabel () {
+        return {
+            'restrict': 'E',
+            'transclude': true,
+            'replace': true,
+            'scope': {
+                'aLabel': '@'
+            },
+            'templateUrl': 'partials/widgets/form/checkbox-label.html'
+        };
+    });
+
+
+/**
+ * @ngdoc directive
  * @name appTooltip
  * @restrict A
  *
@@ -100,44 +124,6 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
             }
         };
     }]);
-
-
-/**
- * @ngdoc directive
- * @name appLabel
- * @restrict E
- *
- * @param {string} aObjectId
- * @param {string} aLabel
- * @param {string=} [aLabelClass=col-sm-4]
- * @param {string=} [aObjectClass=col-sm-8]
- *
- * @description
- * Make label for anything
- */
-appFormDirectives.directive('appLabel',
-    function appLabel () {
-        return {
-            'require': '^form',
-            'restrict': 'E',
-            'transclude': true,
-            'scope': {
-                'aObjectId': '@',
-                'aLabel': '@',
-                'aLabelClass': '@',
-                'aObjectClass': '@'
-            },
-            'templateUrl': 'partials/widgets/label.html',
-            'compile': function (element, attrs) {
-                if (!attrs.aLabelClass) {
-                    attrs.aLabelClass = 'col-sm-4';
-                }
-                if (!attrs.aObjectClass) {
-                    attrs.aObjectClass = 'col-sm-8';
-                }
-            }
-        };
-    });
 
 
 /**
@@ -195,64 +181,6 @@ appFormDirectives.directive('appFormTypeahead',
 
                     $scope.isFilled = isFilled;
                 }]
-        };
-    });
-
-
-/**
- * @ngdoc directive
- * @name appFormCheckbox
- * @restrict E
- *
- * @param {string} aName
- * @param {object} aModel
- * @param {string} aLabel
- * @param {string} aTooltip
- *
- * @description
- * Checkbox with label and tooltip
- */
-appFormDirectives.directive('appFormCheckbox',
-    function appFormCheckbox () {
-        return {
-            'require': '^form',
-            'restrict': 'E',
-            'scope': {
-                'aName': '@',
-                'aModel': '=',
-                'aLabel': '@',
-                'aTooltip': '@'
-            },
-            'templateUrl': 'partials/widgets/form-checkbox.html'
-        };
-    });
-
-
-/**
- * @ngdoc directive
- * @name appCheckbox
- * @restrict E
- *
- * @param {string} aName
- * @param {object} aModel
- * @param {string} aLabel
- * @param {string} aTooltip
- *
- * @description
- * Checkbox with label and tooltip
- */
-appFormDirectives.directive('appCheckbox',
-    function appCheckbox () {
-        return {
-            'require': '^form',
-            'restrict': 'E',
-            'scope': {
-                'aName': '@',
-                'aModel': '=',
-                'aLabel': '@',
-                'aTooltip': '@'
-            },
-            'templateUrl': 'partials/widgets/checkbox.html'
         };
     });
 

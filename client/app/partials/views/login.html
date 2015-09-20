@@ -13,7 +13,11 @@
             <input name="password" id="passwordInput" ng-model="user.password" type="password" class="form-control" placeholder="{{ 'password' | translate }}" required />
           </app-input-form>
 
-          <app-form-checkbox a-name="remember" a-model="user.remember" a-label="{{ 'Remember me' | translate }}" a-tooltip="{{ 'User will not logged out after close this window' | translate }}"></app-form-checkbox>
+          <app-indented-form-group>
+            <app-checkbox-label a-label="{{ 'Remember me' | translate }}" app-tooltip="{{ 'User will not logged out after close this window' | translate }}">
+              <input name="remember" id="rememberCheckbox" ng-model="user.remember" type="checkbox" />
+            </app-checkbox-label>
+          </app-indented-form-group>
 
           <app-indented-form-group>
             <button id="login" class="btn btn-default btn-primary" ng-disable="authenticating" ng-click="login()" translate>Sign in</button><app-spinner ng-if="authenticating"></app-spinner>

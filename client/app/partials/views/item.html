@@ -29,12 +29,12 @@
 
             <!-- Meta -->
             <app-details-modal-panel>
-              <app-label a-label="{{ 'In Stock' | translate }}" a-object-id="current_quantity">
+              <app-input-form a-input-name="currentQuantity" a-input-id="currentQuantityInput" a-label="{{ 'In Stock' | translate }}">
                 <div class="input-group field-quantity">
-                  <input id="current_quantity" name="current_quantity" type="text" class="form-control field-quantity" ng-value="item.quantity" readonly>
+                  <input name="currentQuantity" id="currentQuantityInput" ng-model="item.quantity" type="text" class="form-control field-quantity" readonly />
                   <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>
                 </div>
-              </app-label>
+              </app-input-form>
             </app-details-modal-panel>
 
             <!-- Barcodes -->
@@ -58,11 +58,9 @@
                     <tr ng-repeat="barcode in barcodes | filter:filterAvailable" ng-class="{'warning': barcode.dirty}">
 
                       <td class="field-checkbox">
-                        <div class="checkbox noselect">
-                          <label data-type="info" data-title="{{ 'Master barcode for this item' | translate }}" bs-tooltip>
+                          <app-checkbox-label app-tooltip="{{ 'Master barcode for this item' | translate }}">
                             <input name="master" type="checkbox" ng-model="barcode.master" ng-change="togglePostCheck(barcode); setBarcodeDirty(barcode)" ng-disabled="!barcode.main">
-                          </label>
-                        </div>
+                          </app-checkbox-label>
                       </td>
 
                       <td class="field-barcode">
