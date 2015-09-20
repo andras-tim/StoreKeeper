@@ -40,7 +40,7 @@ describe('Directives/Common: appConfirmOnExit', function () {
                     test.container = helper.compileTemplate(test, '<form ' +
                         'name="testForm" ' +
                         'app-confirm-on-exit="testForm.$dirty" ' +
-                        'app-modal-id="testModalId"></form>');
+                        'a-modal-id="testModalId"></form>');
                 });
             };
 

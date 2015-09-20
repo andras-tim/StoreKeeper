@@ -1,21 +1,21 @@
 <ng-form name="inputForm">
   <div class="form-group" show-errors>
 
-    <div class="{{ appLabelClass }}">
-      <label for="{{ appName }}Typeahead" class="control-label" ng-bind="appLabel"></label>
+    <div class="{{ aLabelClass }}">
+      <label for="{{ aName }}Typeahead" class="control-label" ng-bind="aLabel"></label>
     </div>
 
-    <div class="{{ appInputClass }}" ng-class="{'has-error': inputForm[appName].$dirty && inputForm[appName].$error.required}">
+    <div class="{{ aInputClass }}" ng-class="{'has-error': inputForm[aName].$dirty && inputForm[aName].$error.required}">
       <div class="input-group">
-        <input name="{{ appName }}" id="{{ appName }}Typeahead" ng-model="appModel" type="text" class="form-control" placeholder="{{ appPlaceholder }}" autocomplete="off" ng-required="appRequired" data-min-length="0" data-auto-select="true" bs-options="{{ appDataSource }}" bs-typeahead />
+        <input name="{{ aName }}" id="{{ aName }}Typeahead" ng-model="aModel" type="text" class="form-control" placeholder="{{ aPlaceholder }}" autocomplete="off" ng-required="aRequired" data-min-length="0" data-auto-select="true" bs-options="{{ aDataSource }}" bs-typeahead />
         <span class="input-group-btn">
-          <button class="btn btn-success" ng-disabled="appModel == '' || isFilled(appModel) || appLoadingSpinner || appCreatingSpinner" ng-click="appCreateCallback()">
-            <i ng-if="!(appLoadingSpinner || appCreatingSpinner)" class="fa fa-plus"></i>
-            <app-spinner ng-if="appLoadingSpinner || appCreatingSpinner"></app-spinner>
+          <button class="btn btn-success" ng-disabled="aModel == '' || isFilled(aModel) || aLoadingSpinner || aCreatingSpinner" ng-click="aCreateCallback()">
+            <i ng-if="!(aLoadingSpinner || aCreatingSpinner)" class="fa fa-plus"></i>
+            <app-spinner ng-if="aLoadingSpinner || aCreatingSpinner"></app-spinner>
           </button>
         </span>
       </div>
-      <p class="help-block" ng-if="appRequired" ng-show="inputForm[appName].$dirty && inputForm[appName].$error.required" ng-bind="appRequired"></p>
+      <p class="help-block" ng-if="aRequired" ng-show="inputForm[aName].$dirty && inputForm[aName].$error.required" ng-bind="aRequired"></p>
     </div>
 
   </div>

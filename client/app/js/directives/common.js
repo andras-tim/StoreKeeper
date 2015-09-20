@@ -26,7 +26,7 @@ appCommonDirectives.directive('appSpinner',
  * @restrict A
  *
  * @param {function} appConfirmOnExit dirty validator
- * @param {expression=} [appModalId] name of parent modal
+ * @param {expression=} [aModalId] name of parent modal
  *
  * @description
  * Confirm of leaving dirty form
@@ -36,7 +36,7 @@ appCommonDirectives.directive('appConfirmOnExit', ['$rootScope', '$window', 'get
         return {
             'scope': {
                 'appConfirmOnExit': '&',
-                'appModalId': '='
+                'aModalId': '='
             },
             'restrict': 'A',
             'link': function (scope, element, attr) {
@@ -60,7 +60,7 @@ appCommonDirectives.directive('appConfirmOnExit', ['$rootScope', '$window', 'get
                 }
 
                 function handleCloseModal(event, $modal) {
-                    if ($modal.$id !== scope.appModalId) {
+                    if ($modal.$id !== scope.aModalId) {
                         return;
                     }
                     if (scope.appConfirmOnExit()) {
@@ -74,7 +74,7 @@ appCommonDirectives.directive('appConfirmOnExit', ['$rootScope', '$window', 'get
 
                 modalHideUnbind = $rootScope.$on('modal.hide.before', handleCloseModal);
                 locationChangeUnbind = $rootScope.$on('$locationChangeStart', handleLocationChange);
-                if (attr.appModalId !== undefined) {
+                if (attr.aModalId !== undefined) {
                     windowBeforeUnloadUnbind = $rootScope.$on('windowBeforeUnload', handleWindowUnload);
                 }
 

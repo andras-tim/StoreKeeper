@@ -11,18 +11,18 @@
           <div class="row">
 
             <!-- Item details -->
-            <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" app-modal-id="modalId">
+            <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" a-modal-id="modalId">
               <app-details-modal-panel>
-                <app-form-typeahead app-name="vendor" app-model="item.vendor" app-label="'Vendor' | translate" app-data-source="vendor as vendor.name for vendor in $parent.vendors" app-create-callback="createVendor()" app-placeholder="'Enter vendor' | translate" app-required="'Vendor is required' | translate" app-loading-spinner="loadingVendors" app-creating-spinner="creatingVendor"></app-form-typeahead>
-                <app-form-input app-name="articleNumber" app-model="item.article_number" app-label="'Article no.' | translate" app-placeholder="'Enter article number' | translate" app-required="'Article number is required' | translate"></app-form-input>
-                <app-form-input app-name="name" app-model="item.name" app-label="'Name' | translate" app-placeholder="'Enter name of item' | translate" app-required="'Name is required' | translate"></app-form-input>
-                <app-form-typeahead app-name="unit" app-model="item.unit" app-label="'Unit' | translate" app-data-source="unit as unit.unit for unit in $parent.units" app-create-callback="createUnit()" app-placeholder="'Enter unit' | translate" app-required="'Unit is required' | translate" app-loading-spinner="loadingUnits" app-creating-spinner="creatingUnit"></app-form-typeahead>
+                <app-form-typeahead a-name="vendor" a-model="item.vendor" a-label="'Vendor' | translate" a-data-source="vendor as vendor.name for vendor in $parent.vendors" a-create-callback="createVendor()" a-placeholder="'Enter vendor' | translate" a-required="'Vendor is required' | translate" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor"></app-form-typeahead>
+                <app-form-input a-name="articleNumber" a-model="item.article_number" a-label="'Article no.' | translate" a-placeholder="'Enter article number' | translate" a-required="'Article number is required' | translate"></app-form-input>
+                <app-form-input a-name="name" a-model="item.name" a-label="'Name' | translate" a-placeholder="'Enter name of item' | translate" a-required="'Name is required' | translate"></app-form-input>
+                <app-form-typeahead a-name="unit" a-model="item.unit" a-label="'Unit' | translate" a-data-source="unit as unit.unit for unit in $parent.units" a-create-callback="createUnit()" a-placeholder="'Enter unit' | translate" a-required="'Unit is required' | translate" a-loading-spinner="loadingUnits" a-creating-spinner="creatingUnit"></app-form-typeahead>
               </app-details-modal-panel>
             </form>
 
             <!-- Meta -->
             <app-details-modal-panel>
-              <app-label app-label="'In Stock' | translate" app-object-id="current_quantity">
+              <app-label a-label="'In Stock' | translate" a-object-id="current_quantity">
                 <div class="input-group field-quantity">
                   <input id="current_quantity" name="current_quantity" type="text" class="form-control field-quantity" ng-value="item.quantity" readonly>
                   <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>
@@ -31,7 +31,7 @@
             </app-details-modal-panel>
 
             <!-- Barcodes -->
-            <form name="barcodesForm" app-confirm-on-exit="barcodesForm.$dirty" app-modal-id="modalId">
+            <form name="barcodesForm" app-confirm-on-exit="barcodesForm.$dirty" a-modal-id="modalId">
               <app-details-modal-panel>
                 <table class="table table-condensed">
 

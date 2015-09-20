@@ -8,10 +8,10 @@ var appFormDirectives = angular.module('appDirectives.form', []);
  * @name appLabel
  * @restrict E
  *
- * @param {string} appObjectId
- * @param {expression} appLabel
- * @param {string=} [appLabelClass=col-sm-4]
- * @param {string=} [appObjectClass=col-sm-8]
+ * @param {string} aObjectId
+ * @param {expression} aLabel
+ * @param {string=} [aLabelClass=col-sm-4]
+ * @param {string=} [aObjectClass=col-sm-8]
  *
  * @description
  * Make label for anything
@@ -23,18 +23,18 @@ appFormDirectives.directive('appLabel',
             'restrict': 'E',
             'transclude': true,
             'scope': {
-                'appObjectId': '@',
-                'appLabel': '=',
-                'appLabelClass': '@',
-                'appObjectClass': '@'
+                'aObjectId': '@',
+                'aLabel': '=',
+                'aLabelClass': '@',
+                'aObjectClass': '@'
             },
             'templateUrl': 'partials/widgets/label.html',
             'compile': function (element, attrs) {
-                if (!attrs.appLabelClass) {
-                    attrs.appLabelClass = 'col-sm-4';
+                if (!attrs.aLabelClass) {
+                    attrs.aLabelClass = 'col-sm-4';
                 }
-                if (!attrs.appObjectClass) {
-                    attrs.appObjectClass = 'col-sm-8';
+                if (!attrs.aObjectClass) {
+                    attrs.aObjectClass = 'col-sm-8';
                 }
             }
         };
@@ -46,15 +46,15 @@ appFormDirectives.directive('appLabel',
  * @name appFormInput
  * @restrict E
  *
- * @param {string} appName
- * @param {object} appModel
- * @param {string=} [appType=text]
- * @param {expression} appLabel
- * @param {expression} appPlaceholder
- * @param {expression} appRequired
- * @param {string=} [appAutocomplete]
- * @param {string=} [appLabelClass=col-sm-4]
- * @param {string=} [appInputClass=col-sm-8]
+ * @param {string} aName
+ * @param {object} aModel
+ * @param {string=} [aType=text]
+ * @param {expression} aLabel
+ * @param {expression} aPlaceholder
+ * @param {expression} aRequired
+ * @param {string=} [aAutocomplete]
+ * @param {string=} [aLabelClass=col-sm-4]
+ * @param {string=} [aInputClass=col-sm-8]
  *
  * @description
  * Input text for forms
@@ -65,29 +65,29 @@ appFormDirectives.directive('appFormInput',
             'require': '^form',
             'restrict': 'E',
             'scope': {
-                'appName': '@',
-                'appModel': '=',
-                'appType': '@',
-                'appLabel': '=',
-                'appPlaceholder': '=',
-                'appRequired': '=',
-                'appAutocomplete': '@',
-                'appLabelClass': '@',
-                'appInputClass': '@'
+                'aName': '@',
+                'aModel': '=',
+                'aType': '@',
+                'aLabel': '=',
+                'aPlaceholder': '=',
+                'aRequired': '=',
+                'aAutocomplete': '@',
+                'aLabelClass': '@',
+                'aInputClass': '@'
             },
             'templateUrl': 'partials/widgets/form-input.html',
             'compile': function (element, attrs) {
-                if (!attrs.appType) {
-                    attrs.appType = 'text';
+                if (!attrs.aType) {
+                    attrs.aType = 'text';
                 }
-                if (!attrs.appAutocomplete) {
-                    attrs.appAutocomplete = attrs.appType === 'password' ? 'off' : 'on';
+                if (!attrs.aAutocomplete) {
+                    attrs.aAutocomplete = attrs.aType === 'password' ? 'off' : 'on';
                 }
-                if (!attrs.appLabelClass) {
-                    attrs.appLabelClass = 'col-sm-4';
+                if (!attrs.aLabelClass) {
+                    attrs.aLabelClass = 'col-sm-4';
                 }
-                if (!attrs.appInputClass) {
-                    attrs.appInputClass = 'col-sm-8';
+                if (!attrs.aInputClass) {
+                    attrs.aInputClass = 'col-sm-8';
                 }
             }
         };
@@ -99,17 +99,17 @@ appFormDirectives.directive('appFormInput',
  * @name appFormTypeahead
  * @restrict E
  *
- * @param {string} appName
- * @param {object} appModel
- * @param {string} appDataSource
- * @param {expression} appLabel
- * @param {expression} appPlaceholder
- * @param {expression} appRequired
- * @param {function} appCreateCallback
- * @param {object=} [appLoadingSpinner]
- * @param {object=} [appCreatingSpinner]
- * @param {string=} [appLabelClass=col-sm-4]
- * @param {string=} [appInputClass=col-sm-8]
+ * @param {string} aName
+ * @param {object} aModel
+ * @param {string} aDataSource
+ * @param {expression} aLabel
+ * @param {expression} aPlaceholder
+ * @param {expression} aRequired
+ * @param {function} aCreateCallback
+ * @param {object=} [aLoadingSpinner]
+ * @param {object=} [aCreatingSpinner]
+ * @param {string=} [aLabelClass=col-sm-4]
+ * @param {string=} [aInputClass=col-sm-8]
  *
  * @description
  * Typeahead for forms
@@ -120,25 +120,25 @@ appFormDirectives.directive('appFormTypeahead',
             'require': '^form',
             'restrict': 'E',
             'scope': {
-                'appName': '@',
-                'appModel': '=',
-                'appDataSource': '@',
-                'appLabel': '=',
-                'appPlaceholder': '=',
-                'appRequired': '=',
-                'appCreateCallback': '&',
-                'appLoadingSpinner': '=',
-                'appCreatingSpinner': '=',
-                'appLabelClass': '@',
-                'appInputClass': '@'
+                'aName': '@',
+                'aModel': '=',
+                'aDataSource': '@',
+                'aLabel': '=',
+                'aPlaceholder': '=',
+                'aRequired': '=',
+                'aCreateCallback': '&',
+                'aLoadingSpinner': '=',
+                'aCreatingSpinner': '=',
+                'aLabelClass': '@',
+                'aInputClass': '@'
             },
             'templateUrl': 'partials/widgets/form-typeahead.html',
             'compile': function (element, attrs) {
-                if (!attrs.appLabelClass) {
-                    attrs.appLabelClass = 'col-sm-4';
+                if (!attrs.aLabelClass) {
+                    attrs.aLabelClass = 'col-sm-4';
                 }
-                if (!attrs.appInputClass) {
-                    attrs.appInputClass = 'col-sm-8';
+                if (!attrs.aInputClass) {
+                    attrs.aInputClass = 'col-sm-8';
                 }
             },
             'controller': ['$scope',
@@ -158,10 +158,10 @@ appFormDirectives.directive('appFormTypeahead',
  * @name appFormCheckbox
  * @restrict E
  *
- * @param {string} appName
- * @param {object} appModel
- * @param {expression} appLabel
- * @param {expression} appTooltip
+ * @param {string} aName
+ * @param {object} aModel
+ * @param {expression} aLabel
+ * @param {expression} aTooltip
  *
  * @description
  * Checkbox with label and tooltip
@@ -172,10 +172,10 @@ appFormDirectives.directive('appFormCheckbox',
             'require': '^form',
             'restrict': 'E',
             'scope': {
-                'appName': '@',
-                'appModel': '=',
-                'appLabel': '=',
-                'appTooltip': '='
+                'aName': '@',
+                'aModel': '=',
+                'aLabel': '=',
+                'aTooltip': '='
             },
             'templateUrl': 'partials/widgets/form-checkbox.html'
         };
@@ -187,10 +187,10 @@ appFormDirectives.directive('appFormCheckbox',
  * @name appCheckbox
  * @restrict E
  *
- * @param {string} appName
- * @param {object} appModel
- * @param {expression} appLabel
- * @param {expression} appTooltip
+ * @param {string} aName
+ * @param {object} aModel
+ * @param {expression} aLabel
+ * @param {expression} aTooltip
  *
  * @description
  * Checkbox with label and tooltip
@@ -201,10 +201,10 @@ appFormDirectives.directive('appCheckbox',
             'require': '^form',
             'restrict': 'E',
             'scope': {
-                'appName': '@',
-                'appModel': '=',
-                'appLabel': '=',
-                'appTooltip': '='
+                'aName': '@',
+                'aModel': '=',
+                'aLabel': '=',
+                'aTooltip': '='
             },
             'templateUrl': 'partials/widgets/checkbox.html'
         };
@@ -216,7 +216,7 @@ appFormDirectives.directive('appCheckbox',
  * @name appIndentedFormGroup
  * @restrict E
  *
- * @param {string=} [appClass=col-sm-offset-4 col-sm-8]
+ * @param {string=} [aClass=col-sm-offset-4 col-sm-8]
  *
  * @description
  * For easy indent objects without left-side label
@@ -228,12 +228,12 @@ appFormDirectives.directive('appIndentedFormGroup',
             'restrict': 'E',
             'transclude': true,
             'scope': {
-                'appClass': '@'
+                'aClass': '@'
             },
-            'template': '<div class="form-group"><div class="{{ appClass }}" ng-transclude></div></div>',
+            'template': '<div class="form-group"><div class="{{ aClass }}" ng-transclude></div></div>',
             'compile': function (element, attrs) {
-                if (!attrs.appClass) {
-                    attrs.appClass = 'col-sm-offset-4 col-sm-8';
+                if (!attrs.aClass) {
+                    attrs.aClass = 'col-sm-offset-4 col-sm-8';
                 }
             }
         };
