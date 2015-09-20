@@ -74,7 +74,7 @@
                       </td>
 
                       <td class="field-quantity">
-                        <input name="quantity" ng-model="barcode.quantity" ng-change="setBarcodeDirty(barcode, true)" type="number" min="1" class="form-control field-quantity" placeholder="{{ 'Barcode quantity' | translate }}" required />
+                        <app-quantity-input a-model="barcode.quantity" a-on-change="setBarcodeDirty(barcode, true)" app-tooltip="{{ 'Item amount for this barcode' | translate }}"></app-quantity-input>
                       </td>
 
                       <td class="field-button field-triple-button">

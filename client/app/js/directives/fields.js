@@ -107,3 +107,30 @@ appFieldsDirectives.directive('appUnitInput',
                 }]
         };
     });
+
+
+/**
+ * @ngdoc directive
+ * @name appQuantityInput
+ * @restrict E
+ *
+ * @param {object} aModel
+ * @param {func} aOnChange
+ *
+ * @description
+ * Quantity input field
+ *
+ * @example
+ * <app-quantity-input a-model="barcode.quantity" a-on-change="setBarcodeDirty(barcode, true)"></app-quantity-input>
+ */
+appFieldsDirectives.directive('appQuantityInput',
+    function appQuantityInput () {
+        return {
+            'restrict': 'E',
+            'scope': {
+                'aModel': '=',
+                'aOnChange': '&'
+            },
+            'templateUrl': 'partials/widgets/fields/quantity-input.html'
+        };
+    });
