@@ -18,3 +18,8 @@
 .tooltip {
     font-size: small;
 }
+
+button.btn-sm.btn-sm-wide {
+    padding-left: 20px;
+    padding-right: 20px;
+}
