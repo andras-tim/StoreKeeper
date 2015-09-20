@@ -1,0 +1,4 @@
+<div ng-class="{'has-error': aFormInput.$dirty && aFormInput.$error.required}">
+  <ng-transclude></ng-transclude>
+  <p class="help-block" ng-show="aFormInput.$dirty && aFormInput.$error.required" ng-bind="aRequired"></p>
+</div>

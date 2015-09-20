@@ -1,3 +1,4 @@
+sudo: false
 language: python
 python:
   - 3.4
@@ -8,6 +9,16 @@ env:
 
 matrix:
   fast_finish: true
+
+before_cache:
+  - rm -f $HOME/.cache/pip/log/debug.log
+
+cache:
+  - pip
+  - npm
+  - directories:
+    - $HOME/.cache/pip
+    - $HOME/.npm
 
 before_install:
   - case ${MODULE} in

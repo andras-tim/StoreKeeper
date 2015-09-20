@@ -5,36 +5,67 @@ var appFormDirectives = angular.module('appDirectives.form', []);
 
 /**
  * @ngdoc directive
- * @name appLabel
+ * @name appInputValidator
  * @restrict E
  *
- * @param {string} appObjectId
- * @param {expression} appLabel
- * @param {string} [appLabelClass=col-sm-4]
- * @param {string} [appObjectClass=col-sm-8]
+ * @param {object} aFormInput
+ * @param {string} aRequired
  *
  * @description
- * Make label for anything
+ * Wrap input element with error handler
  */
-appFormDirectives.directive('appLabel',
-    function appLabel () {
+appFormDirectives.directive('appInputValidator',
+    function appInputValidator () {
+        return {
+            'restrict': 'E',
+            'transclude': true,
+            'replace': true,
+            'scope': {
+                'aFormInput': '=',
+                'aRequired': '@'
+            },
+            'templateUrl': 'partials/widgets/form/input-validator.html'
+        };
+    });
+
+
+/**
+ * @ngdoc directive
+ * @name appInputForm
+ * @restrict E
+ *
+ * @param {string} aInputId
+ * @param {string} aInputName
+ * @param {string} aLabel
+ * @param {string} aRequired
+ * @param {string=} [aLabelClass=col-sm-4]
+ * @param {string=} [aInputClass=col-sm-8]
+ *
+ * @description
+ * Nested forms and labels for inputs
+ */
+appFormDirectives.directive('appInputForm',
+    function appInputForm () {
         return {
             'require': '^form',
             'restrict': 'E',
             'transclude': true,
+            'replace': true,
             'scope': {
-                'appObjectId': '@',
-                'appLabel': '=',
-                'appLabelClass': '@',
-                'appObjectClass': '@'
+                'aInputId': '@',
+                'aInputName': '@',
+                'aLabel': '@',
+                'aRequired': '@',
+                'aLabelClass': '@',
+                'aInputClass': '@'
             },
-            'templateUrl': 'partials/widgets/label.html',
+            'templateUrl': 'partials/widgets/form/input-form.html',
             'compile': function (element, attrs) {
-                if (!attrs.appLabelClass) {
-                    attrs.appLabelClass = 'col-sm-4';
+                if (!attrs.aLabelClass) {
+                    attrs.aLabelClass = 'col-sm-4';
                 }
-                if (!attrs.appObjectClass) {
-                    attrs.appObjectClass = 'col-sm-8';
+                if (!attrs.aInputClass) {
+                    attrs.aInputClass = 'col-sm-8';
                 }
             }
         };
@@ -43,55 +74,56 @@ appFormDirectives.directive('appLabel',
 
 /**
  * @ngdoc directive
- * @name appFormInput
+ * @name appCheckboxLabel
  * @restrict E
  *
- * @param {string} appName
- * @param {object} appModel
- * @param {string} [appType=text]
- * @param {expression} appLabel
- * @param {expression} appPlaceholder
- * @param {expression} appRequired
- * @param {string} [appAutocomplete]
- * @param {string} [appLabelClass=col-sm-4]
- * @param {string} [appInputClass=col-sm-8]
+ * @param {string} aLabel
  *
  * @description
- * Input text for forms
+ * Label for input[@type="checkbox"] elements
  */
-appFormDirectives.directive('appFormInput',
-    function appFormInput () {
+appFormDirectives.directive('appCheckboxLabel',
+    function appCheckboxLabel () {
         return {
-            'require': '^form',
             'restrict': 'E',
+            'transclude': true,
+            'replace': true,
             'scope': {
-                'appName': '@',
-                'appModel': '=',
-                'appType': '@',
-                'appLabel': '=',
-                'appPlaceholder': '=',
-                'appRequired': '=',
-                'appAutocomplete': '@',
-                'appLabelClass': '@',
-                'appInputClass': '@'
+                'aLabel': '@'
             },
-            'templateUrl': 'partials/widgets/form-input.html',
-            'compile': function (element, attrs) {
-                if (!attrs.appType) {
-                    attrs.appType = 'text';
-                }
-                if (!attrs.appAutocomplete) {
-                    attrs.appAutocomplete = attrs.appType === 'password' ? 'off' : 'on';
-                }
-                if (!attrs.appLabelClass) {
-                    attrs.appLabelClass = 'col-sm-4';
-                }
-                if (!attrs.appInputClass) {
-                    attrs.appInputClass = 'col-sm-8';
-                }
-            }
+            'templateUrl': 'partials/widgets/form/checkbox-label.html'
         };
     });
+
+
+/**
+ * @ngdoc directive
+ * @name appTooltip
+ * @restrict A
+ *
+ * @param {string} appTooltip
+ *
+ * @description
+ * Tooltip for form elements
+ */
+appFormDirectives.directive('appTooltip', ['$tooltip',
+    function appTooltip ($tooltip) {
+        return {
+            'restrict': 'A',
+            'scope': false,
+            'link': function (scope, element, attrs) {
+                var tooltip;
+                attrs.$observe('appTooltip', function (newValue) {
+                    if (tooltip !== undefined) {
+                        tooltip.destroy();
+                    }
+                    tooltip = $tooltip(element, {
+                        'title': newValue
+                    });
+                });
+            }
+        };
+    }]);
 
 
 /**
@@ -99,17 +131,17 @@ appFormDirectives.directive('appFormInput',
  * @name appFormTypeahead
  * @restrict E
  *
- * @param {string} appName
- * @param {object} appModel
- * @param {string} appDataSource
- * @param {expression} appLabel
- * @param {expression} appPlaceholder
- * @param {expression} appRequired
- * @param {function} appCreateCallback
- * @param {object} [appLoadingSpinner]
- * @param {object} [appCreatingSpinner]
- * @param {string} [appLabelClass=col-sm-4]
- * @param {string} [appInputClass=col-sm-8]
+ * @param {string} aName
+ * @param {object} aModel
+ * @param {string} aDataSource
+ * @param {string} aLabel
+ * @param {string} aPlaceholder
+ * @param {string} aRequired
+ * @param {function} aCreateCallback
+ * @param {object=} [aLoadingSpinner]
+ * @param {object=} [aCreatingSpinner]
+ * @param {string=} [aLabelClass=col-sm-4]
+ * @param {string=} [aInputClass=col-sm-8]
  *
  * @description
  * Typeahead for forms
@@ -120,25 +152,25 @@ appFormDirectives.directive('appFormTypeahead',
             'require': '^form',
             'restrict': 'E',
             'scope': {
-                'appName': '@',
-                'appModel': '=',
-                'appDataSource': '@',
-                'appLabel': '=',
-                'appPlaceholder': '=',
-                'appRequired': '=',
-                'appCreateCallback': '&',
-                'appLoadingSpinner': '=',
-                'appCreatingSpinner': '=',
-                'appLabelClass': '@',
-                'appInputClass': '@'
+                'aName': '@',
+                'aModel': '=',
+                'aDataSource': '@',
+                'aLabel': '@',
+                'aPlaceholder': '@',
+                'aRequired': '@',
+                'aCreateCallback': '&',
+                'aLoadingSpinner': '=',
+                'aCreatingSpinner': '=',
+                'aLabelClass': '@',
+                'aInputClass': '@'
             },
             'templateUrl': 'partials/widgets/form-typeahead.html',
             'compile': function (element, attrs) {
-                if (!attrs.appLabelClass) {
-                    attrs.appLabelClass = 'col-sm-4';
+                if (!attrs.aLabelClass) {
+                    attrs.aLabelClass = 'col-sm-4';
                 }
-                if (!attrs.appInputClass) {
-                    attrs.appInputClass = 'col-sm-8';
+                if (!attrs.aInputClass) {
+                    attrs.aInputClass = 'col-sm-8';
                 }
             },
             'controller': ['$scope',
@@ -155,68 +187,10 @@ appFormDirectives.directive('appFormTypeahead',
 
 /**
  * @ngdoc directive
- * @name appFormCheckbox
- * @restrict E
- *
- * @param {string} appName
- * @param {object} appModel
- * @param {expression} appLabel
- * @param {expression} appTooltip
- *
- * @description
- * Checkbox with label and tooltip
- */
-appFormDirectives.directive('appFormCheckbox',
-    function appFormCheckbox () {
-        return {
-            'require': '^form',
-            'restrict': 'E',
-            'scope': {
-                'appName': '@',
-                'appModel': '=',
-                'appLabel': '=',
-                'appTooltip': '='
-            },
-            'templateUrl': 'partials/widgets/form-checkbox.html'
-        };
-    });
-
-
-/**
- * @ngdoc directive
- * @name appCheckbox
- * @restrict E
- *
- * @param {string} appName
- * @param {object} appModel
- * @param {expression} appLabel
- * @param {expression} appTooltip
- *
- * @description
- * Checkbox with label and tooltip
- */
-appFormDirectives.directive('appCheckbox',
-    function appCheckbox () {
-        return {
-            'require': '^form',
-            'restrict': 'E',
-            'scope': {
-                'appName': '@',
-                'appModel': '=',
-                'appLabel': '=',
-                'appTooltip': '='
-            },
-            'templateUrl': 'partials/widgets/checkbox.html'
-        };
-    });
-
-
-/**
- * @ngdoc directive
  * @name appIndentedFormGroup
  * @restrict E
  *
- * @param {string} [appClass=col-sm-offset-4 col-sm-8]
+ * @param {string=} [aClass=col-sm-offset-4 col-sm-8]
  *
  * @description
  * For easy indent objects without left-side label
@@ -228,12 +202,12 @@ appFormDirectives.directive('appIndentedFormGroup',
             'restrict': 'E',
             'transclude': true,
             'scope': {
-                'appClass': '@'
+                'aClass': '@'
             },
-            'template': '<div class="form-group"><div class="{{ appClass }}" ng-transclude></div></div>',
+            'template': '<div class="form-group"><div class="{{ aClass }}" ng-transclude></div></div>',
             'compile': function (element, attrs) {
-                if (!attrs.appClass) {
-                    attrs.appClass = 'col-sm-offset-4 col-sm-8';
+                if (!attrs.aClass) {
+                    attrs.aClass = 'col-sm-offset-4 col-sm-8';
                 }
             }
         };

@@ -115,7 +115,7 @@ describe('Factories: CommonFactory', function () {
             expect(test.$log.debug.logs).toEqual([]);
 
             expect(test.mocks.$alert).toHaveBeenCalledWith({
-                'title': 'Error {{status}}',
+                'title': 'Error {{ status }}',
                 'content': 'foo<br />bar',
                 'container': 'body',
                 'placement': 'top-right',

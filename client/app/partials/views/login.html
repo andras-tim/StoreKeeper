@@ -5,10 +5,19 @@
         <h2 ng-bind="'Login' | translate | setTitle"></h2>
 
         <form name="userForm" class="form-horizontal">
+          <app-input-form a-input-name="username" a-input-id="usernameInput" a-label="{{ 'Username' | translate }}" a-required="{{ 'Username is required' | translate }}">
+            <input name="username" id="usernameInput" ng-model="user.username" type="text" class="form-control" autocomplete="off" placeholder="{{ 'username' | translate }}" required autofocus />
+          </app-input-form>
 
-          <app-form-input app-name="username" app-autocomplete="off" app-model="user.username" app-label="'Username' | translate" app-placeholder="'username' | translate" app-required="'The user\'s username is required' | translate" autofocus></app-form-input>
-          <app-form-input app-name="password" app-type="password" app-model="user.password" app-label="'Password' | translate" app-placeholder="'password' | translate" app-required="'The user\'s password is required' | translate"></app-form-input>
-          <app-form-checkbox app-name="remember" app-model="user.remember" app-label="'Remember me' | translate" app-tooltip="'User will not logged out after close this window' | translate"></app-form-checkbox>
+          <app-input-form a-input-name="password" a-input-id="passwordInput" a-label="{{ 'Password' | translate }}" a-required="{{ 'Password is required' | translate }}">
+            <input name="password" id="passwordInput" ng-model="user.password" type="password" class="form-control" placeholder="{{ 'password' | translate }}" required />
+          </app-input-form>
+
+          <app-indented-form-group>
+            <app-checkbox-label a-label="{{ 'Remember me' | translate }}" app-tooltip="{{ 'User will not logged out after close this window' | translate }}">
+              <input name="remember" id="rememberCheckbox" ng-model="user.remember" type="checkbox" />
+            </app-checkbox-label>
+          </app-indented-form-group>
 
           <app-indented-form-group>
             <button id="login" class="btn btn-default btn-primary" ng-disable="authenticating" ng-click="login()" translate>Sign in</button><app-spinner ng-if="authenticating"></app-spinner>
