@@ -205,21 +205,32 @@ appFormDirectives.directive('appTypeaheadHelper', ['$timeout',
                     $timeout(function () {
                         scope.aModelController = angular.element(cloneElement).data('$ngModelController');
                     });
+
+                    element.on('keydown', function (event) {
+                        if (event.which === 13 && scope.isReadyToCreate()) {
+                            scope.aCreateCallback();
+                        }
+                    });
                 });
             },
             'controller': ['$scope',
                 function ($scope) {
-                    var getModel = function getModel () {
+                    function getModel() {
                         if ($scope.aModelController) {
                             return $scope.aModelController.$modelValue;
                         }
                         return undefined;
-                    }, isFilled = function isFilled () {
-                        return typeof getModel() === 'object';
-                    };
+                    }
 
-                    $scope.getModel = getModel;
-                    $scope.isFilled = isFilled;
+                    function isFilled() {
+                        return typeof getModel() === 'object';
+                    }
+
+                    function isReadyToCreate() {
+                        return getModel() && !isFilled() && !$scope.aLoadingSpinner && !$scope.aCreatingSpinner;
+                    }
+
+                    $scope.isReadyToCreate = isReadyToCreate;
                 }]
         };
     }]);

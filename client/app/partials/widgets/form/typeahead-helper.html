@@ -1,7 +1,7 @@
 <div class="input-group">
   <!-- transclude here -->
   <span class="input-group-btn">
-    <button class="btn btn-success" ng-disabled="!getModel() || isFilled() || aLoadingSpinner || aCreatingSpinner" ng-click="aCreateCallback()">
+    <button type="button" class="btn btn-success" ng-disabled="!isReadyToCreate()" ng-click="aCreateCallback()">
       <i ng-if="!(aLoadingSpinner || aCreatingSpinner)" class="fa fa-plus"></i>
       <app-spinner ng-if="aLoadingSpinner || aCreatingSpinner"></app-spinner>
     </button>
