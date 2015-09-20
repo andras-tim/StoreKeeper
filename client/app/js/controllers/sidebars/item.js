@@ -1,10 +1,10 @@
 'use strict';
 
-var appBarcodeSidebarControllers = angular.module('appControllers.sidebar.barcode', []);
+var appItemSidebarControllers = angular.module('appControllers.sidebar.item', []);
 
 
-appBarcodeSidebarControllers.controller('BarcodeSidebarController', ['$scope',
-    function BarcodeSidebarController ($scope) {
+appItemSidebarControllers.controller('ItemSidebarController', ['$scope',
+    function ItemSidebarController ($scope) {
         var readItems = [];
 
         function addNewBarcode(barcode) {
