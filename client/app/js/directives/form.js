@@ -54,8 +54,8 @@ appFormDirectives.directive('appInputValidator',
  *   <input name="username" id="usernameInput" ... />
  * </app-input-form>
  */
-appFormDirectives.directive('appInputForm',
-    function appInputForm () {
+appFormDirectives.directive('appInputForm', ['$timeout', 'CommonFactory',
+    function appInputForm ($timeout, CommonFactory) {
         return {
             'require': '^form',
             'restrict': 'E',
@@ -81,14 +81,27 @@ appFormDirectives.directive('appInputForm',
                         iTransclude(function (cloneElement) {
                             element.find('ng-transclude').prepend(cloneElement);
 
-                            scope.aInputId = cloneElement.attr('id');
-                            scope.aInputName = cloneElement.attr('name');
+                            $timeout(function () {
+                                var inputElement = cloneElement.find('input').addBack('input');
+
+                                if (inputElement.length !== 1) {
+                                    CommonFactory.printToConsole('Can not clearly identify the input element in <app-input-form>', {
+                                        'element': iElement,
+                                        'cloneElement': cloneElement,
+                                        'inputElement': inputElement
+                                    });
+                                }
+
+                                scope.aInputId = inputElement.attr('id');
+                                scope.aInputName = inputElement.attr('name');
+                            });
+
                         });
                     }
                 };
             }
         };
-    });
+    }]);
 
 
 /**
