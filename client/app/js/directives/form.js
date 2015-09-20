@@ -13,6 +13,13 @@ var appFormDirectives = angular.module('appDirectives.form', []);
  *
  * @description
  * Wrap input element with error handler
+ *
+ * @example
+ * <ng-form name="inputForm">
+ *   <app-input-validator a-form-input="inputForm.foo" a-required="{{ aRequired }}">
+ *     <input name="foo" />
+ *   </app-input-validator>
+ * </ng-form>
  */
 appFormDirectives.directive('appInputValidator',
     function appInputValidator () {
@@ -43,6 +50,11 @@ appFormDirectives.directive('appInputValidator',
  *
  * @description
  * Nested forms and labels for inputs
+ *
+ * @example
+ * <app-input-form a-input-name="username" a-input-id="usernameInput" a-label="{{ 'Username' | translate }}" a-required="{{ 'Username is required' | translate }}">
+ *   <input name="username" id="usernameInput" ... />
+ * </app-input-form>
  */
 appFormDirectives.directive('appInputForm',
     function appInputForm () {
@@ -81,6 +93,11 @@ appFormDirectives.directive('appInputForm',
  *
  * @description
  * Label for input[@type="checkbox"] elements
+ *
+ * @example
+ * <app-checkbox-label a-label="{{ 'Remember me' | translate }}">
+ *   <input type="checkbox" ... />
+ * </app-checkbox-label>
  */
 appFormDirectives.directive('appCheckboxLabel',
     function appCheckboxLabel () {
@@ -106,6 +123,11 @@ appFormDirectives.directive('appCheckboxLabel',
  *
  * @description
  * Tooltip for form elements
+ *
+ * @example
+ * <ANY app-tooltip="{{ 'Test message' | translate }}">
+ *   ...
+ * </ANY>
  */
 appFormDirectives.directive('appTooltip', ['$tooltip',
     function appTooltip ($tooltip) {
@@ -138,6 +160,11 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
  *
  * @description
  * Extend typeahead input[@type="text"] by add new element button and spinners.
+ *
+ * @example
+ * <app-typeahead-helper a-create-callback="createVendor()" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor">
+ *   <input ng-model="item.vendor" bs-options="vendor as vendor.name for vendor in vendors" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
+ * </app-typeahead-helper>
  */
 appFormDirectives.directive('appTypeaheadHelper', ['$timeout',
     function appTypeaheadHelper ($timeout) {
@@ -187,6 +214,11 @@ appFormDirectives.directive('appTypeaheadHelper', ['$timeout',
  *
  * @description
  * For easy indent objects without left-side label
+ *
+ * @example
+ * <app-indented-form-group>
+ *   <button></button>
+ * </app-indented-form-group>
  */
 appFormDirectives.directive('appIndentedFormGroup',
     function appIndentedFormGroup () {

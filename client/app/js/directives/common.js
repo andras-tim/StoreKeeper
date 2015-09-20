@@ -11,6 +11,9 @@ var appCommonDirectives = angular.module('appDirectives.common', []);
  *
  * @description
  * Append a spinner
+ *
+ * @example
+ * <ANY app-spinner />
  */
 appCommonDirectives.directive('appSpinner',
     function appSpinner () {
@@ -32,6 +35,11 @@ appCommonDirectives.directive('appSpinner',
  *
  * @description
  * Confirm of leaving dirty form
+ *
+ * @example
+ * <form name="itemForm" app-confirm-on-exit="itemForm.$dirty" a-modal-id="modalId">
+ *   ...
+ * </form>
  */
 appCommonDirectives.directive('appConfirmOnExit', ['$rootScope', '$window', 'gettextCatalog',
     function appConfirmOnExit ($rootScope, $window, gettextCatalog) {

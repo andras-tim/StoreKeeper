@@ -10,6 +10,23 @@ var appModalDirectives = angular.module('appDirectives.modal', []);
  *
  * @description
  * Root object for AngularStrap style modals
+ *
+ * @example
+ * <app-details-modal>
+ *   <span ng-controller="ItemController">
+ *     <div class="modal-body">
+ *       <app-details-modal-navbar>
+ *         ...
+ *       </app-details-modal-navbar>
+ *       <div class="details-modal-content">
+ *         ...
+ *       </div>
+ *     </div>
+ *     <div class="modal-footer">
+ *       ...
+ *     </div>
+ *   </span>
+ * </app-details-modal>
  */
 appModalDirectives.directive('appDetailsModal',
     function appDetailsModal () {
@@ -30,6 +47,13 @@ appModalDirectives.directive('appDetailsModal',
  *
  * @description
  * Common navbar object for modals
+ *
+ * @example
+ * <div class="modal-body">
+ *   <app-details-modal-navbar>
+ *     ...
+ *   </app-details-modal-navbar>
+ * </div>
  */
 appModalDirectives.directive('appDetailsModalNavbar',
     function appDetailsModalNavbar () {
@@ -51,6 +75,15 @@ appModalDirectives.directive('appDetailsModalNavbar',
  *
  * @description
  * Common navbar object for modals
+ *
+ * @example
+ * <div class="details-modal-content">
+ *   <app-details-modal-panel>
+ *     <app-input-form>...</app-input-form>
+ *     <app-input-form>...</app-input-form>
+ *     ...
+ *   </app-details-modal-panel>
+ * </div>
  */
 appModalDirectives.directive('appDetailsModalPanel',
     function appDetailsModalPanel () {
