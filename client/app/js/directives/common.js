@@ -7,6 +7,7 @@ var appCommonDirectives = angular.module('appDirectives.common', []);
  * @ngdoc directive
  * @name appSpinner
  * @restrict EA
+ * @element ANY
  *
  * @description
  * Append a spinner
@@ -24,6 +25,7 @@ appCommonDirectives.directive('appSpinner',
  * @ngdoc directive
  * @name appConfirmOnExit
  * @restrict A
+ * @element form
  *
  * @param {function} appConfirmOnExit dirty validator
  * @param {expression=} [aModalId] name of parent modal
@@ -38,6 +40,7 @@ appCommonDirectives.directive('appConfirmOnExit', ['$rootScope', '$window', 'get
                 'appConfirmOnExit': '&',
                 'aModalId': '='
             },
+            'require': 'form',
             'restrict': 'A',
             'link': function (scope, element, attr) {
                 var dirtyOnExitQuestion,

@@ -7,6 +7,7 @@ var appTableDirectives = angular.module('appDirectives.table', []);
  * @ngdoc directive
  * @name appTablePersist
  * @restrict A
+ * @element table
  *
  * @param {string} appTablePersist unique ID of persistent storage
  *
@@ -16,7 +17,7 @@ var appTableDirectives = angular.module('appDirectives.table', []);
 appTableDirectives.directive('appTablePersist',
     function appTablePersist () {
         return {
-            'require': '^stTable',
+            'require': 'stTable',
             'restrict': 'A',
             'scope': {
                 'appTablePersist': '@'

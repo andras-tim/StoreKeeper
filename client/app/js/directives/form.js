@@ -100,6 +100,7 @@ appFormDirectives.directive('appCheckboxLabel',
  * @ngdoc directive
  * @name appTooltip
  * @restrict A
+ * @element ANY
  *
  * @param {string} appTooltip
  *
@@ -201,10 +202,11 @@ appFormDirectives.directive('appIndentedFormGroup',
             'require': '^form',
             'restrict': 'E',
             'transclude': true,
+            'replace': true,
             'scope': {
                 'aClass': '@'
             },
-            'template': '<div class="form-group"><div class="{{ aClass }}" ng-transclude></div></div>',
+            'templateUrl': 'partials/widgets/form/indented-form-group.html',
             'compile': function (element, attrs) {
                 if (!attrs.aClass) {
                     attrs.aClass = 'col-sm-offset-4 col-sm-8';

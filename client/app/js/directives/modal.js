@@ -6,7 +6,7 @@ var appModalDirectives = angular.module('appDirectives.modal', []);
 /**
  * @ngdoc directive
  * @name appDetailsModal
- * @restrict EA
+ * @restrict E
  *
  * @description
  * Root object for AngularStrap style modals
@@ -14,7 +14,7 @@ var appModalDirectives = angular.module('appDirectives.modal', []);
 appModalDirectives.directive('appDetailsModal',
     function appDetailsModal () {
         return {
-            'restrict': 'EA',
+            'restrict': 'E',
             'transclude': true,
             'replace': true,
             'scope': true,
@@ -26,7 +26,7 @@ appModalDirectives.directive('appDetailsModal',
 /**
  * @ngdoc directive
  * @name appDetailsModalNavbar
- * @restrict EA
+ * @restrict E
  *
  * @description
  * Common navbar object for modals
@@ -35,7 +35,7 @@ appModalDirectives.directive('appDetailsModalNavbar',
     function appDetailsModalNavbar () {
         return {
             'require': '^appDetailsModal',
-            'restrict': 'EA',
+            'restrict': 'E',
             'transclude': true,
             'replace': true,
             'scope': true,
