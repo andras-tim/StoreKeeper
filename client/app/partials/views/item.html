@@ -15,9 +15,7 @@
               <app-details-modal-panel>
 
                 <app-input-form a-label="{{ 'Vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}">
-                  <app-typeahead-helper a-create-callback="createVendor()" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor">
-                    <input name="vendor" id="vendorTypeahead" ng-model="item.vendor" bs-options="vendor as vendor.name for vendor in vendors" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
-                  </app-typeahead-helper>
+                  <app-vendor-input a-model="item.vendor"></app-vendor-input>
                 </app-input-form>
 
                 <app-input-form a-label="{{ 'Article no.' | translate }}" a-required="{{ 'Article number is required' | translate }}">

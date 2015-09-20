@@ -19,21 +19,21 @@ describe('Controllers/Views: ItemController', function () {
                     'unit': {
                         'id': 2,
                         'unit': 'kg'
-                    },
-                    'vendor': {
-                        'id': 3,
-                        'name': 'Foo Bar'
                     }
+                    //'vendor': {
+                    //    'id': 3,
+                    //    'name': 'Foo Bar'
+                    //}
                 },
-                'vendors': [
-                    {
-                        'id': 3,
-                        'name': 'Foo Bar.'
-                    },
-                    {
-                        'id': 4,
-                        'name': 'Kiwi Co.'
-                    }],
+                //'vendors': [
+                //    {
+                //        'id': 3,
+                //        'name': 'Foo Bar.'
+                //    },
+                //    {
+                //        'id': 4,
+                //        'name': 'Kiwi Co.'
+                //    }],
                 'units': [
                     {
                         'id': 5,
@@ -92,17 +92,17 @@ describe('Controllers/Views: ItemController', function () {
                     }
                 },
                 'gettextCatalog': {},
-                'vendorList': angular.extend({
-                    'push': function () {}
-                }, data.vendors),
-                'VendorService': {
-                    'getList': function () {
-                        return helper.promiseMock(test, 'vendorsGetListResolved', mocks.vendorList);
-                    },
-                    'post': function (newVendor) {
-                        return helper.promiseMock(test, 'vendorPostResolved', newVendor);
-                    }
-                },
+                //'vendorList': angular.extend({
+                //    'push': function () {}
+                //}, data.vendors),
+                //'VendorService': {
+                //    'getList': function () {
+                //        return helper.promiseMock(test, 'vendorsGetListResolved', mocks.vendorList);
+                //    },
+                //    'post': function (newVendor) {
+                //        return helper.promiseMock(test, 'vendorPostResolved', newVendor);
+                //    }
+                //},
                 'unitList': angular.extend({
                     'push': function () {}
                 }, data.units),
@@ -130,7 +130,7 @@ describe('Controllers/Views: ItemController', function () {
                 //'$q': test.$q,
                 'Restangular': mocks.Restangular,
                 'gettextCatalog': mocks.gettextCatalog,
-                'VendorService': mocks.VendorService,
+                //'VendorService': mocks.VendorService,
                 'UnitService': mocks.UnitService,
                 'CommonFactory': mocks.CommonFactory
             },
@@ -142,8 +142,8 @@ describe('Controllers/Views: ItemController', function () {
                 spyOn(test.mocks.$scope.rowData, 'getList').and.callThrough();
                 spyOn(test.mocks.$scope.itemForm, '$setPristine').and.callThrough();
                 spyOn(test.mocks.Restangular, 'copy').and.callThrough();
-                spyOn(test.mocks.VendorService, 'getList').and.callThrough();
-                spyOn(test.mocks.vendorList, 'push').and.stub();
+                //spyOn(test.mocks.VendorService, 'getList').and.callThrough();
+                //spyOn(test.mocks.vendorList, 'push').and.stub();
                 spyOn(test.mocks.UnitService, 'getList').and.callThrough();
                 spyOn(test.mocks.unitList, 'push').and.stub();
 
@@ -170,8 +170,8 @@ describe('Controllers/Views: ItemController', function () {
     beforeEach(function () {
         test.itemPutResolved = true;
         test.itemGetListResolved = true;
-        test.vendorsGetListResolved = true;
-        test.vendorPostResolved = true;
+        //test.vendorsGetListResolved = true;
+        //test.vendorPostResolved = true;
         test.unitsGetListResolved = true;
         test.unitPostResolved = true;
 
@@ -254,8 +254,8 @@ describe('Controllers/Views: ItemController', function () {
             test.injectController();
             test.$rootScope.$apply();
 
-            expect(test.mocks.VendorService.getList).toHaveBeenCalled();
-            expect(test.mocks.$scope.vendors).toBe(test.mocks.vendorList);
+            //expect(test.mocks.VendorService.getList).toHaveBeenCalled();
+            //expect(test.mocks.$scope.vendors).toBe(test.mocks.vendorList);
 
             expect(test.mocks.UnitService.getList).toHaveBeenCalled();
             expect(test.mocks.$scope.units).toBe(test.mocks.unitList);
@@ -265,14 +265,14 @@ describe('Controllers/Views: ItemController', function () {
         });
 
         it('can not load by server error', function () {
-            test.vendorsGetListResolved = false;
+            //test.vendorsGetListResolved = false;
             test.unitsGetListResolved = false;
             test.itemGetListResolved = false;
             test.injectController();
             test.$rootScope.$apply();
 
-            expect(test.mocks.VendorService.getList).toHaveBeenCalled();
-            expect(test.mocks.$scope.vendors).not.toBeDefined();
+            //expect(test.mocks.VendorService.getList).toHaveBeenCalled();
+            //expect(test.mocks.$scope.vendors).not.toBeDefined();
 
             expect(test.mocks.UnitService.getList).toHaveBeenCalled();
             expect(test.mocks.$scope.units).not.toBeDefined();
@@ -310,34 +310,34 @@ describe('Controllers/Views: ItemController', function () {
         });
     });
 
-    describe('create a new vendor', function () {
-
-        beforeEach(function () {
-            test.injectController();
-            test.$rootScope.$apply();
-
-            test.mocks.$scope.item.vendor = 'New Apple';
-            test.mocks.$scope.itemForm.$dirty = true;
-        });
-
-        it('can add a new vendor', function () {
-            test.mocks.$scope.createVendor();
-            test.$rootScope.$apply();
-
-            expect(test.mocks.vendorList.push).toHaveBeenCalledWith({'name': 'New Apple'});
-            expect(test.mocks.$scope.item.vendor).toEqual({'name': 'New Apple'});
-        });
-
-        it('can not add a new vendor by server error', function () {
-            test.vendorPostResolved = false;
-
-            test.mocks.$scope.createVendor();
-            test.$rootScope.$apply();
-
-            expect(test.mocks.vendorList.push).not.toHaveBeenCalled();
-            expect(test.mocks.$scope.item.vendor).toEqual('New Apple');
-        });
-    });
+    //describe('create a new vendor', function () {
+    //
+    //    beforeEach(function () {
+    //        test.injectController();
+    //        test.$rootScope.$apply();
+    //
+    //        test.mocks.$scope.item.vendor = 'New Apple';
+    //        test.mocks.$scope.itemForm.$dirty = true;
+    //    });
+    //
+    //    it('can add a new vendor', function () {
+    //        test.mocks.$scope.createVendor();
+    //        test.$rootScope.$apply();
+    //
+    //        expect(test.mocks.vendorList.push).toHaveBeenCalledWith({'name': 'New Apple'});
+    //        expect(test.mocks.$scope.item.vendor).toEqual({'name': 'New Apple'});
+    //    });
+    //
+    //    it('can not add a new vendor by server error', function () {
+    //        test.vendorPostResolved = false;
+    //
+    //        test.mocks.$scope.createVendor();
+    //        test.$rootScope.$apply();
+    //
+    //        expect(test.mocks.vendorList.push).not.toHaveBeenCalled();
+    //        expect(test.mocks.$scope.item.vendor).toEqual('New Apple');
+    //    });
+    //});
 
     describe('create a new unit', function () {
 

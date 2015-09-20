@@ -13,6 +13,7 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appControllers.views.items',
     'appControllers.sidebar.barcode',
     'appDirectives.common',
+    'appDirectives.fields',
     'appDirectives.form',
     'appDirectives.modal',
     'appDirectives.table',
