@@ -35,7 +35,7 @@ appModalDirectives.directive('appDetailsModal',
             'transclude': true,
             'replace': true,
             'scope': true,
-            'templateUrl': 'partials/widgets/details_modal.html'
+            'templateUrl': 'partials/widgets/modal/details_modal.html'
         };
     });
 
@@ -63,7 +63,7 @@ appModalDirectives.directive('appDetailsModalNavbar',
             'transclude': true,
             'replace': true,
             'scope': true,
-            'templateUrl': 'partials/widgets/details_modal_navbar.html'
+            'templateUrl': 'partials/widgets/modal/details_modal_navbar.html'
         };
     });
 
@@ -93,6 +93,6 @@ appModalDirectives.directive('appDetailsModalPanel',
             'transclude': true,
             'replace': true,
             'scope': true,
-            'templateUrl': 'partials/widgets/details_modal_panel.html'
+            'templateUrl': 'partials/widgets/modal/details_modal_panel.html'
         };
     });
