@@ -10,8 +10,8 @@ var appFormDirectives = angular.module('appDirectives.form', []);
  *
  * @param {string} appObjectId
  * @param {expression} appLabel
- * @param {string} [appLabelClass=col-sm-4]
- * @param {string} [appObjectClass=col-sm-8]
+ * @param {string=} [appLabelClass=col-sm-4]
+ * @param {string=} [appObjectClass=col-sm-8]
  *
  * @description
  * Make label for anything
@@ -48,13 +48,13 @@ appFormDirectives.directive('appLabel',
  *
  * @param {string} appName
  * @param {object} appModel
- * @param {string} [appType=text]
+ * @param {string=} [appType=text]
  * @param {expression} appLabel
  * @param {expression} appPlaceholder
  * @param {expression} appRequired
- * @param {string} [appAutocomplete]
- * @param {string} [appLabelClass=col-sm-4]
- * @param {string} [appInputClass=col-sm-8]
+ * @param {string=} [appAutocomplete]
+ * @param {string=} [appLabelClass=col-sm-4]
+ * @param {string=} [appInputClass=col-sm-8]
  *
  * @description
  * Input text for forms
@@ -106,10 +106,10 @@ appFormDirectives.directive('appFormInput',
  * @param {expression} appPlaceholder
  * @param {expression} appRequired
  * @param {function} appCreateCallback
- * @param {object} [appLoadingSpinner]
- * @param {object} [appCreatingSpinner]
- * @param {string} [appLabelClass=col-sm-4]
- * @param {string} [appInputClass=col-sm-8]
+ * @param {object=} [appLoadingSpinner]
+ * @param {object=} [appCreatingSpinner]
+ * @param {string=} [appLabelClass=col-sm-4]
+ * @param {string=} [appInputClass=col-sm-8]
  *
  * @description
  * Typeahead for forms
@@ -216,7 +216,7 @@ appFormDirectives.directive('appCheckbox',
  * @name appIndentedFormGroup
  * @restrict E
  *
- * @param {string} [appClass=col-sm-offset-4 col-sm-8]
+ * @param {string=} [appClass=col-sm-offset-4 col-sm-8]
  *
  * @description
  * For easy indent objects without left-side label

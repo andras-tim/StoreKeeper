@@ -26,7 +26,7 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', '$filter'
         function showResponseError(resp) {
             $log.error(resp);
             showErrorPopup(
-                gettextCatalog.getString('Error {{status}}', {'status': resp.status}),
+                gettextCatalog.getString('Error {{ status }}', {'status': resp.status}),
                 resp.statusText + '<br />' + resp.data
             );
         }

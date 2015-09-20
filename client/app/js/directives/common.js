@@ -26,7 +26,7 @@ appCommonDirectives.directive('appSpinner',
  * @restrict A
  *
  * @param {function} appConfirmOnExit dirty validator
- * @param {expression} [appModalId] name of parent modal
+ * @param {expression=} [appModalId] name of parent modal
  *
  * @description
  * Confirm of leaving dirty form
