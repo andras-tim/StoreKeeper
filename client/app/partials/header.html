@@ -15,7 +15,7 @@
       <ul class="nav navbar-nav" ng-if="isAuthenticated()" bs-navbar>
         <li>
           <a href ng-click="openSidebar('barcode')">
-            <i class="fa fa-search"></i>
+            <i app-icon="search"></i>
           </a>
         </li>
         <li data-match-route="/items$">
@@ -26,12 +26,12 @@
       <ul class="nav navbar-nav navbar-right">
         <li ng-if="isAuthenticated()">
           <a href data-template-url="partials/widgets/user_menu.html" role="button" aria-expanded="false" bs-dropdown>
-            <i class="fa fa-user"></i> <span ng-bind="session.username"></span> <span class="caret"></span>
+            <i app-icon="user"></i> <span ng-bind="session.username"></span> <span class="caret"></span>
           </a>
         </li>
         <li ng-if="changeLanguage">
           <a href data-template-url="partials/widgets/language_menu.html" role="button" aria-expanded="false" bs-dropdown="languages">
-            <i class="fa fa-flag"></i> <span ng-bind="getCurrentLanguage()"></span> <span class="caret"></span>
+            <i app-icon="language"></i> <span ng-bind="getCurrentLanguage()"></span> <span class="caret"></span>
           </a>
         </li>
       </ul>

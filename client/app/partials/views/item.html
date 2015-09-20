@@ -2,7 +2,7 @@
   <span ng-controller="ItemController">
     <div class="modal-body">
       <app-details-modal-navbar>
-        <span class="navbar-brand"><i class="fa fa-cube"></i> {{ 'Item' | translate }} #{{ rowData.id }}</span>
+        <span class="navbar-brand"><i app-icon="item"></i> {{ 'Item' | translate }} #{{ rowData.id }}</span>
         <span class="navbar-brand" ng-bind="rowData.name"></span>
       </app-details-modal-navbar>
 
@@ -59,7 +59,7 @@
 
                   <tbody>
                     <tr ng-if="loadingBarcodes">
-                      <td colspan="4" class="text-center" app-spinner></td>
+                      <td colspan="4" class="text-center" app-icon="spinner"></td>
                     </tr>
                     <tr ng-repeat="barcode in barcodes | filter:filterAvailable" ng-class="{'warning': barcode.dirty}">
 
@@ -79,21 +79,21 @@
 
                       <td class="field-button field-triple-button">
                         <div class="btn-group" role="group">
-                          <a ng-click="printLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i class="fa fa-print"></i></a>
-                          <a ng-click="downloadLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i class="fa fa-download"></i></a>
-                          <a ng-click="deleteBarcode(barcode)" class="btn btn-default btn-sm btn-danger" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i class="fa fa-trash-o"></i></a>
+                          <a ng-click="printLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i app-icon="print"></i></a>
+                          <a ng-click="downloadLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i app-icon="download"></i></a>
+                          <a ng-click="deleteBarcode(barcode)" class="btn btn-default btn-sm btn-danger" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i app-icon="delete"></i></a>
                         </div>
                       </td>
 
                     </tr>
                     <tr ng-if="creatingBarcode">
-                      <td colspan="4" class="text-center" app-spinner></td>
+                      <td colspan="4" class="text-center" app-icon="spinner"></td>
                     </tr>
                   </tbody>
                 </table>
 
                 <button type="button" ng-disabled="creatingBarcode" class="btn btn-success btn-sm btn-sm-wide pull-right pull-bottom" ng-click="createBarcode()">
-                  <i class="fa fa-plus"></i>
+                  <i app-icon="add"></i>
                 </button>
               </app-details-modal-panel>
             </form>
@@ -104,7 +104,7 @@
     </div>
 
     <div class="modal-footer">
-      <app-spinner ng-if="savingItem"></app-spinner>
+      <i app-icon="spinner" ng-if="savingItem"></i>
       <button type="button" class="btn btn-primary" ng-disabled="(!itemForm.$dirty && !barcodesForm.$dirty) || savingItem" ng-click="saveChanges()" translate>Save</button>
       <button type="button" class="btn btn-default" ng-click="closeModal()" translate>Close</button>
     </div>

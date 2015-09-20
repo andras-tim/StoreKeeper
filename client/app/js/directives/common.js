@@ -5,27 +5,6 @@ var appCommonDirectives = angular.module('appDirectives.common', []);
 
 /**
  * @ngdoc directive
- * @name appSpinner
- * @restrict EA
- * @element ANY
- *
- * @description
- * Append a spinner
- *
- * @example
- * <ANY app-spinner />
- */
-appCommonDirectives.directive('appSpinner',
-    function appSpinner () {
-        return {
-            'restrict': 'EA',
-            'template': ' <i class="fa fa-spinner fa-pulse"></i> '
-        };
-    });
-
-
-/**
- * @ngdoc directive
  * @name appConfirmOnExit
  * @restrict A
  * @element form
