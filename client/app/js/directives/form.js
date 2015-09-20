@@ -129,61 +129,53 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
 
 /**
  * @ngdoc directive
- * @name appFormTypeahead
+ * @name appTypeaheadHelper
  * @restrict E
  *
- * @param {string} aName
- * @param {object} aModel
- * @param {string} aDataSource
- * @param {string} aLabel
- * @param {string} aPlaceholder
- * @param {string} aRequired
  * @param {function} aCreateCallback
  * @param {object=} [aLoadingSpinner]
  * @param {object=} [aCreatingSpinner]
- * @param {string=} [aLabelClass=col-sm-4]
- * @param {string=} [aInputClass=col-sm-8]
  *
  * @description
- * Typeahead for forms
+ * Extend typeahead input[@type="text"] by add new element button and spinners.
  */
-appFormDirectives.directive('appFormTypeahead',
-    function appFormTypeahead () {
+appFormDirectives.directive('appTypeaheadHelper', ['$timeout',
+    function appTypeaheadHelper ($timeout) {
         return {
-            'require': '^form',
             'restrict': 'E',
+            'transclude': true,
+            'replace': true,
             'scope': {
-                'aName': '@',
-                'aModel': '=',
-                'aDataSource': '@',
-                'aLabel': '@',
-                'aPlaceholder': '@',
-                'aRequired': '@',
                 'aCreateCallback': '&',
                 'aLoadingSpinner': '=',
-                'aCreatingSpinner': '=',
-                'aLabelClass': '@',
-                'aInputClass': '@'
+                'aCreatingSpinner': '='
             },
-            'templateUrl': 'partials/widgets/form-typeahead.html',
-            'compile': function (element, attrs) {
-                if (!attrs.aLabelClass) {
-                    attrs.aLabelClass = 'col-sm-4';
-                }
-                if (!attrs.aInputClass) {
-                    attrs.aInputClass = 'col-sm-8';
-                }
+            'templateUrl': 'partials/widgets/form/typeahead-helper.html',
+            'link': function (scope, element, attrs, ctrl, transclude) {
+                transclude(function (cloneElement) {
+                    element.prepend(cloneElement);
+
+                    $timeout(function () {
+                        scope.aModelController = angular.element(cloneElement).data('$ngModelController');
+                    });
+                });
             },
             'controller': ['$scope',
                 function ($scope) {
-                    var isFilled = function isFilled (modelRef) {
-                        return typeof modelRef === 'object';
+                    var getModel = function getModel () {
+                        if ($scope.aModelController) {
+                            return $scope.aModelController.$modelValue;
+                        }
+                        return undefined;
+                    }, isFilled = function isFilled () {
+                        return typeof getModel() === 'object';
                     };
 
+                    $scope.getModel = getModel;
                     $scope.isFilled = isFilled;
                 }]
         };
-    });
+    }]);
 
 
 /**

@@ -22,17 +22,6 @@ var storekeeperApp = angular.module('storekeeperApp', [
 ]);
 
 
-storekeeperApp.config(['$modalProvider', '$tooltipProvider',
-    function ($modalProvider, $tooltipProvider) {
-        angular.extend($modalProvider.defaults, {
-            'html': true
-        });
-        angular.extend($tooltipProvider.defaults, {
-            'trigger': 'hover'
-        });
-    }]);
-
-
 storekeeperApp.config(['$routeProvider',
     function ($routeProvider) {
         var sessionRequired = {
@@ -117,13 +106,21 @@ storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog',
     }]);
 
 
-storekeeperApp.config(['$tooltipProvider',
-    function ($tooltipProvider) {
+storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider',
+    function ($modalProvider, $tooltipProvider, $typeaheadProvider) {
+        angular.extend($modalProvider.defaults, {
+            'html': true
+        });
         angular.extend($tooltipProvider.defaults, {
+            'trigger': 'hover',
             'delay': {
                 'show': 600,
                 'hide': 100
             }
+        });
+        angular.extend($typeaheadProvider.defaults, {
+            'minLength': 0,
+            'autoSelect': true
         });
     }]);
 

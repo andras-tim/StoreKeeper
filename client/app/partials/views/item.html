@@ -13,7 +13,12 @@
             <!-- Item details -->
             <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" a-modal-id="modalId">
               <app-details-modal-panel>
-                <app-form-typeahead a-name="vendor" a-model="item.vendor" a-label="{{ 'Vendor' | translate }}" a-data-source="vendor as vendor.name for vendor in $parent.vendors" a-create-callback="createVendor()" a-placeholder="{{ 'Enter vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor"></app-form-typeahead>
+
+                <app-input-form a-input-name="vendor" a-input-id="vendorTypeahead" a-label="{{ 'Vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}">
+                  <app-typeahead-helper a-create-callback="createVendor()" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor">
+                    <input name="vendor" id="vendorTypeahead" ng-model="item.vendor" bs-options="vendor as vendor.name for vendor in vendors" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
+                  </app-typeahead-helper>
+                </app-input-form>
 
                 <app-input-form a-input-name="articleNumber" a-input-id="articleNumberInput" a-label="{{ 'Article no.' | translate }}" a-required="{{ 'Article number is required' | translate }}">
                   <input name="articleNumber" id="articleNumberInput" ng-model="item.article_number" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter article number' | translate }}" required />
@@ -23,7 +28,12 @@
                   <input name="name" id="nameInput" ng-model="item.name" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter name of item' | translate }}" required />
                 </app-input-form>
 
-                <app-form-typeahead a-name="unit" a-model="item.unit" a-label="{{ 'Unit' | translate }}" a-data-source="unit as unit.unit for unit in $parent.units" a-create-callback="createUnit()" a-placeholder="{{ 'Enter unit' | translate }}" a-required="{{ 'Unit is required' | translate }}" a-loading-spinner="loadingUnits" a-creating-spinner="creatingUnit"></app-form-typeahead>
+                <app-input-form a-input-name="unit" a-input-id="unitTypeahead" a-label="{{ 'Unit' | translate }}" a-required="{{ 'Unit is required' | translate }}">
+                  <app-typeahead-helper a-create-callback="createUnit()" a-loading-spinner="loadingUnits" a-creating-spinner="creatingUnit">
+                    <input name="unit" id="unitTypeahead" ng-model="item.unit" bs-options="unit as unit.unit for unit in units" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter unit' | translate }}" required bs-typeahead />
+                  </app-typeahead-helper>
+                </app-input-form>
+
               </app-details-modal-panel>
             </form>
 
