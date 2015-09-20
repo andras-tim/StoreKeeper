@@ -74,6 +74,36 @@ appFormDirectives.directive('appInputForm',
 
 /**
  * @ngdoc directive
+ * @name appTooltip
+ * @restrict A
+ *
+ * @param {string} appTooltip
+ *
+ * @description
+ * Tooltip for form elements
+ */
+appFormDirectives.directive('appTooltip', ['$tooltip',
+    function appTooltip ($tooltip) {
+        return {
+            'restrict': 'A',
+            'scope': false,
+            'link': function (scope, element, attrs) {
+                var tooltip;
+                attrs.$observe('appTooltip', function (newValue) {
+                    if (tooltip !== undefined) {
+                        tooltip.destroy();
+                    }
+                    tooltip = $tooltip(element, {
+                        'title': newValue
+                    });
+                });
+            }
+        };
+    }]);
+
+
+/**
+ * @ngdoc directive
  * @name appLabel
  * @restrict E
  *

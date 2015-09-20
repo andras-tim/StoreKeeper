@@ -22,10 +22,13 @@ var storekeeperApp = angular.module('storekeeperApp', [
 ]);
 
 
-storekeeperApp.config(['$modalProvider',
-    function ($modalProvider) {
+storekeeperApp.config(['$modalProvider', '$tooltipProvider',
+    function ($modalProvider, $tooltipProvider) {
         angular.extend($modalProvider.defaults, {
             'html': true
+        });
+        angular.extend($tooltipProvider.defaults, {
+            'trigger': 'hover'
         });
     }]);
 
