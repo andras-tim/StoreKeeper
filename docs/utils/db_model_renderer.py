@@ -52,7 +52,7 @@ class DbModelRenderer:
 
 
 def __initialize_application():
-    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
     sys.path.insert(0, os.path.join(basedir, 'server'))
     import app
