@@ -14,8 +14,15 @@
             <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" a-modal-id="modalId">
               <app-details-modal-panel>
                 <app-form-typeahead a-name="vendor" a-model="item.vendor" a-label="{{ 'Vendor' | translate }}" a-data-source="vendor as vendor.name for vendor in $parent.vendors" a-create-callback="createVendor()" a-placeholder="{{ 'Enter vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor"></app-form-typeahead>
-                <app-form-input a-name="articleNumber" a-model="item.article_number" a-label="{{ 'Article no.' | translate }}" a-placeholder="{{ 'Enter article number' | translate }}" a-required="{{ 'Article number is required' | translate }}"></app-form-input>
-                <app-form-input a-name="name" a-model="item.name" a-label="{{ 'Name' | translate }}" a-placeholder="{{ 'Enter name of item' | translate }}" a-required="{{ 'Name is required' | translate }}"></app-form-input>
+
+                <app-input-form a-input-name="articleNumber" a-input-id="articleNumberInput" a-label="{{ 'Article no.' | translate }}" a-required="{{ 'Article number is required' | translate }}">
+                  <input name="articleNumber" id="articleNumberInput" ng-model="item.article_number" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter article number' | translate }}" required />
+                </app-input-form>
+
+                <app-input-form a-input-name="name" a-input-id="nameInput" a-label="{{ 'Name' | translate }}" a-required="{{ 'Name is required' | translate }}">
+                  <input name="name" id="nameInput" ng-model="item.name" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter name of item' | translate }}" required />
+                </app-input-form>
+
                 <app-form-typeahead a-name="unit" a-model="item.unit" a-label="{{ 'Unit' | translate }}" a-data-source="unit as unit.unit for unit in $parent.units" a-create-callback="createUnit()" a-placeholder="{{ 'Enter unit' | translate }}" a-required="{{ 'Unit is required' | translate }}" a-loading-spinner="loadingUnits" a-creating-spinner="creatingUnit"></app-form-typeahead>
               </app-details-modal-panel>
             </form>

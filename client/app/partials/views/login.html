@@ -5,9 +5,14 @@
         <h2 ng-bind="'Login' | translate | setTitle"></h2>
 
         <form name="userForm" class="form-horizontal">
+          <app-input-form a-input-name="username" a-input-id="usernameInput" a-label="{{ 'Username' | translate }}" a-required="{{ 'Username is required' | translate }}">
+            <input name="username" id="usernameInput" ng-model="user.username" type="text" class="form-control" autocomplete="off" placeholder="{{ 'username' | translate }}" required autofocus />
+          </app-input-form>
 
-          <app-form-input a-name="username" a-autocomplete="off" a-model="user.username" a-label="{{ 'Username' | translate }}" a-placeholder="{{ 'username' | translate }}" a-required="{{ 'username is required' | translate }}"></app-form-input>
-          <app-form-input a-name="password" a-type="password" a-model="user.password" a-label="{{ 'Password' | translate }}" a-placeholder="{{ 'password' | translate }}" a-required="{{ 'password is required' | translate }}"></app-form-input>
+          <app-input-form a-input-name="password" a-input-id="passwordInput" a-label="{{ 'Password' | translate }}" a-required="{{ 'Password is required' | translate }}">
+            <input name="password" id="passwordInput" ng-model="user.password" type="password" class="form-control" placeholder="{{ 'password' | translate }}" required />
+          </app-input-form>
+
           <app-form-checkbox a-name="remember" a-model="user.remember" a-label="{{ 'Remember me' | translate }}" a-tooltip="{{ 'User will not logged out after close this window' | translate }}"></app-form-checkbox>
 
           <app-indented-form-group>

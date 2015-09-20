@@ -5,6 +5,75 @@ var appFormDirectives = angular.module('appDirectives.form', []);
 
 /**
  * @ngdoc directive
+ * @name appInputValidator
+ * @restrict E
+ *
+ * @param {object} aFormInput
+ * @param {string} aRequired
+ *
+ * @description
+ * Wrap input element with error handler
+ */
+appFormDirectives.directive('appInputValidator',
+    function appInputValidator () {
+        return {
+            'restrict': 'E',
+            'transclude': true,
+            'replace': true,
+            'scope': {
+                'aFormInput': '=',
+                'aRequired': '@'
+            },
+            'templateUrl': 'partials/widgets/form/input-validator.html'
+        };
+    });
+
+
+/**
+ * @ngdoc directive
+ * @name appInputForm
+ * @restrict E
+ *
+ * @param {string} aInputId
+ * @param {string} aInputName
+ * @param {string} aLabel
+ * @param {string} aRequired
+ * @param {string=} [aLabelClass=col-sm-4]
+ * @param {string=} [aInputClass=col-sm-8]
+ *
+ * @description
+ * Nested forms and labels for inputs
+ */
+appFormDirectives.directive('appInputForm',
+    function appInputForm () {
+        return {
+            'require': '^form',
+            'restrict': 'E',
+            'transclude': true,
+            'replace': true,
+            'scope': {
+                'aInputId': '@',
+                'aInputName': '@',
+                'aLabel': '@',
+                'aRequired': '@',
+                'aLabelClass': '@',
+                'aInputClass': '@'
+            },
+            'templateUrl': 'partials/widgets/form/input-form.html',
+            'compile': function (element, attrs) {
+                if (!attrs.aLabelClass) {
+                    attrs.aLabelClass = 'col-sm-4';
+                }
+                if (!attrs.aInputClass) {
+                    attrs.aInputClass = 'col-sm-8';
+                }
+            }
+        };
+    });
+
+
+/**
+ * @ngdoc directive
  * @name appLabel
  * @restrict E
  *
@@ -35,59 +104,6 @@ appFormDirectives.directive('appLabel',
                 }
                 if (!attrs.aObjectClass) {
                     attrs.aObjectClass = 'col-sm-8';
-                }
-            }
-        };
-    });
-
-
-/**
- * @ngdoc directive
- * @name appFormInput
- * @restrict E
- *
- * @param {string} aName
- * @param {object} aModel
- * @param {string=} [aType=text]
- * @param {string} aLabel
- * @param {string} aPlaceholder
- * @param {string} aRequired
- * @param {string=} [aAutocomplete]
- * @param {string=} [aLabelClass=col-sm-4]
- * @param {string=} [aInputClass=col-sm-8]
- *
- * @description
- * Input text for forms
- */
-appFormDirectives.directive('appFormInput',
-    function appFormInput () {
-        return {
-            'require': '^form',
-            'restrict': 'E',
-            'scope': {
-                'aName': '@',
-                'aModel': '=',
-                'aType': '@',
-                'aLabel': '@',
-                'aPlaceholder': '@',
-                'aRequired': '@',
-                'aAutocomplete': '@',
-                'aLabelClass': '@',
-                'aInputClass': '@'
-            },
-            'templateUrl': 'partials/widgets/form-input.html',
-            'compile': function (element, attrs) {
-                if (!attrs.aType) {
-                    attrs.aType = 'text';
-                }
-                if (!attrs.aAutocomplete) {
-                    attrs.aAutocomplete = attrs.aType === 'password' ? 'off' : 'on';
-                }
-                if (!attrs.aLabelClass) {
-                    attrs.aLabelClass = 'col-sm-4';
-                }
-                if (!attrs.aInputClass) {
-                    attrs.aInputClass = 'col-sm-8';
                 }
             }
         };
