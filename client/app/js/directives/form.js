@@ -9,7 +9,7 @@ var appFormDirectives = angular.module('appDirectives.form', []);
  * @restrict E
  *
  * @param {string} aObjectId
- * @param {expression} aLabel
+ * @param {string} aLabel
  * @param {string=} [aLabelClass=col-sm-4]
  * @param {string=} [aObjectClass=col-sm-8]
  *
@@ -24,7 +24,7 @@ appFormDirectives.directive('appLabel',
             'transclude': true,
             'scope': {
                 'aObjectId': '@',
-                'aLabel': '=',
+                'aLabel': '@',
                 'aLabelClass': '@',
                 'aObjectClass': '@'
             },
@@ -49,9 +49,9 @@ appFormDirectives.directive('appLabel',
  * @param {string} aName
  * @param {object} aModel
  * @param {string=} [aType=text]
- * @param {expression} aLabel
- * @param {expression} aPlaceholder
- * @param {expression} aRequired
+ * @param {string} aLabel
+ * @param {string} aPlaceholder
+ * @param {string} aRequired
  * @param {string=} [aAutocomplete]
  * @param {string=} [aLabelClass=col-sm-4]
  * @param {string=} [aInputClass=col-sm-8]
@@ -68,9 +68,9 @@ appFormDirectives.directive('appFormInput',
                 'aName': '@',
                 'aModel': '=',
                 'aType': '@',
-                'aLabel': '=',
-                'aPlaceholder': '=',
-                'aRequired': '=',
+                'aLabel': '@',
+                'aPlaceholder': '@',
+                'aRequired': '@',
                 'aAutocomplete': '@',
                 'aLabelClass': '@',
                 'aInputClass': '@'
@@ -102,9 +102,9 @@ appFormDirectives.directive('appFormInput',
  * @param {string} aName
  * @param {object} aModel
  * @param {string} aDataSource
- * @param {expression} aLabel
- * @param {expression} aPlaceholder
- * @param {expression} aRequired
+ * @param {string} aLabel
+ * @param {string} aPlaceholder
+ * @param {string} aRequired
  * @param {function} aCreateCallback
  * @param {object=} [aLoadingSpinner]
  * @param {object=} [aCreatingSpinner]
@@ -123,9 +123,9 @@ appFormDirectives.directive('appFormTypeahead',
                 'aName': '@',
                 'aModel': '=',
                 'aDataSource': '@',
-                'aLabel': '=',
-                'aPlaceholder': '=',
-                'aRequired': '=',
+                'aLabel': '@',
+                'aPlaceholder': '@',
+                'aRequired': '@',
                 'aCreateCallback': '&',
                 'aLoadingSpinner': '=',
                 'aCreatingSpinner': '=',
@@ -160,8 +160,8 @@ appFormDirectives.directive('appFormTypeahead',
  *
  * @param {string} aName
  * @param {object} aModel
- * @param {expression} aLabel
- * @param {expression} aTooltip
+ * @param {string} aLabel
+ * @param {string} aTooltip
  *
  * @description
  * Checkbox with label and tooltip
@@ -174,8 +174,8 @@ appFormDirectives.directive('appFormCheckbox',
             'scope': {
                 'aName': '@',
                 'aModel': '=',
-                'aLabel': '=',
-                'aTooltip': '='
+                'aLabel': '@',
+                'aTooltip': '@'
             },
             'templateUrl': 'partials/widgets/form-checkbox.html'
         };
@@ -189,8 +189,8 @@ appFormDirectives.directive('appFormCheckbox',
  *
  * @param {string} aName
  * @param {object} aModel
- * @param {expression} aLabel
- * @param {expression} aTooltip
+ * @param {string} aLabel
+ * @param {string} aTooltip
  *
  * @description
  * Checkbox with label and tooltip
@@ -203,8 +203,8 @@ appFormDirectives.directive('appCheckbox',
             'scope': {
                 'aName': '@',
                 'aModel': '=',
-                'aLabel': '=',
-                'aTooltip': '='
+                'aLabel': '@',
+                'aTooltip': '@'
             },
             'templateUrl': 'partials/widgets/checkbox.html'
         };

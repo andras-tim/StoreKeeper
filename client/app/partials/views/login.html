@@ -6,9 +6,9 @@
 
         <form name="userForm" class="form-horizontal">
 
-          <app-form-input a-name="username" a-autocomplete="off" a-model="user.username" a-label="'Username' | translate" a-placeholder="'username' | translate" a-required="'The user\'s username is required' | translate"></app-form-input>
-          <app-form-input a-name="password" a-type="password" a-model="user.password" a-label="'Password' | translate" a-placeholder="'password' | translate" a-required="'The user\'s password is required' | translate"></app-form-input>
-          <app-form-checkbox a-name="remember" a-model="user.remember" a-label="'Remember me' | translate" a-tooltip="'User will not logged out after close this window' | translate"></app-form-checkbox>
+          <app-form-input a-name="username" a-autocomplete="off" a-model="user.username" a-label="{{ 'Username' | translate }}" a-placeholder="{{ 'username' | translate }}" a-required="{{ 'username is required' | translate }}"></app-form-input>
+          <app-form-input a-name="password" a-type="password" a-model="user.password" a-label="{{ 'Password' | translate }}" a-placeholder="{{ 'password' | translate }}" a-required="{{ 'password is required' | translate }}"></app-form-input>
+          <app-form-checkbox a-name="remember" a-model="user.remember" a-label="{{ 'Remember me' | translate }}" a-tooltip="{{ 'User will not logged out after close this window' | translate }}"></app-form-checkbox>
 
           <app-indented-form-group>
             <button id="login" class="btn btn-default btn-primary" ng-disable="authenticating" ng-click="login()" translate>Sign in</button><app-spinner ng-if="authenticating"></app-spinner>
