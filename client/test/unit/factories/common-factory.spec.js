@@ -86,13 +86,13 @@ describe('Factories: CommonFactory', function () {
             test.injectFactory();
             test.debugMode = true;
 
-            test.CommonFactory.printToConsole('foo');
+            test.CommonFactory.printToConsole('foo', {'bar': true});
 
             expect(test.$log.log.logs).toEqual([]);
             expect(test.$log.info.logs).toEqual([]);
             expect(test.$log.warn.logs).toEqual([]);
             expect(test.$log.error.logs).toEqual([]);
-            expect(test.$log.debug.logs).toEqual([['foo']]);
+            expect(test.$log.debug.logs).toEqual([['foo', {'bar': true}]]);
         });
 
     });
