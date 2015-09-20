@@ -5,11 +5,11 @@
         <h2 ng-bind="'Login' | translate | setTitle"></h2>
 
         <form name="userForm" class="form-horizontal">
-          <app-input-form a-input-name="username" a-input-id="usernameInput" a-label="{{ 'Username' | translate }}" a-required="{{ 'Username is required' | translate }}">
+          <app-input-form a-label="{{ 'Username' | translate }}" a-required="{{ 'Username is required' | translate }}">
             <input name="username" id="usernameInput" ng-model="user.username" type="text" class="form-control" autocomplete="off" placeholder="{{ 'username' | translate }}" required autofocus />
           </app-input-form>
 
-          <app-input-form a-input-name="password" a-input-id="passwordInput" a-label="{{ 'Password' | translate }}" a-required="{{ 'Password is required' | translate }}">
+          <app-input-form a-label="{{ 'Password' | translate }}" a-required="{{ 'Password is required' | translate }}">
             <input name="password" id="passwordInput" ng-model="user.password" type="password" class="form-control" placeholder="{{ 'password' | translate }}" required />
           </app-input-form>
 

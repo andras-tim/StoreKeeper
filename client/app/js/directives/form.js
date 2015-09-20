@@ -41,8 +41,6 @@ appFormDirectives.directive('appInputValidator',
  * @name appInputForm
  * @restrict E
  *
- * @param {string} aInputId
- * @param {string} aInputName
  * @param {string} aLabel
  * @param {string} aRequired
  * @param {string=} [aLabelClass=col-sm-4]
@@ -52,7 +50,7 @@ appFormDirectives.directive('appInputValidator',
  * Nested forms and labels for inputs
  *
  * @example
- * <app-input-form a-input-name="username" a-input-id="usernameInput" a-label="{{ 'Username' | translate }}" a-required="{{ 'Username is required' | translate }}">
+ * <app-input-form a-label="{{ 'Username' | translate }}" a-required="{{ 'Username is required' | translate }}">
  *   <input name="username" id="usernameInput" ... />
  * </app-input-form>
  */
@@ -64,8 +62,6 @@ appFormDirectives.directive('appInputForm',
             'transclude': true,
             'replace': true,
             'scope': {
-                'aInputId': '@',
-                'aInputName': '@',
                 'aLabel': '@',
                 'aRequired': '@',
                 'aLabelClass': '@',
@@ -79,6 +75,17 @@ appFormDirectives.directive('appInputForm',
                 if (!attrs.aInputClass) {
                     attrs.aInputClass = 'col-sm-8';
                 }
+
+                return {
+                    'post': function postLink (scope, iElement, iAttrs, iCtrl, iTransclude) {
+                        iTransclude(function (cloneElement) {
+                            element.find('ng-transclude').prepend(cloneElement);
+
+                            scope.aInputId = cloneElement.attr('id');
+                            scope.aInputName = cloneElement.attr('name');
+                        });
+                    }
+                };
             }
         };
     });
