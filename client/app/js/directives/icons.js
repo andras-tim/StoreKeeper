@@ -8,6 +8,7 @@ appIconsDirectives.constant('iconList', {
     'items':        'fa fa-cube',
     'barcode':      'fa fa-barcode',
 
+    'new':          'fa fa-sticky-note-o',
     'user':         'fa fa-user',
     'language':     'fa fa-flag',
     'spinner':      'fa fa-spinner fa-pulse',
@@ -19,6 +20,8 @@ appIconsDirectives.constant('iconList', {
     'delete':       'fa fa-trash-o',
     'download':     'fa fa-download',
     'print':        'fa fa-print',
+    'addToView':    'fa fa-share',
+    'assign':       'fa fa-pencil-square-o',
 
     'jumpFirst':    'fa fa-fast-backward',
     'jumpPrev':     'fa fa-step-backward',

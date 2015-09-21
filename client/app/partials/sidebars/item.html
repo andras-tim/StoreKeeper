@@ -3,40 +3,71 @@
     <div class="aside-content" ng-controller="ItemSidebarController">
 
       <div class="aside-header">
-        <h4 class="aside-title"><i app-icon="barcode"></i> <span translate>Item finder</span></h4>
-      </div>
-
-      <div class="aside-body">
+        <h4 class="aside-title">
+          <i app-icon="barcode"></i> <span translate>Item finder</span><span ng-if="loadingBarcodes || loadingBarcodesItem" app-icon="spinner" class="pull-right"></span>
+        </h4>
         <div class="row">
           <div class="col-md-offset-1 col-md-10">
-
             <form name="barcodeForm">
+
               <div class="input-group">
-                <input id="barcodeText" name="barcode" type="text" class="form-control" placeholder="{{ 'Enter barcode' | translate }}" autofocus />
+                <input id="barcodeText" name="barcode" ng-model="barcode" type="text" class="form-control" placeholder="{{ 'Enter barcode' | translate }}" autofocus />
                 <span class="input-group-btn">
-                  <button class="btn btn-success" ng-click="addNewBarcode(barcodeForm.barcode)">
+                  <button class="btn btn-success" type="submit" ng-click="addNewBarcode()">
                     <i app-icon="add"></i>
                   </button>
                 </span>
               </div>
-              <label for="summarizeMultipleItemsCheckbox">
-                <input id="summarizeMultipleItemsCheckbox" name="summarizeMultipleItems" type="checkbox"> {{ 'Summarize items' | translate }}
-              </label>
-            </form>
 
+              <app-checkbox-label a-label="{{ 'Summarize items' | translate }}">
+                <input type="checkbox" ng-model="ui.summarizeMultipleItems" ng-change="save()" />
+              </app-checkbox-label>
+
+            </form>
           </div>
         </div>
+      </div>
 
-        <div class="row" ng-repeat="readItem in readItems">
-          <pre ng-bind="readItem | json"></pre>
+      <div class="aside-body container-fluid">
+        <div class="row row-item" ng-repeat="readItem in readItems">
+
+          <div class="col-md-8">
+            <div ng-if="readItem.id">
+              <strong><i app-icon="item"></i> {{ readItem.item.name }}</strong><br/>
+              {{ readItem.item.article_number }}<br/>
+              {{ readItem.item.vendor.name }}<br/>
+            </div>
+            <div ng-if="!readItem.id">
+              <strong><i app-icon="new"></i> {{ 'Unknown' | translate }}</strong><br/>
+              {{ readItem.barcode }}<br/>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="row">
+              <div class="input-group field-quantity">
+                <app-quantity-input a-model="readItem.quantity" a-on-change="save()"></app-quantity-input>
+                <div class="input-group-addon field-unit-beside-quantity" ng-bind="readItem.item.unit.unit"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="btn-group pull-right" role="group">
+                <a class="btn btn-default btn-sm" ng-if="!readItem.id" app-tooltip="{{ 'Add as new item' | translate }}"><i app-icon="add"></i></a>
+                <a class="btn btn-default btn-sm" ng-if="!readItem.id" app-tooltip="{{ 'Assign to an existing item' | translate }}"><i app-icon="assign"></i></a>
+                <a class="btn btn-default btn-sm" ng-if="readItem.id" app-tooltip="{{ 'Print label' | translate }}"><i app-icon="print"></i></a>
+                <a class="btn btn-danger btn-sm" app-tooltip="{{ 'Remove this item' | translate }}"><i app-icon="delete"></i></a>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
       <div class="aside-footer">
         <div class="btn-group" role="group">
-          <a class="btn btn-default btn-sm">Print</a>
-          <a class="btn btn-default btn-sm">Cleanup</a>
-          <a class="btn btn-default btn-sm">Add to view</a>
+          <a class="btn btn-default" ng-disabled="!readItems.length" app-tooltip="{{ 'Print labels for all item' | translate }}"><i app-icon="print"></i></a>
+          <a class="btn btn-danger" ng-disabled="!readItems.length" ng-click="clearReadItems()" app-tooltip="{{ 'Clean up item list' | translate }}"><i app-icon="delete"></i></a>
+          <a class="btn btn-success" ng-disabled="!readItems.length" app-tooltip="{{ 'Add to current view' | translate }}"><i app-icon="addToView"></i></a>
         </div>
       </div>
 

@@ -1,7 +1,18 @@
-.aside .aside-dialog .aside-body {
-    padding-bottom: 40px;
-}
-
 .aside {
     max-width: 400px;
+}
+
+.aside .aside-dialog .aside-body {
+    padding: 0 10px 10px;
+}
+
+.aside .aside-dialog .aside-body .row.row-item {
+    min-height: 75px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-top: 1px solid rgb(229, 229, 229);
+}
+
+.aside .aside-dialog .row.row-item {
+    margin-right: 0;
 }
