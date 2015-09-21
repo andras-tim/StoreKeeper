@@ -11,7 +11,7 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appControllers.common',
     'appControllers.views.login',
     'appControllers.views.items',
-    'appControllers.sidebar.barcode',
+    'appControllers.sidebar.item',
     'appDirectives.common',
     'appDirectives.fields',
     'appDirectives.form',
@@ -65,8 +65,8 @@ storekeeperApp.config(['$routeProvider',
 storekeeperApp.run(['$rootScope',
     function ($rootScope) {
         $rootScope.sidebars = {
-            'barcode': {
-                'templateUrl': 'partials/sidebars/barcode.html',
+            'item': {
+                'templateUrl': 'partials/sidebars/item.html',
                 'placement': 'left'
             }
         };
@@ -111,7 +111,8 @@ storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog',
 storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider',
     function ($modalProvider, $tooltipProvider, $typeaheadProvider) {
         angular.extend($modalProvider.defaults, {
-            'html': true
+            'html': true,
+            'keyboard': false
         });
         angular.extend($tooltipProvider.defaults, {
             'trigger': 'hover',
@@ -131,14 +132,6 @@ storekeeperApp.config(['stConfig',
     function (stConfig) {
         stConfig.pagination.template = 'partials/widgets/table_pager.html';
         stConfig.pagination.itemsByPage = 20;
-    }]);
-
-
-storekeeperApp.config(['$modalProvider',
-    function ($modalProvider) {
-        angular.extend($modalProvider.defaults, {
-            'keyboard': false
-        });
     }]);
 
 

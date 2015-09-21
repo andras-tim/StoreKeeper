@@ -38,6 +38,7 @@ describe('Services', function () {
         });
 
         services = [
+            {'service': 'BarcodeService', 'entryPoint': '/barcodes'},
             {'service': 'ConfigService', 'entryPoint': '/config'},
             {'service': 'ItemService', 'entryPoint': '/items'},
             {'service': 'SessionService', 'entryPoint': '/session'},

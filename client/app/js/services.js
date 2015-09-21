@@ -9,10 +9,10 @@ var appServices = angular.module('appServices', []);
 //    }]);
 
 
-//appServices.factory('BarcodeService', ['Restangular',
-//    function (Restangular) {
-//        return Restangular.service('barcodes');
-//    }]);
+appServices.factory('BarcodeService', ['Restangular',
+    function BarcodeService (Restangular) {
+        return Restangular.service('barcodes');
+    }]);
 
 
 appServices.factory('ConfigService', ['Restangular',

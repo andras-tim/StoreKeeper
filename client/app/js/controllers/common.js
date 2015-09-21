@@ -3,8 +3,8 @@
 var appControllers = angular.module('appControllers.common', []);
 
 
-appControllers.controller('CommonController', ['$scope', '$aside', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
-    function CommonController ($scope, $aside, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
+appControllers.controller('CommonController', ['$scope', '$timeout', '$aside', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
+    function CommonController ($scope, $timeout, $aside, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
         function initializeModalHandler() {
             var modals = [];
 
@@ -26,16 +26,58 @@ appControllers.controller('CommonController', ['$scope', '$aside', 'ConfigFactor
             $scope.$on('$routeChangeSuccess', closeAllOpenedModals);
         }
 
-        function openSidebar(type) {
-            var options = $scope.sidebars[type];
-            if (options === undefined) {
-                CommonFactory.printToConsole('Missing sidebar \'' + type + '\'');
-                return;
+        function initializeSidebarManager() {
+            var sidebars = {};
+
+            function openSidebar(type) {
+                var sidebar = sidebars[type],
+                    options = $scope.sidebars[type];
+
+                if (angular.isUndefined(sidebar)) {
+                    if (angular.isUndefined(options)) {
+                        CommonFactory.printToConsole('Missing sidebar \'' + type + '\'');
+                        return;
+                    }
+                    sidebar = $aside(options);
+                    sidebars[type] = sidebar;
+                }
+
+                sidebar.$promise.then(function () {
+                    if (!sidebar.$isShown) {
+                        sidebar.show();
+                    }
+                    setFocus(sidebar);
+                });
             }
 
-            $aside(angular.merge({
-                'show': true
-            }, options));
+            function setFocus(sidebar) {
+                $timeout(function setFocusTimeout () {
+                    var defaultElement = sidebar.$element.find('[autofocus]');
+                    if (angular.isDefined(defaultElement)) {
+                        defaultElement.focus();
+                    }
+                });
+            }
+
+            $scope.openSidebar = openSidebar;
+        }
+
+        function initializeShortcutHandler() {
+            var shortcuts = {
+                '19': function breakPause () {
+                    $scope.openSidebar('item');
+                }
+            };
+
+            function onKeyDown($event) {
+                var handler = shortcuts[$event.which];
+                if (angular.isUndefined(handler)) {
+                    return;
+                }
+                handler();
+            }
+
+            $scope.onKeyDown = onKeyDown;
         }
 
         ConfigFactory.getConfig().then(function (config) {
@@ -43,10 +85,11 @@ appControllers.controller('CommonController', ['$scope', '$aside', 'ConfigFactor
         }, CommonFactory.showResponseError);
 
         initializeModalHandler();
+        initializeSidebarManager();
+        initializeShortcutHandler();
 
         $scope.isAuthenticated = SessionFactory.isAuthenticated;
         $scope.getWindowTitle = PageFactory.getWindowTitle;
-        $scope.openSidebar = openSidebar;
     }]);
 
 
