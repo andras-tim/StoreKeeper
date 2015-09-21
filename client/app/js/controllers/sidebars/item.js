@@ -113,6 +113,31 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$rootScope', '$s
             }
         }
 
+        function deleteItem(itemIndex) {
+            var readItem = data.readItems[itemIndex],
+                message;
+
+            if (readItem.id) {
+                message = gettextCatalog.getString(
+                    'Do you want to delete item "{{ name }}" ({{ quantity }} {{ unit }})', {
+                        'name': readItem.item.name,
+                        'quantity': readItem.quantity,
+                        'unit': readItem.item.unit.unit
+                    });
+            } else {
+                message = gettextCatalog.getString(
+                    'Do you want to delete item "{{ barcode }}" ({{ quantity }})', {
+                        'barcode': readItem.barcode,
+                        'quantity': readItem.quantity
+                    });
+            }
+
+            if ($window.confirm(message)) {
+                data.readItems.splice(itemIndex, 1);
+                persistentStorage.save();
+            }
+        }
+
         if (!data.readItems) {
             data.readItems = [];
         }
@@ -128,4 +153,5 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$rootScope', '$s
         $scope.save = persistentStorage.save;
         $scope.addNewBarcode = addNewBarcode;
         $scope.clearReadItems = clearReadItems;
+        $scope.deleteItem = deleteItem;
     }]);
