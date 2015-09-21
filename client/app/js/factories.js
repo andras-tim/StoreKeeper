@@ -17,9 +17,9 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', '$filter'
             });
         }
 
-        function printToConsole(data) {
+        function printToConsole(message, data) {
             if (ConfigFactory.getDebug()) {
-                $log.debug(data);
+                $log.debug(message, data);
             }
         }
 

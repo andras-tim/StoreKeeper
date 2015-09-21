@@ -3,7 +3,7 @@
     <div class="aside-content" ng-controller="BarcodeSidebarController">
 
       <div class="aside-header">
-        <h4 class="aside-title"><i class="fa fa-barcode"></i> <span translate>Barcode Reader</span></h4>
+        <h4 class="aside-title"><i app-icon="barcode"></i> <span translate>Barcode Reader</span></h4>
       </div>
 
       <div class="aside-body">
@@ -15,7 +15,7 @@
                 <input id="barcodeText" name="barcode" type="text" class="form-control" placeholder="{{ 'Enter barcode' | translate }}" />
                 <span class="input-group-btn">
                   <button class="btn btn-success" ng-click="addNewBarcode(barcodeForm.barcode)">
-                    <i class="fa fa-plus"></i>
+                    <i app-icon="add"></i>
                   </button>
                 </span>
               </div>

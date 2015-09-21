@@ -13,24 +13,15 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appControllers.views.items',
     'appControllers.sidebar.barcode',
     'appDirectives.common',
+    'appDirectives.fields',
     'appDirectives.form',
+    'appDirectives.icons',
     'appDirectives.modal',
     'appDirectives.table',
     'appFactories',
     'appFilters',
     'appServices'
 ]);
-
-
-storekeeperApp.config(['$modalProvider', '$tooltipProvider',
-    function ($modalProvider, $tooltipProvider) {
-        angular.extend($modalProvider.defaults, {
-            'html': true
-        });
-        angular.extend($tooltipProvider.defaults, {
-            'trigger': 'hover'
-        });
-    }]);
 
 
 storekeeperApp.config(['$routeProvider',
@@ -117,13 +108,21 @@ storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog',
     }]);
 
 
-storekeeperApp.config(['$tooltipProvider',
-    function ($tooltipProvider) {
+storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider',
+    function ($modalProvider, $tooltipProvider, $typeaheadProvider) {
+        angular.extend($modalProvider.defaults, {
+            'html': true
+        });
         angular.extend($tooltipProvider.defaults, {
+            'trigger': 'hover',
             'delay': {
                 'show': 600,
                 'hide': 100
             }
+        });
+        angular.extend($typeaheadProvider.defaults, {
+            'minLength': 0,
+            'autoSelect': true
         });
     }]);
 

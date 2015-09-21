@@ -7,16 +7,22 @@ var appTableDirectives = angular.module('appDirectives.table', []);
  * @ngdoc directive
  * @name appTablePersist
  * @restrict A
+ * @element table
  *
  * @param {string} appTablePersist unique ID of persistent storage
  *
  * @description
  * Persist table state to local storage and search of $location
+ *
+ * @example
+ * <table st-table="displayedItems" ... app-table-persist="items">
+ *   ...
+ * </table>
  */
 appTableDirectives.directive('appTablePersist',
     function appTablePersist () {
         return {
-            'require': '^stTable',
+            'require': 'stTable',
             'restrict': 'A',
             'scope': {
                 'appTablePersist': '@'
@@ -74,6 +80,17 @@ appTableDirectives.directive('appTablePersist',
  *
  * @description
  * Input box for go to page in a pager
+ *
+ * @example
+ * <nav>
+ *   <ul class="pagination">
+ *     ...
+ *     <li>
+ *       <a><app-page-input></app-page-input> / {{ numPages }}</a>
+ *     </li>
+ *     ...
+ *   </ul>
+ * </nav>
  */
 appTableDirectives.directive('appPageInput',
     function appPageInput () {

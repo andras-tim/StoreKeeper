@@ -2,7 +2,7 @@
   <span ng-controller="ItemController">
     <div class="modal-body">
       <app-details-modal-navbar>
-        <span class="navbar-brand"><i class="fa fa-cube"></i> {{ 'Item' | translate }} #{{ rowData.id }}</span>
+        <span class="navbar-brand"><i app-icon="item"></i> {{ 'Item' | translate }} #{{ rowData.id }}</span>
         <span class="navbar-brand" ng-bind="rowData.name"></span>
       </app-details-modal-navbar>
 
@@ -13,23 +13,29 @@
             <!-- Item details -->
             <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" a-modal-id="modalId">
               <app-details-modal-panel>
-                <app-form-typeahead a-name="vendor" a-model="item.vendor" a-label="{{ 'Vendor' | translate }}" a-data-source="vendor as vendor.name for vendor in $parent.vendors" a-create-callback="createVendor()" a-placeholder="{{ 'Enter vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor"></app-form-typeahead>
 
-                <app-input-form a-input-name="articleNumber" a-input-id="articleNumberInput" a-label="{{ 'Article no.' | translate }}" a-required="{{ 'Article number is required' | translate }}">
+                <app-input-form a-label="{{ 'Vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}">
+                  <app-vendor-input a-model="item.vendor"></app-vendor-input>
+                </app-input-form>
+
+                <app-input-form a-label="{{ 'Article no.' | translate }}" a-required="{{ 'Article number is required' | translate }}">
                   <input name="articleNumber" id="articleNumberInput" ng-model="item.article_number" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter article number' | translate }}" required />
                 </app-input-form>
 
-                <app-input-form a-input-name="name" a-input-id="nameInput" a-label="{{ 'Name' | translate }}" a-required="{{ 'Name is required' | translate }}">
+                <app-input-form a-label="{{ 'Name' | translate }}" a-required="{{ 'Name is required' | translate }}">
                   <input name="name" id="nameInput" ng-model="item.name" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter name of item' | translate }}" required />
                 </app-input-form>
 
-                <app-form-typeahead a-name="unit" a-model="item.unit" a-label="{{ 'Unit' | translate }}" a-data-source="unit as unit.unit for unit in $parent.units" a-create-callback="createUnit()" a-placeholder="{{ 'Enter unit' | translate }}" a-required="{{ 'Unit is required' | translate }}" a-loading-spinner="loadingUnits" a-creating-spinner="creatingUnit"></app-form-typeahead>
+                <app-input-form a-label="{{ 'Unit' | translate }}" a-required="{{ 'Unit is required' | translate }}">
+                  <app-unit-input a-model="item.unit"></app-unit-input>
+                </app-input-form>
+
               </app-details-modal-panel>
             </form>
 
             <!-- Meta -->
             <app-details-modal-panel>
-              <app-input-form a-input-name="currentQuantity" a-input-id="currentQuantityInput" a-label="{{ 'In Stock' | translate }}">
+              <app-input-form a-label="{{ 'In Stock' | translate }}">
                 <div class="input-group field-quantity">
                   <input name="currentQuantity" id="currentQuantityInput" ng-model="item.quantity" type="text" class="form-control field-quantity" readonly />
                   <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>
@@ -53,7 +59,7 @@
 
                   <tbody>
                     <tr ng-if="loadingBarcodes">
-                      <td colspan="4" class="text-center" app-spinner></td>
+                      <td colspan="4" class="text-center" app-icon="spinner"></td>
                     </tr>
                     <tr ng-repeat="barcode in barcodes | filter:filterAvailable" ng-class="{'warning': barcode.dirty}">
 
@@ -68,26 +74,26 @@
                       </td>
 
                       <td class="field-quantity">
-                        <input name="quantity" ng-model="barcode.quantity" ng-change="setBarcodeDirty(barcode, true)" type="number" min="1" class="form-control field-quantity" placeholder="{{ 'Barcode quantity' | translate }}" required />
+                        <app-quantity-input a-model="barcode.quantity" a-on-change="setBarcodeDirty(barcode, true)" app-tooltip="{{ 'Item amount for this barcode' | translate }}"></app-quantity-input>
                       </td>
 
                       <td class="field-button field-triple-button">
                         <div class="btn-group" role="group">
-                          <a ng-click="printLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i class="fa fa-print"></i></a>
-                          <a ng-click="downloadLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i class="fa fa-download"></i></a>
-                          <a ng-click="deleteBarcode(barcode)" class="btn btn-default btn-sm btn-danger" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i class="fa fa-trash-o"></i></a>
+                          <a ng-click="printLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i app-icon="print"></i></a>
+                          <a ng-click="downloadLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i app-icon="download"></i></a>
+                          <a ng-click="deleteBarcode(barcode)" class="btn btn-default btn-sm btn-danger" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i app-icon="delete"></i></a>
                         </div>
                       </td>
 
                     </tr>
                     <tr ng-if="creatingBarcode">
-                      <td colspan="4" class="text-center" app-spinner></td>
+                      <td colspan="4" class="text-center" app-icon="spinner"></td>
                     </tr>
                   </tbody>
                 </table>
 
-                <button ng-disabled="creatingBarcode" class="btn btn-success btn-sm pull-right pull-bottom" ng-click="createBarcode()">
-                  <i class="fa fa-plus"></i>
+                <button type="button" ng-disabled="creatingBarcode" class="btn btn-success btn-sm btn-sm-wide pull-right pull-bottom" ng-click="createBarcode()">
+                  <i app-icon="add"></i>
                 </button>
               </app-details-modal-panel>
             </form>
@@ -98,7 +104,7 @@
     </div>
 
     <div class="modal-footer">
-      <app-spinner ng-if="savingItem"></app-spinner>
+      <i app-icon="spinner" ng-if="savingItem"></i>
       <button type="button" class="btn btn-primary" ng-disabled="(!itemForm.$dirty && !barcodesForm.$dirty) || savingItem" ng-click="saveChanges()" translate>Save</button>
       <button type="button" class="btn btn-default" ng-click="closeModal()" translate>Close</button>
     </div>

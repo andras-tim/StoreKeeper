@@ -1,0 +1,9 @@
+<div class="input-group">
+  <!-- transclude here -->
+  <span class="input-group-btn">
+    <button type="button" class="btn btn-success" ng-disabled="!isReadyToCreate()" ng-click="aCreateCallback()">
+      <i ng-if="!(aLoadingSpinner || aCreatingSpinner)" app-icon="add"></i>
+      <i ng-if="aLoadingSpinner || aCreatingSpinner" app-icon="spinner"></i>
+    </button>
+  </span>
+</div>

@@ -13,6 +13,13 @@ var appFormDirectives = angular.module('appDirectives.form', []);
  *
  * @description
  * Wrap input element with error handler
+ *
+ * @example
+ * <ng-form name="inputForm">
+ *   <app-input-validator a-form-input="inputForm.foo" a-required="{{ aRequired }}">
+ *     <input name="foo" />
+ *   </app-input-validator>
+ * </ng-form>
  */
 appFormDirectives.directive('appInputValidator',
     function appInputValidator () {
@@ -34,8 +41,6 @@ appFormDirectives.directive('appInputValidator',
  * @name appInputForm
  * @restrict E
  *
- * @param {string} aInputId
- * @param {string} aInputName
  * @param {string} aLabel
  * @param {string} aRequired
  * @param {string=} [aLabelClass=col-sm-4]
@@ -43,17 +48,20 @@ appFormDirectives.directive('appInputValidator',
  *
  * @description
  * Nested forms and labels for inputs
+ *
+ * @example
+ * <app-input-form a-label="{{ 'Username' | translate }}" a-required="{{ 'Username is required' | translate }}">
+ *   <input name="username" id="usernameInput" ... />
+ * </app-input-form>
  */
-appFormDirectives.directive('appInputForm',
-    function appInputForm () {
+appFormDirectives.directive('appInputForm', ['$timeout', 'CommonFactory',
+    function appInputForm ($timeout, CommonFactory) {
         return {
             'require': '^form',
             'restrict': 'E',
             'transclude': true,
             'replace': true,
             'scope': {
-                'aInputId': '@',
-                'aInputName': '@',
                 'aLabel': '@',
                 'aRequired': '@',
                 'aLabelClass': '@',
@@ -67,9 +75,33 @@ appFormDirectives.directive('appInputForm',
                 if (!attrs.aInputClass) {
                     attrs.aInputClass = 'col-sm-8';
                 }
+
+                return {
+                    'post': function postLink (scope, iElement, iAttrs, iCtrl, iTransclude) {
+                        iTransclude(function (cloneElement) {
+                            element.find('ng-transclude').prepend(cloneElement);
+
+                            $timeout(function () {
+                                var inputElement = cloneElement.find('input').addBack('input');
+
+                                if (inputElement.length !== 1) {
+                                    CommonFactory.printToConsole('Can not clearly identify the input element in <app-input-form>', {
+                                        'element': iElement,
+                                        'cloneElement': cloneElement,
+                                        'inputElement': inputElement
+                                    });
+                                }
+
+                                scope.aInputId = inputElement.attr('id');
+                                scope.aInputName = inputElement.attr('name');
+                            });
+
+                        });
+                    }
+                };
             }
         };
-    });
+    }]);
 
 
 /**
@@ -81,6 +113,11 @@ appFormDirectives.directive('appInputForm',
  *
  * @description
  * Label for input[@type="checkbox"] elements
+ *
+ * @example
+ * <app-checkbox-label a-label="{{ 'Remember me' | translate }}">
+ *   <input type="checkbox" ... />
+ * </app-checkbox-label>
  */
 appFormDirectives.directive('appCheckboxLabel',
     function appCheckboxLabel () {
@@ -100,11 +137,17 @@ appFormDirectives.directive('appCheckboxLabel',
  * @ngdoc directive
  * @name appTooltip
  * @restrict A
+ * @element ANY
  *
  * @param {string} appTooltip
  *
  * @description
  * Tooltip for form elements
+ *
+ * @example
+ * <ANY app-tooltip="{{ 'Test message' | translate }}">
+ *   ...
+ * </ANY>
  */
 appFormDirectives.directive('appTooltip', ['$tooltip',
     function appTooltip ($tooltip) {
@@ -128,61 +171,69 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
 
 /**
  * @ngdoc directive
- * @name appFormTypeahead
+ * @name appTypeaheadHelper
  * @restrict E
  *
- * @param {string} aName
- * @param {object} aModel
- * @param {string} aDataSource
- * @param {string} aLabel
- * @param {string} aPlaceholder
- * @param {string} aRequired
  * @param {function} aCreateCallback
  * @param {object=} [aLoadingSpinner]
  * @param {object=} [aCreatingSpinner]
- * @param {string=} [aLabelClass=col-sm-4]
- * @param {string=} [aInputClass=col-sm-8]
  *
  * @description
- * Typeahead for forms
+ * Extend typeahead input[@type="text"] by add new element button and spinners.
+ *
+ * @example
+ * <app-typeahead-helper a-create-callback="createVendor()" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor">
+ *   <input ng-model="item.vendor" bs-options="vendor as vendor.name for vendor in vendors" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
+ * </app-typeahead-helper>
  */
-appFormDirectives.directive('appFormTypeahead',
-    function appFormTypeahead () {
+appFormDirectives.directive('appTypeaheadHelper', ['$timeout',
+    function appTypeaheadHelper ($timeout) {
         return {
-            'require': '^form',
             'restrict': 'E',
+            'transclude': true,
+            'replace': true,
             'scope': {
-                'aName': '@',
-                'aModel': '=',
-                'aDataSource': '@',
-                'aLabel': '@',
-                'aPlaceholder': '@',
-                'aRequired': '@',
                 'aCreateCallback': '&',
                 'aLoadingSpinner': '=',
-                'aCreatingSpinner': '=',
-                'aLabelClass': '@',
-                'aInputClass': '@'
+                'aCreatingSpinner': '='
             },
-            'templateUrl': 'partials/widgets/form-typeahead.html',
-            'compile': function (element, attrs) {
-                if (!attrs.aLabelClass) {
-                    attrs.aLabelClass = 'col-sm-4';
-                }
-                if (!attrs.aInputClass) {
-                    attrs.aInputClass = 'col-sm-8';
-                }
+            'templateUrl': 'partials/widgets/form/typeahead-helper.html',
+            'link': function (scope, element, attrs, ctrl, transclude) {
+                transclude(function (cloneElement) {
+                    element.prepend(cloneElement);
+
+                    $timeout(function () {
+                        scope.aModelController = angular.element(cloneElement).data('$ngModelController');
+                    });
+
+                    element.on('keydown', function (event) {
+                        if (event.which === 13 && scope.isReadyToCreate()) {
+                            scope.aCreateCallback();
+                        }
+                    });
+                });
             },
             'controller': ['$scope',
                 function ($scope) {
-                    var isFilled = function isFilled (modelRef) {
-                        return typeof modelRef === 'object';
-                    };
+                    function getModel() {
+                        if ($scope.aModelController) {
+                            return $scope.aModelController.$modelValue;
+                        }
+                        return undefined;
+                    }
 
-                    $scope.isFilled = isFilled;
+                    function isFilled() {
+                        return typeof getModel() === 'object';
+                    }
+
+                    function isReadyToCreate() {
+                        return getModel() && !isFilled() && !$scope.aLoadingSpinner && !$scope.aCreatingSpinner;
+                    }
+
+                    $scope.isReadyToCreate = isReadyToCreate;
                 }]
         };
-    });
+    }]);
 
 
 /**
@@ -194,6 +245,11 @@ appFormDirectives.directive('appFormTypeahead',
  *
  * @description
  * For easy indent objects without left-side label
+ *
+ * @example
+ * <app-indented-form-group>
+ *   <button></button>
+ * </app-indented-form-group>
  */
 appFormDirectives.directive('appIndentedFormGroup',
     function appIndentedFormGroup () {
@@ -201,10 +257,11 @@ appFormDirectives.directive('appIndentedFormGroup',
             'require': '^form',
             'restrict': 'E',
             'transclude': true,
+            'replace': true,
             'scope': {
                 'aClass': '@'
             },
-            'template': '<div class="form-group"><div class="{{ aClass }}" ng-transclude></div></div>',
+            'templateUrl': 'partials/widgets/form/indented-form-group.html',
             'compile': function (element, attrs) {
                 if (!attrs.aClass) {
                     attrs.aClass = 'col-sm-offset-4 col-sm-8';

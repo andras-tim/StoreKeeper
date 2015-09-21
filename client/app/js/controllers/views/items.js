@@ -47,32 +47,8 @@ appItemViewControllers.controller('ItemsController', ['$scope', '$location', '$m
     }]);
 
 
-appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Restangular', 'gettextCatalog', 'VendorService', 'UnitService', 'CommonFactory',
-    function ItemController ($scope, $window, $q, Restangular, gettextCatalog, VendorService, UnitService, CommonFactory) {
-        function createVendor() {
-            var completedNewVendor = {'name': $scope.item.vendor};
-
-            CommonFactory.handlePromise(
-                VendorService.post(Restangular.copy(completedNewVendor)),
-                'creatingVendor',
-                function (resp) {
-                    $scope.vendors.push(resp);
-                    $scope.item.vendor = resp;
-                });
-        }
-
-        function createUnit() {
-            var completedNewUnit = { 'unit': $scope.item.unit };
-
-            CommonFactory.handlePromise(
-                UnitService.post(Restangular.copy(completedNewUnit)),
-                'creatingUnit',
-                function (resp) {
-                    $scope.units.push(resp);
-                    $scope.item.unit = resp;
-                });
-        }
-
+appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Restangular', 'gettextCatalog', 'CommonFactory',
+    function ItemController ($scope, $window, $q, Restangular, gettextCatalog, CommonFactory) {
         function saveChanges() {
             $scope.$broadcast('show-errors-check-validity');
 
@@ -256,22 +232,6 @@ appItemViewControllers.controller('ItemController', ['$scope', '$window', '$q', 
                 $scope.barcodes = barcodes;
             });
 
-        CommonFactory.handlePromise(
-            VendorService.getList(),
-            'loadingVendors',
-            function (vendors) {
-                $scope.vendors = vendors;
-            });
-
-        CommonFactory.handlePromise(
-            UnitService.getList(),
-            'loadingUnits',
-            function (units) {
-                $scope.units = units;
-            });
-
-        $scope.createVendor = createVendor;
-        $scope.createUnit = createUnit;
         $scope.createBarcode = createBarcode;
         $scope.filterAvailable = filterAvailable;
         $scope.setBarcodeDirty = setBarcodeDirty;

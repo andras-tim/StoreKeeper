@@ -1,7 +1,8 @@
 <div class="container">
   <div class="container-fluid">
-    <h2><i class="fa fa-cube"></i> <span ng-bind="'Items' | translate | setTitle"></span></h2>
+    <h2><i app-icon="items"></i> <span ng-bind="'Items' | translate | setTitle"></span></h2>
 
+    <div class="table-responsive"></div>
     <table st-table="displayedItems" st-safe-src="items" st-set-filter="isContainedInNested" app-table-persist="items" class="table table-striped table-hover">
       <thead>
         <tr class="clickable">
@@ -23,7 +24,7 @@
 
       <tbody>
         <tr ng-if="loadingItems">
-          <td colspan="5" class="text-center" app-spinner></td>
+          <td colspan="5" class="text-center" app-icon="spinner"></td>
         </tr>
         <tr ng-repeat="item in displayedItems" ng-click="openItem(item)" class="clickable">
           <td class="field-vendor">{{ item.vendor.name }}</td>
