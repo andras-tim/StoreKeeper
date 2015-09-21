@@ -79,9 +79,9 @@
 
                       <td class="field-button field-triple-button">
                         <div class="btn-group" role="group">
-                          <a ng-click="printLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i app-icon="print"></i></a>
-                          <a ng-click="downloadLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i app-icon="download"></i></a>
-                          <a ng-click="deleteBarcode(barcode)" class="btn btn-danger btn-sm" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i app-icon="delete"></i></a>
+                          <button type="button" ng-click="printLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i app-icon="print"></i></button>
+                          <button type="button" ng-click="downloadLabel(barcode)" ng-disabled="!barcode.main || barcode.dirtyForLabel" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i app-icon="download"></i></button>
+                          <button type="button" ng-click="deleteBarcode(barcode)" class="btn btn-danger btn-sm" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i app-icon="delete"></i></button>
                         </div>
                       </td>
 
@@ -105,7 +105,7 @@
 
     <div class="modal-footer">
       <i app-icon="spinner" ng-if="savingItem"></i>
-      <button type="button" class="btn btn-primary" ng-disabled="(!itemForm.$dirty && !barcodesForm.$dirty) || savingItem" ng-click="saveChanges()" translate>Save</button>
+      <button type="button" class="btn btn-primary" ng-disabled="(!itemForm.$dirty && !barcodesForm.$dirty) || !itemForm.$valid || !barcodesForm.$valid || savingItem" ng-click="saveChanges()" translate>Save</button>
       <button type="button" class="btn btn-default" ng-click="closeModal()" translate>Close</button>
     </div>
 

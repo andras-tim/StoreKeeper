@@ -52,10 +52,10 @@
             </div>
             <div class="row">
               <div class="btn-group pull-right" role="group">
-                <a class="btn btn-default btn-sm" ng-if="!readItem.id" app-tooltip="{{ 'Add as new item' | translate }}"><i app-icon="add"></i></a>
-                <a class="btn btn-default btn-sm" ng-if="!readItem.id" app-tooltip="{{ 'Assign to an existing item' | translate }}"><i app-icon="assign"></i></a>
-                <a class="btn btn-default btn-sm" ng-if="readItem.id" app-tooltip="{{ 'Print label' | translate }}"><i app-icon="print"></i></a>
-                <a class="btn btn-danger btn-sm" ng-click="deleteItem($index)" app-tooltip="{{ 'Remove this item' | translate }}"><i app-icon="delete"></i></a>
+                <button type="button" class="btn btn-default btn-sm" ng-if="!readItem.id" app-tooltip="{{ 'Add as new item' | translate }}"><i app-icon="add"></i></button>
+                <button type="button" class="btn btn-default btn-sm" ng-if="!readItem.id" app-tooltip="{{ 'Assign to an existing item' | translate }}"><i app-icon="assign"></i></button>
+                <button type="button" class="btn btn-default btn-sm" ng-if="readItem.id" app-tooltip="{{ 'Print label' | translate }}"><i app-icon="print"></i></button>
+                <button type="button" class="btn btn-danger btn-sm" ng-click="deleteItem($index)" app-tooltip="{{ 'Remove this item' | translate }}"><i app-icon="delete"></i></button>
               </div>
             </div>
           </div>
@@ -65,9 +65,9 @@
 
       <div class="aside-footer">
         <div class="btn-group" role="group">
-          <a class="btn btn-default" ng-disabled="!readItems.length" app-tooltip="{{ 'Print labels for all item' | translate }}"><i app-icon="print"></i></a>
-          <a class="btn btn-danger" ng-disabled="!readItems.length" ng-click="clearReadItems()" app-tooltip="{{ 'Clean up item list' | translate }}"><i app-icon="delete"></i></a>
-          <a class="btn btn-success" ng-disabled="!readItems.length" app-tooltip="{{ 'Add to current view' | translate }}"><i app-icon="addToView"></i></a>
+          <button type="button" class="btn btn-default" ng-disabled="!readItems.length" app-tooltip="{{ 'Print labels for all item' | translate }}"><i app-icon="print"></i></button>
+          <button type="button" class="btn btn-danger" ng-disabled="!readItems.length" ng-click="clearReadItems()" app-tooltip="{{ 'Clean up item list' | translate }}"><i app-icon="delete"></i></button>
+          <button type="button" class="btn btn-success" ng-disabled="!readItems.length" app-tooltip="{{ 'Add to current view' | translate }}"><i app-icon="addToView"></i></button>
         </div>
       </div>
 
