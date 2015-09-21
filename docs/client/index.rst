@@ -10,3 +10,5 @@ The UI of **StoreKeeper** will be implemented in `AngularStrap <http://mgcrea.gi
 
 .. toctree::
    :maxdepth: 1
+
+   api/index

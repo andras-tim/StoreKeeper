@@ -7,6 +7,7 @@ function do_clear()
 
 function do_build()
 {
+    run render_ngdoc
     make html
 }
 
@@ -24,6 +25,11 @@ function do_start()
 function do_render_db_model()
 {
     ../server/flask/bin/python3 'utils/db_model_renderer.py' "$@"
+}
+
+function do_render_ngdoc()
+{
+    utils/ngdoc_renderer.sh render_ngdoc "$@"
 }
 
 

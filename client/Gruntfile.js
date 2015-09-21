@@ -201,6 +201,14 @@ module.exports = function (grunt) {
                 ],
                 'tasks': ['nggettext_extract', 'app_index_html']
             }
+        },
+
+        'dgeni': {
+            'options': {
+                'basePath': 'app/js'
+            },
+            'src': ['**/*.js'],
+            'dest': grunt.option('d') || grunt.option('destination') || 'tmp/dgeni'
         }
     });
 
@@ -213,6 +221,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks('grunt-dgeni');
 
     grunt.registerTask('app_res', 'Prepare external resources', [
         'copy'
