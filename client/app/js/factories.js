@@ -230,3 +230,30 @@ appFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionService', '
             'logout': logout
         };
     }]);
+
+
+appFactories.factory('PersistFactory', ['CommonFactory',
+    function PersistFactory (CommonFactory) {
+        function load(name, version) {
+            var storage = JSON.parse(localStorage.getItem(name)) || {};
+
+            if (storage.version !== version) {
+                CommonFactory.printToConsole('Persistent factory version mismatch; request=' + name + ':' + version, storage);
+                storage = {
+                    'version': version,
+                    'data': {}
+                };
+            }
+
+            return {
+                'data': storage.data,
+                'save': function () {
+                    localStorage.setItem(name, JSON.stringify(storage));
+                }
+            };
+        }
+
+        return {
+            'load': load
+        };
+    }]);
