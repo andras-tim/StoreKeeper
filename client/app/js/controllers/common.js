@@ -62,12 +62,31 @@ appControllers.controller('CommonController', ['$scope', '$timeout', '$aside', '
             $scope.openSidebar = openSidebar;
         }
 
+        function initializeShortcutHandler() {
+            var shortcuts = {
+                '19': function breakPause () {
+                    $scope.openSidebar('item');
+                }
+            };
+
+            function onKeyDown($event) {
+                var handler = shortcuts[$event.which];
+                if (angular.isUndefined(handler)) {
+                    return;
+                }
+                handler();
+            }
+
+            $scope.onKeyDown = onKeyDown;
+        }
+
         ConfigFactory.getConfig().then(function (config) {
             $scope.appTitle = config.app_title;
         }, CommonFactory.showResponseError);
 
         initializeModalHandler();
         initializeSidebarManager();
+        initializeShortcutHandler();
 
         $scope.isAuthenticated = SessionFactory.isAuthenticated;
         $scope.getWindowTitle = PageFactory.getWindowTitle;
