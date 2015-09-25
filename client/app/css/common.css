@@ -23,3 +23,8 @@ button.btn-sm.btn-sm-wide {
     padding-left: 20px;
     padding-right: 20px;
 }
+
+button.btn.btn-wide {
+    padding-left: 24px;
+    padding-right: 24px;
+}

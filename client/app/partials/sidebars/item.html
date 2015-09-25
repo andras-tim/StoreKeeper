@@ -50,7 +50,7 @@
                 <div class="input-group-addon field-unit-beside-quantity" ng-bind="readItem.item.unit.unit"></div>
               </div>
             </div>
-            <div class="row">
+            <div class="row commands">
               <div class="btn-group pull-right" role="group">
                 <button type="button" class="btn btn-default btn-sm" ng-click="addNewItem($index, readItem)" ng-if="!readItem.data.id" app-tooltip="{{ 'Add as new item' | translate }}"><i app-icon="add"></i></button>
                 <button type="button" class="btn btn-default btn-sm" ng-click="assignToItem($index, readItem)" ng-if="!readItem.data.id" app-tooltip="{{ 'Assign to an existing item' | translate }}"><i app-icon="assign"></i></button>
@@ -65,9 +65,9 @@
 
       <div class="aside-footer">
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-default" ng-disabled="!readItems.length" ng-click="printAll()" app-tooltip="{{ 'Print labels for all item' | translate }}"><i app-icon="print"></i></button>
-          <button type="button" class="btn btn-danger" ng-disabled="!readItems.length" ng-click="removeAll()" app-tooltip="{{ 'Remove all items from list' | translate }}"><i app-icon="delete"></i></button>
-          <button type="button" class="btn btn-success" ng-disabled="!readItems.length" ng-click="addToCurrentView()" app-tooltip="{{ 'Add to current view' | translate }}"><i app-icon="addToView"></i></button>
+          <button type="button" class="btn btn-default btn-wide" ng-disabled="!readItems.length" ng-click="printAll()" app-tooltip="{{ 'Print labels for all item' | translate }}"><i app-icon="print"></i></button>
+          <button type="button" class="btn btn-danger btn-wide" ng-disabled="!readItems.length" ng-click="removeAll()" app-tooltip="{{ 'Remove all items from list' | translate }}"><i app-icon="delete"></i></button>
+          <button type="button" class="btn btn-success btn-wide" ng-disabled="!readItems.length" ng-click="addToCurrentView()" app-tooltip="{{ 'Add to current view' | translate }}"><i app-icon="addToView"></i></button>
         </div>
       </div>
 

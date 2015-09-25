@@ -16,3 +16,7 @@
 .aside .aside-dialog .row.row-item {
     margin-right: 0;
 }
+
+.aside .aside-dialog .row.row-item .row.commands {
+    margin-top: 4px;
+}
