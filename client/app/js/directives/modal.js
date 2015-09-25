@@ -8,11 +8,13 @@ var appModalDirectives = angular.module('appDirectives.modal', []);
  * @name appDetailsModal
  * @restrict E
  *
+ * @param {expression} aBigModal
+ *
  * @description
  * Root object for AngularStrap style modals
  *
  * @example
- * <app-details-modal>
+ * <app-details-modal a-big-modal="true">
  *   <span ng-controller="ItemController">
  *     <div class="modal-body">
  *       <app-details-modal-navbar>
@@ -34,7 +36,9 @@ appModalDirectives.directive('appDetailsModal',
             'restrict': 'E',
             'transclude': true,
             'replace': true,
-            'scope': true,
+            'scope': {
+                'aBigModal': '='
+            },
             'templateUrl': 'partials/widgets/modal/details_modal.html'
         };
     });
@@ -73,6 +77,8 @@ appModalDirectives.directive('appDetailsModalNavbar',
  * @name appDetailsModalPanel
  * @restrict E
  *
+ * @param {expression} aHalfWidth
+ *
  * @description
  * Common navbar object for modals
  *
@@ -92,7 +98,9 @@ appModalDirectives.directive('appDetailsModalPanel',
             'restrict': 'E',
             'transclude': true,
             'replace': true,
-            'scope': true,
+            'scope': {
+                'aHalfWidth': '='
+            },
             'templateUrl': 'partials/widgets/modal/details_modal_panel.html'
         };
     });
