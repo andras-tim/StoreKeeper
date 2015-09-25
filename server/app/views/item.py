@@ -162,8 +162,8 @@ class ItemBarcodePrintView(BaseNestedView):
         barcode = self._get_item_by_filter(item_id=item_id, id=id)
 
         copies = 1
-        if hasattr(data, 'copies'):
-            copies = data.copies
+        if 'copies' in data.keys():
+            copies = data['copies']
 
         try:
             label_printer = _get_label_printer(barcode)
