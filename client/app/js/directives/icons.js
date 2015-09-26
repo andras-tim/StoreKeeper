@@ -38,7 +38,6 @@ appIconsDirectives.constant('iconList', {
  * @restrict A
  *
  * @param {string} appIcon
- * @param {string} aIcon
  *
  * @description
  * Substitutes with the selected icon
@@ -46,13 +45,16 @@ appIconsDirectives.constant('iconList', {
  * @example
  * <i app-icon="item"></i>
  */
-appIconsDirectives.directive('appIcon', ['iconList', 'CommonFactory',
-    function appIcon (iconList, CommonFactory) {
+appIconsDirectives.directive('appIcon', ['$compile', 'iconList', 'CommonFactory',
+    function appIcon ($compile, iconList, CommonFactory) {
         return {
             'restrict': 'A',
             'replace': true,
-            'compile': function (element, attrs) {
-                var iconId = attrs.appIcon,
+            'scope': {
+                'appIcon': '@'
+            },
+            'link': function (scope, element) {
+                var iconId = scope.appIcon,
                     iconClass = iconList[iconId];
 
                 if (iconClass === undefined) {
