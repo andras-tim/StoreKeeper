@@ -28,3 +28,12 @@ button.btn.btn-wide {
     padding-left: 24px;
     padding-right: 24px;
 }
+
+button.btn.btn-toggle-wide {
+    padding-left: 24px;
+    padding-right: 12px;
+}
+
+button.btn.dropdown-toggle {
+    padding: 6px 8px;
+}
