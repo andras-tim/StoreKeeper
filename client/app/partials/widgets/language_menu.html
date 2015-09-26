@@ -1,6 +1,6 @@
 <ul tabindex="-1" class="dropdown-menu" role="menu">
   <li role="presentation" ng-class="{divider: item.divider}" ng-repeat="item in content" >
-    <a role="menuitem" tabindex="-1" href="javascript:void(0)" ng-click="changeLanguage(item.language)" ng-if="!item.divider">
+    <a href ng-if="!item.divider" role="menuitem" tabindex="-1" ng-click="changeLanguage(item.language)">
       <span class="flag-icon flag-icon-{{ item.flag || item.language }}"></span> {{ item.title }}
     </a>
   </li>
