@@ -3,8 +3,8 @@
 var appFactories = angular.module('appFactories', []);
 
 
-appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', '$filter', 'gettextCatalog', 'ConfigFactory',
-    function CommonFactory ($rootScope, $alert, $log, $filter, gettextCatalog, ConfigFactory) {
+appFactories.factory('CommonFactory', ['$rootScope', '$q', '$timeout', '$alert', '$log', '$filter', 'gettextCatalog', 'ConfigFactory',
+    function CommonFactory ($rootScope, $q, $timeout, $alert, $log, $filter, gettextCatalog, ConfigFactory) {
         function showErrorPopup(title, content) {
             $alert({
                 'title': title,
@@ -56,10 +56,50 @@ appFactories.factory('CommonFactory', ['$rootScope', '$alert', '$log', '$filter'
             return promise;
         }
 
+        function createDelayedPromiseCallback(promiseCallback, delayMs) {
+            var previousQuery;
+
+            function callback(argument) {
+                var result = $q.defer();
+
+                if (angular.isDefined(previousQuery)) {
+                    previousQuery.reject();
+                }
+                previousQuery = result;
+
+                $timeout(function () {
+                    if (result.promise.$$state.status === 0) {
+                        promiseCallback(argument).then(function (data) {
+                            result.resolve(data);
+                        }, function (data) {
+                            result.reject(data);
+                        });
+                    }
+                }, delayMs);
+
+                return result.promise;
+            }
+
+            function cancel() {
+                if (previousQuery) {
+                    previousQuery.reject();
+                }
+            }
+
+            delayMs = delayMs || 600;
+
+            return {
+                'callback': callback,
+                'cancel': cancel
+            };
+        }
+
+
         return {
             'showResponseError': showResponseError,
             'printToConsole': printToConsole,
-            'handlePromise': handlePromise
+            'handlePromise': handlePromise,
+            'createDelayedPromiseCallback': createDelayedPromiseCallback
         };
     }]);
 
@@ -255,5 +295,53 @@ appFactories.factory('PersistFactory', ['CommonFactory',
 
         return {
             'load': load
+        };
+    }]);
+
+
+appFactories.factory('TypeaheadFactory', ['$typeahead', '$parseOptions',
+    function TypeaheadFactory ($typeahead, $parseOptions) {
+        // based on angular-strap.js
+
+        var defaults = $typeahead.defaults,
+
+            getParsedOptions = function getParsedOptions (options) {
+                var filter = options.filter || defaults.filter,
+                    limit = options.limit || defaults.limit,
+                    comparator = options.comparator || defaults.comparator,
+                    bsOptions = options.bsOptions;
+
+                if (filter) {
+                    bsOptions += ' | ' + filter + ':$viewValue';
+                }
+                if (comparator) {
+                    bsOptions += ':' + comparator;
+                }
+                if (limit) {
+                    bsOptions += ' | limitTo:' + limit;
+                }
+
+                return $parseOptions(bsOptions);
+            },
+
+            createTypeahead = function createTypeahead (scope, element, controller, options) {
+                var parsedOptions = getParsedOptions(options),
+                    typeahead = $typeahead(element, controller, options),
+
+                    updateTypeahead = function updateTypeahead () {
+                        parsedOptions.valuesFn(scope, controller).then(function (values) {
+                            typeahead.update(values);
+                            controller.$render();
+                        });
+                    };
+
+                return {
+                    'object': typeahead,
+                    'update': updateTypeahead
+                };
+            };
+
+        return {
+            'createTypeahead': createTypeahead
         };
     }]);
