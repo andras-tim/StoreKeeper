@@ -117,7 +117,7 @@ storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider
         angular.extend($tooltipProvider.defaults, {
             'trigger': 'hover',
             'delay': {
-                'show': 600,
+                'show': 800,
                 'hide': 100
             }
         });

@@ -140,12 +140,13 @@ appFormDirectives.directive('appCheckboxLabel',
  * @element ANY
  *
  * @param {string} appTooltip
+ * @param {string} aPlacement
  *
  * @description
  * Tooltip for form elements
  *
  * @example
- * <ANY app-tooltip="{{ 'Test message' | translate }}">
+ * <ANY app-tooltip="{{ 'Test message' | translate }}" a-placement="bottom-left">
  *   ...
  * </ANY>
  */
@@ -157,12 +158,19 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
             'link': function (scope, element, attrs) {
                 var tooltip;
                 attrs.$observe('appTooltip', function (newValue) {
+                    var options;
                     if (tooltip !== undefined) {
                         tooltip.destroy();
                     }
-                    tooltip = $tooltip(element, {
+
+                    options = {
                         'title': newValue
-                    });
+                    };
+                    if (attrs.aPlacement) {
+                        options.placement = attrs.aPlacement;
+                    }
+
+                    tooltip = $tooltip(element, options);
                 });
             }
         };
