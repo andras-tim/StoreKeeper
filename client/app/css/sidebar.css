@@ -1,6 +1,11 @@
 .aside {
     max-width: 400px;
 }
+@media (max-width: 1142px) {
+    .aside {
+        max-width: 35%;
+    }
+}
 
 .aside .aside-dialog .aside-body {
     padding: 0 10px 10px;
