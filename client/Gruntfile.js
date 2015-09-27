@@ -4,8 +4,7 @@ module.exports = function (grunt) {
     var production = grunt.option('p') || grunt.option('production');
 
     grunt.initConfig({
-        'pkg': grunt.file.readJSON('package.json'),
-        'banner': '<%= pkg.name %> v<%= pkg.version %> | ' + '<%= pkg.author %> | <%= pkg.license %> Licensed | ' +
+        'banner': '<%= grunt.package.name %> v<%= grunt.package.version %> | ' + '<%= grunt.package.author %> | <%= grunt.package.license %> Licensed | ' +
                   '<%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>',
         'min': production ? '.min' : '',
 
@@ -162,7 +161,7 @@ module.exports = function (grunt) {
                 'dest': 'app/index.html',
                 'replacements': [{
                     'from': /(|\.min)\.(css|js)[^"]*"/g,
-                    'to': '.min.$2?v=<%= pkg.version %>"'
+                    'to': '.min.$2?v=<%= grunt.package.version %>"'
                 }]
             }
         },
