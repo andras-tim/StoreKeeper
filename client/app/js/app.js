@@ -108,8 +108,8 @@ storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog',
     }]);
 
 
-storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider',
-    function ($modalProvider, $tooltipProvider, $typeaheadProvider) {
+storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider', '$asideProvider',
+    function ($modalProvider, $tooltipProvider, $typeaheadProvider, $asideProvider) {
         angular.extend($modalProvider.defaults, {
             'html': true,
             'keyboard': false
@@ -124,6 +124,9 @@ storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider
         angular.extend($typeaheadProvider.defaults, {
             'minLength': 0,
             'autoSelect': true
+        });
+        angular.extend($asideProvider.defaults, {
+            'show': false
         });
     }]);
 

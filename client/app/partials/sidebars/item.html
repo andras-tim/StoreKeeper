@@ -4,7 +4,7 @@
 
       <div class="aside-header">
         <h4 class="aside-title">
-          <i app-icon="barcode"></i> <span translate>Item finder</span><span ng-if="loadingBarcodes || loadingBarcodesItem" app-icon="spinner" class="pull-right"></span>
+          <i app-icon="search"></i> <span translate>Item finder</span><span ng-if="loadingBarcodes || loadingBarcodesItem" app-icon="spinner" class="pull-right"></span>
         </h4>
         <div class="row">
           <div class="col-md-offset-1 col-md-10">
@@ -38,7 +38,7 @@
               {{ readItem.item.vendor.name }}<br/>
             </div>
             <div ng-if="!readItem.data.id">
-              <strong><i app-icon="new"></i> <i>{{ 'Unknown item' | translate }}</i></strong><br/>
+              <strong><i app-icon="barcode"></i> <i>{{ 'Unknown item' | translate }}</i></strong><br/>
               {{ readItem.data.barcode }}<br/>
             </div>
           </div>

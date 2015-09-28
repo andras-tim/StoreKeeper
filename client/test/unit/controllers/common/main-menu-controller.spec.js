@@ -26,6 +26,7 @@ describe('Controllers/Common: MainMenuController', function () {
             },
 
             mocks = {
+                '$aside': {},
                 'gettextCatalog': {
                     'currentLanguage': 'hu',
                     'setCurrentLanguage': function () {}
@@ -41,6 +42,7 @@ describe('Controllers/Common: MainMenuController', function () {
             },
 
             dependencies = {
+                '$aside': mocks.$aside,
                 'gettextCatalog': mocks.gettextCatalog,
                 'ConfigFactory': mocks.ConfigFactory,
                 'CommonFactory': mocks.CommonFactory
