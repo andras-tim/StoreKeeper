@@ -246,6 +246,94 @@ appFormDirectives.directive('appTypeaheadHelper', ['$timeout',
 
 /**
  * @ngdoc directive
+ * @name appLazyTypeahead
+ * @restrict A
+ * @element input
+ *
+ * @param {string} appLazyTypeahead
+ * @param {func} aDataFetcher
+ * @param {expression=} [aTimeout=300]
+ *
+ * @description
+ * Timeout slowed, backend fetcher based typeahead
+ *
+ * @example
+ * <input name="item" id="itemTypeahead" ng-model="data.item" app-lazy-typeahead="partials/widgets/fields/item-input-typeahead.html" a-data-fetcher="getData()" />
+ */
+appFormDirectives.directive('appLazyTypeahead', ['$q', '$timeout', '$typeahead', '$parseOptions', 'CommonFactory', 'TypeaheadFactory',
+    function appLazyTypeahead ($q, $timeout, $typeahead, $parseOptions, CommonFactory, TypeaheadFactory) {
+        return {
+            'require': 'ngModel',
+            'restrict': 'A',
+            'scope': {
+                'appLazyTypeahead': '@',
+                'aDataFetcher': '&',
+                'aTimeout': '='
+            },
+            'link': function (scope, element, attrs, controller) {
+                var options,
+                    typeahead,
+
+                    delayedPromise = CommonFactory.createDelayedPromiseCallback(function (filter) {
+                        var result = $q.defer();
+
+                        if (filter) {
+                            scope.aDataFetcher()(filter, typeahead.object.$options.limit).then(
+                                function (items) {
+                                    result.resolve(items);
+                                },
+                                result.reject);
+                        } else {
+                            result.reject();
+                        }
+
+                        return result.promise;
+                    }, scope.aTimeout),
+
+                onItemChange = function onItemChange (newItem) {
+                    if (scope.data.elements) {
+                        scope.data.elements = [];
+                        typeahead.update();
+                    }
+
+                    if (angular.isUndefined(newItem) || angular.isObject(newItem)) {
+                        delayedPromise.cancel();
+                        return;
+                    }
+
+                    delayedPromise.callback(newItem).then(function (items) {
+                        scope.data.elements = items;
+                        typeahead.update();
+                    });
+                };
+
+
+                scope.data = {
+                    'elements': []
+                };
+
+                options = {
+                    'scope': scope,
+                    'bsOptions': 'element for element in data.elements',
+                    'minLength': 1,
+                    'autoSelect': false,
+                    'templateUrl': scope.appLazyTypeahead
+                };
+
+                typeahead = TypeaheadFactory.createTypeahead(scope, element, controller, options);
+
+                scope.$watch(function () {
+                    return controller.$modelValue;
+                }, function (newValue) {
+                    onItemChange(newValue);
+                });
+            }
+        };
+    }]);
+
+
+/**
+ * @ngdoc directive
  * @name appIndentedFormGroup
  * @restrict E
  *
