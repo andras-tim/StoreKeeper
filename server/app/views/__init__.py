@@ -22,6 +22,7 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
         'error': (error.ErrorView, '/error'),
 
         'item_list': (item.ItemListView, '/items'),
+        'item_search': (item.ItemSearchListView, '/items/search'),
         'item': (item.ItemView, '/items/<int:id>'),
         'item_barcode_list': (item.ItemBarcodeListView, '/items/<int:id>/barcodes'),
         'item_barcode': (item.ItemBarcodeView, '/items/<int:item_id>/barcodes/<int:id>'),

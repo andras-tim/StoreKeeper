@@ -127,6 +127,22 @@ class ItemDeserializer(Serializer):
     unit = fields.Nested(UnitDeserializer(), required=True)
 
 
+class ItemSearchSerializer(Serializer):
+    class Meta:
+        skip_missing = True
+
+    type = fields.Str(required=True)
+    item_id = fields.Int(required=True)
+
+    name = fields.Str()
+    article_number = fields.Str()
+    vendor = fields.Str()
+    unit = fields.Str()
+
+    barcode = fields.Str()
+    quantity = fields.Int(default=None)
+
+
 class ItemBarcodeSerializer(BasicSerializer):
     fields = ('id', 'barcode', 'quantity', 'master', 'main')
 

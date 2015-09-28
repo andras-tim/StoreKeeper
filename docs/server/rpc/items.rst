@@ -13,6 +13,11 @@ Data management
   .. autoflask:: app.server:app
      :endpoints: item_list
 
+``/api/items/search``
+^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: item_search
+
 ``/api/items/<id>``
 ^^^^^^^^^^^^^^^^^^^
   .. autoflask:: app.server:app
