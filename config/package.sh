@@ -9,6 +9,7 @@ function do_make_defaults()
     make_default 'img/label_logo' .gif
     make_default 'img/logo' .png
     make_default 'img/logo' .svg
+    make_default 'img/background' .svg
     make_default 'ico/apple-touch-icon-114-precomposed' .png
     make_default 'ico/apple-touch-icon-144-precomposed' .png
     make_default 'ico/apple-touch-icon-72-precomposed' .png

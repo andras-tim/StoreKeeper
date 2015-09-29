@@ -5,6 +5,18 @@ body {
     padding-top: 70px;
 }
 
+.background {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    height: 30%;
+    width: 100%;
+
+    background: #ffffff url("../../img/background.svg") no-repeat top left;
+    background-size: 100%;
+}
+
 
 /**
  * Navbar
