@@ -19,6 +19,7 @@ describe('Factories: CommonFactory', function () {
             },
 
             mocks = {
+                '$timeout': function () {},
                 '$alert': function () {},
                 'filterFilter': function () {
                     return test.filterResults;
@@ -40,6 +41,7 @@ describe('Factories: CommonFactory', function () {
 
             injectFactory = function () {
                 module(function ($provide) {
+                    $provide.value('$timeout', mocks.$timeout);
                     $provide.value('$alert', mocks.$alert);
                     $provide.value('$filter', mocks.$filter);
                     $provide.value('gettextCatalog', mocks.gettextCatalog);

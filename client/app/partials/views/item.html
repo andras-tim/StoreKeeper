@@ -1,4 +1,4 @@
-<app-details-modal>
+<app-details-modal a-big-modal="true">
   <span ng-controller="ItemController">
     <div class="modal-body">
       <app-details-modal-navbar>
@@ -12,7 +12,7 @@
 
             <!-- Item details -->
             <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" a-modal-id="modalId">
-              <app-details-modal-panel>
+              <app-details-modal-panel a-half-width="true">
 
                 <app-input-form a-label="{{ 'Vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}">
                   <app-vendor-input a-model="item.vendor"></app-vendor-input>
@@ -34,7 +34,7 @@
             </form>
 
             <!-- Meta -->
-            <app-details-modal-panel>
+            <app-details-modal-panel a-half-width="true">
               <app-input-form a-label="{{ 'In Stock' | translate }}">
                 <div class="input-group field-quantity">
                   <input name="currentQuantity" id="currentQuantityInput" ng-model="item.quantity" type="text" class="form-control field-quantity" readonly />
@@ -45,7 +45,7 @@
 
             <!-- Barcodes -->
             <form name="barcodesForm" app-confirm-on-exit="barcodesForm.$dirty" a-modal-id="modalId">
-              <app-details-modal-panel>
+              <app-details-modal-panel a-half-width="true">
                 <table class="table table-condensed">
 
                   <thead>

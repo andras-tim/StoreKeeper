@@ -1,18 +1,19 @@
 import re
-from flask import send_file
+from flask import send_file, request
 from flask.ext.restful import abort
 from app.modules.types import BarcodeType
 from app.modules.view_helper_for_models import get_validated_request
 from app.modules.view_helper_for_models import RequestProcessingError
 
-from app.server import config
-from app.models import Item, Barcode
+from app.server import config, db
+from app.models import Item, Barcode, Vendor
 from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
-from app.modules.example_data import ExampleItems, ExampleItemBarcodes, ExampleItemBarcodePrints
+from app.modules.example_data import ExampleItems, ExampleItemBarcodes, ExampleItemBarcodePrints, \
+    ExampleItemSearchResults
 from app.modules.label_printer import LabelPrinter
 from app.modules.printer import MissingCups
 from app.serializers import ItemSerializer, ItemDeserializer, ItemBarcodeDeserializer, ItemBarcodeSerializer, \
-    ItemBarcodePrintDeserializer
+    ItemBarcodePrintDeserializer, ItemSearchSerializer
 from app.views.common import api_func
 
 __MAIN_BARCODE_FORMAT = re.compile(r'^' + re.escape(config.App.BARCODE_PREFIX) +
@@ -34,6 +35,40 @@ class ItemListView(BaseListView):
               response=ExampleItems.ITEM1.get())
     def post(self):
         return self._post()
+
+
+class ItemSearchListView(BaseListView):
+    _serializer = ItemSearchSerializer()
+
+    @api_func('Search in items and barcodes', url_tail='/items/search?expression=sk&limit=6',
+              response=[ExampleItemSearchResults.RESULT1.get(), ExampleItemSearchResults.RESULT2.get()])
+    def get(self):
+        if 'expression' not in request.args.keys():
+            return abort(422, message='Missing mandatory \'expression\' argument')
+        data = {
+            'expression': request.args['expression'],
+            'limit': 6,
+        }
+        if 'limit' in request.args.keys():
+            data['limit'] = int(request.args['limit'])
+
+        results = []
+
+        barcodes = Barcode.query.filter(
+            Barcode.barcode.contains(data['expression'])
+        ).limit(data['limit']).all()
+        results.extend([_CreateObject(type='barcode', item_id=row.item_id, barcode=row.barcode, quantity=row.quantity,
+                                      name=row.item.name, unit=row.item.unit.unit) for row in barcodes])
+
+        if len(results) < data['limit']:
+            items = Item.query.filter(
+                Item.name.contains(data['expression']) |
+                Item.article_number.contains(data['expression'])
+            ).limit(data['limit'] - len(results)).all()
+            results.extend([_CreateObject(type='item', item_id=row.id, name=row.name, article_number=row.article_number,
+                                          vendor=row.vendor.name) for row in items])
+
+        return self._serializer.dump(results, many=True).data
 
 
 class ItemView(BaseView):
@@ -162,8 +197,8 @@ class ItemBarcodePrintView(BaseNestedView):
         barcode = self._get_item_by_filter(item_id=item_id, id=id)
 
         copies = 1
-        if hasattr(data, 'copies'):
-            copies = data.copies
+        if 'copies' in data.keys():
+            copies = data['copies']
 
         try:
             label_printer = _get_label_printer(barcode)
@@ -202,3 +237,8 @@ def _get_label_printer(barcode: Barcode) -> LabelPrinter:
         title = '{} ({!s}{})'.format(title, barcode.quantity, barcode.item.unit.unit)
 
     return LabelPrinter(title=title, data=barcode.barcode)
+
+
+class _CreateObject:
+    def __init__(self, **entries):
+        self.__dict__.update(entries)

@@ -4,23 +4,23 @@
 
       <div class="aside-header">
         <h4 class="aside-title">
-          <i app-icon="barcode"></i> <span translate>Item finder</span><span ng-if="loadingBarcodes || loadingBarcodesItem" app-icon="spinner" class="pull-right"></span>
+          <i app-icon="search"></i> <span translate>Item finder</span><span ng-if="loadingBarcodes || loadingBarcodesItem" app-icon="spinner" class="pull-right"></span>
         </h4>
         <div class="row">
           <div class="col-md-offset-1 col-md-10">
             <form name="barcodeForm">
 
               <div class="input-group">
-                <input id="barcodeText" name="barcode" ng-model="barcode" type="text" class="form-control" placeholder="{{ 'Enter barcode' | translate }}" autofocus />
+                <input id="barcodeText" name="barcode" ng-model="newBarcode" type="text" class="form-control" placeholder="{{ 'Enter barcode' | translate }}" autofocus />
                 <span class="input-group-btn">
-                  <button class="btn btn-success" type="submit" ng-click="addNewBarcode()">
+                  <button class="btn btn-success" type="submit" ng-click="enterNewBarcode()">
                     <i app-icon="add"></i>
                   </button>
                 </span>
               </div>
 
               <app-checkbox-label a-label="{{ 'Summarize items' | translate }}">
-                <input type="checkbox" ng-model="ui.summarizeMultipleItems" ng-change="save()" />
+                <input type="checkbox" ng-model="uiSettings.summarizeMultipleItems" ng-change="save()" />
               </app-checkbox-label>
 
             </form>
@@ -32,30 +32,30 @@
         <div class="row row-item" ng-repeat="readItem in readItems">
 
           <div class="col-md-8">
-            <div ng-if="readItem.id">
-              <strong><i app-icon="item"></i> {{ readItem.item.name }}</strong><br/>
+            <div ng-if="readItem.data.id">
+              <strong><i app-icon="item"></i> {{ readItem.item.name }}</strong><i app-icon="spinner" ng-if="!readItem.item"></i><br/>
               {{ readItem.item.article_number }}<br/>
               {{ readItem.item.vendor.name }}<br/>
             </div>
-            <div ng-if="!readItem.id">
-              <strong><i app-icon="new"></i> <i>{{ 'Unknown item' | translate }}</i></strong><br/>
-              {{ readItem.barcode }}<br/>
+            <div ng-if="!readItem.data.id">
+              <strong><i app-icon="barcode"></i> <i>{{ 'Unknown item' | translate }}</i></strong><br/>
+              {{ readItem.data.barcode }}<br/>
             </div>
           </div>
 
           <div class="col-md-4">
             <div class="row">
               <div class="input-group field-quantity">
-                <app-quantity-input a-model="readItem.quantity" a-on-change="save()"></app-quantity-input>
+                <app-quantity-input a-model="readItem.data.quantity" a-on-change="save()"></app-quantity-input>
                 <div class="input-group-addon field-unit-beside-quantity" ng-bind="readItem.item.unit.unit"></div>
               </div>
             </div>
-            <div class="row">
+            <div class="row commands">
               <div class="btn-group pull-right" role="group">
-                <button type="button" class="btn btn-default btn-sm" ng-if="!readItem.id" app-tooltip="{{ 'Add as new item' | translate }}"><i app-icon="add"></i></button>
-                <button type="button" class="btn btn-default btn-sm" ng-if="!readItem.id" app-tooltip="{{ 'Assign to an existing item' | translate }}"><i app-icon="assign"></i></button>
-                <button type="button" class="btn btn-default btn-sm" ng-if="readItem.id" app-tooltip="{{ 'Print label' | translate }}"><i app-icon="print"></i></button>
-                <button type="button" class="btn btn-danger btn-sm" ng-click="deleteItem($index)" app-tooltip="{{ 'Remove this item' | translate }}"><i app-icon="delete"></i></button>
+                <button type="button" class="btn btn-default btn-sm" ng-click="addNewItem($index, readItem)" ng-if="!readItem.data.id" app-tooltip="{{ 'Add as new item' | translate }}"><i app-icon="add"></i></button>
+                <button type="button" class="btn btn-default btn-sm" ng-click="assignToItem($index, readItem)" ng-if="!readItem.data.id" app-tooltip="{{ 'Assign to an existing item' | translate }}"><i app-icon="assign"></i></button>
+                <button type="button" class="btn btn-default btn-sm" ng-click="printOne($index, readItem)" ng-if="readItem.data.id" app-tooltip="{{ 'Print label' | translate }}"><i app-icon="print"></i></button>
+                <button type="button" class="btn btn-danger btn-sm" ng-click="removeItem($index, readItem)" app-tooltip="{{ 'Remove this item' | translate }}"><i app-icon="delete"></i></button>
               </div>
             </div>
           </div>
@@ -65,9 +65,9 @@
 
       <div class="aside-footer">
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-default" ng-disabled="!readItems.length" app-tooltip="{{ 'Print labels for all item' | translate }}"><i app-icon="print"></i></button>
-          <button type="button" class="btn btn-danger" ng-disabled="!readItems.length" ng-click="clearReadItems()" app-tooltip="{{ 'Clean up item list' | translate }}"><i app-icon="delete"></i></button>
-          <button type="button" class="btn btn-success" ng-disabled="!readItems.length" app-tooltip="{{ 'Add to current view' | translate }}"><i app-icon="addToView"></i></button>
+          <button type="button" class="btn btn-default btn-wide" ng-disabled="!readItems.length" ng-click="printAll()" app-tooltip="{{ 'Print labels for all item' | translate }}"><i app-icon="print"></i></button>
+          <button type="button" class="btn btn-danger btn-wide" ng-disabled="!readItems.length" ng-click="removeAll()" app-tooltip="{{ 'Remove all items from list' | translate }}"><i app-icon="delete"></i></button>
+          <button type="button" class="btn btn-success btn-wide" ng-disabled="!readItems.length" ng-click="addToCurrentView()" app-tooltip="{{ 'Add to current view' | translate }}"><i app-icon="addToView"></i></button>
         </div>
       </div>
 

@@ -134,3 +134,47 @@ appFieldsDirectives.directive('appQuantityInput',
             'templateUrl': 'partials/widgets/fields/quantity-input.html'
         };
     });
+
+
+/**
+ * @ngdoc directive
+ * @name appItemInput
+ * @restrict E
+ *
+ * @param {object} aModel
+ * @param {func} aOnChange
+ * @param {expression} aAutofocus
+ *
+ * @description
+ * Item selector typeahead (results is not trimmed)
+ *
+ * @example
+ * <app-item-input a-model="data"></app-item-input>
+ */
+appFieldsDirectives.directive('appItemInput',
+    function appItemInput () {
+        return {
+            'restrict': 'E',
+            'scope': {
+                'aModel': '=',
+                'aOnChange': '&'
+            },
+            'templateUrl': 'partials/widgets/fields/item-input.html',
+            'compile': function (element, attrs) {
+                element.find('input').attr('autofocus', angular.isUndefined(attrs.aAutofocus) ? null : '');
+            },
+            'controller': ['$scope', 'ItemService', 'CommonFactory',
+                function ($scope, ItemService, CommonFactory) {
+                    $scope.dataFetcher = function (filter, limit) {
+                        var options = {
+                            'expression': filter,
+                            'limit': limit
+                        };
+
+                        return CommonFactory.handlePromise(
+                            ItemService.one('search').getList(null, options)
+                        );
+                    };
+                }]
+        };
+    });

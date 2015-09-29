@@ -20,8 +20,11 @@
 </head>
 <body ng-keydown="onKeyDown($event)">
   <div ng-include="'partials/header.html'"></div>
-  <div ng-view></div>
+  <div class="page-body">
+    <div ng-view></div>
+  </div>
   <div ng-include="'partials/footer.html'"></div>
+  <div class="background"></div>
 
   <script src="dist/js/resources.js"></script>
   <script src="dist/js/storekeeper.js"></script>

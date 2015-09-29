@@ -3,63 +3,93 @@
 var appControllers = angular.module('appControllers.common', []);
 
 
-appControllers.controller('CommonController', ['$scope', '$timeout', '$aside', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
-    function CommonController ($scope, $timeout, $aside, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
+appControllers.controller('CommonController', ['$rootScope', '$scope', '$location', '$timeout', '$aside', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
+    function CommonController ($rootScope, $scope, $location, $timeout, $aside, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
         function initializeModalHandler() {
             var modals = [];
 
-            function registerNewModal(event, $modal) {
-                if (modals.indexOf($modal) === -1) {
-                    modals.push($modal);
+            function registerNewModal(event, modal) {
+                if (modals.indexOf(modal) === -1) {
+                    modals.push(modal);
                 }
             }
 
             function closeAllOpenedModals() {
-                if (modals.length) {
-                    angular.forEach(modals, function ($modal) {
-                        $modal.$promise.then($modal.hide);
-                    });
-                }
+                angular.forEach(modals, function (modal) {
+                    modal.$promise.then(modal.hide);
+                });
             }
 
-            $scope.$on('modal.show', registerNewModal);
-            $scope.$on('$routeChangeSuccess', closeAllOpenedModals);
+            return {
+                'registerNewModal': registerNewModal,
+                'closeAllOpenedModals': closeAllOpenedModals
+            };
         }
 
         function initializeSidebarManager() {
             var sidebars = {};
 
-            function openSidebar(type) {
-                var sidebar = sidebars[type],
-                    options = $scope.sidebars[type];
+            function loadSidebars() {
+                angular.forEach($scope.sidebars, function (defaultOptions, sidebarId) {
+                    var options = angular.merge({},
+                            defaultOptions, {
+                                'id': sidebarId
+                            }),
+                        sidebarObject = $aside(options);
 
-                if (angular.isUndefined(sidebar)) {
-                    if (angular.isUndefined(options)) {
-                        CommonFactory.printToConsole('Missing sidebar \'' + type + '\'');
-                        return;
-                    }
-                    sidebar = $aside(options);
-                    sidebars[type] = sidebar;
-                }
-
-                sidebar.$promise.then(function () {
-                    if (!sidebar.$isShown) {
-                        sidebar.show();
-                    }
-                    setFocus(sidebar);
+                    sidebars[sidebarId] = sidebarObject;
                 });
             }
 
-            function setFocus(sidebar) {
+            function openSidebar(sidebarId) {
+                var sidebarObject = sidebars[sidebarId];
+
+                if (angular.isUndefined(sidebarObject)) {
+                    CommonFactory.printToConsole('Missing sidebar \'' + sidebarId + '\'');
+                    return;
+                }
+
+                sidebarObject.$promise.then(function () {
+                    if (!sidebarObject.$isShown) {
+                        sidebarObject.show();
+                        $location.search(sidebarId + '-sidebar', '1');
+                    }
+                    setFocus(sidebarObject);
+                });
+            }
+
+            function setFocus(sidebarObject) {
                 $timeout(function setFocusTimeout () {
-                    var defaultElement = sidebar.$element.find('[autofocus]');
+                    var defaultElement = sidebarObject.$element.find('[autofocus]');
                     if (angular.isDefined(defaultElement)) {
                         defaultElement.focus();
                     }
                 });
             }
 
-            $scope.openSidebar = openSidebar;
+            function onSidebarClose(event, sidebarObject) {
+                $location.search(sidebarObject.$id + '-sidebar', null);
+            }
+
+            function showHideSidebarsProperly() {
+                angular.forEach(sidebars, function (sidebarObject) {
+                    var setVisible = $location.search()[sidebarObject.$id + '-sidebar'];
+
+                    if (setVisible === '1' && !sidebarObject.$isShown) {
+                        sidebarObject.$promise.then(sidebarObject.show);
+                    } else if (setVisible !== '1' && sidebarObject.$isShown) {
+                        sidebarObject.$promise.then(sidebarObject.hide);
+                    }
+                });
+            }
+
+            loadSidebars();
+
+            return {
+                'openSidebar': openSidebar,
+                'onSidebarClose': onSidebarClose,
+                'showHideSidebarsProperly': showHideSidebarsProperly
+            };
         }
 
         function initializeShortcutHandler() {
@@ -77,24 +107,35 @@ appControllers.controller('CommonController', ['$scope', '$timeout', '$aside', '
                 handler();
             }
 
-            $scope.onKeyDown = onKeyDown;
+            return {
+                'onKeyDown': onKeyDown
+            };
         }
+
+        var modalHandler = initializeModalHandler(),
+            sidebarManager = initializeSidebarManager(),
+            shortcutHandler = initializeShortcutHandler();
 
         ConfigFactory.getConfig().then(function (config) {
             $scope.appTitle = config.app_title;
         }, CommonFactory.showResponseError);
 
-        initializeModalHandler();
-        initializeSidebarManager();
-        initializeShortcutHandler();
+        $scope.$on('modal.show', modalHandler.registerNewModal);
+        $rootScope.$on('aside.hide', sidebarManager.onSidebarClose);
+        $scope.$on('$routeChangeSuccess', function () {
+            modalHandler.closeAllOpenedModals();
+            sidebarManager.showHideSidebarsProperly();
+        });
 
+        $scope.onKeyDown = shortcutHandler.onKeyDown;
+        $scope.openSidebar = sidebarManager.openSidebar;
         $scope.isAuthenticated = SessionFactory.isAuthenticated;
         $scope.getWindowTitle = PageFactory.getWindowTitle;
     }]);
 
 
-appControllers.controller('MainMenuController', ['$scope', 'gettextCatalog', 'ConfigFactory', 'CommonFactory',
-    function MainMenuController ($scope, gettextCatalog, ConfigFactory, CommonFactory) {
+appControllers.controller('MainMenuController', ['$rootScope', '$scope', '$aside', 'gettextCatalog', 'ConfigFactory', 'CommonFactory',
+    function MainMenuController ($rootScope, $scope, $aside, gettextCatalog, ConfigFactory, CommonFactory) {
         function initializeLanguages() {
             var languages = [
                 {
@@ -120,6 +161,7 @@ appControllers.controller('MainMenuController', ['$scope', 'gettextCatalog', 'Co
             $scope.changeLanguage = changeLanguage;
         }
 
+
         ConfigFactory.getConfig().then(function (config) {
             if (config.forced_language === null) {
                 initializeLanguages();
@@ -141,4 +183,3 @@ appControllers.controller('UserMenuController', ['$scope', '$location', 'Session
 
         $scope.logout = logout;
     }]);
-

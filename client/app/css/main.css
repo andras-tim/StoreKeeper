@@ -1,3 +1,26 @@
+/**
+ * Common
+ */
+body {
+    padding-top: 70px;
+}
+
+.background {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    height: 30%;
+    width: 100%;
+
+    background: #ffffff url("../../img/background.svg") no-repeat top left;
+    background-size: 100%;
+}
+
+
+/**
+ * Navbar
+ */
 .main-navbar .navbar-brand {
     padding: 8px 15px;
 }
@@ -8,6 +31,24 @@
     margin-right: 0.5em;
 }
 
+@media (max-width: 400px) {
+    .main-navbar .app-title {
+        display: none;
+    }
+}
+
+
+/**
+ * Page body
+ */
+.page-body {
+    min-height: 80vh;
+}
+
+
+/**
+ * Footer
+ */
 .main-footer {
     margin-top: 30px;
     padding-top: 15px;
@@ -17,4 +58,14 @@
 
 .main-footer a {
     color: #80a0d0;
+}
+
+
+/**
+ * Aside
+ */
+@media (max-width: 1142px) {
+    .aside {
+        max-width: 35%;
+    }
 }

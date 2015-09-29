@@ -4,8 +4,7 @@ module.exports = function (grunt) {
     var production = grunt.option('p') || grunt.option('production');
 
     grunt.initConfig({
-        'pkg': grunt.file.readJSON('package.json'),
-        'banner': '<%= pkg.name %> v<%= pkg.version %> | ' + '<%= pkg.author %> | <%= pkg.license %> Licensed | ' +
+        'banner': '<%= grunt.package.name %> v<%= grunt.package.version %> | ' + '<%= grunt.package.author %> | <%= grunt.package.license %> Licensed | ' +
                   '<%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>',
         'min': production ? '.min' : '',
 
@@ -162,7 +161,7 @@ module.exports = function (grunt) {
                 'dest': 'app/index.html',
                 'replacements': [{
                     'from': /(|\.min)\.(css|js)[^"]*"/g,
-                    'to': '.min.$2?v=<%= pkg.version %>"'
+                    'to': '.min.$2?v=<%= grunt.package.version %>"'
                 }]
             }
         },
@@ -217,6 +216,7 @@ module.exports = function (grunt) {
     grunt.registerTask('app_res', 'Prepare external resources', [
         'copy'
     ]);
+
     grunt.registerTask('app_css', 'Prepare CSS files', function () {
         grunt.task.run('concat:res_css');
         grunt.task.run('concat:app_css');
@@ -224,6 +224,7 @@ module.exports = function (grunt) {
             grunt.task.run('cssmin');
         }
     });
+
     grunt.registerTask('app_js', 'Prepare JS files', function () {
         grunt.task.run('nggettext_compile');
         grunt.task.run('ngtemplates');
@@ -233,6 +234,7 @@ module.exports = function (grunt) {
             grunt.task.run('uglify');
         }
     });
+
     grunt.registerTask('app_index_html', 'Prepare HTML files', function () {
         if (production) {
             grunt.task.run('replace:index_html_min');
@@ -240,6 +242,7 @@ module.exports = function (grunt) {
             grunt.task.run('replace:index_html');
         }
     });
+
     grunt.registerTask('prepare', 'Prepare environment (you can use [-p, --production])', [
         'clean',
         'app_res',
@@ -247,6 +250,12 @@ module.exports = function (grunt) {
         'app_js',
         'app_index_html'
     ]);
+
+    grunt.registerTask('auto_prepare', 'Prepare environment (you can use [-p, --production]) and following up changes', [
+        'prepare',
+        'watch'
+    ]);
+
     grunt.registerTask('default', [
         'prepare'
     ]);

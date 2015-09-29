@@ -142,6 +142,12 @@ class ExampleItems:
                            getters={'id': 3})
 
 
+class ExampleItemSearchResults:
+    RESULT1 = FilterableDict(getters={'type': 'barcode', 'item_id': 326, 'barcode': 'SK586936', 'quantity': 1})
+    RESULT2 = FilterableDict(getters={'type': 'item', 'item_id': 309, 'name': 'Skate', 'article_number': 'SE180826',
+                                      'vendor': 'Import'})
+
+
 class ExampleAcquisitionItems:
     ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132.4},
                            getters={'id': 1})

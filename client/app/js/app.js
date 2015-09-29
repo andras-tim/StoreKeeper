@@ -108,8 +108,8 @@ storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog',
     }]);
 
 
-storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider',
-    function ($modalProvider, $tooltipProvider, $typeaheadProvider) {
+storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider', '$asideProvider',
+    function ($modalProvider, $tooltipProvider, $typeaheadProvider, $asideProvider) {
         angular.extend($modalProvider.defaults, {
             'html': true,
             'keyboard': false
@@ -117,7 +117,7 @@ storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider
         angular.extend($tooltipProvider.defaults, {
             'trigger': 'hover',
             'delay': {
-                'show': 600,
+                'show': 800,
                 'hide': 100
             }
         });
@@ -125,13 +125,16 @@ storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider
             'minLength': 0,
             'autoSelect': true
         });
+        angular.extend($asideProvider.defaults, {
+            'show': false
+        });
     }]);
 
 
 storekeeperApp.config(['stConfig',
     function (stConfig) {
         stConfig.pagination.template = 'partials/widgets/table_pager.html';
-        stConfig.pagination.itemsByPage = 20;
+        stConfig.pagination.itemsByPage = 17;
     }]);
 
 
