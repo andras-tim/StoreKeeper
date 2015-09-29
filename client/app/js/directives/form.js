@@ -253,6 +253,7 @@ appFormDirectives.directive('appTypeaheadHelper', ['$timeout',
  * @param {string} appLazyTypeahead
  * @param {func} aDataFetcher
  * @param {expression=} [aTimeout=300]
+ * @param {string} aTitleAttribute
  *
  * @description
  * Timeout slowed, backend fetcher based typeahead
@@ -268,7 +269,8 @@ appFormDirectives.directive('appLazyTypeahead', ['$q', '$timeout', '$typeahead',
             'scope': {
                 'appLazyTypeahead': '@',
                 'aDataFetcher': '&',
-                'aTimeout': '='
+                'aTimeout': '=',
+                'aTitleAttribute': '@'
             },
             'link': function (scope, element, attrs, controller) {
                 var options,
@@ -327,6 +329,16 @@ appFormDirectives.directive('appLazyTypeahead', ['$q', '$timeout', '$typeahead',
                 }, function (newValue) {
                     onItemChange(newValue);
                 });
+
+                if (angular.isDefined(scope.aTitleAttribute)) {
+                    scope.$watch(function () {
+                        return controller.$viewValue;
+                    }, function (newValue) {
+                        if (angular.isObject(newValue)) {
+                            controller.$viewValue = newValue[scope.aTitleAttribute];
+                        }
+                    });
+                }
             }
         };
     }]);
