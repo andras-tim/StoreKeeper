@@ -134,7 +134,7 @@ storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider
 storekeeperApp.config(['stConfig',
     function (stConfig) {
         stConfig.pagination.template = 'partials/widgets/table_pager.html';
-        stConfig.pagination.itemsByPage = 20;
+        stConfig.pagination.itemsByPage = 17;
     }]);
 
 
