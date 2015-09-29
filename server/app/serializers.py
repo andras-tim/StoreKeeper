@@ -138,6 +138,7 @@ class ItemSearchSerializer(Serializer):
     article_number = fields.Str()
     vendor = fields.Str()
     unit = fields.Str()
+    master_barcode = fields.Str()
 
     barcode = fields.Str()
     quantity = fields.Int(default=None)
