@@ -18,7 +18,9 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appDirectives.icons',
     'appDirectives.modal',
     'appDirectives.table',
-    'appFactories',
+    'appFactories.common',
+    'appFactories.controller',
+    'appFactories.resource',
     'appFilters',
     'appServices'
 ]);

@@ -1,9 +1,9 @@
 'use strict';
 
-describe('Factories: ConfigFactory', function () {
+describe('Factories/Resource: ConfigFactory', function () {
     var test;
 
-    beforeEach(module('appFactories'));
+    beforeEach(module('appFactories.resource'));
 
     beforeEach(function () {
         test = this;
