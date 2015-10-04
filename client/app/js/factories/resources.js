@@ -185,3 +185,40 @@ appResourceFactories.factory('BarcodeCacheFactory', ['$q', 'Restangular', 'Commo
 
         return BarcodeCache;
     }]);
+
+
+appResourceFactories.factory('ItemCacheFactory', ['$q', 'Restangular', 'CommonFactory', 'ItemService',
+    function ItemCacheFactory ($q, Restangular, CommonFactory, ItemService) {
+        var
+            ItemCache = function ItemCache (spinner) {
+                var itemCache = {},
+
+                    getItemById = function getItemById (itemId) {
+                        var result = $q.defer();
+
+                        if (angular.isDefined(itemCache[itemId])) {
+                            result.resolve(itemCache[itemId]);
+                            return result.promise;
+                        }
+
+                        CommonFactory.handlePromise(
+                            ItemService.one(itemId).get(),
+                            spinner,
+                            function (item) {
+                                itemCache[itemId] = item;
+                                result.resolve(item);
+                            },
+                            function () {
+                                result.reject();
+                            }
+                        );
+                        return result.promise;
+                    };
+
+                return {
+                    'getItemById': getItemById
+                };
+            };
+
+        return ItemCache;
+    }]);
