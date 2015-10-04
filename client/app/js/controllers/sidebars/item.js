@@ -3,8 +3,8 @@
 var appItemSidebarControllers = angular.module('appControllers.sidebar.item', []);
 
 
-appItemSidebarControllers.controller('ItemSidebarController', ['$rootScope', '$scope', '$q', '$window', 'gettextCatalog', 'Restangular', 'ItemService', 'BarcodeService', 'CommonFactory', 'PersistFactory',
-    function ItemSidebarController ($rootScope, $scope, $q, $window, gettextCatalog, Restangular, ItemService, BarcodeService, CommonFactory, PersistFactory) {
+appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$window', 'gettextCatalog', 'BarcodeCacheFactory', 'ItemService', 'CommonFactory', 'PersistFactory',
+    function ItemSidebarController ($scope, $q, $window, gettextCatalog, BarcodeCacheFactory, ItemService, CommonFactory, PersistFactory) {
         var
             /**
              * Persistent storage
@@ -142,57 +142,11 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$rootScope', '$s
             },
 
             /**
-             * Barcode object factory
-             */
-            barcodeCacheClass = function barcodeCacheClass () {
-                var barcodeCache,
-
-                    getBarcodes = function getBarcodes () {
-                        var result = $q.defer();
-
-                        if (angular.isDefined(barcodeCache)) {
-                            result.resolve(barcodeCache);
-                            return result.promise;
-                        }
-
-                        CommonFactory.handlePromise(
-                            BarcodeService.getList(),
-                            'loadingBarcodes',
-                            function (barcodes) {
-                                barcodeCache = Restangular.stripRestangular(barcodes);
-                                result.resolve(barcodeCache);
-                            });
-                        return result.promise;
-                    },
-
-                    getBarcode = function getBarcode (barcodeValue) {
-                        var result = $q.defer();
-
-                        getBarcodes().then(function (barcodes) {
-                            var index = _.findIndex(barcodes, 'barcode', barcodeValue);
-
-                            if (index === -1) {
-                                result.reject(barcodeValue);
-                                return;
-                            }
-
-                            result.resolve(barcodes[index]);
-                        });
-
-                        return result.promise;
-                    };
-
-                return {
-                    'getBarcode': getBarcode
-                };
-            },
-
-            /**
              * Class instances
              */
             persistentStorage = persistentStorageClass(),
             itemList = itemListClass(persistentStorage.data.readItems),
-            barcodeCache = barcodeCacheClass(),
+            barcodeCache = new BarcodeCacheFactory('loadingBarcodes'),
 
             /**
              * UI helper functions

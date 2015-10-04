@@ -135,3 +135,53 @@ appResourceFactories.factory('SessionFactory', ['$q', 'Restangular', 'SessionSer
             'logout': logout
         };
     }]);
+
+
+appResourceFactories.factory('BarcodeCacheFactory', ['$q', 'Restangular', 'CommonFactory', 'BarcodeService',
+    function BarcodeCacheFactory ($q, Restangular, CommonFactory, BarcodeService) {
+        var
+            BarcodeCache = function BarcodeCache (spinner) {
+                var barcodeCache,
+
+                    getBarcodes = function getBarcodes () {
+                        var result = $q.defer();
+
+                        if (angular.isDefined(barcodeCache)) {
+                            result.resolve(barcodeCache);
+                            return result.promise;
+                        }
+
+                        CommonFactory.handlePromise(
+                            BarcodeService.getList(),
+                            spinner,
+                            function (barcodes) {
+                                barcodeCache = Restangular.stripRestangular(barcodes);
+                                result.resolve(barcodeCache);
+                            });
+                        return result.promise;
+                    },
+
+                    getBarcode = function getBarcode (barcodeValue) {
+                        var result = $q.defer();
+
+                        getBarcodes().then(function (barcodes) {
+                            var index = _.findIndex(barcodes, 'barcode', barcodeValue);
+
+                            if (index === -1) {
+                                result.reject(barcodeValue);
+                                return;
+                            }
+
+                            result.resolve(barcodes[index]);
+                        });
+
+                        return result.promise;
+                    };
+
+                return {
+                    'getBarcode': getBarcode
+                };
+            };
+
+        return BarcodeCache;
+    }]);
