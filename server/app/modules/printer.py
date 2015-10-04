@@ -13,6 +13,10 @@ class MissingCups(Exception):
     pass
 
 
+class MissingPrinter(Exception):
+    pass
+
+
 class Printer:
     DEFAULT_PRINTER = 'DEFAULT'
 
@@ -34,17 +38,29 @@ class Printer:
         if 'cups' not in globals().keys():
             raise MissingCups('Can not print while \'pycups\' python3 module is not installed.')
 
-        if name == self.DEFAULT_PRINTER:
-            self.conn = cups.Connection()
-        else:
-            self.conn = cups.Connection(name)
+        self.__cups_connection = cups.Connection()
+        self.__printer_name = self.__evaluate_printer_name(name)
 
-    def print_pdf(self, pdf_path: str, printer_name: (str, None)=None, options: (dict, None)=None):
-        printer_name = printer_name or self.conn.getDefault()
+    def print_pdf(self, pdf_path: str, options: (dict, None)=None) -> 'Printer':
         job_title = '{} - {}'.format(config.App.TITLE, os.path.basename(pdf_path))
 
         current_options = self.printer_options.copy()
         if options:
             current_options.update(options)
 
-        self.conn.printFile(printer_name, pdf_path, job_title, current_options)
+        self.__cups_connection.printFile(self.__printer_name, pdf_path, job_title, current_options)
+
+        return self
+
+    def __evaluate_printer_name(self, printer_name: str) -> str:
+        if printer_name == self.DEFAULT_PRINTER:
+            printer_name = self.__cups_connection.getDefault()
+
+        if printer_name is None:
+            raise MissingPrinter('Cups has not default printer when the application config set to use the default.')
+
+        printers = self.__cups_connection.getPrinters()
+        if printer_name not in printers.keys():
+            raise MissingPrinter('The selected printer is not found; printer_name={!r}'.format(printer_name))
+
+        return printer_name

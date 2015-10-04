@@ -35,7 +35,7 @@ class LabelPrinter:
         printer = printer or Printer(config.App.LABEL_PRINTER)
 
         self.print_to_pdf()
-        printer.print_pdf(self.__pdf_path, options={'copies': copies})
+        printer.print_pdf(self.__pdf_path, options={'copies': str(copies)})
 
     def __generate_pdf(self):
         pdf_generator = _LabelPdfGenerator()
