@@ -83,6 +83,7 @@ class TestConfig(unittest.TestCase):
             'DebugId': 'Development',
             'App': {
                 'MIGRATE_REPO_PATH': '/test/db_repository',
+                'UTF8_VALUE': 'Több hűtőházból kértünk színhúst',
             },
             'Flask': {
                 'SERVER_NAME': '0.0.0.0:8000',
@@ -97,7 +98,8 @@ class TestConfig(unittest.TestCase):
 
     def test_str_dump_validity(self):
         config = self.config.read(config_reader=ConfigMock('DevelopmentConfig').config_reader)
-        assert """{'App': {'MIGRATE_REPO_PATH': '/test/db_repository'},
+        assert """{'App': {'MIGRATE_REPO_PATH': '/test/db_repository',
+         'UTF8_VALUE': 'Több hűtőházból kértünk színhúst'},
  'DebugId': 'Development',
  'Flask': {'DEBUG': True,
            'SERVER_NAME': '0.0.0.0:8000',
