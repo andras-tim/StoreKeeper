@@ -46,6 +46,24 @@ function prepare_chroot()
     debootstrap "${OS_DISTRO}" "${CHROOT}" "${MIRROR}"
 }
 
+function prepare_locales()
+{
+    local LOCALE_CONFIG="${CHROOT}/etc/default/locale"
+    if [ -e "${LOCALE_CONFIG}" ]
+    then
+        return
+    fi
+
+    echo ' * Preparing locales...'
+    run_as_root dpkg-reconfigure tzdata
+    run_as_root timedatectl
+    cat - <<EOF > "${LOCALE_CONFIG}"
+LANG="en_US.UTF-8"
+LANGUAGE="en_US:en"
+EOF
+    run_as_root locale-gen
+}
+
 function is_mounted()
 {
     local directory="$1"
@@ -299,6 +317,7 @@ function restart_services()
 if [ ! -e  "${CHROOT}/etc/debian_chroot" ]
 then
     prepare_chroot
+    prepare_locales
     mount_resources
     prepare_network
 
