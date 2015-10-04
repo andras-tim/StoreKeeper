@@ -3,8 +3,8 @@
 var appControllers = angular.module('appControllers.common', []);
 
 
-appControllers.controller('CommonController', ['$rootScope', '$scope', '$location', '$timeout', '$aside', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
-    function CommonController ($rootScope, $scope, $location, $timeout, $aside, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
+appControllers.controller('CommonController', ['$rootScope', '$scope', '$route', '$location', '$timeout', '$aside', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
+    function CommonController ($rootScope, $scope, $route, $location, $timeout, $aside, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
         function initializeModalHandler() {
             var modals = [];
 
@@ -72,9 +72,17 @@ appControllers.controller('CommonController', ['$rootScope', '$scope', '$locatio
             }
 
             function showHideSidebarsProperly() {
-                angular.forEach(sidebars, function (sidebarObject) {
-                    var setVisible = $location.search()[sidebarObject.$id + '-sidebar'];
+                var sidebarsEnabled = !!$route.current.sidebarsEnabled;
 
+                angular.forEach(sidebars, function (sidebarObject) {
+                    var setVisible;
+
+                    if (!sidebarsEnabled) {
+                        $location.search(sidebarObject.$id + '-sidebar', null);
+                        return;
+                    }
+
+                    setVisible = $location.search()[sidebarObject.$id + '-sidebar'];
                     if (setVisible === '1' && !sidebarObject.$isShown) {
                         sidebarObject.$promise.then(sidebarObject.show);
                     } else if (setVisible !== '1' && sidebarObject.$isShown) {

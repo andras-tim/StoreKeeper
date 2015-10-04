@@ -56,7 +56,8 @@ storekeeperApp.config(['$routeProvider',
                 'templateUrl': 'partials/views/items.html',
                 'controller': 'ItemsController',
                 'resolve': sessionRequired,
-                'reloadOnSearch': false
+                'reloadOnSearch': false,
+                'sidebarsEnabled': true
             }).
             otherwise({
                 'redirectTo': '/items'
