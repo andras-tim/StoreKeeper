@@ -19,11 +19,9 @@ function init()
 function do_preinstall()
 {
     # Extra dependencies for fast Yaml file reading (http://stackoverflow.com/a/24791419/1108919)
-    packages="build-essential python${PYTHON_VERSION} python${PYTHON_VERSION}-dev libyaml-dev python3-cups python3-psycopg2"
-    if [ "${GLOBAL_INSTALL}" == true ]
+    packages="build-essential python${PYTHON_VERSION} python${PYTHON_VERSION}-dev python3-pip libyaml-dev python3-cups python3-psycopg2"
+    if [ "${GLOBAL_INSTALL}" == false ]
     then
-        packages="${packages} python3-pip"
-    else
         packages="${packages} python-virtualenv"
     fi
     apt_get_install ${packages}

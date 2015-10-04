@@ -11,6 +11,8 @@ class ConfigMock:
 DefaultConfig:
   DebugId: Default
   App:
+    UTF8_VALUE: 'Több hűtőházból kértünk színhúst'
+
     MIGRATE_REPO_PATH: $BASEDIR/db_repository
 
   Flask:

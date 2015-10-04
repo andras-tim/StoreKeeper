@@ -46,6 +46,24 @@ function prepare_chroot()
     debootstrap "${OS_DISTRO}" "${CHROOT}" "${MIRROR}"
 }
 
+function prepare_locales()
+{
+    local LOCALE_CONFIG="${CHROOT}/etc/default/locale"
+    if [ -e "${LOCALE_CONFIG}" ]
+    then
+        return
+    fi
+
+    echo ' * Preparing locales...'
+    run_as_root dpkg-reconfigure tzdata
+    run_as_root timedatectl
+    cat - <<EOF > "${LOCALE_CONFIG}"
+LANG="en_US.UTF-8"
+LANGUAGE="en_US:en"
+EOF
+    run_as_root locale-gen
+}
+
 function is_mounted()
 {
     local directory="$1"
@@ -124,10 +142,10 @@ EOF
 
 function prepare_uwsgi()
 {
-    UWSGI="${CHROOT}/etc/uwsgi"
-    CONFIG="${UWSGI}/apps-available/storekeeper.ini"
-    ENABLED_CONFIG="${UWSGI}/apps-enabled/storekeeper.ini"
-    LINK_TARGET='../apps-available/storekeeper.ini'
+    local UWSGI="${CHROOT}/etc/uwsgi"
+    local CONFIG="${UWSGI}/apps-available/storekeeper.ini"
+    local ENABLED_CONFIG="${UWSGI}/apps-enabled/storekeeper.ini"
+    local LINK_TARGET='../apps-available/storekeeper.ini'
     if [ -e "${ENABLED_CONFIG}" ]
     then
         return
@@ -164,11 +182,11 @@ EOF
 
 function prepare_nginx()
 {
-    NGINX="${CHROOT}/etc/nginx"
-    DEFAULT="${NGINX}/sites-enabled/default"
-    STOREKEEPER="${NGINX}/sites-available/storekeeper"
-    ENABLED_STOREKEEPER="${NGINX}/sites-enabled/storekeeper"
-    LINK_TARGET='../sites-available/storekeeper'
+    local NGINX="${CHROOT}/etc/nginx"
+    local DEFAULT="${NGINX}/sites-enabled/default"
+    local STOREKEEPER="${NGINX}/sites-available/storekeeper"
+    local ENABLED_STOREKEEPER="${NGINX}/sites-enabled/storekeeper"
+    local LINK_TARGET='../sites-available/storekeeper'
     if [ -e "${ENABLED_STOREKEEPER}" ]
     then
         return
@@ -222,7 +240,7 @@ function prepare_users()
 
 function prepare_sudo()
 {
-    SUDOERS="${CHROOT}/etc/sudoers.d/storekeeper"
+    local SUDOERS="${CHROOT}/etc/sudoers.d/storekeeper"
     if [ -e "${SUDOERS}" ]
     then
         return
@@ -299,6 +317,7 @@ function restart_services()
 if [ ! -e  "${CHROOT}/etc/debian_chroot" ]
 then
     prepare_chroot
+    prepare_locales
     mount_resources
     prepare_network
 
