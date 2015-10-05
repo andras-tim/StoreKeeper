@@ -25,6 +25,10 @@
     max-width: 12em;
 }
 
+.field-count {
+    text-align: right;
+}
+
 .field-checkbox {
     text-align: center;
 }

@@ -7,21 +7,34 @@
     }
 }
 
-.aside .aside-dialog .aside-body {
-    padding: 0 10px 10px;
+.aside .row.row-element .commands {
+    margin-top: 4px;
 }
 
-.aside .aside-dialog .aside-body .row.row-item {
+.aside .aside-dialog .aside-header .settings-placeholder {
+    margin: 6px 0;
+}
+
+.aside .aside-dialog .aside-body {
+    position: absolute;
+    top: 97px;
+    bottom: 64px;
+    width: 100%;
+    overflow-y: scroll;
+    padding: 0 10px;
+}
+
+.aside .aside-dialog .aside-body .row.row-element {
     min-height: 75px;
     padding-top: 6px;
     padding-bottom: 6px;
-    border-top: 1px solid rgb(229, 229, 229);
+    border-top: 1px solid rgb(240, 240, 240);
 }
 
-.aside .aside-dialog .row.row-item {
-    margin-right: 0;
-}
 
-.aside .aside-dialog .row.row-item .row.commands {
-    margin-top: 4px;
+.aside .aside-dialog .aside-footer {
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    width: 100%;
 }

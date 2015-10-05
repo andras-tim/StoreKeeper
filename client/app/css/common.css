@@ -11,6 +11,10 @@
     cursor: pointer;
 }
 
+.without-padding {
+    padding: 0;
+}
+
 .tooltip-inner {
     border: solid 1px #ccc;
 }
