@@ -24,11 +24,12 @@ describe('Controllers/Common: CommonController', function () {
             },
 
             mocks = {
-                '$scope': {
+                '$rootScope': {
                     '$on': function (name, func) {
                         test.eventListeners[name] = func;
                     }
                 },
+                '$scope': {},
                 '$location': {},
                 '$route': {
                     'current': {}
@@ -67,6 +68,7 @@ describe('Controllers/Common: CommonController', function () {
 
             dependencies = {
                 '$scope': mocks.$scope,
+                '$rootScope': mocks.$rootScope,
                 '$location': mocks.$location,
                 '$route': mocks.$route,
                 '$aside': mocks.$aside,

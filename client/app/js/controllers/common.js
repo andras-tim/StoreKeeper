@@ -128,9 +128,9 @@ appControllers.controller('CommonController', ['$rootScope', '$scope', '$route',
             $scope.appTitle = config.app_title;
         }, CommonFactory.showResponseError);
 
-        $scope.$on('modal.show', modalHandler.registerNewModal);
+        $rootScope.$on('modal.show', modalHandler.registerNewModal);
         $rootScope.$on('aside.hide', sidebarManager.onSidebarClose);
-        $scope.$on('$routeChangeSuccess', function () {
+        $rootScope.$on('$routeChangeSuccess', function () {
             modalHandler.closeAllOpenedModals();
             sidebarManager.showHideSidebarsProperly();
         });
