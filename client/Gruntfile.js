@@ -169,6 +169,7 @@ module.exports = function (grunt) {
         'watch': {
             'options': {
                 'spawn': false,
+                'interrupt': true,
                 'dateFormat': function (time) {
                     grunt.log.writeln('\n>> finished in ' + time + 'ms at ' + (new Date()).toString() + '\n\n');
                     grunt.log.writeln('Waiting for more changes...');
