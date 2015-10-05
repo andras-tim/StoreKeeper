@@ -8,10 +8,13 @@ appControllers.controller('CommonController', ['$rootScope', '$scope', '$route',
         function initializeModalHandler() {
             var modals = [];
 
-            function registerNewModal(event, modal) {
+            function openModal(event, modal) {
                 if (modals.indexOf(modal) === -1) {
                     modals.push(modal);
                 }
+                modal.$promise.then(function () {
+                    setFocus(modal);
+                });
             }
 
             function closeAllOpenedModals() {
@@ -21,7 +24,7 @@ appControllers.controller('CommonController', ['$rootScope', '$scope', '$route',
             }
 
             return {
-                'registerNewModal': registerNewModal,
+                'openModal': openModal,
                 'closeAllOpenedModals': closeAllOpenedModals
             };
         }
@@ -55,15 +58,6 @@ appControllers.controller('CommonController', ['$rootScope', '$scope', '$route',
                         $location.search(sidebarId + '-sidebar', '1');
                     }
                     setFocus(sidebarObject);
-                });
-            }
-
-            function setFocus(sidebarObject) {
-                $timeout(function setFocusTimeout () {
-                    var defaultElement = sidebarObject.$element.find('[autofocus]');
-                    if (angular.isDefined(defaultElement)) {
-                        defaultElement.focus();
-                    }
                 });
             }
 
@@ -120,6 +114,15 @@ appControllers.controller('CommonController', ['$rootScope', '$scope', '$route',
             };
         }
 
+        function setFocus(parentObject) {
+            $timeout(function setFocusTimeout () {
+                var defaultObject = parentObject.$element.find('[autofocus]');
+                if (angular.isDefined(defaultObject)) {
+                    defaultObject.focus();
+                }
+            });
+        }
+
         var modalHandler = initializeModalHandler(),
             sidebarManager = initializeSidebarManager(),
             shortcutHandler = initializeShortcutHandler();
@@ -128,7 +131,7 @@ appControllers.controller('CommonController', ['$rootScope', '$scope', '$route',
             $scope.appTitle = config.app_title;
         }, CommonFactory.showResponseError);
 
-        $rootScope.$on('modal.show', modalHandler.registerNewModal);
+        $rootScope.$on('modal.show', modalHandler.openModal);
         $rootScope.$on('aside.hide', sidebarManager.onSidebarClose);
         $rootScope.$on('$routeChangeSuccess', function () {
             modalHandler.closeAllOpenedModals();
