@@ -6,8 +6,10 @@ from flask.ext.bcrypt import Bcrypt
 from app import test_mode, doc_mode, log, static
 from app.config import get_config, check_warnings_in_config
 from app.modules.restful_api import RestfulApiWithoutSimpleAuth
+from app.version import Version
 
 
+version_info = Version()
 config = get_config()
 flask_args = {}
 
@@ -49,4 +51,4 @@ if config.App.ADMIN_PAGE and not (test_mode or doc_mode):
     from app import admin
     admin.initialize(app, db, config)
 
-app.logger.info('Ready')
+app.logger.info('StoreKeeper v{} :: Ready'.format(version_info.release))

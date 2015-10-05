@@ -1,11 +1,21 @@
 'use strict';
 
 module.exports = function (grunt) {
-    var production = grunt.option('p') || grunt.option('production');
+    var versionArray = grunt.file.readJSON('../VERSION.json'),
+        version = [versionArray.slice(0, 3).join('.')].concat(versionArray.slice(3)).join('-'),
+        production = grunt.option('p') || grunt.option('production'),
+
+        updateVersionInFile = function updateVersionInFile (filePath) {
+            var jsonObject = grunt.file.readJSON(filePath);
+            jsonObject.version = version;
+            grunt.file.write(filePath, JSON.stringify(jsonObject, null, 2) + '\n');
+        };
+
 
     grunt.initConfig({
-        'banner': '<%= grunt.package.name %> v<%= grunt.package.version %> | ' + '<%= grunt.package.author %> | <%= grunt.package.license %> Licensed | ' +
-                  '<%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>',
+        'version': version,
+        'banner': '<%= grunt.package.name %> v<%= version %> | <%= grunt.package.author %> | ' +
+                  '<%= grunt.package.license %> Licensed | <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>',
         'min': production ? '.min' : '',
 
         'clean': {
@@ -161,7 +171,7 @@ module.exports = function (grunt) {
                 'dest': 'app/index.html',
                 'replacements': [{
                     'from': /(|\.min)\.(css|js)[^"]*"/g,
-                    'to': '.min.$2?v=<%= grunt.package.version %>"'
+                    'to': '.min.$2?v=<%= version %>"'
                 }]
             }
         },
@@ -244,8 +254,14 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('update_versions', 'Update version strings in package related files', function () {
+        updateVersionInFile('package.json');
+        updateVersionInFile('bower.json');
+    });
+
     grunt.registerTask('prepare', 'Prepare environment (you can use [-p, --production])', [
         'clean',
+        'update_versions',
         'app_res',
         'app_css',
         'app_js',
