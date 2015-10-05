@@ -3,8 +3,8 @@
 var appItemSidebarControllers = angular.module('appControllers.sidebar.item', []);
 
 
-appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$window', 'gettextCatalog', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
-    function ItemSidebarController ($scope, $log, $window, gettextCatalog, BarcodeCacheFactory, ItemCacheFactory, PersistFactory) {
+appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$window', 'gettextCatalog', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
+    function ItemSidebarController ($scope, $log, $window, gettextCatalog, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory) {
         var
             /**
              * Persistent storage
@@ -179,7 +179,15 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log',
 
             assignBarcodeToAnExistingItem = function assignBarcodeToAnExistingItem ($index, readElement) {},
 
-            printElement = function printElement ($index, readElement) {},
+            printElement = function printElement ($index, readElement) {
+                itemCache.getItemById(readElement.data.itemId).then(
+                    function (item) {
+                        CommonFactory.handlePromise(
+                            item.one('barcodes', readElement.barcode.id).customPUT(null, 'print'),
+                            'itemSidebarPrintingBarcode'
+                        );
+                    });
+            },
 
             removeElement = function removeElement (elementIndex) {
                 var readElement = readElements.elements[elementIndex],
@@ -208,7 +216,43 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log',
                 }
             },
 
-            printAllElements = function printAllElements () {},
+            printAllElements = function printAllElements () {
+                var count = getCountOfPrintableLabels(),
+                    message = gettextCatalog.getString('Do you want to print sum ' + count + ' pcs. labels?');
+
+                if (!$window.confirm(message)) {
+                    return;
+                }
+
+                _.forEach(readElements.elements, function (readElement) {
+                    if (!readElement.barcode) {
+                        return;
+                    }
+                    itemCache.getItemById(readElement.data.itemId).then(
+                        function (item) {
+                            CommonFactory.handlePromise(
+                                item.one('barcodes', readElement.barcode.id).customPUT({'copies': readElement.data.count}, 'print'),
+                                'itemSidebarPrintingBarcode'
+                            );
+                        });
+                });
+            },
+
+            getCountOfPrintableLabels = function getCountOfPrintableLabels () {
+                var length = readElements.elements.length,
+                    readElement,
+                    index,
+                    count = 0;
+
+                for (index = 0; index < length; index += 1) {
+                    readElement = readElements.elements[index];
+                    if (readElement.barcode) {
+                        count += readElement.data.count;
+                    }
+                }
+
+                return count;
+            },
 
             removeAllElements = function removeAllElements () {
                 var message = gettextCatalog.getString('Do you want to clear list?');
