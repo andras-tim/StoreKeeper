@@ -5,22 +5,29 @@ var appResourceFactories = angular.module('appFactories.resource', []);
 
 appResourceFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
     function ConfigFactory ($q, Restangular, ConfigService) {
-        var config = {
-            'app_name': undefined,
-            'app_title': undefined,
-            'forced_language': undefined,
-            'debug': false
-        };
+        var
+            config = {
+                'app_name': undefined,
+                'app_title': undefined,
+                'forced_language': undefined,
+                'debug': false
+            },
+            gettingConfigPromise;
 
         function getConfig() {
             if (config.app_name !== undefined) {
                 return $q.when(config);
             }
 
-            return ConfigService.one().get().then(function (resp) {
+            if (angular.isDefined(gettingConfigPromise)) {
+                return gettingConfigPromise;
+            }
+
+            gettingConfigPromise = ConfigService.one().get().then(function (resp) {
                 config = Restangular.stripRestangular(resp);
                 return config;
             });
+            return gettingConfigPromise;
         }
 
         function getDebug() {
@@ -142,6 +149,7 @@ appResourceFactories.factory('BarcodeCacheFactory', ['$q', 'Restangular', 'Commo
         var
             BarcodeCache = function BarcodeCache (spinner) {
                 var barcodeCache,
+                    gettingBarcodesPromise,
 
                     getBarcodes = function getBarcodes () {
                         var result = $q.defer();
@@ -151,6 +159,10 @@ appResourceFactories.factory('BarcodeCacheFactory', ['$q', 'Restangular', 'Commo
                             return result.promise;
                         }
 
+                        if (angular.isDefined(gettingBarcodesPromise)) {
+                            return gettingBarcodesPromise;
+                        }
+
                         CommonFactory.handlePromise(
                             BarcodeService.getList(),
                             spinner,
@@ -158,6 +170,8 @@ appResourceFactories.factory('BarcodeCacheFactory', ['$q', 'Restangular', 'Commo
                                 barcodeCache = Restangular.stripRestangular(barcodes);
                                 result.resolve(barcodeCache);
                             });
+
+                        gettingBarcodesPromise = result.promise;
                         return result.promise;
                     },
 
