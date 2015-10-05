@@ -1,9 +1,9 @@
 'use strict';
 
-describe('Factories: SessionFactory', function () {
+describe('Factories/Resource: SessionFactory', function () {
     var test;
 
-    beforeEach(module('appFactories'));
+    beforeEach(module('appFactories.resource'));
 
     beforeEach(function () {
         test = this;

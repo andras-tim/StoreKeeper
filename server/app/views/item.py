@@ -1,12 +1,13 @@
 import re
 from flask import send_file, request
 from flask.ext.restful import abort
+from sqlalchemy import or_, and_
 from app.modules.types import BarcodeType
 from app.modules.view_helper_for_models import get_validated_request
 from app.modules.view_helper_for_models import RequestProcessingError
 
 from app.server import config, db
-from app.models import Item, Barcode, Vendor
+from app.models import Item, Barcode
 from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
 from app.modules.example_data import ExampleItems, ExampleItemBarcodes, ExampleItemBarcodePrints, \
     ExampleItemSearchResults
@@ -61,12 +62,15 @@ class ItemSearchListView(BaseListView):
                                       name=row.item.name, unit=row.item.unit.unit) for row in barcodes])
 
         if len(results) < data['limit']:
-            items = Item.query.filter(
-                Item.name.contains(data['expression']) |
-                Item.article_number.contains(data['expression'])
+            items = db.session.query(Item, Barcode).join(Barcode).filter(
+                and_(
+                    or_(Item.name.contains(data['expression']), Item.article_number.contains(data['expression'])),
+                    Barcode.master
+                )
             ).limit(data['limit'] - len(results)).all()
-            results.extend([_CreateObject(type='item', item_id=row.id, name=row.name, article_number=row.article_number,
-                                          vendor=row.vendor.name) for row in items])
+            results.extend([_CreateObject(type='item', item_id=row.Item.id, name=row.Item.name,
+                                          article_number=row.Item.article_number, vendor=row.Item.vendor.name,
+                                          master_barcode=row.Barcode.barcode) for row in items])
 
         return self._serializer.dump(results, many=True).data
 

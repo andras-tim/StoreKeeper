@@ -112,7 +112,8 @@ class Barcode(db.Model):
     item = db.relationship('Item')
 
     def __repr__(self)-> str:
-        return '{!s} [quantity={!r}, main={!s}]'.format(self.barcode, self.quantity, self.main)
+        return '{!s} [quantity={!r}, main={!s}, master={!s}]'.format(
+            self.barcode, self.quantity, self.main, self.master)
 
 
 @nested_fields(customer=Customer, outbound_close_user=User, returned_close_user=User)

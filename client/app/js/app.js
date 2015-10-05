@@ -18,7 +18,9 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appDirectives.icons',
     'appDirectives.modal',
     'appDirectives.table',
-    'appFactories',
+    'appFactories.common',
+    'appFactories.controller',
+    'appFactories.resource',
     'appFilters',
     'appServices'
 ]);
@@ -54,7 +56,8 @@ storekeeperApp.config(['$routeProvider',
                 'templateUrl': 'partials/views/items.html',
                 'controller': 'ItemsController',
                 'resolve': sessionRequired,
-                'reloadOnSearch': false
+                'reloadOnSearch': false,
+                'sidebarsEnabled': true
             }).
             otherwise({
                 'redirectTo': '/items'

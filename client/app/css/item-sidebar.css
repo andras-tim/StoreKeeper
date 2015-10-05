@@ -1,0 +1,17 @@
+.item-sidebar .barcode-value {
+    font-weight: bold;
+}
+
+.item-sidebar .quantity-value {}
+
+.item-sidebar .item-name-value {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.item-sidebar .article-number-value {
+}
+
+.item-sidebar .vendor-value {
+    font-style: italic;
+}
