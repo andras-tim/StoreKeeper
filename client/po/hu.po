@@ -28,11 +28,11 @@ msgstr "Új tétel hozzáadása a listához"
 msgid "Article Number"
 msgstr "Cikkszám"
 
-#: app/partials/views/item.html:21
+#: app/partials/views/item.html:26
 msgid "Article no."
 msgstr "Cikkszám"
 
-#: app/partials/views/item.html:21
+#: app/partials/views/item.html:26
 msgid "Article number is required"
 msgstr "A cikkszámot kötelező megadni"
 
@@ -44,7 +44,7 @@ msgstr "Vonalkód hozzárendelése egy létező elemhez"
 msgid "Assign to item"
 msgstr "Hozzárendelés egy elemhez"
 
-#: app/partials/views/item.html:54
+#: app/partials/views/item.html:59
 msgid "Barcode"
 msgstr "Vonalkód"
 
@@ -60,12 +60,12 @@ msgstr "Vonalkód, elem név, cikkszám"
 msgid "Cancel"
 msgstr "Mégse"
 
-#: app/partials/views/item.html:109
+#: app/partials/views/item.html:114
 #: app/partials/widgets/modal/details_modal_navbar.html:17
 msgid "Close"
 msgstr "Bezárás"
 
-#: app/partials/views/item.html:56
+#: app/partials/views/item.html:61
 msgid "Commands"
 msgstr "Műveletek"
 
@@ -77,7 +77,7 @@ msgstr "Darabszám"
 msgid "Do you want to clear list?"
 msgstr "Biztosan üríteni szeretné az tétellistát?"
 
-#: app/js/controllers/views/item.js:155
+#: app/js/controllers/views/item.js:182
 msgid "Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})"
 msgstr ""
 "Biztosan törölni szeretné a {{ barcode }} ({{ quantity }} {{ unit }}) "
@@ -99,15 +99,15 @@ msgstr ""
 msgid "Do you want to print sum {{ count }} pcs. labels?"
 msgstr "Biztosan ki szeretne nyomtatni {{ count }} darab címkét?"
 
-#: app/partials/views/item.html:83
+#: app/partials/views/item.html:88
 msgid "Download label file"
 msgstr "Címke fájl letöltése"
 
-#: app/partials/views/item.html:22
+#: app/partials/views/item.html:27
 msgid "Enter article number"
 msgstr "Írja be a cikkszámot"
 
-#: app/partials/views/item.html:26
+#: app/partials/views/item.html:31
 msgid "Enter name of item"
 msgstr "Írja be a nevét"
 
@@ -123,15 +123,15 @@ msgstr "Írja be a gyártót"
 msgid "Error {{ status }}"
 msgstr "Hiba {{status}}"
 
-#: app/partials/views/item.html:38
+#: app/partials/views/item.html:43
 msgid "In Stock"
 msgstr "Raktáron"
 
-#: app/partials/views/item-selector.html:11 app/partials/views/item.html:5
+#: app/partials/views/item-selector.html:11 app/partials/views/item.html:9
 msgid "Item"
 msgstr "Elem"
 
-#: app/partials/views/item-selector.html:16 app/partials/views/item.html:77
+#: app/partials/views/item-selector.html:16 app/partials/views/item.html:82
 msgid "Item amount for this barcode"
 msgstr "A vonalkódhoz tartozó elemszám"
 
@@ -155,7 +155,11 @@ msgstr "Elemek"
 msgid "Login"
 msgstr "Bejelentkezés"
 
-#: app/partials/views/item.html:67
+#: app/partials/widgets/user_menu.html:3
+msgid "Logout"
+msgstr "Kijelentkezés"
+
+#: app/partials/views/item.html:72
 msgid "Master barcode for this item"
 msgstr "Fő címke ehhez az elemhez"
 
@@ -163,13 +167,17 @@ msgstr "Fő címke ehhez az elemhez"
 msgid "Move elements to the Items"
 msgstr "Tételek mozgatása az Elemekhez"
 
-#: app/partials/views/item.html:25 app/partials/views/items.html:11
+#: app/partials/views/item.html:30 app/partials/views/items.html:11
 msgid "Name"
 msgstr "Megnevezés"
 
-#: app/partials/views/item.html:25
+#: app/partials/views/item.html:30
 msgid "Name is required"
 msgstr "A felhasználónevet kötelező megadni"
+
+#: app/partials/views/item.html:6
+msgid "New Item"
+msgstr "Új elem"
 
 #: app/partials/views/login.html:12
 msgid "Password"
@@ -179,7 +187,7 @@ msgstr "Jelszó"
 msgid "Password is required"
 msgstr "A jelszót kötelező megadni"
 
-#: app/partials/views/item.html:82
+#: app/partials/views/item.html:87
 msgid "Print label"
 msgstr "Címke nyomtatása"
 
@@ -196,7 +204,7 @@ msgstr "Címke nyomtatás az összes tételhez"
 msgid "Quantity"
 msgstr "Mennyiség"
 
-#: app/partials/views/item.html:55
+#: app/partials/views/item.html:60
 msgid "Quantity ({{ item.unit.unit }})"
 msgstr "Mennyiség"
 
@@ -212,7 +220,7 @@ msgstr "Emlékezz rám"
 msgid "Remove all elements from list"
 msgstr "Az összes tltel eltávolítása a listából"
 
-#: app/partials/views/item.html:84
+#: app/partials/views/item.html:89
 msgid "Remove label"
 msgstr "Címke törlése"
 
@@ -220,7 +228,7 @@ msgstr "Címke törlése"
 msgid "Remove this element"
 msgstr "Elem eltávolítása"
 
-#: app/partials/views/item.html:108
+#: app/partials/views/item.html:113
 msgid "Save"
 msgstr "Mentés"
 
@@ -241,11 +249,11 @@ msgstr "Az űrlap még nincs mentve. Biztos el akarja hagyni az oldalt?"
 msgid "Toggle menu"
 msgstr "Menü megjelenítése/elrejtése"
 
-#: app/partials/views/item.html:29
+#: app/partials/views/item.html:34
 msgid "Unit"
 msgstr "Mennyiségi egység"
 
-#: app/partials/views/item.html:29
+#: app/partials/views/item.html:34
 msgid "Unit is required"
 msgstr "A mennyiségi egységet kötelező megadni"
 
@@ -261,11 +269,11 @@ msgstr "Felhasználónév"
 msgid "Username is required"
 msgstr "A felhasználónevet kötelező megadni"
 
-#: app/partials/views/item.html:17 app/partials/views/items.html:9
+#: app/partials/views/item.html:22 app/partials/views/items.html:9
 msgid "Vendor"
 msgstr "Gyártó"
 
-#: app/partials/views/item.html:17
+#: app/partials/views/item.html:22
 msgid "Vendor is required"
 msgstr "A gyártót kötelező megadni"
 
