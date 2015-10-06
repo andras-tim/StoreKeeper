@@ -3,8 +3,8 @@
 var appViewControllers = angular.module('appControllers.views');
 
 
-appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Restangular', 'gettextCatalog', 'CommonFactory', 'ItemService',
-    function ItemController ($scope, $window, $q, Restangular, gettextCatalog, CommonFactory, ItemService) {
+appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$timeout', 'Restangular', 'gettextCatalog', 'CommonFactory', 'ItemService',
+    function ItemController ($scope, $window, $q, $timeout, Restangular, gettextCatalog, CommonFactory, ItemService) {
         function saveChanges() {
             $scope.$broadcast('show-errors-check-validity');
 
@@ -13,8 +13,13 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Res
                 'savingItem',
                 function () {
                     if (angular.isDefined($scope.elementData.onSave)) {
-                        $scope.elementData.onSave();
+                        $timeout(function () {
+                            $scope.elementData.onSave($scope.item, $scope.barcodes);
+                        });
                     }
+                    angular.merge($scope.elementData, $scope.item);
+                    $scope.elementData.new = undefined;
+
                     console.log('done');
                 });
         }
@@ -32,14 +37,24 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Res
                 return promise;
             }
 
-            return CommonFactory.handlePromise(
-                $scope.item.put(),
-                null,
-                function () {
-                    console.log('saving item');
-                    angular.merge($scope.elementData, $scope.item);
-                    $scope.itemForm.$setPristine();
-                });
+            if ($scope.elementData.new) {
+                return CommonFactory.handlePromise(
+                    ItemService.post(Restangular.copy($scope.item)),
+                    null,
+                    function (resp) {
+                        $scope.item = resp;
+                        $scope.itemForm.$setPristine();
+                    });
+            } else {
+                return CommonFactory.handlePromise(
+                    $scope.item.put(),
+                    null,
+                    function () {
+                        console.log('saving item');
+                        angular.merge($scope.elementData, $scope.item);
+                        $scope.itemForm.$setPristine();
+                    });
+            }
         }
 
         function saveBarcodesChanges() {
@@ -58,6 +73,15 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Res
 
             if (!$scope.barcodesForm.$dirty || !$scope.barcodesForm.$valid) {
                 return;
+            }
+
+            if ($scope.elementData.new) {
+                return CommonFactory.handlePromise(
+                    $scope.item.all('barcodes').post(Restangular.copy($scope.barcodes[0])),
+                    'creatingBarcode',
+                    function (resp) {
+                        angular.merge($scope.barcodes[0], resp);
+                    });
             }
 
             _.forEach($scope.barcodes, function (barcode, i) {
@@ -121,7 +145,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Res
         function createBarcode() {
             var emptyBarcode = {'master': false};
 
-            CommonFactory.handlePromise(
+            return CommonFactory.handlePromise(
                 $scope.barcodes.post(Restangular.copy(emptyBarcode)),
                 'creatingBarcode',
                 function (resp) {
@@ -180,14 +204,49 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Res
             });
         }
 
-        $scope.item = Restangular.copy($scope.elementData);
+        function prepareScopeForNewItem() {
+            $scope.item = {
+                'article_number': '',
+                'name': '',
+                'quantity': 0,
+                'unit': {},
+                'vendor': {}
+            };
+            $scope.barcodes = [];
 
-        CommonFactory.handlePromise(
-            $scope.item.getList('barcodes'),
-            'loadingBarcodes',
-            function (barcodes) {
-                $scope.barcodes = barcodes;
+            if ($scope.elementData.new.barcode) {
+                $scope.barcodes.push({
+                    'barcode': $scope.elementData.new.barcode,
+                    'quantity': 1,
+                    'main': false,
+                    'master': false,
+                    'dirty': true
+                });
+            } else {
+                $scope.barcodes.push({
+                    'quantity': 1,
+                    'master': true,
+                    'dirty': true
+                });
+            }
+
+            $timeout(function () {
+                $scope.barcodesForm.$setDirty();
             });
+        }
+
+        if ($scope.elementData.new) {
+            prepareScopeForNewItem();
+
+        } else {
+            $scope.item = Restangular.copy($scope.elementData);
+            CommonFactory.handlePromise(
+                $scope.item.getList('barcodes'),
+                'loadingBarcodes',
+                function (barcodes) {
+                    $scope.barcodes = barcodes;
+                });
+        }
 
         $scope.createBarcode = createBarcode;
         $scope.filterAvailable = filterAvailable;
