@@ -261,7 +261,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
 
                 if (readElement.data.itemId) {
                     message = gettextCatalog.getString(
-                        'Do you want to delete barcode "{{ barcode }}" ({{ count }} x {{ quantity }} {{ unit }} of "{{ name }}")', {
+                        'Do you want to delete element "{{ barcode }}" ({{ count }} x {{ quantity }} {{ unit }} of item "{{ name }}")', {
                             'barcode': readElement.data.barcode,
                             'count': readElement.data.count,
                             'quantity': readElement.data.quantity,
@@ -270,7 +270,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                         });
                 } else {
                     message = gettextCatalog.getString(
-                        'Do you want to delete barcode "{{ barcode }}" ({{ count }} pcs)', {
+                        'Do you want to delete element "{{ barcode }}" ({{ count }} pcs)', {
                             'barcode': readElement.data.barcode,
                             'count': readElement.data.count
                         });
@@ -284,7 +284,9 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
 
             printAllElements = function printAllElements () {
                 var count = getCountOfPrintableLabels(),
-                    message = gettextCatalog.getString('Do you want to print sum ' + count + ' pcs. labels?');
+                    message = gettextCatalog.getString('Do you want to print sum {{ count }} pcs. labels?', {
+                        'count': count
+                    });
 
                 if (!$window.confirm(message)) {
                     return;
