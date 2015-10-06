@@ -205,7 +205,7 @@ appCommonFactories.factory('FloatingObjectFactory', ['$rootScope', '$route', '$l
                     $location.search(searchTag, null);
                     return;
                 }
-                if (!elementId) {
+                if (angular.isUndefined(elementId)) {
                     elementId = '1';
                 }
 
@@ -214,7 +214,7 @@ appCommonFactories.factory('FloatingObjectFactory', ['$rootScope', '$route', '$l
                 }).then(function () {
                     if (!obj.$isShown) {
                         obj.show();
-                        if (obj.$options.saveState !== false) {
+                        if (elementId && obj.$options.saveState !== false) {
                             $location.search(searchTag, elementId);
                         }
                     }

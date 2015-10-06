@@ -166,7 +166,20 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 return unLocalizedData.toUpperCase();
             },
 
-            addNewElement = function addNewElement () {},
+            addNewElement = function addNewElement (barcodeValue) {
+                var elementData = {
+                    'new': {},
+
+                    'onSave': function onSave () {
+                    }
+                };
+
+                if (angular.isDefined(barcodeValue)) {
+                    elementData.new.barcode = barcodeValue;
+                }
+
+                $scope.openModal('item', 0, elementData);
+            },
 
             getBarcodeFromObject = function getBarcodeFromObject (selectedObject) {
                 if (selectedObject.type === 'barcode') {
@@ -331,9 +344,6 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
             },
 
             moveElementsToCurrentView = function moveElementsToCurrentView () {};
-
-
-        $scope.enterNewBarcode = function enterNewBarcode () {};
 
 
         $scope.readElements = readElements.elements;

@@ -12,6 +12,9 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Res
                 saveItemChanges().then(saveBarcodesChanges),
                 'savingItem',
                 function () {
+                    if (angular.isDefined($scope.elementData.onSave)) {
+                        $scope.elementData.onSave();
+                    }
                     console.log('done');
                 });
         }

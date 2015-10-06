@@ -2,8 +2,13 @@
   <span ng-controller="ItemController">
     <div class="modal-body">
       <app-details-modal-navbar>
-        <span class="navbar-brand"><i app-icon="item"></i> {{ 'Item' | translate }} #{{ elementData.id }}</span>
-        <span class="navbar-brand" ng-bind="elementData.name"></span>
+        <span ng-if="elementData.new">
+          <span class="navbar-brand"><i app-icon="item"></i> {{ 'New Item' | translate }}</span>
+        </span>
+        <span ng-if="!elementData.new">
+          <span class="navbar-brand"><i app-icon="item"></i> {{ 'Item' | translate }} #{{ elementData.id }}</span>
+          <span class="navbar-brand" ng-bind="elementData.name"></span>
+        </span>
       </app-details-modal-navbar>
 
       <div class="details-modal-content">
@@ -92,7 +97,7 @@
                   </tbody>
                 </table>
 
-                <button type="button" ng-disabled="creatingBarcode" class="btn btn-success btn-sm btn-sm-wide pull-right pull-bottom" ng-click="createBarcode()">
+                <button type="button" ng-disabled="creatingBarcode || elementData.new" class="btn btn-success btn-sm btn-sm-wide pull-right pull-bottom" ng-click="createBarcode()">
                   <i app-icon="add"></i>
                 </button>
               </app-details-modal-panel>
