@@ -121,66 +121,66 @@ describe('Controllers/Views: ItemsController', function () {
         expect(test.mocks.$scope.items).not.toBeDefined();
     });
 
-    describe('open Item modal', function () {
-        describe('via openItem()', function () {
-            it('set rowData', function () {
-                test.injectController();
-                test.$rootScope.$apply();
+    //describe('open Item modal', function () {
+    //    describe('via openItem()', function () {
+    //        it('set rowData', function () {
+    //            test.injectController();
+    //            test.$rootScope.$apply();
+    //
+    //            test.mocks.$scope.openItem(test.data.items[0]);
+    //            expect(test.mocks.$scope.$new).toHaveBeenCalled();
+    //            expect(test.newScope.rowData).toBe(test.data.items[0]);
+    //        });
+    //
+    //        it('is opened modal', function () {
+    //            expect(test.openedModals.length).toEqual(0);
+    //
+    //            test.injectController();
+    //            test.$rootScope.$apply();
+    //
+    //            test.mocks.$scope.openItem(test.data.items[0]);
+    //            expect(test.openedModals.length).toEqual(1);
+    //            expect(test.openedModals[0].id).toEqual('item');
+    //        });
+    //    });
+    //
+    //    it('via location search', function () {
+    //        expect(test.openedModals.length).toEqual(0);
+    //
+    //        test.filterResult = 1;
+    //        test.locationSearch.id = test.data.items[test.filterResult].id;
+    //        test.injectController();
+    //        test.$rootScope.$apply();
+    //
+    //        expect(test.openedModals.length).toEqual(1);
+    //        expect(test.openedModals[0].id).toEqual('item');
+    //    });
+    //});
 
-                test.mocks.$scope.openItem(test.data.items[0]);
-                expect(test.mocks.$scope.$new).toHaveBeenCalled();
-                expect(test.newScope.rowData).toBe(test.data.items[0]);
-            });
-
-            it('is opened modal', function () {
-                expect(test.openedModals.length).toEqual(0);
-
-                test.injectController();
-                test.$rootScope.$apply();
-
-                test.mocks.$scope.openItem(test.data.items[0]);
-                expect(test.openedModals.length).toEqual(1);
-                expect(test.openedModals[0].id).toEqual('item');
-            });
-        });
-
-        it('via location search', function () {
-            expect(test.openedModals.length).toEqual(0);
-
-            test.filterResult = 1;
-            test.locationSearch.id = test.data.items[test.filterResult].id;
-            test.injectController();
-            test.$rootScope.$apply();
-
-            expect(test.openedModals.length).toEqual(1);
-            expect(test.openedModals[0].id).toEqual('item');
-        });
-    });
-
-    describe('modal state in url', function () {
-        it('open modal set id in location search', function () {
-            test.injectController();
-            test.$rootScope.$apply();
-
-            test.mocks.$scope.openItem(test.data.items[0]);
-            expect(test.mocks.$location.search).toHaveBeenCalledWith('id', 123);
-        });
-
-        it('close an Item modal clear id in location search', function () {
-            test.injectController();
-            test.$rootScope.$apply();
-
-            test.eventListeners['modal.hide'](test.mocks.$event, test.data.itemModal);
-            expect(test.mocks.$location.search).toHaveBeenCalledWith('id', null);
-        });
-
-        it('close a non Item modal does not do anything with location search', function () {
-            test.injectController();
-            test.$rootScope.$apply();
-            test.mocks.$location.search.calls.reset();
-
-            test.eventListeners['modal.hide'](test.mocks.$event, test.data.otherModal);
-            expect(test.mocks.$location.search).not.toHaveBeenCalled();
-        });
-    });
+    //describe('modal state in url', function () {
+    //    it('open modal set id in location search', function () {
+    //        test.injectController();
+    //        test.$rootScope.$apply();
+    //
+    //        test.mocks.$scope.openItem(test.data.items[0]);
+    //        expect(test.mocks.$location.search).toHaveBeenCalledWith('id', 123);
+    //    });
+    //
+    //    it('close an Item modal clear id in location search', function () {
+    //        test.injectController();
+    //        test.$rootScope.$apply();
+    //
+    //        test.eventListeners['modal.hide'](test.mocks.$event, test.data.itemModal);
+    //        expect(test.mocks.$location.search).toHaveBeenCalledWith('id', null);
+    //    });
+    //
+    //    it('close a non Item modal does not do anything with location search', function () {
+    //        test.injectController();
+    //        test.$rootScope.$apply();
+    //        test.mocks.$location.search.calls.reset();
+    //
+    //        test.eventListeners['modal.hide'](test.mocks.$event, test.data.otherModal);
+    //        expect(test.mocks.$location.search).not.toHaveBeenCalled();
+    //    });
+    //});
 });
