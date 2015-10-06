@@ -3,7 +3,7 @@
 describe('Factories/Resource: ConfigFactory', function () {
     var test;
 
-    beforeEach(module('appFactories.resource'));
+    beforeEach(module('appFactories.resources'));
 
     beforeEach(function () {
         test = this;

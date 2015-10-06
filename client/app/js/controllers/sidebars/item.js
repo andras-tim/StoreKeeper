@@ -1,10 +1,10 @@
 'use strict';
 
-var appItemSidebarControllers = angular.module('appControllers.sidebar.item', []);
+var appSidebarControllers = angular.module('appControllers.sidebars');
 
 
-appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
-    function ItemSidebarController ($scope, $log, $window, $modal, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory) {
+appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
+    function ItemSidebarController ($scope, $q, $log, $window, $modal, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory) {
         var
             /**
              * Persistent storage
@@ -74,7 +74,7 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log',
 
                 addNewElement = function addNewElement (barcodeValue, count) {
                     pushElementData({
-                        'barcode': barcodeValue.toUpperCase(),
+                        'barcode': barcodeValue,
                         'itemId': null,
                         'count': count || 1
                     });
@@ -133,15 +133,37 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log',
              * UI helper functions
              */
             enterElement = function enterElement () {
-                var barcode = $scope.searchField;
+                var barcode;
+
                 if (angular.isObject($scope.searchField)) {
                     barcode = getBarcodeFromObject($scope.searchField);
+                } else {
+                    barcode = normalizeReadData($scope.searchField);
                 }
                 barcodeCache.getBarcode(barcode).then(
                     handleExistingBarcode,
                     handleNewBarcode
                 );
                 $scope.searchField = '';
+            },
+
+            normalizeReadData = function normalizeReadData (data) {
+                var unLocalizedData,
+                    translate = {
+                        //'!': '$', // FIXME: can not detect keyboard layout in JS
+                        //'-': '/', // FIXME: translated only the unequivocal translatable symbols from Code39 and 93 standards
+                        'ö': '0',
+                        'ü': '-',
+                        'Ó': '+',
+                        '(': '*'
+                    },
+                    translateRe = /[öüÓ(]/g;
+
+                unLocalizedData = (data.replace(translateRe, function (match) {
+                    return translate[match];
+                }));
+
+                return unLocalizedData.toUpperCase();
             },
 
             addNewElement = function addNewElement () {},
@@ -175,49 +197,51 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log',
                 persistentStorage.save();
             },
 
-            addBarcodeToANewItem = function addBarcodeToANewItem ($index, readElement) {},
+            addBarcodeToANewItem = function addBarcodeToANewItem ($index, readElement) {
+                addNewElement(readElement.data.barcode);
+            },
 
             assignBarcodeToAnExistingItem = function assignBarcodeToAnExistingItem ($index, readElement) {
-                var scope = $scope.$new(),
-                    modal;
+                var elementData = {
+                    'defaultButtonTitle': gettextCatalog.getString('Assign to item'),
+                    'selectedItem': '',
+                    'barcodeQuantity': 1,
 
-                scope.defaultButtonTitle = gettextCatalog.getString('Assign to item');
-                scope.data = {
-                    'selectedItem': ''
-                };
-                scope.onItemSelect = function onItemSelect (selectedItem) {
-                    var
-                        barcode = {
-                            'barcode': readElement.data.barcode
-                        };
-
-                    itemCache.getItemById(selectedItem.item_id).then(
-                        function (item) {
-                            CommonFactory.handlePromise(item.all('barcodes').post(Restangular.copy(barcode)),
-                                'itemSelectorOperation',
-                                function (resp) {
-                                    readElement.data.itemId = selectedItem.item_id;
-                                    persistentStorage.save();
-
-                                    readElement.barcode = resp;
-                                    itemCache.getItemById(selectedItem.item_id).then(
-                                        function (item) {
-                                            readElement.item = item;
-                                        }
-                                    );
-
-                                    modal.$promise.then(function () {
-                                        modal.hide();
-                                        scope.$destroy();
-                                    });
-                                });
-                        });
+                    'onItemSelect': function onItemSelect () {
+                        addBarcodeToItem(elementData.selectedItem.item_id, readElement.data.barcode, elementData.barcodeQuantity, readElement).then(
+                            function () {
+                                $scope.closeModal('item-selector');
+                            });
+                    }
                 };
 
-                modal = $modal({
-                    'templateUrl': 'partials/views/item-selector.html',
-                    'scope': scope,
-                    'show': true
+                $scope.openModal('item-selector', null, elementData);
+            },
+
+            addBarcodeToItem = function addBarcodeToItem (itemId, barcodeValue, barcodeQuantity, localElement) {
+                function updateLocalState(barcodeObject) {
+                    localElement.data.itemId = itemId;
+                    persistentStorage.save();
+
+                    localElement.barcode = barcodeObject;
+                    itemCache.getItemById(itemId).then(function (item) {
+                        localElement.item = item;
+                        return $q.when();
+                    }).then(function () {
+                        return barcodeCache.refresh();
+                    });
+                }
+
+                return itemCache.getItemById(itemId).then(function (item) {
+                    var barcode = {
+                        'barcode': barcodeValue,
+                        'quantity': barcodeQuantity
+                    };
+
+                    return CommonFactory.handlePromise(
+                        item.all('barcodes').post(Restangular.copy(barcode)),
+                        'itemSelectorOperation',
+                        updateLocalState);
                 });
             },
 
@@ -237,7 +261,7 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log',
 
                 if (readElement.data.itemId) {
                     message = gettextCatalog.getString(
-                        'Do you want to delete barcode "{{ barcode }}" ({{ count }} x {{ quantity }} {{ unit }} of "{{ name }}")', {
+                        'Do you want to delete element "{{ barcode }}" ({{ count }} x {{ quantity }} {{ unit }} of item "{{ name }}")', {
                             'barcode': readElement.data.barcode,
                             'count': readElement.data.count,
                             'quantity': readElement.data.quantity,
@@ -246,7 +270,7 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log',
                         });
                 } else {
                     message = gettextCatalog.getString(
-                        'Do you want to delete barcode "{{ barcode }}" ({{ count }} pcs)', {
+                        'Do you want to delete element "{{ barcode }}" ({{ count }} pcs)', {
                             'barcode': readElement.data.barcode,
                             'count': readElement.data.count
                         });
@@ -260,7 +284,9 @@ appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log',
 
             printAllElements = function printAllElements () {
                 var count = getCountOfPrintableLabels(),
-                    message = gettextCatalog.getString('Do you want to print sum ' + count + ' pcs. labels?');
+                    message = gettextCatalog.getString('Do you want to print sum {{ count }} pcs. labels?', {
+                        'count': count
+                    });
 
                 if (!$window.confirm(message)) {
                     return;

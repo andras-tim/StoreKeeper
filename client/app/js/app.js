@@ -9,9 +9,8 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'gettext',
     'smart-table',
     'appControllers.common',
-    'appControllers.views.login',
-    'appControllers.views.items',
-    'appControllers.sidebar.item',
+    'appControllers.views',
+    'appControllers.sidebars',
     'appDirectives.common',
     'appDirectives.fields',
     'appDirectives.form',
@@ -19,8 +18,8 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appDirectives.modal',
     'appDirectives.table',
     'appFactories.common',
-    'appFactories.controller',
-    'appFactories.resource',
+    'appFactories.form',
+    'appFactories.resources',
     'appFilters',
     'appServices'
 ]);
@@ -57,7 +56,7 @@ storekeeperApp.config(['$routeProvider',
                 'controller': 'ItemsController',
                 'resolve': sessionRequired,
                 'reloadOnSearch': false,
-                'sidebarsEnabled': true
+                'floatingsEnabled': true
             }).
             otherwise({
                 'redirectTo': '/items'
@@ -71,6 +70,16 @@ storekeeperApp.run(['$rootScope',
             'item': {
                 'templateUrl': 'partials/sidebars/item.html',
                 'placement': 'left'
+            }
+        };
+        $rootScope.modals = {
+            'item': {
+                'templateUrl': 'partials/views/item.html',
+                'dataFactory': 'item'
+            },
+            'item-selector': {
+                'templateUrl': 'partials/views/item-selector.html',
+                'saveState': false
             }
         };
     }]);
@@ -97,8 +106,8 @@ storekeeperApp.run(['$window', 'gettextCatalog', 'ConfigFactory', 'CommonFactory
     }]);
 
 
-storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog',
-    function ($rootScope, $window, gettextCatalog) {
+storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog', 'SidebarFactory', 'ModalFactory',
+    function ($rootScope, $window, gettextCatalog, SidebarFactory, ModalFactory) {
         function onWindowBeforeUnload() {
             var event = $rootScope.$broadcast('windowBeforeUnload');
 
@@ -108,6 +117,11 @@ storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog',
         }
 
         $window.onbeforeunload = onWindowBeforeUnload;
+
+        $rootScope.openSidebar = SidebarFactory.open;
+        $rootScope.closeSidebar = SidebarFactory.close;
+        $rootScope.openModal = ModalFactory.open;
+        $rootScope.closeModal = ModalFactory.close;
     }]);
 
 
@@ -115,7 +129,8 @@ storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider
     function ($modalProvider, $tooltipProvider, $typeaheadProvider, $asideProvider) {
         angular.extend($modalProvider.defaults, {
             'html': true,
-            'keyboard': false
+            'keyboard': false,
+            'show': false
         });
         angular.extend($tooltipProvider.defaults, {
             'trigger': 'hover',

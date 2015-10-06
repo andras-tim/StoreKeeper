@@ -1,6 +1,6 @@
 'use strict';
 
-var appResourceFactories = angular.module('appFactories.resource', []);
+var appResourceFactories = angular.module('appFactories.resources', []);
 
 
 appResourceFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
@@ -190,10 +190,21 @@ appResourceFactories.factory('BarcodeCacheFactory', ['$q', 'Restangular', 'Commo
                         });
 
                         return result.promise;
+                    },
+
+                    clear = function clear () {
+                        barcodeCache = undefined;
+                        gettingBarcodesPromise = undefined;
+                    },
+
+                    refresh = function refresh () {
+                        clear();
+                        return getBarcodes();
                     };
 
                 return {
-                    'getBarcode': getBarcode
+                    'getBarcode': getBarcode,
+                    'refresh': refresh
                 };
             };
 
@@ -235,4 +246,16 @@ appResourceFactories.factory('ItemCacheFactory', ['$q', 'Restangular', 'CommonFa
             };
 
         return ItemCache;
+    }]);
+
+
+appResourceFactories.factory('ElementDataFactory', ['ItemService',
+    function ElementDataFactory (ItemService) {
+        function itemPromise(elementId) {
+            return ItemService.one(elementId).get();
+        }
+
+        return {
+            'item': itemPromise
+        };
     }]);

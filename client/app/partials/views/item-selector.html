@@ -9,7 +9,11 @@
         <div class="container-fluid">
           <div class="row">
             <app-input-form a-label="{{ 'Item' | translate }}" a-required="{{ 'Item can not be empty' | translate }}">
-              <app-item-input a-model="data.selectedItem" a-autofocus></app-item-input>
+              <app-item-input a-model="elementData.selectedItem" class="field-count" a-autofocus></app-item-input>
+            </app-input-form>
+
+            <app-input-form a-label="{{ 'Barcode quantity' | translate }}" a-required="{{ 'Quantity can not be empty' | translate }}">
+              <app-quantity-input a-model="elementData.barcodeQuantity" app-tooltip="{{ 'Item amount for this barcode' | translate }}" class="field-quantity"></app-quantity-input>
             </app-input-form>
           </div>
         </div>
@@ -18,7 +22,7 @@
 
     <div class="modal-footer">
       <i app-icon="spinner" ng-if="itemSelectorOperation"></i>
-      <button type="submit" class="btn btn-primary" ng-click="onItemSelect(data.selectedItem)" ng-disabled="itemSelectorOperation" ng-bind="defaultButtonTitle"></button>
+      <button type="submit" class="btn btn-primary" ng-click="elementData.onItemSelect()" ng-disabled="itemSelectorOperation" ng-bind="elementData.defaultButtonTitle"></button>
       <button type="button" class="btn btn-default" ng-click="$hide()" translate>Cancel</button>
     </div>
   </form>

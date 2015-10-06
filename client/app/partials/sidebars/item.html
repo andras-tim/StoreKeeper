@@ -6,7 +6,7 @@
         <h4 class="aside-title">
           <i app-icon="search"></i> <span translate>Item collector</span><span ng-if="itemSidebarLoadingBarcodes || itemSidebarLoadingBarcodeItem || itemSidebarPrintingBarcode" app-icon="spinner" class="pull-right"></span>
         </h4>
-        <form name="barcodeForm">
+        <form name="elementForm">
           <div class="container-fluid">
 
             <div class="row">
@@ -14,7 +14,7 @@
                 <div class="input-group">
                   <app-item-input a-model="searchField" a-autofocus></app-item-input>
                   <span class="input-group-btn">
-                    <button type="submit" class="btn btn-success" ng-disabled="barcodeForm.$invalid" ng-click="enterElement()" app-tooltip="{{ 'Add element to list' | translate }}" a-placement="bottom"><i app-icon="add"></i></button>
+                    <button type="submit" class="btn btn-success" ng-disabled="elementForm.$invalid" ng-click="enterElement()" app-tooltip="{{ 'Add element to list' | translate }}" a-placement="bottom"><i app-icon="add"></i></button>
                   </span>
                 </div>
               </div>
@@ -46,13 +46,13 @@
 
             <div class="col-md-4 col-sm-5 col-xs-6 noselect">
               <div class="row">
-                <input name="count" ng-model="readElement.data.count" ng-change="save()" type="number" min="1" class="form-control field-count" placeholder="{{ 'Count' | translate }}" required />
+                <input name="count" ng-model="readElement.data.count" ng-change="save()" type="number" class="form-control field-count" placeholder="{{ 'Count' | translate }}" required />
               </div>
               <div class="row commands">
                 <div class="btn-group pull-right" role="group">
                   <button type="button" class="btn btn-default btn-sm" ng-click="addBarcodeToANewItem($index, readElement)" ng-if="!readElement.data.itemId" app-tooltip="{{ 'Add barcode to a new item' | translate }}"><i app-icon="add"></i></button>
                   <button type="button" class="btn btn-default btn-sm" ng-click="assignBarcodeToAnExistingItem($index, readElement)" ng-if="!readElement.data.itemId" app-tooltip="{{ 'Assign barcode to an existing item' | translate }}"><i app-icon="assign"></i></button>
-                  <button type="button" class="btn btn-default btn-sm" ng-click="printElement($index, readElement)" ng-if="readElement.data.itemId" ng-disabled="itemSidebarPrintingBarcode" app-tooltip="{{ 'Print label for this barcode' | translate }}"><i app-icon="print"></i></button>
+                  <button type="button" class="btn btn-default btn-sm" ng-click="printElement($index, readElement)" ng-if="readElement.data.itemId" ng-disabled="itemSidebarPrintingBarcode" app-tooltip="{{ 'Print label for this element' | translate }}"><i app-icon="print"></i></button>
                   <button type="button" class="btn btn-danger btn-sm" ng-click="removeElement($index, readElement)" app-tooltip="{{ 'Remove this element' | translate }}"><i app-icon="delete"></i></button>
                 </div>
               </div>
@@ -64,9 +64,9 @@
 
       <div class="aside-footer">
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-default btn-wide" ng-disabled="!readElements.length || itemSidebarPrintingBarcode" ng-click="printAllElements()" app-tooltip="{{ 'Print labels for all barcodes' | translate }}"><i app-icon="print"></i></button>
-          <button type="button" class="btn btn-danger btn-wide" ng-disabled="!readElements.length" ng-click="removeAllElements()" app-tooltip="{{ 'Remove all barcodes from list' | translate }}"><i app-icon="delete"></i></button>
-          <button type="button" class="btn btn-success btn-wide" ng-disabled="!readElements.length" ng-click="moveElementsToCurrentView()" app-tooltip="{{ 'Move all barcodes to the current view' | translate }}"><i app-icon="addToView"></i></button>
+          <button type="button" class="btn btn-default btn-wide" ng-disabled="!readElements.length || itemSidebarPrintingBarcode" ng-click="printAllElements()" app-tooltip="{{ 'Print labels for all elements' | translate }}"><i app-icon="print"></i></button>
+          <button type="button" class="btn btn-danger btn-wide" ng-disabled="!readElements.length" ng-click="removeAllElements()" app-tooltip="{{ 'Remove all elements from list' | translate }}"><i app-icon="delete"></i></button>
+          <button type="button" class="btn btn-success btn-wide" ng-disabled="!readElements.length" ng-click="moveElementsToCurrentView()" app-tooltip="{{ 'Move elements to the Items' | translate }}"><i app-icon="addToView"></i></button>
         </div>
       </div>
 

@@ -20,6 +20,7 @@ module.exports = function (config) {
         'files': [
             'bower_components/jquery/dist/jquery.js',
             'bower_components/lodash/lodash.js',
+            'bower_components/sprintf/src/sprintf.js',
             'bower_components/angular/angular.js',
             'bower_components/angular-route/angular-route.js',
             'bower_components/angular-route/angular-route.js',

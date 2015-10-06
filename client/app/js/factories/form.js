@@ -1,9 +1,9 @@
 'use strict';
 
-var appControllerFactories = angular.module('appFactories.controller', []);
+var appFormFactories = angular.module('appFactories.form', []);
 
 
-appControllerFactories.factory('TypeaheadFactory', ['$typeahead', '$parseOptions',
+appFormFactories.factory('TypeaheadFactory', ['$typeahead', '$parseOptions',
     function TypeaheadFactory ($typeahead, $parseOptions) {
         // based on angular-strap.js
 

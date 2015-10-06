@@ -1,9 +1,9 @@
 'use strict';
 
-var appLoginViewControllers = angular.module('appControllers.views.login', []);
+var appViewControllers = angular.module('appControllers.views');
 
 
-appLoginViewControllers.controller('LoginController', ['$scope', '$location', 'SessionFactory', 'CommonFactory',
+appViewControllers.controller('LoginController', ['$scope', '$location', 'SessionFactory', 'CommonFactory',
     function LoginController ($scope, $location, SessionFactory, CommonFactory) {
         function login() {
             $scope.$broadcast('show-errors-check-validity');

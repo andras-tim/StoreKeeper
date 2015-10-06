@@ -17,6 +17,7 @@ module.exports = function (grunt) {
         'banner': '<%= grunt.package.name %> v<%= version %> | <%= grunt.package.author %> | ' +
                   '<%= grunt.package.license %> Licensed | <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>',
         'min': production ? '.min' : '',
+        'resourceRelease': production ? 'dist' : 'src',
 
         'clean': {
             'dist': ['app/dist']
@@ -95,6 +96,7 @@ module.exports = function (grunt) {
                 'src': [
                     'bower_components/jquery/dist/jquery<%= min %>.js',
                     'bower_components/lodash/lodash<%= min %>.js',
+                    'bower_components/sprintf/<%= resourceRelease %>/sprintf<%= min %>.js',
                     'bower_components/angular/angular<%= min %>.js',
 
                     'bower_components/angular-route/angular-route<%= min %>.js',

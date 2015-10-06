@@ -2,8 +2,8 @@
   <span ng-controller="ItemController">
     <div class="modal-body">
       <app-details-modal-navbar>
-        <span class="navbar-brand"><i app-icon="item"></i> {{ 'Item' | translate }} #{{ rowData.id }}</span>
-        <span class="navbar-brand" ng-bind="rowData.name"></span>
+        <span class="navbar-brand"><i app-icon="item"></i> {{ 'Item' | translate }} #{{ elementData.id }}</span>
+        <span class="navbar-brand" ng-bind="elementData.name"></span>
       </app-details-modal-navbar>
 
       <div class="details-modal-content">
@@ -11,7 +11,7 @@
           <div class="row">
 
             <!-- Item details -->
-            <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" a-modal-id="modalId">
+            <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" a-modal-id="floatingObjectId">
               <app-details-modal-panel a-half-width="true">
 
                 <app-input-form a-label="{{ 'Vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}">
