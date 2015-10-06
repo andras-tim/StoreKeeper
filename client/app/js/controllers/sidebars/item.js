@@ -166,7 +166,26 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 return unLocalizedData.toUpperCase();
             },
 
-            addNewElement = function addNewElement () {},
+            addNewElement = function addNewElement (readElement, barcodeValue) {
+                var elementData = {
+                    'new': {},
+
+                    'onSave': function onSave (item, barcodes) {
+                        if (angular.isUndefined(readElement) && barcodes.length) {
+                            barcodeCache.refresh().then(function () {
+                                barcodeCache.getBarcode(barcodes[0].barcode).then(handleExistingBarcode);
+                            });
+                        }
+                        $scope.closeModal('item');
+                    }
+                };
+
+                if (angular.isDefined(barcodeValue)) {
+                    elementData.new.barcode = barcodeValue;
+                }
+
+                $scope.openModal('item', 0, elementData);
+            },
 
             getBarcodeFromObject = function getBarcodeFromObject (selectedObject) {
                 if (selectedObject.type === 'barcode') {
@@ -198,7 +217,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
             },
 
             addBarcodeToANewItem = function addBarcodeToANewItem ($index, readElement) {
-                addNewElement(readElement.data.barcode);
+                addNewElement(readElement, readElement.data.barcode);
             },
 
             assignBarcodeToAnExistingItem = function assignBarcodeToAnExistingItem ($index, readElement) {
@@ -331,9 +350,6 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
             },
 
             moveElementsToCurrentView = function moveElementsToCurrentView () {};
-
-
-        $scope.enterNewBarcode = function enterNewBarcode () {};
 
 
         $scope.readElements = readElements.elements;

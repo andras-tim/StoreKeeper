@@ -50,6 +50,10 @@ appFieldsDirectives.directive('appVendorInput',
                         });
 
                     $scope.data.vendor = $scope.aModel;
+                    $scope.$watch('data.vendor', function (newVendor) {
+                        $scope.aModel = newVendor;
+                    });
+
                     $scope.createVendor = createVendor;
                 }]
         };
@@ -103,6 +107,10 @@ appFieldsDirectives.directive('appUnitInput',
                         });
 
                     $scope.data.unit = $scope.aModel;
+                    $scope.$watch('data.unit', function (newUnit) {
+                        $scope.aModel = newUnit;
+                    });
+
                     $scope.createUnit = createUnit;
                 }]
         };
