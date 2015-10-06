@@ -9,9 +9,8 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'gettext',
     'smart-table',
     'appControllers.common',
-    'appControllers.views.login',
-    'appControllers.views.items',
-    'appControllers.sidebar.item',
+    'appControllers.views',
+    'appControllers.sidebars',
     'appDirectives.common',
     'appDirectives.fields',
     'appDirectives.form',
@@ -19,8 +18,8 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appDirectives.modal',
     'appDirectives.table',
     'appFactories.common',
-    'appFactories.controller',
-    'appFactories.resource',
+    'appFactories.form',
+    'appFactories.resources',
     'appFilters',
     'appServices'
 ]);

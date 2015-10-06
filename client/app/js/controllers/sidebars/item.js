@@ -1,9 +1,9 @@
 'use strict';
 
-var appItemSidebarControllers = angular.module('appControllers.sidebar.item', []);
+var appSidebarControllers = angular.module('appControllers.sidebars');
 
 
-appItemSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
+appSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
     function ItemSidebarController ($scope, $log, $window, $modal, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory) {
         var
             /**

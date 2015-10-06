@@ -3,7 +3,7 @@
 describe('Controllers/Views: LoginController', function () {
     var test;
 
-    beforeEach(module('appControllers.views.login'));
+    beforeEach(module('appControllers.views'));
 
     beforeEach(function () {
         test = this;

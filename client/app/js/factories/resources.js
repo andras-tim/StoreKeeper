@@ -1,6 +1,6 @@
 'use strict';
 
-var appResourceFactories = angular.module('appFactories.resource', []);
+var appResourceFactories = angular.module('appFactories.resources', []);
 
 
 appResourceFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigService',
