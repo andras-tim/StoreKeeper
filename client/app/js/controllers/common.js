@@ -3,35 +3,17 @@
 var appControllers = angular.module('appControllers.common', []);
 
 
-appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory',
-    function CommonController ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory) {
-        function initializeShortcutHandler() {
-            var shortcuts = {
-                '19': function breakPause () {
-                    $scope.openSidebar('item');
-                }
-            };
-
-            function onKeyDown($event) {
-                var handler = shortcuts[$event.which];
-                if (angular.isUndefined(handler)) {
-                    return;
-                }
-                handler();
-            }
-
-            return {
-                'onKeyDown': onKeyDown
-            };
-        }
-
-        var shortcutHandler = initializeShortcutHandler();
-
+appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory', 'ShortcutFactory',
+    function CommonController ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory, ShortcutFactory) {
         ConfigFactory.getConfig().then(function (config) {
             $scope.appTitle = config.app_title;
         }, CommonFactory.showResponseError);
 
-        $scope.onKeyDown = shortcutHandler.onKeyDown;
+        $scope.onKeyDown = new ShortcutFactory({
+            '19': function breakPause () {
+                $scope.openSidebar('item');
+            }
+        });
 
         $scope.isAuthenticated = SessionFactory.isAuthenticated;
         $scope.getWindowTitle = PageFactory.getWindowTitle;

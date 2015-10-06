@@ -307,4 +307,21 @@ appCommonFactories.factory('SidebarFactory', ['$rootScope', '$aside', 'FloatingO
         return new FloatingObjectFactory($rootScope.sidebars, '%s-sidebar', $aside, 'aside.hide');
     }]);
 
+
+appCommonFactories.factory('ShortcutFactory', [
+    function ShortcutFactory () {
+        var
+            shortcutHandler = function shortcutHandler (shortcuts) {
+                function onKeyDown($event) {
+                    var handler = shortcuts[$event.which];
+                    if (angular.isUndefined(handler)) {
+                        return;
+                    }
+                    handler();
+                }
+
+                return onKeyDown;
+            };
+
+        return shortcutHandler;
     }]);

@@ -63,7 +63,8 @@ describe('Controllers/Common: CommonController', function () {
                 },
                 'CommonFactory': {
                     'showResponseError': function () {}
-                }
+                },
+                'ShortcutFactory': function () {}
             },
 
             dependencies = {
@@ -76,6 +77,7 @@ describe('Controllers/Common: CommonController', function () {
                 'PageFactory': mocks.PageFactory,
                 'SessionFactory': mocks.SessionFactory,
                 'CommonFactory': mocks.CommonFactory
+                'ShortcutFactory': mocks.ShortcutFactory
             },
 
             injectController = function () {
