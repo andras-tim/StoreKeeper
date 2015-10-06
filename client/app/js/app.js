@@ -76,6 +76,10 @@ storekeeperApp.run(['$rootScope',
             'item': {
                 'templateUrl': 'partials/views/item.html',
                 'dataFactory': 'item'
+            },
+            'item-selector': {
+                'templateUrl': 'partials/views/item-selector.html',
+                'saveState': false
             }
         };
     }]);

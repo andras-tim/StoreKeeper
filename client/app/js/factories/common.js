@@ -214,7 +214,9 @@ appCommonFactories.factory('FloatingObjectFactory', ['$rootScope', '$route', '$l
                 }).then(function () {
                     if (!obj.$isShown) {
                         obj.show();
-                        $location.search(searchTag, elementId);
+                        if (obj.$options.saveState !== false) {
+                            $location.search(searchTag, elementId);
+                        }
                     }
                     CommonFactory.setFocus(obj);
                 });

@@ -175,50 +175,40 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$w
                 persistentStorage.save();
             },
 
-            addBarcodeToANewItem = function addBarcodeToANewItem ($index, readElement) {},
+            addBarcodeToANewItem = function addBarcodeToANewItem ($index, readElement) {
+                addNewElement(readElement.data.barcode);
+            },
 
             assignBarcodeToAnExistingItem = function assignBarcodeToAnExistingItem ($index, readElement) {
-                var scope = $scope.$new(),
-                    modal;
+                var elementData = {
+                    'defaultButtonTitle': gettextCatalog.getString('Assign to item'),
+                    'selectedItem': '',
 
-                scope.defaultButtonTitle = gettextCatalog.getString('Assign to item');
-                scope.data = {
-                    'selectedItem': ''
-                };
-                scope.onItemSelect = function onItemSelect (selectedItem) {
-                    var
-                        barcode = {
-                            'barcode': readElement.data.barcode
-                        };
+                    'onItemSelect': function onItemSelect () {
+                        var selectedItem = elementData.selectedItem,
+                            barcode = { 'barcode': readElement.data.barcode };
 
-                    itemCache.getItemById(selectedItem.item_id).then(
-                        function (item) {
-                            CommonFactory.handlePromise(item.all('barcodes').post(Restangular.copy(barcode)),
-                                'itemSelectorOperation',
-                                function (resp) {
-                                    readElement.data.itemId = selectedItem.item_id;
-                                    persistentStorage.save();
+                        itemCache.getItemById(selectedItem.item_id).then(
+                            function (item) {
+                                CommonFactory.handlePromise(item.all('barcodes').post(Restangular.copy(barcode)),
+                                    'itemSelectorOperation',
+                                    function (resp) {
+                                        readElement.data.itemId = selectedItem.item_id;
+                                        persistentStorage.save();
 
-                                    readElement.barcode = resp;
-                                    itemCache.getItemById(selectedItem.item_id).then(
-                                        function (item) {
-                                            readElement.item = item;
-                                        }
-                                    );
-
-                                    modal.$promise.then(function () {
-                                        modal.hide();
-                                        scope.$destroy();
+                                        readElement.barcode = resp;
+                                        itemCache.getItemById(selectedItem.item_id).then(
+                                            function (item) {
+                                                readElement.item = item;
+                                            }
+                                        );
+                                        $scope.closeModal('item-selector');
                                     });
-                                });
-                        });
+                            });
+                    }
                 };
 
-                modal = $modal({
-                    'templateUrl': 'partials/views/item-selector.html',
-                    'scope': scope,
-                    'show': true
-                });
+                $scope.openModal('item-selector', null, elementData);
             },
 
             printElement = function printElement ($index, readElement) {
