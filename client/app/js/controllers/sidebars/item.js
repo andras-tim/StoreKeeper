@@ -205,9 +205,10 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 var elementData = {
                     'defaultButtonTitle': gettextCatalog.getString('Assign to item'),
                     'selectedItem': '',
+                    'barcodeQuantity': 1,
 
                     'onItemSelect': function onItemSelect () {
-                        addBarcodeToItem(elementData.selectedItem.item_id, readElement.data.barcode, readElement).then(
+                        addBarcodeToItem(elementData.selectedItem.item_id, readElement.data.barcode, elementData.barcodeQuantity, readElement).then(
                             function () {
                                 $scope.closeModal('item-selector');
                             });
@@ -217,7 +218,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 $scope.openModal('item-selector', null, elementData);
             },
 
-            addBarcodeToItem = function addBarcodeToItem (itemId, barcodeValue, localElement) {
+            addBarcodeToItem = function addBarcodeToItem (itemId, barcodeValue, barcodeQuantity, localElement) {
                 function updateLocalState(barcodeObject) {
                     localElement.data.itemId = itemId;
                     persistentStorage.save();
@@ -232,7 +233,10 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 }
 
                 return itemCache.getItemById(itemId).then(function (item) {
-                    var barcode = {'barcode': localElement.data.barcode};
+                    var barcode = {
+                        'barcode': barcodeValue,
+                        'quantity': barcodeQuantity
+                    };
 
                     return CommonFactory.handlePromise(
                         item.all('barcodes').post(Restangular.copy(barcode)),
