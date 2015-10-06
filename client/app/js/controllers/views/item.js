@@ -3,8 +3,8 @@
 var appViewControllers = angular.module('appControllers.views');
 
 
-appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Restangular', 'gettextCatalog', 'CommonFactory',
-    function ItemController ($scope, $window, $q, Restangular, gettextCatalog, CommonFactory) {
+appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Restangular', 'gettextCatalog', 'CommonFactory', 'ItemService',
+    function ItemController ($scope, $window, $q, Restangular, gettextCatalog, CommonFactory, ItemService) {
         function saveChanges() {
             $scope.$broadcast('show-errors-check-validity');
 
@@ -34,7 +34,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Res
                 null,
                 function () {
                     console.log('saving item');
-                    angular.merge($scope.rowData, $scope.item);
+                    angular.merge($scope.elementData, $scope.item);
                     $scope.itemForm.$setPristine();
                 });
         }
@@ -179,7 +179,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Res
             });
         }
 
-        $scope.item = Restangular.copy($scope.rowData);
+        $scope.item = Restangular.copy($scope.elementData);
 
         CommonFactory.handlePromise(
             $scope.item.getList('barcodes'),

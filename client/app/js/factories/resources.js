@@ -236,3 +236,15 @@ appResourceFactories.factory('ItemCacheFactory', ['$q', 'Restangular', 'CommonFa
 
         return ItemCache;
     }]);
+
+
+appResourceFactories.factory('ElementDataFactory', ['ItemService',
+    function ElementDataFactory (ItemService) {
+        function itemPromise(elementId) {
+            return ItemService.one(elementId).get();
+        }
+
+        return {
+            'item': itemPromise
+        };
+    }]);
