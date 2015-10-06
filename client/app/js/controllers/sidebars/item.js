@@ -74,7 +74,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$w
 
                 addNewElement = function addNewElement (barcodeValue, count) {
                     pushElementData({
-                        'barcode': barcodeValue.toUpperCase(),
+                        'barcode': barcodeValue,
                         'itemId': null,
                         'count': count || 1
                     });
@@ -133,15 +133,37 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$w
              * UI helper functions
              */
             enterElement = function enterElement () {
-                var barcode = $scope.searchField;
+                var barcode;
+
                 if (angular.isObject($scope.searchField)) {
                     barcode = getBarcodeFromObject($scope.searchField);
+                } else {
+                    barcode = normalizeReadData($scope.searchField);
                 }
                 barcodeCache.getBarcode(barcode).then(
                     handleExistingBarcode,
                     handleNewBarcode
                 );
                 $scope.searchField = '';
+            },
+
+            normalizeReadData = function normalizeReadData (data) {
+                var unLocalizedData,
+                    translate = {
+                        //'!': '$', // FIXME: can not detect keyboard layout in JS
+                        //'-': '/', // FIXME: translated only the unequivocal translatable symbols from Code39 and 93 standards
+                        'ö': '0',
+                        'ü': '-',
+                        'Ó': '+',
+                        '(': '*'
+                    },
+                    translateRe = /[öüÓ(]/g;
+
+                unLocalizedData = (data.replace(translateRe, function (match) {
+                    return translate[match];
+                }));
+
+                return unLocalizedData.toUpperCase();
             },
 
             addNewElement = function addNewElement () {},

@@ -166,8 +166,6 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', 'Res
         }
 
         function togglePostCheck(currentBarcode) {
-            console.log(currentBarcode);
-
             if (!currentBarcode.master) {
                 return;
             }
