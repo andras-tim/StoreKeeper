@@ -190,10 +190,21 @@ appResourceFactories.factory('BarcodeCacheFactory', ['$q', 'Restangular', 'Commo
                         });
 
                         return result.promise;
+                    },
+
+                    clear = function clear () {
+                        barcodeCache = undefined;
+                        gettingBarcodesPromise = undefined;
+                    },
+
+                    refresh = function refresh () {
+                        clear();
+                        return getBarcodes();
                     };
 
                 return {
-                    'getBarcode': getBarcode
+                    'getBarcode': getBarcode,
+                    'refresh': refresh
                 };
             };
 

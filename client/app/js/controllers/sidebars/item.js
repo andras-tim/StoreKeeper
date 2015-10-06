@@ -3,8 +3,8 @@
 var appSidebarControllers = angular.module('appControllers.sidebars');
 
 
-appSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
-    function ItemSidebarController ($scope, $log, $window, $modal, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory) {
+appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
+    function ItemSidebarController ($scope, $q, $log, $window, $modal, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory) {
         var
             /**
              * Persistent storage
@@ -207,30 +207,38 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$log', '$w
                     'selectedItem': '',
 
                     'onItemSelect': function onItemSelect () {
-                        var selectedItem = elementData.selectedItem,
-                            barcode = { 'barcode': readElement.data.barcode };
-
-                        itemCache.getItemById(selectedItem.item_id).then(
-                            function (item) {
-                                CommonFactory.handlePromise(item.all('barcodes').post(Restangular.copy(barcode)),
-                                    'itemSelectorOperation',
-                                    function (resp) {
-                                        readElement.data.itemId = selectedItem.item_id;
-                                        persistentStorage.save();
-
-                                        readElement.barcode = resp;
-                                        itemCache.getItemById(selectedItem.item_id).then(
-                                            function (item) {
-                                                readElement.item = item;
-                                            }
-                                        );
-                                        $scope.closeModal('item-selector');
-                                    });
+                        addBarcodeToItem(elementData.selectedItem.item_id, readElement.data.barcode, readElement).then(
+                            function () {
+                                $scope.closeModal('item-selector');
                             });
                     }
                 };
 
                 $scope.openModal('item-selector', null, elementData);
+            },
+
+            addBarcodeToItem = function addBarcodeToItem (itemId, barcodeValue, localElement) {
+                function updateLocalState(barcodeObject) {
+                    localElement.data.itemId = itemId;
+                    persistentStorage.save();
+
+                    localElement.barcode = barcodeObject;
+                    itemCache.getItemById(itemId).then(function (item) {
+                        localElement.item = item;
+                        return $q.when();
+                    }).then(function () {
+                        return barcodeCache.refresh();
+                    });
+                }
+
+                return itemCache.getItemById(itemId).then(function (item) {
+                    var barcode = {'barcode': localElement.data.barcode};
+
+                    return CommonFactory.handlePromise(
+                        item.all('barcodes').post(Restangular.copy(barcode)),
+                        'itemSelectorOperation',
+                        updateLocalState);
+                });
             },
 
             printElement = function printElement ($index, readElement) {
