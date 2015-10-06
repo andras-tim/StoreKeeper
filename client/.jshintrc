@@ -98,9 +98,10 @@
         "inject": false,
         "element": false,
         "exports": false,
+        "helper": true,
+        "installPromiseMatchers": false,
         "module": false,
         "process": false,
-        "installPromiseMatchers": false,
-        "helper": true
+        "sprintf": false
     }
 }
