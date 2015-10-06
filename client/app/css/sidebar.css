@@ -20,7 +20,7 @@
     top: 97px;
     bottom: 64px;
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 0 10px;
 }
 
