@@ -257,3 +257,7 @@ class TestWorkItemWithClosedOutbound(CommonSessionTest):
         request = WorkItems.ITEM1.set(change={'outbound_quantity': WorkItems.ITEM1['outbound_quantity'] + 1})
         self.assertApiPut(1, data=request,
                           expected_data={'message': 'Work item was closed.'}, expected_status_codes=403)
+
+    def test_can_not_delete_work_item_after_outbound_items_are_closed(self):
+        self.assertApiDelete(1,
+                             expected_data={'message': 'Can not delete item.'}, expected_status_codes=403)

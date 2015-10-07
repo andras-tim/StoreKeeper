@@ -112,10 +112,15 @@ class WorkItemView(BaseNestedViewWithDiff):
 
     @api_func('Delete work item', item_name='work item', url_tail='/works/1/items/1',
               response=None,
+              status_codes={403: 'can not delete work item after outbound/returned items was closed'},
               queries={'id': 'ID of work',
                        'item_id': 'ID of selected work item for get'})
     def delete(self, id: int, item_id: int):
-        self._initialize_parent_item(id)
+        work = self._initialize_parent_item(id)
+
+        if work.are_items_frozen():
+            abort(403, message='Can not delete item.')
+
         return self._delete(work_id=id, id=item_id)
 
     def __is_tried_to_change_closed(self, work, changed_fields):
