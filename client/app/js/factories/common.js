@@ -27,8 +27,31 @@ appCommonFactories.factory('CommonFactory', ['$rootScope', '$q', '$timeout', '$a
             $log.error(resp);
             showErrorPopup(
                 gettextCatalog.getString('Error {{ status }}', {'status': resp.status}),
-                resp.statusText + '<br />' + resp.data
+                getProperErrorMessage(resp)
             );
+        }
+
+        function getProperErrorMessage(response) {
+            var statusText = response.statusText,
+                data = response.data;
+
+            if (response.status === 0 && statusText === '' && data === null) {
+                return gettextCatalog.getString('Can not connect to server');
+            }
+
+            if (angular.isObject(response.data)) {
+                if (angular.isDefined(response.data.message)) {
+                    data = JSON.stringify(data.message);
+                } else {
+                    data = JSON.stringify(data);
+                }
+            }
+
+            if (statusText) {
+                statusText += '<br />';
+            }
+
+            return statusText + data;
         }
 
         function setSpinner(spinnerName, value) {

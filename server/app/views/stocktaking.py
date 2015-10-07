@@ -1,9 +1,13 @@
-from app.models import Stocktaking, StocktakingItem
+from flask import g
+from flask.ext.restful import abort
+
+from app.server import db
+from app.models import Stocktaking, StocktakingItem, Item
 from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
 from app.modules.example_data import ExampleStocktakings, ExampleStocktakingItems
 from app.serializers import StocktakingSerializer, StocktakingDeserializer, StocktakingItemSerializer, \
     StocktakingItemDeserializer
-from app.views.common import api_func
+from app.views.common import api_func, commit_with_error_handling
 
 
 class StocktakingListView(BaseListView):
@@ -61,11 +65,17 @@ class StocktakingItemListView(BaseNestedListView):
     @api_func('Create stocktaking item', url_tail='/stocktakings/1/items',
               request=ExampleStocktakingItems.ITEM1.set(),
               response=ExampleStocktakingItems.ITEM1.get(),
-              status_codes={422: '{{ original }} / can not add one item twice'},
+              status_codes={403: 'can not add new stocktakings item after items was closed',
+                            422: '{{ original }} / can not add one item twice'},
               queries={'id': 'ID of stocktaking'})
     def post(self, id: int):
-        self._initialize_parent_item(id)
-        return self._post(stocktaking_id=id)
+        stocktaking = self._initialize_parent_item(id)
+        item = self._post_populate(stocktaking_id=id)
+
+        if stocktaking.are_items_frozen():
+            abort(403, message='Can not add new item.')
+
+        return self._post_commit(item)
 
 
 class StocktakingItemView(BaseNestedView):
@@ -85,17 +95,55 @@ class StocktakingItemView(BaseNestedView):
     @api_func('Update stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
               request=ExampleStocktakingItems.ITEM1.set(),
               response=ExampleStocktakingItems.ITEM1.get(),
-              status_codes={422: '{{ original }} / can not add one item twice'},
+              status_codes={403: 'can not change work item after outbound/returned items was closed',
+                            422: '{{ original }} / can not add one item twice'},
               queries={'id': 'ID of stocktaking',
                        'item_id': 'ID of selected stocktaking item for put'})
     def put(self, id: int, item_id: int):
-        self._initialize_parent_item(id)
-        return self._put(stocktaking_id=id, id=item_id)
+        stocktaking = self._initialize_parent_item(id)
+        item = self._put_populate(stocktaking_id=id, id=item_id)
+
+        if stocktaking.are_items_closed():
+            abort(403, message='Stocktaking item was closed.')
+
+        return self._put_commit(item)
 
     @api_func('Delete stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
               response=None,
+              status_codes={403: 'can not delete stocktaking item after items was closed'},
               queries={'id': 'ID of stocktaking',
                        'item_id': 'ID of selected stocktaking item for delete'})
     def delete(self, id: int, item_id: int):
-        self._initialize_parent_item(id)
+        stocktaking = self._initialize_parent_item(id)
+
+        if stocktaking.are_items_frozen():
+            abort(403, message='Can not delete item.')
+
         return self._delete(stocktaking_id=id, id=item_id)
+
+
+class StocktakingCloseView(BaseView):
+    _model = Stocktaking
+    _serializer = StocktakingSerializer()
+    _deserializer = StocktakingDeserializer()
+
+    @api_func('Close items on stocktaking', item_name='stocktaking', url_tail='/stocktakings/1/close',
+              response=ExampleStocktakings.STOCKTAKING1_CLOSED.get())
+    def put(self, id: int):
+        stocktaking = self._get_item_by_id(id)
+
+        if stocktaking.are_items_frozen():
+            abort(422, message='Items have been closed.')
+
+        self._apply_item_changes(stocktaking)
+        stocktaking.close_items(g.user)
+
+        return self._put_commit(stocktaking)
+
+    def _apply_item_changes(self, stocktaking):
+        stocktaking_items = StocktakingItem.query.filter_by(stocktaking_id=stocktaking.id).all()
+
+        for stocktaking_item in stocktaking_items:
+            stocktaking_item.item.quantity += stocktaking_item.quantity
+
+        commit_with_error_handling(db)

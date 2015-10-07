@@ -110,6 +110,7 @@ def iterate_items(data: dict):
             vendor_id=random.randrange(vendor_count) + 1,
             article_number='{}{!s}'.format((''.join(random.sample(letters, 2))).upper(), random.randint(1000, 999999)),
             quantity=round(random.uniform(0, 10000), 2),
+            warning_quantity=round(random.uniform(0, 100), 2),
             unit_id=random.randrange(unit_count) + 1
         )
 

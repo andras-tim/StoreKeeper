@@ -1,4 +1,5 @@
 config.yml
+persistent_storage/
 
 img/background.svg
 img/label_logo.gif

@@ -1,6 +1,7 @@
 from app.modules.example_data import ExampleStocktakingItems as StocktakingItems, ExampleStocktakings as Stocktakings, \
-    ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units
+    ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units, ExampleUsers as Users
 from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
+from test.views.base_session_test import CommonSessionTest
 
 
 class TestStocktakingWithBrandNewDb(CommonApiTest):
@@ -55,6 +56,33 @@ class TestUserWithPreFilledDb(CommonApiTest):
         request = Stocktakings.STOCKTAKING2.set(change={'comment': Stocktakings.STOCKTAKING1['comment']})
 
         self.assertApiPut(Stocktakings.STOCKTAKING2['id'], data=request)
+
+
+class TesCloseOutboundOfStocktaking(CommonSessionTest):
+    ENDPOINT = '/stocktakings'
+    INIT_PUSH = [
+        ('/users', [Users.USER1]),
+    ]
+
+    def setUp(self):
+        super().setUp()
+        self.assertApiLogin(Users.USER1)
+
+    def test_can_not_close_of_non_existed_stocktaking(self):
+        self.assertApiPut(1, url_suffix='/close',
+                          expected_status_codes=404)
+
+    def test_can_close_once(self):
+        self.assertApiPost(data=Stocktakings.STOCKTAKING1, expected_data=Stocktakings.STOCKTAKING1)
+        self.assertApiPut(1, url_suffix='/close',
+                          expected_data=Stocktakings.STOCKTAKING1_CLOSED)
+
+    def test_can_not_close_twice(self):
+        self.assertApiPost(data=Stocktakings.STOCKTAKING1, expected_data=Stocktakings.STOCKTAKING1)
+        self.assertApiPut(1, url_suffix='/close')
+        self.assertApiPut(1, url_suffix='/close',
+                          expected_data={'message': 'Items have been closed.'},
+                          expected_status_codes=422)
 
 
 @append_mandatory_field_tests(item_name='stocktaking_item', base_item=StocktakingItems.ITEM1,
@@ -145,3 +173,38 @@ class TestStocktakingItemWithPreFilledDb(CommonApiTest):
     def test_can_not_update_stocktaking_item_of_a_non_existed_stocktaking(self):
         self.assertApiPut(StocktakingItems.ITEM1['id'], data=StocktakingItems.ITEM1, endpoint=self.BAD_ENDPOINT,
                           expected_status_codes=404)
+
+
+class TestStocktakingItemWithClosedOutbound(CommonSessionTest):
+    ENDPOINT = '/stocktakings/1/items'
+    BAD_ENDPOINT = '/stocktakings/2/items'
+    INIT_PUSH = [
+        ('/users', [Users.USER1]),
+        ('/stocktakings', [Stocktakings.STOCKTAKING1]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1, Items.ITEM2]),
+        (ENDPOINT, [StocktakingItems.ITEM1, StocktakingItems.ITEM2]),
+    ]
+
+    def setUp(self):
+        super().setUp()
+        self.assertApiLogin(Users.USER1)
+        self.assertApiPut(Stocktakings.STOCKTAKING1['id'], endpoint='/stocktakings', url_suffix='/close')
+
+    def test_can_not_add_new_stocktaking_item_after_items_are_closed(self):
+        self.assertApiPost(data=StocktakingItems.ITEM2.set(change={'stocktaking': Stocktakings.STOCKTAKING1.get()}),
+                           expected_data={'message': 'Can not add new item.'}, expected_status_codes=403)
+
+    def test_can_not_change_stocktaking_item_after_items_are_closed(self):
+        request = StocktakingItems.ITEM1.set(change={'item': Items.ITEM1.get()})
+        self.assertApiPut(1, data=request,
+                          expected_data={'message': 'Stocktaking item was closed.'}, expected_status_codes=403)
+
+        request = StocktakingItems.ITEM1.set(change={'quantity': StocktakingItems.ITEM1['quantity'] + 1})
+        self.assertApiPut(1, data=request,
+                          expected_data={'message': 'Stocktaking item was closed.'}, expected_status_codes=403)
+
+    def test_can_not_delete_stocktaking_item_after_outbound_items_are_closed(self):
+        self.assertApiDelete(1,
+                             expected_data={'message': 'Can not delete item.'}, expected_status_codes=403)

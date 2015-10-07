@@ -102,7 +102,10 @@ class AcquisitionDeserializer(Serializer):
 
 class StocktakingSerializer(BasicSerializer):
     fields = ('id', 'comment')
-    datetime_fields = ('timestamp', )
+    datetime_fields = ('timestamp', 'close_timestamp')
+    nested_fields = {
+        'close_user': UserSerializer(),
+    }
 
 
 class StocktakingDeserializer(Serializer):
@@ -111,7 +114,7 @@ class StocktakingDeserializer(Serializer):
 
 
 class ItemSerializer(BasicSerializer):
-    fields = ('id', 'name', 'article_number', 'quantity')
+    fields = ('id', 'name', 'article_number', 'quantity', 'warning_quantity')
     nested_fields = {
         'vendor': VendorSerializer(),
         'unit': UnitSerializer(),
@@ -124,6 +127,7 @@ class ItemDeserializer(Serializer):
     vendor = fields.Nested(VendorDeserializer(), required=True)
     article_number = UppercaseString()
     quantity = fields.Float(required=True)
+    warning_quantity = fields.Float(required=True)
     unit = fields.Nested(UnitDeserializer(), required=True)
 
 

@@ -3,8 +3,8 @@
 var appSidebarControllers = angular.module('appControllers.sidebars');
 
 
-appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
-    function ItemSidebarController ($scope, $q, $log, $window, $modal, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory) {
+appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory', 'StocktakingService',
+    function ItemSidebarController ($scope, $q, $log, $window, $modal, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory, StocktakingService) {
         var
             /**
              * Persistent storage
@@ -40,6 +40,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
              */
             readElementsClass = function readElementsClass (elementStorage, barcodeCache, itemCache) {
                 var elements = [],
+                    initialized = false,
 
                 fetchItemStorage = function fetchItemStorage () {
                     var length = elementStorage.length,
@@ -54,6 +55,8 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                             addNewElement(element.barcode, element.count);
                         }
                     }
+
+                    initialized = true;
                 },
 
                 addElement = function addElement (barcodeValue, itemId, count) {
@@ -90,26 +93,51 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     elementStorage.push(elementData);
                     elements.push(element);
 
+                    checkAllElementsHasBeenAssigned();
                     return element;
                 },
 
                 removeElement = function removeElement (elementIndex) {
                     elementStorage.splice(elementIndex, 1);
                     elements.splice(elementIndex, 1);
+
+                    checkAllElementsHasBeenAssigned();
                 },
 
                 removeAllElements = function removeAllElements () {
                     elementStorage.splice(0, elementStorage.length);
                     elements.splice(0, elements.length);
+
+                    checkAllElementsHasBeenAssigned();
                 },
 
                 getIndexByBarcode = function getIndexByBarcode (barcode) {
                     return _.findIndex(elements, function (element) {
                         return element.data.barcode === barcode;
                     });
+                },
+
+                checkAllElementsHasBeenAssigned = function checkAllElementsHasBeenAssigned () {
+                    if (!initialized) {
+                        return;
+                    }
+
+                    var length = elements.length,
+                        index,
+                        element;
+
+                    for (index = 0; index < length; index += 1) {
+                        element = elements[index];
+                        if (!element.data.itemId) {
+                            $scope.movable = false;
+                            return;
+                        }
+                        $scope.movable = true;
+                    }
                 };
 
                 fetchItemStorage();
+                checkAllElementsHasBeenAssigned();
 
                 return {
                     'elements': elements,
@@ -269,7 +297,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     function (item) {
                         CommonFactory.handlePromise(
                             item.one('barcodes', readElement.barcode.id).customPUT(null, 'print'),
-                            'itemSidebarPrintingBarcode'
+                            'itemSidebarPrintingLabel'
                         );
                     });
             },
@@ -318,8 +346,8 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     itemCache.getItemById(readElement.data.itemId).then(
                         function (item) {
                             CommonFactory.handlePromise(
-                                item.one('barcodes', readElement.barcode.id).customPUT({'copies': readElement.data.count}, 'print'),
-                                'itemSidebarPrintingBarcode'
+                                item.one('barcodes', readElement.barcode.id).customPUT({'copies': Math.abs(readElement.data.count)}, 'print'),
+                                'itemSidebarPrintingLabel'
                             );
                         });
                 });
@@ -334,7 +362,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 for (index = 0; index < length; index += 1) {
                     readElement = readElements.elements[index];
                     if (readElement.barcode) {
-                        count += readElement.data.count;
+                        count += Math.abs(readElement.data.count);
                     }
                 }
 
@@ -349,7 +377,63 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 }
             },
 
-            moveElementsToCurrentView = function moveElementsToCurrentView () {};
+            moveElementsToCurrentView = function moveElementsToCurrentView () {
+                var mergedElements = getMergedElementsByItem(),
+                    lastItemPromise = $q.when();
+
+                CommonFactory.handlePromise(
+                    StocktakingService.post({
+                        'comment': '[initial input]'
+                    }),
+                    'itemSidebarMovingItems'
+                ).then(function (stocktaking) {
+                    _.forEach(mergedElements, function (element) {
+                        lastItemPromise = lastItemPromise.then(function () {
+                            return CommonFactory.handlePromise(
+                                stocktaking.all('items').post({
+                                    'item': element.item,
+                                    'quantity': element.quantity
+                                }),
+                                'itemSidebarMovingItems');
+                        });
+                    });
+
+                    lastItemPromise.then(function () {
+                        CommonFactory.handlePromise(
+                            stocktaking.customPUT(null, 'close'),
+                            'itemSidebarMovingItems',
+                            function () {
+                                readElements.removeAllElements();
+                                persistentStorage.save();
+                            }
+                        );
+                    });
+                });
+            },
+
+            getMergedElementsByItem = function getMergedElementsByItem () {
+                var items = {},
+                    length = readElements.elements.length,
+                    index,
+                    element,
+                    itemId;
+
+                for (index = 0; index < length; index += 1) {
+                    element = readElements.elements[index];
+                    itemId = element.data.itemId;
+
+                    if (angular.isUndefined(items[itemId])) {
+                        items[itemId] = {
+                            'item': element.item,
+                            'quantity': element.barcode.quantity * element.data.count
+                        };
+                    } else {
+                        items[itemId].quantity += element.barcode.quantity * element.data.count;
+                    }
+                }
+
+                return items;
+            };
 
 
         $scope.readElements = readElements.elements;

@@ -45,10 +45,10 @@ appServices.factory('SessionService', ['Restangular',
     }]);
 
 
-//appServices.factory('StocktakingService', ['Restangular',
-//    function StocktakingService (Restangular) {
-//        return Restangular.service('stocktaking');
-//    }]);
+appServices.factory('StocktakingService', ['Restangular',
+    function StocktakingService (Restangular) {
+        return Restangular.service('stocktakings');
+    }]);
 
 
 appServices.factory('UnitService', ['Restangular',

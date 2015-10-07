@@ -125,20 +125,30 @@ class ExampleAcquisitions:
 
 class ExampleStocktakings:
     STOCKTAKING1 = FilterableDict(commons={'comment': 'Maybe missing some items'},
-                                  getters={'id': 1, 'timestamp': ExampleTimestamp.utcnow()})
-    STOCKTAKING2 = FilterableDict(getters={'id': 2, 'comment': None, 'timestamp': ExampleTimestamp.utcnow()})
+                                  getters={'id': 1, 'timestamp': ExampleTimestamp.utcnow(),
+                                           'close_timestamp': None,
+                                           'close_user': ExampleUsers.NONE_USER.get()})
+    STOCKTAKING2 = FilterableDict(getters={'id': 2, 'comment': None, 'timestamp': ExampleTimestamp.utcnow(),
+                                           'close_timestamp': None,
+                                           'close_user': ExampleUsers.NONE_USER.get()})
+
+    STOCKTAKING1_CLOSED = STOCKTAKING1.get_changed(
+        getters={'close_timestamp': ExampleTimestamp.utcnow(),
+                 'close_user': ExampleUsers.USER1.get()})
 
 
 class ExampleItems:
     ITEM1 = FilterableDict(commons={'name': 'Spray', 'vendor': ExampleVendors.VENDOR1.get(), 'quantity': 132.3,
-                                    'unit': ExampleUnits.UNIT2.get()},
+                                    'warning_quantity': 4.0, 'unit': ExampleUnits.UNIT2.get()},
                            setters={'article_number': 'sk132465'},
                            getters={'id': 1, 'article_number': 'SK132465'})
     ITEM2 = FilterableDict(commons={'name': 'Pipe', 'vendor': ExampleVendors.VENDOR2.get(),
-                                    'article_number': 'FO213546', 'quantity': 32.6, 'unit': ExampleUnits.UNIT1.get()},
+                                    'article_number': 'FO213546', 'quantity': 32.6, 'warning_quantity': 0.0,
+                                    'unit': ExampleUnits.UNIT1.get()},
                            getters={'id': 2})
     ITEM3 = FilterableDict(commons={'name': 'Screw', 'vendor': ExampleVendors.VENDOR2.get(),
-                                    'article_number': 'BA45678', 'quantity': 12.1, 'unit': ExampleUnits.UNIT2.get()},
+                                    'article_number': 'BA45678', 'quantity': 12.1, 'warning_quantity': 3.14,
+                                    'unit': ExampleUnits.UNIT2.get()},
                            getters={'id': 3})
 
 

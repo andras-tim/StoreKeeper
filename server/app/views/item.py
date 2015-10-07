@@ -2,7 +2,6 @@ import re
 from flask import send_file, request
 from flask.ext.restful import abort
 from sqlalchemy import or_, and_
-from app.modules.types import BarcodeType
 from app.modules.view_helper_for_models import get_validated_request
 from app.modules.view_helper_for_models import RequestProcessingError
 
@@ -13,6 +12,7 @@ from app.modules.example_data import ExampleItems, ExampleItemBarcodes, ExampleI
     ExampleItemSearchResults
 from app.modules.label_printer import LabelPrinter
 from app.modules.printer import MissingCups
+from app.modules.persistent_storage import PersistentStorage
 from app.serializers import ItemSerializer, ItemDeserializer, ItemBarcodeDeserializer, ItemBarcodeSerializer, \
     ItemBarcodePrintDeserializer, ItemSearchSerializer
 from app.views.common import api_func
@@ -211,9 +211,18 @@ class ItemBarcodePrintView(BaseNestedView):
         label_printer.print(copies=copies)
 
 
+_persistent_storage = PersistentStorage('item')
+
+
 def _get_barcode_generator(barcode_prefix: str, count_of_numbers: int, base_barcode: Barcode) -> callable:
     def generator():
-        barcode = BarcodeType.generate(barcode_prefix, count_of_numbers)
+        barcode_number = _persistent_storage.get('last_barcode_number', 0) + 1
+        barcode = '{prefix}{numbers}'.format(
+            prefix=barcode_prefix,
+            numbers=str(barcode_number).zfill(count_of_numbers)
+        )
+        _persistent_storage.set('last_barcode_number', barcode_number)
+
         return Barcode(barcode=barcode, quantity=base_barcode.quantity, item_id=base_barcode.item_id,
                        master=base_barcode.master, main=True)
 
@@ -238,7 +247,11 @@ def _can_be_master_barcode(barcode: Barcode):
 def _get_label_printer(barcode: Barcode) -> LabelPrinter:
     title = barcode.item.name
     if barcode.quantity > 1:
-        title = '{} ({!s}{})'.format(title, barcode.quantity, barcode.item.unit.unit)
+        title = '{title} ({quantity!s}{unit})'.format(
+            title=title,
+            quantity=str(barcode.quantity).rstrip('0').rstrip('.'),
+            unit=barcode.item.unit.unit
+        )
 
     return LabelPrinter(title=title, data=barcode.barcode)
 

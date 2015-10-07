@@ -23,8 +23,8 @@
                   <app-vendor-input a-model="item.vendor"></app-vendor-input>
                 </app-input-form>
 
-                <app-input-form a-label="{{ 'Article no.' | translate }}" a-required="{{ 'Article number is required' | translate }}">
-                  <input name="articleNumber" id="articleNumberInput" ng-model="item.article_number" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter article number' | translate }}" required />
+                <app-input-form a-label="{{ 'Article no.' | translate }}">
+                  <input name="articleNumber" id="articleNumberInput" ng-model="item.article_number" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter article number' | translate }}" />
                 </app-input-form>
 
                 <app-input-form a-label="{{ 'Name' | translate }}" a-required="{{ 'Name is required' | translate }}">
@@ -36,17 +36,22 @@
                 </app-input-form>
 
               </app-details-modal-panel>
-            </form>
 
-            <!-- Meta -->
-            <app-details-modal-panel a-half-width="true">
-              <app-input-form a-label="{{ 'In Stock' | translate }}">
-                <div class="input-group field-quantity">
-                  <input name="currentQuantity" id="currentQuantityInput" ng-model="item.quantity" type="text" class="form-control field-quantity" readonly />
-                  <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>
-                </div>
-              </app-input-form>
-            </app-details-modal-panel>
+              <!-- Meta -->
+              <app-details-modal-panel a-half-width="true">
+                <app-input-form a-label="{{ 'In Stock' | translate }}">
+                  <div class="input-group field-quantity">
+                    <input name="currentQuantity" id="currentQuantityInput" ng-model="item.quantity" type="text" class="form-control field-quantity" readonly />
+                    <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>
+                  </div>
+                </app-input-form>
+
+                <app-input-form a-label="{{ 'Warning quantity' | translate }}" a-required="{{ 'Warning quantity is required' | translate }}">
+                  <app-quantity-input a-model="item.warning_quantity" app-tooltip="{{ 'System will send a warning when the quantity decreases under this value' | translate }}"></app-quantity-input>
+                </app-input-form>
+
+              </app-details-modal-panel>
+            </form>
 
             <!-- Barcodes -->
             <form name="barcodesForm" app-confirm-on-exit="barcodesForm.$dirty" a-modal-id="modalId">
