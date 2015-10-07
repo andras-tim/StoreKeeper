@@ -318,7 +318,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     itemCache.getItemById(readElement.data.itemId).then(
                         function (item) {
                             CommonFactory.handlePromise(
-                                item.one('barcodes', readElement.barcode.id).customPUT({'copies': readElement.data.count}, 'print'),
+                                item.one('barcodes', readElement.barcode.id).customPUT({'copies': Math.abs(readElement.data.count)}, 'print'),
                                 'itemSidebarPrintingBarcode'
                             );
                         });
@@ -334,7 +334,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 for (index = 0; index < length; index += 1) {
                     readElement = readElements.elements[index];
                     if (readElement.barcode) {
-                        count += readElement.data.count;
+                        count += Math.abs(readElement.data.count);
                     }
                 }
 
