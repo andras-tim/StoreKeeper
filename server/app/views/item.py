@@ -247,7 +247,11 @@ def _can_be_master_barcode(barcode: Barcode):
 def _get_label_printer(barcode: Barcode) -> LabelPrinter:
     title = barcode.item.name
     if barcode.quantity > 1:
-        title = '{} ({!s}{})'.format(title, barcode.quantity, barcode.item.unit.unit)
+        title = '{title} ({quantity!s}{unit})'.format(
+            title=title,
+            quantity=str(barcode.quantity).rstrip('0').rstrip('.'),
+            unit=barcode.item.unit.unit
+        )
 
     return LabelPrinter(title=title, data=barcode.barcode)
 
