@@ -90,6 +90,7 @@ class Item(db.Model):
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
     article_number = db.Column(db.String(20))
     quantity = db.Column(db.Float, nullable=False, default=0)
+    warning_quantity = db.Column(db.Float, nullable=False, default=0)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
 
     vendor = db.relationship('Vendor', lazy='joined')
