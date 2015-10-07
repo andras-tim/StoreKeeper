@@ -35,6 +35,7 @@ def initialize_endpoints(app_config: ConfigObject, api: RestfulApiWithoutSimpleA
         'stocktaking_item_list': (stocktaking.StocktakingItemListView, '/stocktakings/<int:id>/items'),
         'stocktaking_item': (stocktaking.StocktakingItemView,
                              '/stocktakings/<int:id>/items/<int:item_id>'),
+        'stocktaking_close': (stocktaking.StocktakingCloseView, '/stocktakings/<int:id>/close'),
 
         'unit_list': (unit.UnitListView, '/units'),
         'unit': (unit.UnitView, '/units/<int:id>'),

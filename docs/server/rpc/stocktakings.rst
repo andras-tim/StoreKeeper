@@ -28,3 +28,11 @@ Data management
   .. autoflask:: app.server:app
      :endpoints: stocktaking_item
 
+
+Commands
+--------
+
+``/api/stocktakings/<id>/close``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. autoflask:: app.server:app
+     :endpoints: stocktaking_close

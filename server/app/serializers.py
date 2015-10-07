@@ -102,7 +102,10 @@ class AcquisitionDeserializer(Serializer):
 
 class StocktakingSerializer(BasicSerializer):
     fields = ('id', 'comment')
-    datetime_fields = ('timestamp', )
+    datetime_fields = ('timestamp', 'close_timestamp')
+    nested_fields = {
+        'close_user': UserSerializer(),
+    }
 
 
 class StocktakingDeserializer(Serializer):

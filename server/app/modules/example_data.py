@@ -125,8 +125,16 @@ class ExampleAcquisitions:
 
 class ExampleStocktakings:
     STOCKTAKING1 = FilterableDict(commons={'comment': 'Maybe missing some items'},
-                                  getters={'id': 1, 'timestamp': ExampleTimestamp.utcnow()})
-    STOCKTAKING2 = FilterableDict(getters={'id': 2, 'comment': None, 'timestamp': ExampleTimestamp.utcnow()})
+                                  getters={'id': 1, 'timestamp': ExampleTimestamp.utcnow(),
+                                           'close_timestamp': None,
+                                           'close_user': ExampleUsers.NONE_USER.get()})
+    STOCKTAKING2 = FilterableDict(getters={'id': 2, 'comment': None, 'timestamp': ExampleTimestamp.utcnow(),
+                                           'close_timestamp': None,
+                                           'close_user': ExampleUsers.NONE_USER.get()})
+
+    STOCKTAKING1_CLOSED = STOCKTAKING1.get_changed(
+        getters={'close_timestamp': ExampleTimestamp.utcnow(),
+                 'close_user': ExampleUsers.USER1.get()})
 
 
 class ExampleItems:

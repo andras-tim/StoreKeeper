@@ -211,11 +211,26 @@ class Stocktaking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     comment = db.Column(db.Text)
+    close_timestamp = db.Column(db.DateTime)
+    close_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    close_user = db.relationship('User', foreign_keys=[close_user_id], lazy='joined')
     items = db.relationship('StocktakingItem', lazy='dynamic')
 
     def __repr__(self)-> str:
         return '{!s} [{!s}]'.format(self.id, self.timestamp)
+
+    def are_items_frozen(self) -> bool:
+        return self.are_items_closed()
+
+    def are_items_closed(self) -> bool:
+        return self.close_user_id is not None
+
+    def close_items(self, user: User):
+        if self.close_user_id:
+            raise RuntimeError("Items have been closed.")
+        self.close_user_id = user.id
+        self.close_timestamp = datetime.utcnow()
 
 
 @nested_fields(stocktaking=Stocktaking, item=Item)
