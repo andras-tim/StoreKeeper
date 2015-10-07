@@ -3,8 +3,8 @@
 var appSidebarControllers = angular.module('appControllers.sidebars');
 
 
-appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory',
-    function ItemSidebarController ($scope, $q, $log, $window, $modal, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory) {
+appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log', '$window', '$modal', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory', 'StocktakingService',
+    function ItemSidebarController ($scope, $q, $log, $window, $modal, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory, StocktakingService) {
         var
             /**
              * Persistent storage
@@ -297,7 +297,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     function (item) {
                         CommonFactory.handlePromise(
                             item.one('barcodes', readElement.barcode.id).customPUT(null, 'print'),
-                            'itemSidebarPrintingBarcode'
+                            'itemSidebarPrintingLabel'
                         );
                     });
             },
@@ -347,7 +347,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                         function (item) {
                             CommonFactory.handlePromise(
                                 item.one('barcodes', readElement.barcode.id).customPUT({'copies': Math.abs(readElement.data.count)}, 'print'),
-                                'itemSidebarPrintingBarcode'
+                                'itemSidebarPrintingLabel'
                             );
                         });
                 });
@@ -377,7 +377,63 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 }
             },
 
-            moveElementsToCurrentView = function moveElementsToCurrentView () {};
+            moveElementsToCurrentView = function moveElementsToCurrentView () {
+                var mergedElements = getMergedElementsByItem(),
+                    lastItemPromise = $q.when();
+
+                CommonFactory.handlePromise(
+                    StocktakingService.post({
+                        'comment': '[initial input]'
+                    }),
+                    'itemSidebarMovingItems'
+                ).then(function (stocktaking) {
+                    _.forEach(mergedElements, function (element) {
+                        lastItemPromise = lastItemPromise.then(function () {
+                            return CommonFactory.handlePromise(
+                                stocktaking.all('items').post({
+                                    'item': element.item,
+                                    'quantity': element.quantity
+                                }),
+                                'itemSidebarMovingItems');
+                        });
+                    });
+
+                    lastItemPromise.then(function () {
+                        CommonFactory.handlePromise(
+                            stocktaking.customPUT(null, 'close'),
+                            'itemSidebarMovingItems',
+                            function () {
+                                readElements.removeAllElements();
+                                persistentStorage.save();
+                            }
+                        );
+                    });
+                });
+            },
+
+            getMergedElementsByItem = function getMergedElementsByItem () {
+                var items = {},
+                    length = readElements.elements.length,
+                    index,
+                    element,
+                    itemId;
+
+                for (index = 0; index < length; index += 1) {
+                    element = readElements.elements[index];
+                    itemId = element.data.itemId;
+
+                    if (angular.isUndefined(items[itemId])) {
+                        items[itemId] = {
+                            'item': element.item,
+                            'quantity': element.barcode.quantity * element.data.count
+                        };
+                    } else {
+                        items[itemId].quantity += element.barcode.quantity * element.data.count;
+                    }
+                }
+
+                return items;
+            };
 
 
         $scope.readElements = readElements.elements;
