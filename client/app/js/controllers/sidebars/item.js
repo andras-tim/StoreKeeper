@@ -40,6 +40,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
              */
             readElementsClass = function readElementsClass (elementStorage, barcodeCache, itemCache) {
                 var elements = [],
+                    initialized = false,
 
                 fetchItemStorage = function fetchItemStorage () {
                     var length = elementStorage.length,
@@ -54,6 +55,8 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                             addNewElement(element.barcode, element.count);
                         }
                     }
+
+                    initialized = true;
                 },
 
                 addElement = function addElement (barcodeValue, itemId, count) {
@@ -90,26 +93,51 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     elementStorage.push(elementData);
                     elements.push(element);
 
+                    checkAllElementsHasBeenAssigned();
                     return element;
                 },
 
                 removeElement = function removeElement (elementIndex) {
                     elementStorage.splice(elementIndex, 1);
                     elements.splice(elementIndex, 1);
+
+                    checkAllElementsHasBeenAssigned();
                 },
 
                 removeAllElements = function removeAllElements () {
                     elementStorage.splice(0, elementStorage.length);
                     elements.splice(0, elements.length);
+
+                    checkAllElementsHasBeenAssigned();
                 },
 
                 getIndexByBarcode = function getIndexByBarcode (barcode) {
                     return _.findIndex(elements, function (element) {
                         return element.data.barcode === barcode;
                     });
+                },
+
+                checkAllElementsHasBeenAssigned = function checkAllElementsHasBeenAssigned () {
+                    if (!initialized) {
+                        return;
+                    }
+
+                    var length = elements.length,
+                        index,
+                        element;
+
+                    for (index = 0; index < length; index += 1) {
+                        element = elements[index];
+                        if (!element.data.itemId) {
+                            $scope.movable = false;
+                            return;
+                        }
+                        $scope.movable = true;
+                    }
                 };
 
                 fetchItemStorage();
+                checkAllElementsHasBeenAssigned();
 
                 return {
                     'elements': elements,
