@@ -208,6 +208,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             $scope.item = {
                 'article_number': '',
                 'name': '',
+                'warning_quantity': 0,
                 'quantity': 0,
                 'unit': {},
                 'vendor': {}
