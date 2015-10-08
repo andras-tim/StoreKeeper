@@ -15,7 +15,10 @@
               </app-input-form>
 
               <app-input-form a-label="{{ 'Barcode quantity' | translate }}" a-required="{{ 'Quantity can not be empty' | translate }}">
-                <app-quantity-input a-model="elementData.barcodeQuantity" app-tooltip="{{ 'Item amount for this barcode' | translate }}" class="field-quantity"></app-quantity-input>
+                <div class="input-group field-quantity">
+                  <app-quantity-input a-model="elementData.barcodeQuantity" app-tooltip="{{ 'Item amount for this barcode' | translate }}" class="field-quantity"></app-quantity-input>
+                  <div class="input-group-addon field-unit-beside-quantity" ng-bind="elementData.selectedItem.unit"></div>
+                </div>
               </app-input-form>
 
             </ng-form>

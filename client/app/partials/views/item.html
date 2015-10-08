@@ -47,7 +47,10 @@
                 </app-input-form>
 
                 <app-input-form a-label="{{ 'Warning quantity' | translate }}" a-required="{{ 'Warning quantity is required' | translate }}">
-                  <app-quantity-input a-model="item.warning_quantity" a-min="0" app-tooltip="{{ 'System will send a warning when the quantity decreases under this value' | translate }}"></app-quantity-input>
+                  <div class="input-group field-quantity">
+                    <app-quantity-input a-model="item.warning_quantity" a-min="0" app-tooltip="{{ 'System will send a warning when the quantity decreases under this value' | translate }}"></app-quantity-input>
+                    <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>
+                  </div>
                 </app-input-form>
 
               </app-details-modal-panel>

@@ -136,6 +136,7 @@ appFieldsDirectives.directive('appQuantityInput',
     function appQuantityInput () {
         return {
             'restrict': 'E',
+            'replace': true,
             'scope': {
                 'aModel': '=',
                 'aMin': '=',
