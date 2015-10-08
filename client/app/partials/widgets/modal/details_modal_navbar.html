@@ -1,24 +1,18 @@
-<nav class="navbar navbar-default details-modal-navbar noselect" role="navigation" bs-collapse start-collapsed="true">
+<nav class="navbar navbar-default details-modal-navbar noselect" role="navigation">
   <div class="container-fluid">
 
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" bs-collapse-toggle>
-        <span class="sr-only" translate>Toggle menu</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <ng-transclude></ng-transclude>
-    </div>
 
-    <div class="navbar-collapse" bs-collapse-target>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a href ng-click="$hide()" bs-tooltip="'Close' | translate">
+      <ng-transclude></ng-transclude>
+
+      <div class="pull-right navbar-buttons">
+        <a href ng-click="$hide()" bs-tooltip="'Close' | translate">
+          <span class="navbar-brand">
             <i app-icon="close"></i>
-          </a>
-        </li>
-      </ul>
+          </span>
+        </a>
+      </div>
+
     </div>
 
   </div>

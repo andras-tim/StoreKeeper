@@ -8,6 +8,25 @@
     margin-bottom: 10px;
 }
 
+.details-modal-navbar .navbar-buttons {
+    margin-right: -15px;
+}
+@media (max-width: 767px) {
+    .details-modal-navbar .navbar-buttons {
+        margin-right: 0;
+    }
+}
+
+.details-modal-navbar .navbar {
+    margin-bottom: 0;
+    padding: 0 15px;
+    border: 0;
+}
+
+.details-modal-navbar .navbar-header {
+    float: inherit;
+}
+
 .details-modal-content {
     padding: 15px;
 }
