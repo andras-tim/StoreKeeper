@@ -114,7 +114,9 @@ class ItemBarcodeListView(BaseNestedListView):
               request=ExampleItemBarcodes.BARCODE1.set(),
               response=ExampleItemBarcodes.BARCODE1.get(),
               status_codes={422: '{{ original }} / can not add one barcode twice / '
-                                 'can not generate unique new barcode'},
+                                 'can not generate unique new barcode / '
+                                 'can not set non-main barcode as master barcode / '
+                                 'can not set more than one master barcode to an item'},
               queries={'id': 'ID of item'})
     def post(self, id: int):
         self._initialize_parent_item(id)
@@ -147,7 +149,9 @@ class ItemBarcodeView(BaseNestedView):
     @api_func('Update barcode', item_name='barcode', url_tail='/items/1/barcodes/1',
               request=ExampleItemBarcodes.BARCODE1.set(),
               response=ExampleItemBarcodes.BARCODE1.get(),
-              status_codes={422: '{{ original }} / can not add one barcode twice'},
+              status_codes={422: '{{ original }} / can not add one barcode twice / '
+                                 'can not set non-main barcode as master barcode / '
+                                 'can not set more than one master barcode to an item'},
               queries={'item_id': 'ID of item',
                        'id': 'ID of selected barcode for put'})
     def put(self, item_id: int, id: int):
