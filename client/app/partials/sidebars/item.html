@@ -20,7 +20,7 @@
               </div>
 
               <div class="col-xs-2 without-padding text-right">
-                <button type="button" class="btn btn-success" ng-click="addNewElement()" app-tooltip="{{ 'Add new element to list' | translate }}" a-placement="bottom"><i app-icon="new"></i></button>
+                <button type="button" class="btn btn-success" ng-click="createNewElement()" app-tooltip="{{ 'Add new element to list' | translate }}" a-placement="bottom"><i app-icon="new"></i></button>
               </div>
             </div>
 
@@ -38,9 +38,11 @@
             <div class="col-md-8 col-sm-7 col-xs-6 without-padding">
               <span class="barcode-value"><i app-icon="barcode"></i> {{ readElement.data.barcode }}</span> <i app-icon="spinner" ng-if="readElement.data.itemId && (!readElement.item || !readElement.barcode)"></i>
               <span ng-if="readElement.item && readElement.barcode">
-                <span class="quantity-value">({{ readElement.barcode.quantity }}&nbsp;{{ readElement.item.unit.unit }})</span><br/>
-                <span class="item-name-value">{{ readElement.item.name }}</span><br/>
-                <span class="article-number-value">{{ readElement.item.article_number }}</span> <span class="vendor-value">{{ readElement.item.vendor.name }}</span><br/>
+                <span class="badge quantity-value">{{ readElement.barcode.quantity }}&nbsp;{{ readElement.item.unit.unit }}</span><br/>
+                <span class="clickable" ng-click="showElement($index, readElement)">
+                  <span class="item-name-value">{{ readElement.item.name }}</span><br/>
+                  <span class="article-number-value">{{ readElement.item.article_number }}</span> <span class="vendor-value">{{ readElement.item.vendor.name }}</span><br/>
+                </span>
               </span>
             </div>
 
@@ -66,7 +68,7 @@
         <div class="btn-group" role="group">
           <button type="button" class="btn btn-default btn-wide" ng-disabled="!readElements.length || itemSidebarPrintingBarcode" ng-click="printAllElements()" app-tooltip="{{ 'Print labels for all elements' | translate }}"><i app-icon="print"></i></button>
           <button type="button" class="btn btn-danger btn-wide" ng-disabled="!readElements.length" ng-click="removeAllElements()" app-tooltip="{{ 'Remove all elements from list' | translate }}"><i app-icon="delete"></i></button>
-          <button type="button" class="btn btn-success btn-wide" ng-disabled="!readElements.length || !movable" ng-click="moveElementsToCurrentView()" app-tooltip="{{ 'Move elements to the Items' | translate }}"><i app-icon="addToView"></i></button>
+          <button type="button" class="btn btn-success btn-wide" ng-disabled="!readElements.length || !movable" ng-click="moveElementsToCurrentView()" app-tooltip="{{ 'Move elements to Items' | translate }}"><i app-icon="addToView"></i></button>
         </div>
       </div>
 

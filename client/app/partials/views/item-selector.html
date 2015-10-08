@@ -8,13 +8,20 @@
       <div class="details-modal-content">
         <div class="container-fluid">
           <div class="row">
-            <app-input-form a-label="{{ 'Item' | translate }}" a-required="{{ 'Item can not be empty' | translate }}">
-              <app-item-input a-model="elementData.selectedItem" class="field-count" a-autofocus></app-item-input>
-            </app-input-form>
+            <ng-form class="form-horizontal">
 
-            <app-input-form a-label="{{ 'Barcode quantity' | translate }}" a-required="{{ 'Quantity can not be empty' | translate }}">
-              <app-quantity-input a-model="elementData.barcodeQuantity" app-tooltip="{{ 'Item amount for this barcode' | translate }}" class="field-quantity"></app-quantity-input>
-            </app-input-form>
+              <app-input-form a-label="{{ 'Item' | translate }}" a-required="{{ 'Item can not be empty' | translate }}">
+                <app-item-input a-model="elementData.selectedItem" class="field-count" a-autofocus></app-item-input>
+              </app-input-form>
+
+              <app-input-form a-label="{{ 'Barcode quantity' | translate }}" a-required="{{ 'Quantity can not be empty' | translate }}">
+                <div class="input-group field-quantity">
+                  <app-quantity-input a-model="elementData.barcodeQuantity" app-tooltip="{{ 'Item amount for this barcode' | translate }}" class="field-quantity"></app-quantity-input>
+                  <div class="input-group-addon field-unit-beside-quantity" ng-bind="elementData.selectedItem.unit"></div>
+                </div>
+              </app-input-form>
+
+            </ng-form>
           </div>
         </div>
       </div>

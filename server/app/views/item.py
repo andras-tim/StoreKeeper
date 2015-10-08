@@ -70,6 +70,7 @@ class ItemSearchListView(BaseListView):
             ).limit(data['limit'] - len(results)).all()
             results.extend([_CreateObject(type='item', item_id=row.Item.id, name=row.Item.name,
                                           article_number=row.Item.article_number, vendor=row.Item.vendor.name,
+                                          unit=row.Item.unit.unit,
                                           master_barcode=row.Barcode.barcode) for row in items])
 
         return self._serializer.dump(results, many=True).data
@@ -114,13 +115,19 @@ class ItemBarcodeListView(BaseNestedListView):
               request=ExampleItemBarcodes.BARCODE1.set(),
               response=ExampleItemBarcodes.BARCODE1.get(),
               status_codes={422: '{{ original }} / can not add one barcode twice / '
-                                 'can not generate unique new barcode'},
+                                 'can not generate unique new barcode / '
+                                 'can not set non-main barcode as master barcode / '
+                                 'can not set more than one master barcode to an item'},
               queries={'id': 'ID of item'})
     def post(self, id: int):
-        self._initialize_parent_item(id)
+        item = self._initialize_parent_item(id)
         barcode = self._post_populate(item_id=id)
-        if barcode.barcode and _is_main_barcode(barcode.barcode):
+
+        if barcode.main is None and barcode.barcode and _is_main_barcode(barcode.barcode):
             barcode.main = True
+        if barcode.master is None and barcode.main and item.barcodes.count() == 0:
+            barcode.master = True
+
         _can_be_master_barcode(barcode)
 
         if barcode.barcode is None:
@@ -147,7 +154,9 @@ class ItemBarcodeView(BaseNestedView):
     @api_func('Update barcode', item_name='barcode', url_tail='/items/1/barcodes/1',
               request=ExampleItemBarcodes.BARCODE1.set(),
               response=ExampleItemBarcodes.BARCODE1.get(),
-              status_codes={422: '{{ original }} / can not add one barcode twice'},
+              status_codes={422: '{{ original }} / can not add one barcode twice / '
+                                 'can not set non-main barcode as master barcode / '
+                                 'can not set more than one master barcode to an item'},
               queries={'item_id': 'ID of item',
                        'id': 'ID of selected barcode for put'})
     def put(self, item_id: int, id: int):

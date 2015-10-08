@@ -47,7 +47,10 @@
                 </app-input-form>
 
                 <app-input-form a-label="{{ 'Warning quantity' | translate }}" a-required="{{ 'Warning quantity is required' | translate }}">
-                  <app-quantity-input a-model="item.warning_quantity" app-tooltip="{{ 'System will send a warning when the quantity decreases under this value' | translate }}"></app-quantity-input>
+                  <div class="input-group field-quantity">
+                    <app-quantity-input a-model="item.warning_quantity" a-min="0" app-tooltip="{{ 'System will send a warning when the quantity decreases under this value' | translate }}"></app-quantity-input>
+                    <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>
+                  </div>
                 </app-input-form>
 
               </app-details-modal-panel>
@@ -84,7 +87,7 @@
                       </td>
 
                       <td class="field-quantity">
-                        <app-quantity-input a-model="barcode.quantity" a-on-change="setBarcodeDirty(barcode, true)" app-tooltip="{{ 'Item amount for this barcode' | translate }}"></app-quantity-input>
+                        <app-quantity-input a-model="barcode.quantity" a-min="1" a-on-change="setBarcodeDirty(barcode, true)" app-tooltip="{{ 'Item amount for this barcode' | translate }}"></app-quantity-input>
                       </td>
 
                       <td class="field-button field-triple-button">
@@ -115,7 +118,7 @@
 
     <div class="modal-footer">
       <i app-icon="spinner" ng-if="savingItem"></i>
-      <button type="button" class="btn btn-primary" ng-disabled="(!itemForm.$dirty && !barcodesForm.$dirty) || !itemForm.$valid || !barcodesForm.$valid || savingItem" ng-click="saveChanges()" translate>Save</button>
+      <button type="button" class="btn btn-primary" ng-disabled="(itemForm.$pristine && barcodesForm.$pristine) || !itemForm.$valid || !barcodesForm.$valid || savingItem" ng-click="saveChanges()" translate>Save</button>
       <button type="button" class="btn btn-default" ng-click="closeModal()" translate>Close</button>
     </div>
 
