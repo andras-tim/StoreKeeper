@@ -28,9 +28,8 @@
     min-height: 75px;
     padding-top: 6px;
     padding-bottom: 6px;
-    border-top: 1px solid rgb(240, 240, 240);
+    border-bottom: 1px solid rgb(240, 240, 240);
 }
-
 
 .aside .aside-dialog .aside-footer {
     position: absolute;
