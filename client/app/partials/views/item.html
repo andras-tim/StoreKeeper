@@ -118,7 +118,7 @@
 
     <div class="modal-footer">
       <i app-icon="spinner" ng-if="savingItem"></i>
-      <button type="button" class="btn btn-primary" ng-disabled="(!itemForm.$dirty && !barcodesForm.$dirty) || !itemForm.$valid || !barcodesForm.$valid || savingItem" ng-click="saveChanges()" translate>Save</button>
+      <button type="button" class="btn btn-primary" ng-disabled="(itemForm.$pristine && barcodesForm.$pristine) || !itemForm.$valid || !barcodesForm.$valid || savingItem" ng-click="saveChanges()" translate>Save</button>
       <button type="button" class="btn btn-default" ng-click="closeModal()" translate>Close</button>
     </div>
 
