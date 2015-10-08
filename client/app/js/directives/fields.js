@@ -123,6 +123,7 @@ appFieldsDirectives.directive('appUnitInput',
  * @restrict E
  *
  * @param {object} aModel
+ * @param {object} aMin
  * @param {func} aOnChange
  *
  * @description
@@ -137,6 +138,7 @@ appFieldsDirectives.directive('appQuantityInput',
             'restrict': 'E',
             'scope': {
                 'aModel': '=',
+                'aMin': '=',
                 'aOnChange': '&'
             },
             'templateUrl': 'partials/widgets/fields/quantity-input.html'
