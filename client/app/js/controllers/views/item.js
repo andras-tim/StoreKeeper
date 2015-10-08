@@ -218,8 +218,6 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 $scope.barcodes.push({
                     'barcode': $scope.elementData.new.barcode,
                     'quantity': 1,
-                    'main': false,
-                    'master': false,
                     'dirty': true
                 });
             } else {
