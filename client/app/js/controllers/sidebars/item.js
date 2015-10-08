@@ -332,6 +332,10 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 }
             },
 
+            showElement = function showElement ($index, readElement) {
+                $scope.openModal('item', readElement.item.id, readElement.item);
+            },
+
             printAllElements = function printAllElements () {
                 var count = getCountOfPrintableLabels(),
                     message = gettextCatalog.getString('Do you want to print sum {{ count }} pcs. labels?', {
@@ -458,6 +462,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
         $scope.assignBarcodeToAnExistingItem = assignBarcodeToAnExistingItem;
         $scope.printElement = printElement;
         $scope.removeElement = removeElement;
+        $scope.showElement = showElement;
 
         $scope.printAllElements = printAllElements;
         $scope.removeAllElements = removeAllElements;
