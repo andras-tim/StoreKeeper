@@ -380,8 +380,17 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
             },
 
             moveElementsToCurrentView = function moveElementsToCurrentView () {
-                var mergedElements = getMergedElementsByItem(),
-                    lastItemPromise = $q.when();
+                var message,
+                    mergedElements,
+                    elementPromises;
+
+                message = gettextCatalog.getString('Do you want to move all element from list to Items?');
+                if (!$window.confirm(message)) {
+                    return;
+                }
+
+                mergedElements = getMergedElementsByItem();
+                elementPromises = [];
 
                 CommonFactory.handlePromise(
                     StocktakingService.post({
@@ -390,17 +399,17 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     'itemSidebarMovingItems'
                 ).then(function (stocktaking) {
                     _.forEach(mergedElements, function (element) {
-                        lastItemPromise = lastItemPromise.then(function () {
-                            return CommonFactory.handlePromise(
+                        elementPromises.push(
+                            CommonFactory.handlePromise(
                                 stocktaking.all('items').post({
                                     'item': element.item,
                                     'quantity': element.quantity
                                 }),
-                                'itemSidebarMovingItems');
-                        });
+                                'itemSidebarMovingItems')
+                        );
                     });
 
-                    lastItemPromise.then(function () {
+                    $q.all(elementPromises).then(function () {
                         CommonFactory.handlePromise(
                             stocktaking.customPUT(null, 'close'),
                             'itemSidebarMovingItems',
