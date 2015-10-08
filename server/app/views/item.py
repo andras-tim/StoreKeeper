@@ -119,10 +119,14 @@ class ItemBarcodeListView(BaseNestedListView):
                                  'can not set more than one master barcode to an item'},
               queries={'id': 'ID of item'})
     def post(self, id: int):
-        self._initialize_parent_item(id)
+        item = self._initialize_parent_item(id)
         barcode = self._post_populate(item_id=id)
-        if barcode.barcode and _is_main_barcode(barcode.barcode):
+
+        if barcode.main is None and barcode.barcode and _is_main_barcode(barcode.barcode):
             barcode.main = True
+        if barcode.master is None and barcode.main and item.barcodes.count() == 0:
+            barcode.master = True
+
         _can_be_master_barcode(barcode)
 
         if barcode.barcode is None:
