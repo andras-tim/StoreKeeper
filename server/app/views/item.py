@@ -70,6 +70,7 @@ class ItemSearchListView(BaseListView):
             ).limit(data['limit'] - len(results)).all()
             results.extend([_CreateObject(type='item', item_id=row.Item.id, name=row.Item.name,
                                           article_number=row.Item.article_number, vendor=row.Item.vendor.name,
+                                          unit=row.Item.unit.unit,
                                           master_barcode=row.Barcode.barcode) for row in items])
 
         return self._serializer.dump(results, many=True).data
