@@ -4,16 +4,23 @@
 
 StoreKeeper is an open source, multilingual warehouse/store management software
 
-*Project is under development, so pleas go back some weeks later for first release!*
+*Project is under development!*
 
 
 Features
 --------
 
-The following features are only available via API now.
+The following features are available:
 
-* Manage users, sessions (login, logout), handle permissions
+* User login, logout
 * Manage items and its barcodes, units, vendors
+* Add/remove items in store
+* Able to use barcode reader for collecting items
+* Can use barcode printer to create labels
+
+The following features are only available via API now:
+
+* Manage users, handle permissions
 * Can make acquisition and stocktaking
 * Can crate works and its customers (handle outbound, returned items)
 
@@ -24,7 +31,7 @@ Prepare & Run
 All commands can run with ``package.sh`` scripts what you want. All of these scripts has ``--help`` argument for
 available getting some info about the current module.
 
-1. Install all dependencies: ``./package.sh install``
+1. Install all dependencies: ``./package.sh -p install``
 2. Make default configuration files: ``./package.sh make_defaults``
 3. Check the ``config/config.yml`` for database and other settings
 4. Prepare database: ``./package.sh create_database``
