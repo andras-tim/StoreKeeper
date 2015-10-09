@@ -115,11 +115,8 @@ class TestItemBarcodeWithBrandNewDb(CommonApiTest):
                            expected_data={'message': {'barcode': ['Already exists.']}},
                            expected_status_codes=422)
 
-    def test_can_not_adding_new_master_non_main_barcode(self):
-        self.assertApiPost(data=ItemBarcodes.BARCODE2.set(change={'master': True}),
-                           expected_data={'message': {'master': [
-                               'Can not set non-main barcode as master barcode.']}},
-                           expected_status_codes=422)
+    def test_can_add_new_master_non_main_barcode(self):
+        self.assertApiPost(data=ItemBarcodes.BARCODE2.set(change={'master': True}))
 
     def test_can_not_add_more_than_one_master_barcode(self):
         self.assertApiPost(data=ItemBarcodes.BARCODE1)

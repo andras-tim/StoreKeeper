@@ -78,7 +78,7 @@
 
                       <td class="field-checkbox">
                         <app-checkbox-label app-tooltip="{{ 'Master barcode for this item' | translate }}">
-                          <input name="master" type="checkbox" ng-model="barcode.master" ng-change="togglePostCheck(barcode); setBarcodeDirty(barcode)" ng-disabled="!barcode.main">
+                          <input name="master" type="checkbox" ng-model="barcode.master" ng-change="togglePostCheck(barcode); setBarcodeDirty(barcode)">
                         </app-checkbox-label>
                       </td>
 

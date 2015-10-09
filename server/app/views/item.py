@@ -125,7 +125,7 @@ class ItemBarcodeListView(BaseNestedListView):
 
         if barcode.main is None and barcode.barcode and _is_main_barcode(barcode.barcode):
             barcode.main = True
-        if barcode.master is None and barcode.main and item.barcodes.count() == 0:
+        if barcode.master is None and item.barcodes.count() == 0:
             barcode.master = True
 
         _can_be_master_barcode(barcode)
@@ -245,8 +245,6 @@ def _is_main_barcode(barcode: str) -> bool:
 def _can_be_master_barcode(barcode: Barcode):
     if not barcode.master:
         return
-    if barcode.master and barcode.barcode and not barcode.main:
-        abort(422, message={'master': ['Can not set non-main barcode as master barcode.']})
     if Barcode.query.filter(Barcode.id != barcode.id,
                             Barcode.item_id == barcode.item_id,
                             Barcode.master).count() > 0:
