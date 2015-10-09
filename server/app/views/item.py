@@ -55,8 +55,9 @@ class ItemSearchListView(BaseListView):
 
         results = []
 
+        expression = '%{}%'.format(data['expression'])
         barcodes = Barcode.query.filter(
-            Barcode.barcode.contains(data['expression'])
+            Barcode.barcode.ilike(expression)
         ).limit(data['limit']).all()
         results.extend([_CreateObject(type='barcode', item_id=row.item_id, barcode=row.barcode, quantity=row.quantity,
                                       name=row.item.name, unit=row.item.unit.unit) for row in barcodes])
@@ -64,7 +65,10 @@ class ItemSearchListView(BaseListView):
         if len(results) < data['limit']:
             items = db.session.query(Item, Barcode).join(Barcode).filter(
                 and_(
-                    or_(Item.name.contains(data['expression']), Item.article_number.contains(data['expression'])),
+                    or_(
+                        Item.name.ilike(expression),
+                        Item.article_number.ilike(expression)
+                    ),
                     Barcode.master
                 )
             ).limit(data['limit'] - len(results)).all()
@@ -125,7 +129,7 @@ class ItemBarcodeListView(BaseNestedListView):
 
         if barcode.main is None and barcode.barcode and _is_main_barcode(barcode.barcode):
             barcode.main = True
-        if barcode.master is None and barcode.main and item.barcodes.count() == 0:
+        if barcode.master is None and item.barcodes.count() == 0:
             barcode.master = True
 
         _can_be_master_barcode(barcode)
@@ -245,8 +249,6 @@ def _is_main_barcode(barcode: str) -> bool:
 def _can_be_master_barcode(barcode: Barcode):
     if not barcode.master:
         return
-    if barcode.master and barcode.barcode and not barcode.main:
-        abort(422, message={'master': ['Can not set non-main barcode as master barcode.']})
     if Barcode.query.filter(Barcode.id != barcode.id,
                             Barcode.item_id == barcode.item_id,
                             Barcode.master).count() > 0:

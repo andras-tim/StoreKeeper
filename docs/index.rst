@@ -6,16 +6,23 @@ Welcome to StoreKeeper's documentation!
 StoreKeeper is an open source, multilingual warehouse/store management software
 
 .. warning::
-    *Project is under development, so pleas go back some weeks later for first release!*
+    *Project is under development!*
 
 
 Features
 --------
 
-The following features are only available via API now.
+The following features are available:
 
-* Manage users, sessions (login, logout), handle permissions
+* User login, logout
 * Manage items and its barcodes, units, vendors
+* Add/remove items in store
+* Able to use barcode reader for collecting items
+* Can use barcode printer to create labels
+
+The following features are only available via API now:
+
+* Manage users, handle permissions
 * Can make acquisition and stocktaking
 * Can crate works and its customers (handle outbound, returned items)
 
