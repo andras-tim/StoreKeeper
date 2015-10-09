@@ -55,8 +55,9 @@ class ItemSearchListView(BaseListView):
 
         results = []
 
+        expression = '%{}%'.format(data['expression'])
         barcodes = Barcode.query.filter(
-            Barcode.barcode.contains(data['expression'])
+            Barcode.barcode.ilike(expression)
         ).limit(data['limit']).all()
         results.extend([_CreateObject(type='barcode', item_id=row.item_id, barcode=row.barcode, quantity=row.quantity,
                                       name=row.item.name, unit=row.item.unit.unit) for row in barcodes])
@@ -64,7 +65,10 @@ class ItemSearchListView(BaseListView):
         if len(results) < data['limit']:
             items = db.session.query(Item, Barcode).join(Barcode).filter(
                 and_(
-                    or_(Item.name.contains(data['expression']), Item.article_number.contains(data['expression'])),
+                    or_(
+                        Item.name.ilike(expression),
+                        Item.article_number.ilike(expression)
+                    ),
                     Barcode.master
                 )
             ).limit(data['limit'] - len(results)).all()
