@@ -39,13 +39,20 @@ function do_preinstall()
 
 function do_install()
 {
-    ${PIP} install -r requirements.txt --upgrade
-    if [ "${PRODUCTION}" == false ]
+    mkdir -p tmp
+
+    pip_options='--upgrade'
+    if [ -e "tmp/pip-download-cache" ]
     then
-        ${PIP} install -r requirements-dev.txt --upgrade
+        mkdir -p "$(pwd)/tmp/pip-download-cache"
+        pip_options="${pip_options} --cache-dir $(pwd)/tmp/pip-download-cache"
     fi
 
-    mkdir -p tmp
+    ${PIP} install -r requirements.txt ${pip_options}
+    if [ "${PRODUCTION}" == false ]
+    then
+        ${PIP} install -r requirements-dev.txt ${pip_options}
+    fi
 }
 
 function do_clear()
