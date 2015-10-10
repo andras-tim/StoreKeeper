@@ -31,11 +31,12 @@ Prepare & Run
 All commands can run with ``package.sh`` scripts what you want. All of these scripts has ``--help`` argument for
 available getting some info about the current module.
 
-1. Install all dependencies: ``./package.sh -p install``
-2. Make default configuration files: ``./package.sh make_defaults``
-3. Check the ``config/config.yml`` for database and other settings
-4. Prepare database: ``./package.sh create_database``
-5. Start server: ``./package.sh start``
+1. Clone repo, or download & extract a release ``.tar.gz`` file
+2. Install all dependencies: ``./package.sh -p install``
+3. Make default configuration files: ``./package.sh make_defaults``
+4. Check the ``config/config.yml`` for database and other settings
+5. Prepare database: ``./package.sh create_database``
+6. Start server: ``./package.sh start``
 
 Now, you can open the WebUI: http://localhost:8000/storekeeper
 
