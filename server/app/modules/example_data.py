@@ -138,18 +138,18 @@ class ExampleStocktakings:
 
 
 class ExampleItems:
-    ITEM1 = FilterableDict(commons={'name': 'Spray', 'vendor': ExampleVendors.VENDOR1.get(), 'quantity': 132.3,
+    ITEM1 = FilterableDict(commons={'name': 'Spray', 'vendor': ExampleVendors.VENDOR1.get(),
                                     'warning_quantity': 4.0, 'unit': ExampleUnits.UNIT2.get()},
                            setters={'article_number': 'sk132465'},
-                           getters={'id': 1, 'article_number': 'SK132465'})
+                           getters={'id': 1, 'article_number': 'SK132465', 'quantity': 0.0})
     ITEM2 = FilterableDict(commons={'name': 'Pipe', 'vendor': ExampleVendors.VENDOR2.get(),
-                                    'article_number': 'FO213546', 'quantity': 32.6, 'warning_quantity': 0.0,
+                                    'article_number': 'FO213546',
                                     'unit': ExampleUnits.UNIT1.get()},
-                           getters={'id': 2})
+                           getters={'id': 2, 'quantity': 0.0, 'warning_quantity': 0.0})
     ITEM3 = FilterableDict(commons={'name': 'Screw', 'vendor': ExampleVendors.VENDOR2.get(),
-                                    'article_number': 'BA45678', 'quantity': 12.1, 'warning_quantity': 3.14,
+                                    'article_number': 'BA45678', 'warning_quantity': 3.14,
                                     'unit': ExampleUnits.UNIT2.get()},
-                           getters={'id': 3})
+                           getters={'id': 3, 'quantity': 0.0})
 
 
 class ExampleItemSearchResults:
