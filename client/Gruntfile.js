@@ -212,6 +212,12 @@ module.exports = function (grunt) {
                     'app/index.html'
                 ],
                 'tasks': ['nggettext_extract', 'app_index_html']
+            },
+            'version': {
+                'files': [
+                    '../VERSION.json'
+                ],
+                'tasks': ['prepare']
             }
         }
     });
