@@ -126,8 +126,7 @@ class ItemDeserializer(Serializer):
     name = fields.Str(required=True, validate=_not_blank)
     vendor = fields.Nested(VendorDeserializer(), required=True)
     article_number = UppercaseString()
-    quantity = fields.Float(required=True)
-    warning_quantity = fields.Float(required=True)
+    warning_quantity = fields.Float()
     unit = fields.Nested(UnitDeserializer(), required=True)
 
 

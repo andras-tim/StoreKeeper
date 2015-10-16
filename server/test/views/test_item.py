@@ -6,7 +6,7 @@ from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
 # I do not want to check the output of printing, therefore this feature is tested only by rights
 
 @append_mandatory_field_tests(item_name='item', base_item=Items.ITEM1,
-                              mandatory_fields=['name', 'vendor', 'quantity', 'unit'])
+                              mandatory_fields=['name', 'vendor', 'unit'])
 class TestItemWithBrandNewDb(CommonApiTest):
     ENDPOINT = '/items'
     INIT_PUSH = [
@@ -22,9 +22,9 @@ class TestItemWithBrandNewDb(CommonApiTest):
         self.assertApiPost(data=Items.ITEM1, expected_data=Items.ITEM1)
         self.assertApiPost(data=Items.ITEM2, expected_data=Items.ITEM2)
 
-    def test_can_add_item_with_negative_and_zero_quantity(self):
-        self.assertApiPost(data=Items.ITEM1.set(change={'quantity': -1}))
-        self.assertApiPost(data=Items.ITEM2.set(change={'quantity': 0}))
+    def test_can_not_create_item_with_not_zero_quantity(self):
+        self.assertApiPost(data=Items.ITEM1.set(change={'quantity': 123}),
+                           expected_data=Items.ITEM1.get())
 
     def test_can_not_add_item_with_same_name(self):
         self.assertApiPost(data=Items.ITEM1)
@@ -60,13 +60,18 @@ class TestItemWithPreFilledDb(CommonApiTest):
 
     def test_update_item(self):
         request = Items.ITEM2.set(change={'name': 'Spray222', 'vendor': Vendors.VENDOR1.get(), 'article_number': 'B222',
-                                          'quantity': 222.0, 'unit': Units.UNIT2.get()})
+                                          'warning_quantity': 222.0, 'unit': Units.UNIT2.get()})
         response = Items.ITEM2.get(change={'name': request['name'], 'vendor': request['vendor'],
-                                           'article_number': request['article_number'], 'quantity': request['quantity'],
-                                           'unit': request['unit']})
+                                           'article_number': request['article_number'],
+                                           'warning_quantity': request['warning_quantity'], 'unit': request['unit']})
 
         self.assertApiPut(Items.ITEM2['id'], data=request, expected_data=response)
         self.assertApiGet(expected_data=[Items.ITEM1, response])
+
+    def test_can_not_change_item_quantity(self):
+        request = Items.ITEM2.set(change={'quantity': 542})
+
+        self.assertApiPut(Items.ITEM2['id'], data=request, expected_data=Items.ITEM2.get())
 
     def test_update_name_to_name_of_another_item(self):
         request = Items.ITEM2.set(change={'name': Items.ITEM1['name']})

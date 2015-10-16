@@ -3,8 +3,8 @@
 var appControllers = angular.module('appControllers.common', []);
 
 
-appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory', 'ShortcutFactory',
-    function CommonController ($scope, ConfigFactory, PageFactory, SessionFactory, CommonFactory, ShortcutFactory) {
+appControllers.controller('CommonController', ['$scope', 'appVersion', 'ConfigFactory', 'PageFactory', 'SessionFactory', 'CommonFactory', 'ShortcutFactory',
+    function CommonController ($scope, appVersion, ConfigFactory, PageFactory, SessionFactory, CommonFactory, ShortcutFactory) {
         ConfigFactory.getConfig().then(function (config) {
             $scope.appTitle = config.app_title;
         }, CommonFactory.showResponseError);
@@ -15,6 +15,7 @@ appControllers.controller('CommonController', ['$scope', 'ConfigFactory', 'PageF
             }
         });
 
+        $scope.appVersion = appVersion;
         $scope.isAuthenticated = SessionFactory.isAuthenticated;
         $scope.getWindowTitle = PageFactory.getWindowTitle;
     }]);
