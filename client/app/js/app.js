@@ -25,6 +25,9 @@ var storekeeperApp = angular.module('storekeeperApp', [
 ]);
 
 
+storekeeperApp.constant('appVersion', angular.element('meta[name=version]').attr('content'));
+
+
 storekeeperApp.config(['$routeProvider',
     function ($routeProvider) {
         var sessionRequired = {

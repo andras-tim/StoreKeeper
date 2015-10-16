@@ -166,6 +166,9 @@ module.exports = function (grunt) {
                 'replacements': [{
                     'from': /(|\.min)\.(css|js)[^"]*"/g,
                     'to': '.$2"'
+                }, {
+                    'from': /(<meta name="version" content=").*("\s*\/>)/g,
+                    'to': '$1<%= version %>-dev$2'
                 }]
             },
             'index_html_min': {
@@ -174,6 +177,9 @@ module.exports = function (grunt) {
                 'replacements': [{
                     'from': /(|\.min)\.(css|js)[^"]*"/g,
                     'to': '.min.$2?v=<%= version %>"'
+                }, {
+                    'from': /(<meta name="version" content=").*("\s*\/>)/g,
+                    'to': '$1<%= version %>$2'
                 }]
             }
         },

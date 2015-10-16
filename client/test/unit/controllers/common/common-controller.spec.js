@@ -46,6 +46,7 @@ describe('Controllers/Common: CommonController', function () {
                     },
                     'hide': function () {}
                 },
+                'appVersion': '0.0.0-test',
                 'ConfigFactory': {
                     'getConfig': function () {
                         return helper.promiseMock(test, 'configResolved', test.config, test.config);
@@ -73,6 +74,7 @@ describe('Controllers/Common: CommonController', function () {
                 '$location': mocks.$location,
                 '$route': mocks.$route,
                 '$aside': mocks.$aside,
+                'appVersion': mocks.appVersion,
                 'ConfigFactory': mocks.ConfigFactory,
                 'PageFactory': mocks.PageFactory,
                 'SessionFactory': mocks.SessionFactory,
