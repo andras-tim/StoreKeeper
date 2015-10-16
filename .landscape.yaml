@@ -1,4 +1,0 @@
-max-line-length: 120
-autodetect: yes
-requirements:
-    - server/requirements.txt
