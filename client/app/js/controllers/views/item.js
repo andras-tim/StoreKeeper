@@ -212,7 +212,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
         }
 
         function downloadLabel(barcode) {
-            window.location.href = 'api/items/' + $scope.item.id + '/barcodes/' + barcode.id + '/print';
+            $window.location.href = 'api/items/' + $scope.item.id + '/barcodes/' + barcode.id + '/print';
         }
 
         function deleteBarcode(barcode) {
