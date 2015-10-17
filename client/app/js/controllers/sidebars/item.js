@@ -402,16 +402,23 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     }),
                     'itemSidebarMovingItems'
                 ).then(function (stocktaking) {
-                    _.forEach(mergedElements, function (element) {
-                        elementPromises.push(
-                            CommonFactory.handlePromise(
-                                stocktaking.all('items').post({
-                                    'item': element.item,
-                                    'quantity': element.quantity
-                                }),
-                                'itemSidebarMovingItems')
-                        );
-                    });
+                    var itemId,
+                        element;
+
+                    for (itemId in mergedElements) {
+                        if (mergedElements.hasOwnProperty(itemId)) {
+                            element = mergedElements[itemId];
+
+                            elementPromises.push(
+                                CommonFactory.handlePromise(
+                                    stocktaking.all('items').post({
+                                        'item': element.item,
+                                        'quantity': element.quantity
+                                    }),
+                                    'itemSidebarMovingItems')
+                            );
+                        }
+                    }
 
                     $q.all(elementPromises).then(function () {
                         CommonFactory.handlePromise(

@@ -74,11 +74,11 @@
                     <tr ng-if="loadingBarcodes">
                       <td colspan="4" class="text-center" app-icon="spinner"></td>
                     </tr>
-                    <tr ng-repeat="barcode in barcodes | filter:filterAvailable" ng-class="{'warning': barcode.dirty}">
+                    <tr ng-repeat="barcode in barcodes | filter:availableOnlyFilter" ng-class="{'warning': barcode.dirty}">
 
                       <td class="field-checkbox">
                         <app-checkbox-label app-tooltip="{{ 'Master barcode for this item' | translate }}">
-                          <input name="master" type="checkbox" ng-model="barcode.master" ng-change="togglePostCheck(barcode); setBarcodeDirty(barcode)">
+                          <input name="master" type="checkbox" ng-model="barcode.master" ng-change="togglePostCheck(barcode); setBarcodeDirty(barcode)" ng-disabled="barcode.master">
                         </app-checkbox-label>
                       </td>
 
