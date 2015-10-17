@@ -49,10 +49,10 @@
     padding-bottom: 0;
 }
 
-.table > tbody > tr > td.field-button.field-double-button .btn-group {
-    min-width: 70px;
+.table > tbody > tr > td.field-button.field-double-button {
+    min-width: 76px;
 }
 
-.table > tbody > tr > td.field-button.field-triple-button .btn-group {
-    min-width: 105px;
+.table > tbody > tr > td.field-button.field-triple-button {
+    min-width: 106px;
 }

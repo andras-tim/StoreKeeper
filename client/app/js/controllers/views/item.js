@@ -107,7 +107,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             for (index = $scope.barcodes.length - 1; index >= 0; index -= 1) {
                 barcode = $scope.barcodes[index];
 
-                if (barcode.dirty === 'deleted') {
+                if (barcode !== undefined && barcode.dirty === 'deleted') {
                     promises.push(
                         CommonFactory.handlePromise(
                             barcode.remove(),
@@ -128,14 +128,14 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 onUpdateFactory = function onUpdateFactory (barcode) {
                     return function onUpdate () {
                         barcode.dirty = '';
-                        barcode.dirtyForLabel = false;
+                        barcode.labelCommandsDisabled = false;
                     };
                 };
 
             for (index = 0; index < length; index += 1) {
                 barcode = $scope.barcodes[index];
 
-                if (barcode && barcode.dirty === 'modified' && !barcode.master) {
+                if (barcode !== undefined && barcode.dirty === 'modified' && !barcode.master) {
                     promises.push(
                         CommonFactory.handlePromise(
                             barcode.put(),
@@ -156,14 +156,14 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 onUpdateFactory = function onUpdateFactory (barcode) {
                     return function onUpdate () {
                         barcode.dirty = '';
-                        barcode.dirtyForLabel = false;
+                        barcode.labelCommandsDisabled = false;
                     };
                 };
 
             for (index = 0; index < length; index += 1) {
                 barcode = $scope.barcodes[index];
 
-                if (barcode && barcode.dirty === 'modified' && barcode.master) {
+                if (barcode !== undefined && barcode.dirty === 'modified' && barcode.master) {
                     promises.push(
                         CommonFactory.handlePromise(
                             barcode.put(),
@@ -188,13 +188,13 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 });
         }
 
-        function setBarcodeDirty(barcode, dirtiedForLabel) {
+        function setBarcodeDirty(barcode, disableLabelCommands) {
             if (!barcode) {
                 return;
             }
             barcode.dirty = 'modified';
-            if (dirtiedForLabel) {
-                barcode.dirtyForLabel = true;
+            if (disableLabelCommands) {
+                barcode.labelCommandsDisabled = true;
             }
         }
 
