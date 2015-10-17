@@ -19,8 +19,6 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                     }
                     angular.merge($scope.elementData, $scope.item);
                     $scope.elementData.new = undefined;
-
-                    console.log('done');
                 });
         }
 
@@ -50,7 +48,6 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                     $scope.item.put(),
                     null,
                     function () {
-                        console.log('saving item');
                         angular.merge($scope.elementData, $scope.item);
                         $scope.itemForm.$setPristine();
                     });
@@ -59,7 +56,8 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
 
         function saveBarcodesChanges() {
             var result = $q.defer(),
-                promise = result.promise;
+                promise = result.promise,
+                bulkPromises;
 
             if (!$scope.barcodesForm.$dirty) {
                 result.resolve();
@@ -68,11 +66,6 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             } else if (!$scope.barcodesForm.$valid) {
                 result.reject();
                 return promise;
-            }
-            result.resolve();
-
-            if (!$scope.barcodesForm.$dirty || !$scope.barcodesForm.$valid) {
-                return;
             }
 
             if ($scope.elementData.new) {
@@ -84,58 +77,102 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                     });
             }
 
-            _.forEach($scope.barcodes, function (barcode, i) {
+            bulkPromises = [];
+
+            promise = deleteBarcodes();
+            bulkPromises.push(promise);
+
+            promise = promise.then(updateNonMasterBarcodes);
+            bulkPromises.push(promise);
+
+            promise = promise.then(updateMasterBarcodes);
+            bulkPromises.push(promise);
+
+            return $q.all(bulkPromises).then(function () {
+                $scope.barcodesForm.$setPristine();
+            });
+        }
+
+        function deleteBarcodes() {
+            var index,
+                barcode,
+                promises = [],
+
+                onDeleteFactory = function onDeleteFactory (index) {
+                    return function onDelete () {
+                        delete $scope.barcodes[index];
+                    };
+                };
+
+            for (index = $scope.barcodes.length - 1; index >= 0; index -= 1) {
+                barcode = $scope.barcodes[index];
+
                 if (barcode.deleted) {
-                    console.log('deleting item');
-                    promise.then(function () {
-                        promise = CommonFactory.handlePromise(
+                    promises.push(
+                        CommonFactory.handlePromise(
                             barcode.remove(),
                             null,
-                            function () {
-                                delete $scope.barcodes[i];
-                            }
-                        );
-                    });
+                            onDeleteFactory(index)));
                 }
-            });
+            }
 
-            _.forEach($scope.barcodes, function (barcode) {
-                if ((barcode !== undefined) && !barcode.deleted && barcode.dirty && !barcode.master) {
-                    promise.then(function () {
-                        console.log('updating item');
-                        promise = CommonFactory.handlePromise(
+            return $q.all(promises);
+        }
+
+        function updateNonMasterBarcodes() {
+            var length = $scope.barcodes.length,
+                index,
+                barcode,
+                promises = [],
+
+                onUpdateFactory = function onUpdateFactory (barcode) {
+                    return function onUpdate () {
+                        barcode.dirty = false;
+                        barcode.dirtyForLabel = false;
+                    };
+                };
+
+            for (index = 0; index < length; index += 1) {
+                barcode = $scope.barcodes[index];
+
+                if (!barcode.deleted && barcode.dirty && !barcode.master) {
+                    promises.push(
+                        CommonFactory.handlePromise(
                             barcode.put(),
                             null,
-                            function () {
-                                barcode.dirty = false;
-                                barcode.dirtyForLabel = false;
-                            });
-                    });
+                            onUpdateFactory(barcode)));
                 }
-            });
+            }
 
-            _.forEach($scope.barcodes, function (barcode) {
-                if ((barcode !== undefined) && !barcode.deleted && barcode.dirty && barcode.master) {
-                    promise.then(function () {
-                        console.log('updating2 item');
-                        promise = CommonFactory.handlePromise(
+            return $q.all(promises);
+        }
+
+        function updateMasterBarcodes() {
+            var length = $scope.barcodes.length,
+                index,
+                barcode,
+                promises = [],
+
+                onUpdateFactory = function onUpdateFactory (barcode) {
+                    return function onUpdate () {
+                        barcode.dirty = false;
+                        barcode.dirtyForLabel = false;
+                    };
+                };
+
+            for (index = 0; index < length; index += 1) {
+                barcode = $scope.barcodes[index];
+
+                if (!barcode.deleted && barcode.dirty && barcode.master) {
+                    promises.push(
+                        CommonFactory.handlePromise(
                             barcode.put(),
                             null,
-                            function () {
-                                barcode.dirty = false;
-                                barcode.dirtyForLabel = false;
-                            });
-                    });
+                            onUpdateFactory(barcode)));
                 }
-            });
+            }
 
-            return CommonFactory.handlePromise(
-                promise,
-                null,
-                function () {
-                    console.log('saving barcodes');
-                    $scope.barcodesForm.$setPristine();
-                });
+            return $q.all(promises);
         }
 
         function closeModal() {
