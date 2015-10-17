@@ -180,10 +180,8 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
         }
 
         function createBarcode() {
-            var emptyBarcode = {'master': false};
-
             return CommonFactory.handlePromise(
-                $scope.barcodes.post(Restangular.copy(emptyBarcode)),
+                $scope.barcodes.post({}),
                 'creatingBarcode',
                 function (resp) {
                     $scope.barcodes.push(resp);
@@ -256,6 +254,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 $scope.barcodes.push({
                     'barcode': $scope.elementData.new.barcode,
                     'quantity': 1,
+                    'master': true,
                     'dirty': true
                 });
             } else {
