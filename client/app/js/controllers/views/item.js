@@ -107,7 +107,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             for (index = $scope.barcodes.length - 1; index >= 0; index -= 1) {
                 barcode = $scope.barcodes[index];
 
-                if (barcode.deleted) {
+                if (barcode.dirty === 'deleted') {
                     promises.push(
                         CommonFactory.handlePromise(
                             barcode.remove(),
@@ -127,7 +127,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
 
                 onUpdateFactory = function onUpdateFactory (barcode) {
                     return function onUpdate () {
-                        barcode.dirty = false;
+                        barcode.dirty = '';
                         barcode.dirtyForLabel = false;
                     };
                 };
@@ -135,7 +135,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             for (index = 0; index < length; index += 1) {
                 barcode = $scope.barcodes[index];
 
-                if (!barcode.deleted && barcode.dirty && !barcode.master) {
+                if (barcode && barcode.dirty === 'modified' && !barcode.master) {
                     promises.push(
                         CommonFactory.handlePromise(
                             barcode.put(),
@@ -155,7 +155,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
 
                 onUpdateFactory = function onUpdateFactory (barcode) {
                     return function onUpdate () {
-                        barcode.dirty = false;
+                        barcode.dirty = '';
                         barcode.dirtyForLabel = false;
                     };
                 };
@@ -163,7 +163,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             for (index = 0; index < length; index += 1) {
                 barcode = $scope.barcodes[index];
 
-                if (!barcode.deleted && barcode.dirty && barcode.master) {
+                if (barcode && barcode.dirty === 'modified' && barcode.master) {
                     promises.push(
                         CommonFactory.handlePromise(
                             barcode.put(),
@@ -194,14 +194,14 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             if (!barcode) {
                 return;
             }
-            barcode.dirty = true;
+            barcode.dirty = 'modified';
             if (dirtiedForLabel) {
                 barcode.dirtyForLabel = true;
             }
         }
 
         function filterAvailable(barcode) {
-            return !barcode.deleted;
+            return barcode.dirty !== 'deleted';
         }
 
         function printLabel(barcode) {
@@ -225,7 +225,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
 
             if ($window.confirm(message)) {
                 $scope.barcodesForm.$setDirty();
-                barcode.deleted = true;
+                barcode.dirty = 'deleted';
             }
         }
 
@@ -234,7 +234,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 return;
             }
             _.forEach($scope.barcodes, function (barcode) {
-                if ((barcode !== undefined) && !barcode.deleted && barcode.master && (barcode !== currentBarcode)) {
+                if ((barcode !== undefined) && barcode.dirty !== 'deleted' && barcode.master && (barcode !== currentBarcode)) {
                     barcode.master = false;
                     setBarcodeDirty(barcode);
                 }
