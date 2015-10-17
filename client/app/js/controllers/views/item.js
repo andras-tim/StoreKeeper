@@ -200,7 +200,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             }
         }
 
-        function filterAvailable(barcode) {
+        function availableOnlyFilter(barcode) {
             return barcode.dirty !== 'deleted';
         }
 
@@ -284,8 +284,8 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 });
         }
 
+        $scope.availableOnlyFilter = availableOnlyFilter;
         $scope.createBarcode = createBarcode;
-        $scope.filterAvailable = filterAvailable;
         $scope.setBarcodeDirty = setBarcodeDirty;
         $scope.togglePostCheck = togglePostCheck;
         $scope.printLabel = printLabel;
