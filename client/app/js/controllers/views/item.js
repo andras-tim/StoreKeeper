@@ -125,10 +125,9 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 barcode,
                 promises = [],
 
-                onUpdateFactory = function onUpdateFactory (barcode) {
-                    return function onUpdate () {
-                        barcode.dirty = '';
-                        barcode.labelCommandsDisabled = false;
+                onUpdateFactory = function onUpdateFactory (barcodeIndex) {
+                    return function onUpdate (newBarcode) {
+                        $scope.barcodes[barcodeIndex] = newBarcode;
                     };
                 };
 
@@ -140,7 +139,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                         CommonFactory.handlePromise(
                             barcode.put(),
                             null,
-                            onUpdateFactory(barcode)));
+                            onUpdateFactory(index)));
                 }
             }
 
@@ -153,10 +152,9 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 barcode,
                 promises = [],
 
-                onUpdateFactory = function onUpdateFactory (barcode) {
-                    return function onUpdate () {
-                        barcode.dirty = '';
-                        barcode.labelCommandsDisabled = false;
+                onUpdateFactory = function onUpdateFactory (barcodeIndex) {
+                    return function onUpdate (newBarcode) {
+                        $scope.barcodes[barcodeIndex] = newBarcode;
                     };
                 };
 
@@ -168,7 +166,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                         CommonFactory.handlePromise(
                             barcode.put(),
                             null,
-                            onUpdateFactory(barcode)));
+                            onUpdateFactory(index)));
                 }
             }
 
