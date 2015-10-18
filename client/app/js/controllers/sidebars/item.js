@@ -219,7 +219,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     'new': {},
 
                     'onSave': function onSave (item, barcodes) {
-                        if (angular.isUndefined(readElement) && barcodes.length) {
+                        if (readElement === undefined) {
                             barcodeCache.refresh().then(function () {
                                 addElement(barcodes[0].barcode);
                             });

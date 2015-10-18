@@ -91,7 +91,7 @@
                         <div class="btn-group pull-right" role="group">
                           <button type="button" ng-click="printLabel(barcode)" ng-disabled="!barcode.main || barcode.labelCommandsDisabled" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i app-icon="print"></i></button>
                           <button type="button" ng-click="downloadLabel(barcode)" ng-disabled="!barcode.main || barcode.labelCommandsDisabled" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i app-icon="download"></i></button>
-                          <button type="button" ng-click="deleteBarcode(barcode)" class="btn btn-danger btn-sm" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i app-icon="delete"></i></button>
+                          <button type="button" ng-click="deleteBarcode(barcode)" ng-disabled="barcode.master" class="btn btn-danger btn-sm" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i app-icon="delete"></i></button>
                         </div>
                       </td>
 
