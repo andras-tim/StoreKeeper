@@ -163,7 +163,7 @@ module.exports = function (grunt) {
         'replace': {
             'index_html': {
                 'src': 'app/index.html',
-                'dest': 'app/index.html',
+                'overwrite': true,
                 'replacements': [{
                     'from': /(|\.min)\.(css|js)[^"]*"/g,
                     'to': '.$2"'
@@ -174,7 +174,7 @@ module.exports = function (grunt) {
             },
             'index_html_min': {
                 'src': 'app/index.html',
-                'dest': 'app/index.html',
+                'overwrite': true,
                 'replacements': [{
                     'from': /(|\.min)\.(css|js)[^"]*"/g,
                     'to': '.min.$2?v=<%= version %>"'
