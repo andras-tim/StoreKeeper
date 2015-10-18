@@ -80,7 +80,8 @@
                       </td>
 
                       <td class="field-barcode">
-                        <input name="barcode" ng-value="barcode.barcode" type="text" class="form-control field-barcode" readonly />
+                        <input name="barcode" ng-if="barcode.barcode" ng-value="barcode.barcode" type="text" class="form-control field-barcode" readonly />
+                        <input name="barcode" ng-if="!barcode.barcode" value="..." type="text" class="form-control field-barcode" readonly />
                       </td>
 
                       <td class="field-quantity">
@@ -89,22 +90,20 @@
 
                       <td class="field-button field-triple-button">
                         <div class="btn-group pull-right" role="group">
-                          <button type="button" ng-click="printLabel(barcode)" ng-disabled="!barcode.main || barcode.labelCommandsDisabled" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i app-icon="print"></i></button>
-                          <button type="button" ng-click="downloadLabel(barcode)" ng-disabled="!barcode.main || barcode.labelCommandsDisabled" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i app-icon="download"></i></button>
+                          <button type="button" ng-click="printLabel(barcode)" ng-if="barcode.main" ng-disabled="barcode.labelCommandsDisabled" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Print label' | translate }}" bs-tooltip><i app-icon="print"></i></button>
+                          <button type="button" ng-click="downloadLabel(barcode)" ng-if="barcode.main" ng-disabled="barcode.labelCommandsDisabled" class="btn btn-default btn-sm" data-type="info" data-title="{{ 'Download label file' | translate }}" bs-tooltip><i app-icon="download"></i></button>
                           <button type="button" ng-click="deleteBarcode(barcode)" ng-disabled="barcode.master" class="btn btn-danger btn-sm" data-type="info" data-title="{{ 'Remove label' | translate }}" bs-tooltip><i app-icon="delete"></i></button>
                         </div>
                       </td>
 
                     </tr>
-                    <tr ng-if="loadingBarcodes || creatingBarcode">
+                    <tr ng-if="loadingBarcodes">
                       <td colspan="4" class="text-center" app-icon="spinner"></td>
                     </tr>
                   </tbody>
                 </table>
 
-                <button type="button" ng-disabled="creatingBarcode || elementData.new" class="btn btn-success btn-sm btn-sm-wide pull-right pull-bottom" ng-click="createBarcode()">
-                  <i app-icon="add"></i>
-                </button>
+                <button type="button" ng-disabled="creatingBarcode" class="btn btn-success btn-sm btn-sm-wide pull-right pull-bottom" ng-click="addNewBarcode()"><i app-icon="add"></i></button>
               </app-details-modal-panel>
             </form>
 

@@ -219,16 +219,17 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     'new': {},
 
                     'onSave': function onSave (item, barcodes) {
+                        var masterBarcode = getMasterBarcodeFromBarcodes(barcodes);
+
                         if (readElement === undefined) {
                             barcodeCache.refresh().then(function () {
-                                addElement(barcodes[0].barcode);
+                                addElement(masterBarcode.barcode);
                             });
                         } else {
                             readElement.data.itemId = item.id;
                             readElement.item = item;
-                            readElement.barcode = barcodes[0];
+                            readElement.barcode = masterBarcode;
                         }
-                        $scope.closeModal('item');
                     }
                 };
 
@@ -237,6 +238,21 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                 }
 
                 $scope.openModal('item', 0, elementData);
+            },
+
+            getMasterBarcodeFromBarcodes = function getMasterBarcodeFromBarcodes (barcodes) {
+                var length = barcodes.length,
+                    index,
+                    barcode;
+
+                for (index = 0; index < length; index += 1) {
+                    barcode = barcodes[index];
+                    if (barcode.master) {
+                        return barcode;
+                    }
+                }
+
+                return null;
             },
 
             getBarcodeFromObject = function getBarcodeFromObject (selectedObject) {

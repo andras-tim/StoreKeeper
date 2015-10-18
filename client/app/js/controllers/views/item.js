@@ -36,22 +36,27 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             }
 
             if ($scope.elementData.new) {
-                return CommonFactory.handlePromise(
+                CommonFactory.handlePromise(
                     ItemService.post(Restangular.copy($scope.item)),
                     null,
                     function (resp) {
                         $scope.item = resp;
                         $scope.itemForm.$setPristine();
+                        $scope.barcodes = Restangular.restangularizeCollection($scope.item, $scope.barcodes, 'barcodes');
+                        result.resolve();
+                    }, function () {
+                        result.reject();
                     });
-            } else {
-                return CommonFactory.handlePromise(
-                    $scope.item.put(),
-                    null,
-                    function () {
-                        angular.merge($scope.elementData, $scope.item);
-                        $scope.itemForm.$setPristine();
-                    });
+                return promise;
             }
+
+            return CommonFactory.handlePromise(
+                $scope.item.put(),
+                null,
+                function () {
+                    angular.merge($scope.elementData, $scope.item);
+                    $scope.itemForm.$setPristine();
+                });
         }
 
         function saveBarcodesChanges() {
@@ -68,15 +73,6 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 return promise;
             }
 
-            if ($scope.elementData.new) {
-                return CommonFactory.handlePromise(
-                    $scope.item.all('barcodes').post(Restangular.copy($scope.barcodes[0])),
-                    'creatingBarcode',
-                    function (resp) {
-                        angular.merge($scope.barcodes[0], resp);
-                    });
-            }
-
             bulkPromises = [];
 
             promise = deleteBarcodes();
@@ -86,6 +82,9 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             bulkPromises.push(promise);
 
             promise = promise.then(updateMasterBarcodes);
+            bulkPromises.push(promise);
+
+            promise = promise.then(createNewBarcodes);
             bulkPromises.push(promise);
 
             return $q.all(bulkPromises).then(function () {
@@ -173,24 +172,77 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             return $q.all(promises);
         }
 
+        function createNewBarcodes() {
+            var length = $scope.barcodes.length,
+                index,
+                barcode,
+                promises = [],
+
+                onCreateFactory = function onCreateFactory (barcodeIndex) {
+                    return function onCreate (newBarcode) {
+                        $scope.barcodes[barcodeIndex] = newBarcode;
+                    };
+                };
+
+            for (index = 0; index < length; index += 1) {
+                barcode = $scope.barcodes[index];
+
+                if (barcode !== undefined && barcode.dirty === 'new') {
+                    promises.push(
+                        CommonFactory.handlePromise(
+                            $scope.barcodes.post(Restangular.copy(barcode)),
+                            null,
+                            onCreateFactory(index)));
+                }
+            }
+
+            return $q.all(promises);
+        }
+
         function closeModal() {
             $scope.$hide();
         }
 
-        function createBarcode() {
-            return CommonFactory.handlePromise(
-                $scope.barcodes.post({}),
-                'creatingBarcode',
-                function (resp) {
-                    $scope.barcodes.push(resp);
-                });
+        function addNewBarcode(barcodeValue) {
+            var newBarcode = {
+                'quantity': 1,
+                'master': !hasMasterBarcode(),
+                'dirty': 'new',
+                'labelCommandsDisabled': true
+            };
+            if (barcodeValue === undefined) {
+                newBarcode.main = true;
+            } else {
+                newBarcode.barcode = barcodeValue;
+            }
+
+            $scope.barcodes.push(newBarcode);
+            $scope.barcodesForm.$setDirty();
+        }
+
+        function hasMasterBarcode() {
+            var barcodes = $scope.barcodes,
+                length = barcodes.length,
+                index,
+                barcode;
+
+            for (index = 0; index < length; index += 1) {
+                barcode = barcodes[index];
+                if (barcode !== undefined && barcode.status !== 'deleted' && barcode.master) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         function setBarcodeDirty(barcode, disableLabelCommands) {
             if (!barcode) {
                 return;
             }
-            barcode.dirty = 'modified';
+            if (barcode.dirty !== 'new') {
+                barcode.dirty = 'modified';
+            }
             if (disableLabelCommands) {
                 barcode.labelCommandsDisabled = true;
             }
@@ -212,16 +264,33 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
         }
 
         function deleteBarcode(barcode) {
-            var message = gettextCatalog.getString(
-                'Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})', {
-                    'barcode': barcode.barcode,
-                    'quantity': barcode.quantity,
-                    'unit': $scope.item.unit.unit
-                });
+            var message;
+
+            if (barcode.barcode) {
+                message = gettextCatalog.getString(
+                    'Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})', {
+                        'barcode': barcode.barcode,
+                        'quantity': barcode.quantity,
+                        'unit': $scope.item.unit.unit
+                    });
+            } else {
+                message = gettextCatalog.getString(
+                    'Do you want to delete new barcode ({{ quantity }} {{ unit }})', {
+                        'quantity': barcode.quantity,
+                        'unit': $scope.item.unit.unit
+                    });
+            }
 
             if ($window.confirm(message)) {
                 $scope.barcodesForm.$setDirty();
-                barcode.dirty = 'deleted';
+
+                if (barcode.dirty === 'new') {
+                    _.remove($scope.barcodes, function (currentBarcode) {
+                        return currentBarcode === barcode;
+                    });
+                } else {
+                    barcode.dirty = 'deleted';
+                }
             }
         }
 
@@ -248,31 +317,16 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
             };
             $scope.barcodes = [];
 
-            if ($scope.elementData.new.barcode) {
-                $scope.barcodes.push({
-                    'barcode': $scope.elementData.new.barcode,
-                    'quantity': 1,
-                    'master': true,
-                    'dirty': true
-                });
-            } else {
-                $scope.barcodes.push({
-                    'quantity': 1,
-                    'master': true,
-                    'dirty': true
-                });
-            }
-
             $timeout(function () {
-                $scope.barcodesForm.$setDirty();
+                if ($scope.elementData.new.barcode) {
+                    addNewBarcode($scope.elementData.new.barcode);
+                } else {
+                    addNewBarcode();
+                }
             });
         }
 
-        if ($scope.elementData.new) {
-            prepareScopeForNewItem();
-
-        } else {
-            $scope.item = Restangular.copy($scope.elementData);
+        function fetchBarcodes() {
             CommonFactory.handlePromise(
                 $scope.item.getList('barcodes'),
                 'loadingBarcodes',
@@ -281,8 +335,16 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 });
         }
 
+        if ($scope.elementData.new) {
+            prepareScopeForNewItem();
+
+        } else {
+            $scope.item = Restangular.copy($scope.elementData);
+            fetchBarcodes();
+        }
+
         $scope.availableOnlyFilter = availableOnlyFilter;
-        $scope.createBarcode = createBarcode;
+        $scope.addNewBarcode = addNewBarcode;
         $scope.setBarcodeDirty = setBarcodeDirty;
         $scope.togglePostCheck = togglePostCheck;
         $scope.printLabel = printLabel;
