@@ -13,9 +13,10 @@ module.exports = function (grunt) {
 
 
     grunt.initConfig({
+        'pkg': grunt.file.readJSON('package.json'),
         'version': version,
-        'banner': '<%= grunt.package.name %> v<%= version %> | <%= grunt.package.author %> | ' +
-                  '<%= grunt.package.license %> Licensed | <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>',
+        'banner': '<%= pkg.name %> v<%= version %> | <%= pkg.author %> | ' +
+                  '<%= pkg.license %> Licensed | <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>',
         'min': production ? '.min' : '',
         'resourceRelease': production ? 'dist' : 'src',
 
