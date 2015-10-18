@@ -182,6 +182,14 @@ module.exports = function (grunt) {
                     'from': /(<meta name="version" content=").*("\s*\/>)/g,
                     'to': '$1<%= version %>$2'
                 }]
+            },
+            'po': {
+                'src': 'po/*.po',
+                'overwrite': true,
+                'replacements': [{
+                    'from': /("Project-Id-Version:\s*)[^\\]*((\\r|\\n)*")/,
+                    'to': '$1<%= pkg.name %> v<%= version %>$2'
+                }]
             }
         },
 
@@ -206,19 +214,19 @@ module.exports = function (grunt) {
                     'app/partials/**/*.html',
                     'po/*.po'
                 ],
-                'tasks': ['nggettext_extract', 'app_js']
+                'tasks': ['app_po', 'app_js']
             },
             'html': {
                 'files': [
                     'app/partials/**/*.html'
                 ],
-                'tasks': ['nggettext_extract']
+                'tasks': ['app_po']
             },
             'index_html': {
                 'files': [
                     'app/index.html'
                 ],
-                'tasks': ['nggettext_extract', 'app_index_html']
+                'tasks': ['app_po', 'app_index_html']
             },
             'version': {
                 'files': [
@@ -268,6 +276,11 @@ module.exports = function (grunt) {
             grunt.task.run('replace:index_html');
         }
     });
+
+    grunt.registerTask('app_po', 'Update .PO files', [
+        'nggettext_extract',
+        'replace:po'
+    ]);
 
     grunt.registerTask('update_versions', 'Update version strings in package related files', function () {
         updateVersionInFile('package.json');
