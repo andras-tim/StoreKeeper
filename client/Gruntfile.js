@@ -13,9 +13,10 @@ module.exports = function (grunt) {
 
 
     grunt.initConfig({
+        'pkg': grunt.file.readJSON('package.json'),
         'version': version,
-        'banner': '<%= grunt.package.name %> v<%= version %> | <%= grunt.package.author %> | ' +
-                  '<%= grunt.package.license %> Licensed | <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>',
+        'banner': '<%= pkg.name %> v<%= version %> | <%= pkg.author %> | ' +
+                  '<%= pkg.license %> Licensed | <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>',
         'min': production ? '.min' : '',
         'resourceRelease': production ? 'dist' : 'src',
 
@@ -162,7 +163,7 @@ module.exports = function (grunt) {
         'replace': {
             'index_html': {
                 'src': 'app/index.html',
-                'dest': 'app/index.html',
+                'overwrite': true,
                 'replacements': [{
                     'from': /(|\.min)\.(css|js)[^"]*"/g,
                     'to': '.$2"'
@@ -173,13 +174,21 @@ module.exports = function (grunt) {
             },
             'index_html_min': {
                 'src': 'app/index.html',
-                'dest': 'app/index.html',
+                'overwrite': true,
                 'replacements': [{
                     'from': /(|\.min)\.(css|js)[^"]*"/g,
                     'to': '.min.$2?v=<%= version %>"'
                 }, {
                     'from': /(<meta name="version" content=").*("\s*\/>)/g,
                     'to': '$1<%= version %>$2'
+                }]
+            },
+            'po': {
+                'src': 'po/*.po',
+                'overwrite': true,
+                'replacements': [{
+                    'from': /("Project-Id-Version:\s*)[^\\]*((\\r|\\n)*")/,
+                    'to': '$1<%= pkg.name %> v<%= version %>$2'
                 }]
             }
         },
@@ -205,19 +214,19 @@ module.exports = function (grunt) {
                     'app/partials/**/*.html',
                     'po/*.po'
                 ],
-                'tasks': ['nggettext_extract', 'app_js']
+                'tasks': ['app_po', 'app_js']
             },
             'html': {
                 'files': [
                     'app/partials/**/*.html'
                 ],
-                'tasks': ['nggettext_extract']
+                'tasks': ['app_po']
             },
             'index_html': {
                 'files': [
                     'app/index.html'
                 ],
-                'tasks': ['nggettext_extract', 'app_index_html']
+                'tasks': ['app_po', 'app_index_html']
             },
             'version': {
                 'files': [
@@ -267,6 +276,11 @@ module.exports = function (grunt) {
             grunt.task.run('replace:index_html');
         }
     });
+
+    grunt.registerTask('app_po', 'Update .PO files', [
+        'nggettext_extract',
+        'replace:po'
+    ]);
 
     grunt.registerTask('update_versions', 'Update version strings in package related files', function () {
         updateVersionInFile('package.json');
