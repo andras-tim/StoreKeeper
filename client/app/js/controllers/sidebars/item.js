@@ -404,7 +404,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                     mergedElements,
                     elementPromises;
 
-                message = gettextCatalog.getString('Do you want to move all element from list to Items?');
+                message = gettextCatalog.getString('Do you want to move all element from list to Stockpile?');
                 if (!$window.confirm(message)) {
                     return;
                 }
