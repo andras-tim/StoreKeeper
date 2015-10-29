@@ -104,6 +104,10 @@ TestingConfig:
   Base: DefaultConfig
 
   App:
+    NAME: "storekeeper"
+    TITLE: "StoreKeeper"
+    FORCED_LANGUAGE: NULL
+
     MIGRATE_REPO_PATH: "$SERVER/tmp/test_db_repository"
 
     BARCODE_PREFIX: "SK-TEST-"
