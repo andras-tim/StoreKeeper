@@ -23,7 +23,7 @@ class TestListInListHelpers(unittest.TestCase):
         assert not common.any_in(self.DISJUNCT, self.REFERENCE)
 
 
-class TestDictInListHelpers(unittest.TestCase):
+class TestFilterDict(unittest.TestCase):
     DATA = {
         'apple': 1,
         'orange': 2,
@@ -38,4 +38,92 @@ class TestDictInListHelpers(unittest.TestCase):
         assert common.filter_dict(self.DATA, {'apple', 'peach'}) == {
             'apple': 1,
             'peach': 3,
+        }
+
+
+class TestRecursiveDictUpdate(unittest.TestCase):
+    def setUp(self):
+        self.single_level = {
+            'apple': 1,
+            'orange': 2,
+            'peach': 3,
+        }
+
+        self.multi_level = {
+            'fruit': self.single_level,
+            'vegetables': {
+                'carrot': {
+                    'small': 1
+                }
+            },
+        }
+
+    def test_update_single_level_dict_with_single_level_dict(self):
+        common.recursive_dict_update(self.single_level, {
+            'apple': 4,
+            'kiwi': 5,
+        })
+
+        assert self.single_level == {
+            'apple': 4,
+            'orange': 2,
+            'peach': 3,
+            'kiwi': 5,
+        }
+
+    def test_update_single_level_dict_with_multi_level_dict(self):
+        common.recursive_dict_update(self.single_level, {
+            'apple': {
+                'small': 4
+            },
+            'kiwi': {
+                'big': 5
+            },
+        })
+
+        assert self.single_level == {
+            'apple': {
+                'small': 4
+            },
+            'orange': 2,
+            'peach': 3,
+            'kiwi': {
+                'big': 5
+            },
+        }
+
+    def test_update_multi_level_dict_with_multi_level_dict(self):
+        common.recursive_dict_update(self.multi_level, {
+            'fruit': {
+                'apple': 4,
+                'orange': {
+                    'small': 5
+                },
+                'kiwi': 6,
+            },
+            'vegetables': {
+                'carrot': 7
+            }
+        })
+
+        assert self.multi_level == {
+            'fruit': {
+                'apple': 4,
+                'orange': {
+                    'small': 5
+                },
+                'peach': 3,
+                'kiwi': 6,
+            },
+            'vegetables': {
+                'carrot': 7
+            },
+        }
+        assert self.single_level == {
+            'apple': 4,
+            'orange': {
+                'small': 5
+            },
+            'peach': 3,
+            'kiwi': 6,
         }
