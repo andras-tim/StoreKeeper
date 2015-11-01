@@ -1,9 +1,9 @@
 # Python byte-compiled / optimized / DLL files
-__pycache__/
+__pycache__
 *.py[cod]
 
 # Unit test / coverage reports
-htmlcov/
+htmlcov
 .coverage
 .coverage.gw*
 
@@ -13,8 +13,10 @@ htmlcov/
 
 # Editor
 .idea/
-*.swp
 
 # Temporary and backup files
+.cache
+tmp
 *~
 *.bak
+*.swp
