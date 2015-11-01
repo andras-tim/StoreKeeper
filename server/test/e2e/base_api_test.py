@@ -4,9 +4,6 @@ from collections import OrderedDict
 from flask import Response
 from operator import itemgetter
 
-import app
-app.test_mode = True
-
 from app.server import config, app, db
 from app.models import User
 from app.modules.example_data import ExampleUsers as Users, FilterableDict

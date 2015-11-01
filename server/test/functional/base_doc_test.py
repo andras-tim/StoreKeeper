@@ -1,8 +1,5 @@
 import unittest
 
-import app
-app.test_mode = True
-
 from app.server import config
 
 

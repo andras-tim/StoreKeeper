@@ -4,9 +4,6 @@ import shutil
 import unittest
 import pytest
 
-import app
-app.test_mode = True
-
 from app.server import config
 from app.modules.database_maintenance import DatabaseMaintenance
 

@@ -1,10 +1,6 @@
 import os
 import unittest
 
-import app
-app.test_mode = True
-import app.server
-
 from app.modules.label_printer import LabelPrinter
 from test.functional.mocks.printer_mock import PrinterMock
 

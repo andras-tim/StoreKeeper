@@ -1,9 +1,5 @@
 import unittest
 
-import app
-app.test_mode = True
-
-import app.server
 from app.models import User
 
 

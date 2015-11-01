@@ -1,6 +1,5 @@
 pep8>=1.6.2
 pylint>=1.4.3
-pytest>=2.6.4
-pytest-cache>=1.0
+pytest>=2.8.0
 pytest-cov>=1.8.1
 pytest-xdist>=1.11

@@ -1,8 +1,5 @@
 import pytest
 
-import app
-app.test_mode = True
-
 from app.modules.example_data import ExampleUsers as Users
 from test.e2e.base_session_test import CommonSessionTest
 
