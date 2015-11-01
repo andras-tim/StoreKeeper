@@ -1,4 +1,4 @@
-from test.modules.base_doc_test import ApiDocTestCase
+from test.functional.base_doc_test import ApiDocTestCase
 from app.modules.api_doc import ApiDoc
 
 

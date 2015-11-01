@@ -1,6 +1,6 @@
 from app.modules.example_data import ExampleItemBarcodes as ItemBarcodes, ExampleBarcodes as Barcodes, \
     ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units
-from test.views.base_api_test import CommonApiTest
+from test.e2e.base_api_test import CommonApiTest
 
 
 class TestBarcodeWithPreFilledDb(CommonApiTest):

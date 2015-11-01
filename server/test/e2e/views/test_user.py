@@ -1,5 +1,5 @@
 from app.modules.example_data import ExampleUsers as Users
-from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
+from test.e2e.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
 @append_mandatory_field_tests(item_name='user', base_item=Users.USER1,

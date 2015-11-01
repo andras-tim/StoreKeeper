@@ -1,5 +1,5 @@
 from app.modules.example_data import ExampleConfigs as Configs
-from test.views.base_api_test import CommonApiTest
+from test.e2e.base_api_test import CommonApiTest
 
 
 class TestConfig(CommonApiTest):

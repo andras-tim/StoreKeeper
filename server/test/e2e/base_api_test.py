@@ -1,8 +1,8 @@
 import json
-from operator import itemgetter
 import re
 from collections import OrderedDict
 from flask import Response
+from operator import itemgetter
 
 import app
 app.test_mode = True
@@ -10,7 +10,7 @@ app.test_mode = True
 from app.server import config, app, db
 from app.models import User
 from app.modules.example_data import ExampleUsers as Users, FilterableDict
-from test.views.base_database_test import CommonTestWithDatabaseSupport
+from test.e2e.base_database_test import CommonTestWithDatabaseSupport
 
 
 class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):

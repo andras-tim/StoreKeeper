@@ -1,5 +1,5 @@
 from app.modules.example_data import ExampleUnits as Units
-from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
+from test.e2e.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
 @append_mandatory_field_tests(item_name='unit', base_item=Units.UNIT1,

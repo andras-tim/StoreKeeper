@@ -6,7 +6,7 @@ app.test_mode = True
 import app.server
 
 from app.modules.label_printer import LabelPrinter
-from test.mock.printer_mock import PrinterMock
+from test.functional.mocks.printer_mock import PrinterMock
 
 
 class TestLabelPrinter(unittest.TestCase):

@@ -3,7 +3,7 @@ app.test_mode = True
 
 from app.server import app, lm
 from app.modules.example_data import ExampleUsers as Users, ExampleUser
-from test.views.base_api_test import CommonApiTest
+from test.e2e.base_api_test import CommonApiTest
 
 
 class CommonSessionTest(CommonApiTest):

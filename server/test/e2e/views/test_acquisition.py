@@ -1,6 +1,6 @@
 from app.modules.example_data import ExampleAcquisitionItems as AcquisitionItems, ExampleAcquisitions as Acquisitions, \
     ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units
-from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
+from test.e2e.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
 class TestAcquisitionWithBrandNewDb(CommonApiTest):

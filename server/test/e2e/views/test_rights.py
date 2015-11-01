@@ -14,7 +14,7 @@ from app.modules.example_data import (
     ExampleWorks as Works,
     ExampleWorkItems as WorkItems,
 )
-from test.views.base_right_test import CommonRightsTest, use_as_rights_data_provider
+from test.e2e.base_right_test import CommonRightsTest, use_as_rights_data_provider
 
 
 def _get_all_rights_for_logged_in_users(existing_element_map_id: str, new_element_map_id: str):

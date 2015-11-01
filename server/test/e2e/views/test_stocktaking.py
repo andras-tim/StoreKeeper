@@ -1,7 +1,7 @@
 from app.modules.example_data import ExampleStocktakingItems as StocktakingItems, ExampleStocktakings as Stocktakings, \
     ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units, ExampleUsers as Users
-from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
-from test.views.base_session_test import CommonSessionTest
+from test.e2e.base_api_test import CommonApiTest, append_mandatory_field_tests
+from test.e2e.base_session_test import CommonSessionTest
 
 
 class TestStocktakingWithBrandNewDb(CommonApiTest):

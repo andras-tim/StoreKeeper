@@ -1,6 +1,6 @@
 from app.modules.example_data import ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units, \
     ExampleItemBarcodes as ItemBarcodes
-from test.views.base_api_test import CommonApiTest, append_mandatory_field_tests
+from test.e2e.base_api_test import CommonApiTest, append_mandatory_field_tests
 
 
 # I do not want to check the output of printing, therefore this feature is tested only by rights
