@@ -1,6 +1,6 @@
 import unittest
 
-from app.server import app, db
+from app.server import app, config, db
 
 
 class CommonTestWithDatabaseSupport(unittest.TestCase):
@@ -9,18 +9,13 @@ class CommonTestWithDatabaseSupport(unittest.TestCase):
 
     Initialize a brand-new database at start, and purge at stop.
     """
-    @classmethod
-    def setUpClass(cls):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-
     def setUp(self):
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         db.drop_all()
         db.create_all()
 
     def tearDown(self):
         CommonTestWithDatabaseSupport.tearDownClass()
-
-    @classmethod
-    def tearDownClass(cls):
         db.session.remove()
         db.drop_all()
+        app.config['SQLALCHEMY_DATABASE_URI'] = config.Flask.SQLALCHEMY_DATABASE_URI

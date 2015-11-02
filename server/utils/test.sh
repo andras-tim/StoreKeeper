@@ -50,7 +50,13 @@ function get_count_of_cpu_cores()
 
 function get_parallel_run_options()
 {
-    echo "-n $(get_count_of_cpu_cores)"
+    local thread_count="$(get_count_of_cpu_cores)"
+
+    if [ "${thread_count}" -gt 8 ]
+    then
+        thread_count=8
+    fi
+    echo "-n ${thread_count}"
 }
 
 
