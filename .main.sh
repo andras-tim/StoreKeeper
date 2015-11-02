@@ -10,7 +10,7 @@ function get_code_of_init()
 {
     if declare -F | grep -xq 'declare -f init'
     then
-        declaration="$(declare -f init)"
+        local declaration="$(declare -f init)"
         # Drop first 3 and last lines
         echo "${declaration}" | tail -n +3 | head -n -1
     fi
@@ -18,8 +18,9 @@ function get_code_of_init()
 
 function show_title()
 {
-    dirname="$(basename "$(dirname "$0")")"
-    prefix=
+    local dirname="$(basename "$(dirname "$0")")"
+    local prefix=
+
     if [ "${dirname}" != '.' ]; then
         prefix="${dirname}: "
     fi
@@ -50,13 +51,13 @@ function run()
 
 function apt_get_install()
 {
-    args=
+    local apt_args=
     if [ "${FORCE}" == true ]
     then
-        args='-y'
+        apt_args='-y'
     fi
 
-    sudo apt-get install ${args} "$@"
+    sudo apt-get install ${apt_args} "$@"
 }
 
 function purge()

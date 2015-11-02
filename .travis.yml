@@ -47,7 +47,7 @@ before_script:
 
 script:
   - case ${MODULE} in
-      server) server/package.sh test -vv --full-trace;;
+      server) server/package.sh test -f -vv --full-trace --durations=10;;
       client) client/package.sh test;;
     esac
 

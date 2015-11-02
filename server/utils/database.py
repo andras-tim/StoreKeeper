@@ -41,8 +41,10 @@ def main() -> int:
     if not check_repo(have_to_be_created=not args.create):
         return 1
 
+    db_maintenance = DatabaseMaintenance()
+
     if args.create:
-        DatabaseMaintenance.create()
+        db_maintenance.create()
 
         user = User(username="admin", email="admin@localhost", admin=True)
         user.set_password("admin")
@@ -52,19 +54,19 @@ def main() -> int:
         print("Done")
 
     elif args.migrate:
-        migration = DatabaseMaintenance.migrate()
+        migration = db_maintenance.migrate()
         print('New migration saved as {!s}'.format(migration))
 
     elif args.downgrade:
-        DatabaseMaintenance.downgrade()
+        db_maintenance.downgrade()
 
     elif args.upgrade:
-        DatabaseMaintenance.upgrade()
+        db_maintenance.upgrade()
 
     elif args.version:
         pass
 
-    print('Current database version: {:d}'.format(DatabaseMaintenance.get_version()))
+    print('Current database version: {:d}'.format(db_maintenance.get_version()))
     return 0
 
 

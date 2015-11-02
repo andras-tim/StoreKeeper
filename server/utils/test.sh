@@ -4,7 +4,7 @@ PYTHON=${PYTHON:-${BASEDIR}/flask/bin/python3}
 
 function run_test()
 {
-    "${PYTHON}" -m pytest "$@" "${BASEDIR}/test"
+    "${PYTHON}" -m pytest -c "${BASEDIR}/test/pytest.ini" --basetemp "${BASEDIR}/tmp" "$@" "${BASEDIR}/test"
 }
 
 function run_test_with_coverage()
@@ -50,7 +50,13 @@ function get_count_of_cpu_cores()
 
 function get_parallel_run_options()
 {
-    echo "-n $(get_count_of_cpu_cores)"
+    local thread_count="$(get_count_of_cpu_cores)"
+
+    if [ "${thread_count}" -gt 8 ]
+    then
+        thread_count=8
+    fi
+    echo "-n ${thread_count}"
 }
 
 
@@ -76,6 +82,8 @@ then
                         ;;
         -l|--pylint)    run_pylint
                         exit 0
+                        ;;
+        --)             shift
                         ;;
     esac
 fi

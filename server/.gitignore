@@ -1,5 +1,3 @@
 app.sqlite
 db_repository/
 flask/
-test/.cache/
-tmp/

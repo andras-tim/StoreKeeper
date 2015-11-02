@@ -1,7 +1,8 @@
-from datetime import datetime
 import json
+from copy import deepcopy
+from datetime import datetime
 
-from app.modules.common import filter_dict
+from app.modules.common import filter_dict, recursive_dict_update
 from app.modules.types import BarcodeType
 
 
@@ -42,7 +43,8 @@ class FilterableDict:
         result.update(call_specific_data)
 
         if changed_fields:
-            result.update(changed_fields)
+            result = deepcopy(result)
+            recursive_dict_update(result, changed_fields)
 
         if fields_in_result is not None:
             result = filter_dict(result, fields_in_result)

@@ -33,6 +33,7 @@ DefaultConfig:
 
     # https://pythonhosted.org/Flask-SQLAlchemy/config.html
     SQLALCHEMY_DATABASE_URI: "sqlite:///$SERVER/app.sqlite"
+    SQLALCHEMY_TRACK_MODIFICATIONS: False
 
   Log:
     # The log level (LEVEL) should be: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
@@ -104,6 +105,10 @@ TestingConfig:
   Base: DefaultConfig
 
   App:
+    NAME: "storekeeper"
+    TITLE: "StoreKeeper"
+    FORCED_LANGUAGE: NULL
+
     MIGRATE_REPO_PATH: "$SERVER/tmp/test_db_repository"
 
     BARCODE_PREFIX: "SK-TEST-"

@@ -8,3 +8,11 @@ def any_in(list1: list, list2: list) -> bool:
 
 def filter_dict(dictionary: dict, fields: (list, set)) -> dict:
     return dict((k, v) for k, v in dictionary.items() if k in fields)
+
+
+def recursive_dict_update(dictionary: dict, updater: dict):
+    for key, value in updater.items():
+        if key in dictionary.keys() and isinstance(value, dict) and isinstance(dictionary[key], dict):
+            recursive_dict_update(dictionary[key], value)
+        else:
+            dictionary[key] = value
