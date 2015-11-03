@@ -1,13 +1,20 @@
 import json
 import re
 from collections import OrderedDict
+
+import pytest
 from flask import Response
 from operator import itemgetter
+from pprint import pformat
 
 from app.server import config, app, db
 from app.models import User
 from app.modules.example_data import ExampleUsers as Users, FilterableDict
 from test.e2e.base_database_test import CommonTestWithDatabaseSupport
+
+
+class InvalidDataFormatException(Exception):
+    pass
 
 
 class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
@@ -36,6 +43,7 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
 
     def assertApiRequest(self, command: str, url: str, data: (dict, None)=None,
                          expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+        __tracebackhide__ = True
         request = {'command': command, 'url': url, 'data': json.dumps(data)}
         response = self.__call_api(**request)
         if expected_data is not None:
@@ -46,16 +54,18 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
         """
         "request" parameter will be shown on assertion error
         """
+        __tracebackhide__ = True
         parsed_data = self.__make_testable_data(self.__get_parsed_response(response.data.decode('utf-8')))
         expected_data = self.__make_testable_data(expected_data)
 
         try:
-            self.assertEqual(expected_data, parsed_data)
+            assert expected_data == parsed_data
         except AssertionError as e:
             assert False, '{!s}\n\nrequest={!r}\nresponse={!r}\nstatus_code={}'\
                 .format(e, request, parsed_data, response.status_code)
 
     def __get_parsed_response(self, response_string: str) -> (str, list, dict, None):
+        __tracebackhide__ = True
         try:
             data_json = json.loads(response_string)
         except Exception as e:
@@ -63,6 +73,7 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
         return data_json
 
     def __assert_status_code(self, expected_status_codes: (int, list), response: Response, request: dict):
+        __tracebackhide__ = True
         if type(expected_status_codes) != list:
             expected_status_codes = [expected_status_codes]
         assert response.status_code in expected_status_codes, \
@@ -73,6 +84,7 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
                                              content_type='application/json', data=data)
 
     def __make_testable_data(self, data: (str, list, dict)) -> (str, list, dict):
+        __tracebackhide__ = True
         data_type = type(data)
         if not data_type == str:
             data = json.dumps(data, default=str, sort_keys=True)
@@ -84,15 +96,32 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
             data = json.loads(data, object_pairs_hook=OrderedDict)
 
         if data and type(data) == list:
-            if type(data[0]) in {dict, OrderedDict}:
-                if 'id' in data[0].keys():
-                    data = sorted(data, key=itemgetter('id'))
-                elif 'name' in data[0].keys():
-                    data = sorted(data, key=itemgetter('name'))
-            else:
-                data = sorted(data)
+            try:
+                data = self.__sort_list(data)
+            except Exception as e:
+                message = 'Response and expected data can be ordered (or have to be contained dicts with \'id\' or ' \
+                          '\'name\' keys) when the data is a list'
+                if pytest.config.option.verbose:
+                    message += '\n    exception={exception!r},\n    data={data}'.format(
+                        exception=e,
+                        data=pformat(data).replace('\n', '\n{}'.format(' ' * 9))
+                    )
+
+                raise InvalidDataFormatException(message)
 
         return data
+
+    def __sort_list(self, data: list) -> list:
+        if type(data[0]) not in {dict, OrderedDict}:
+            return sorted(data)
+
+        if 'id' in data[0].keys():
+            return sorted(data, key=itemgetter('id'))
+
+        if 'name' in data[0].keys():
+            return sorted(data, key=itemgetter('name'))
+
+        raise ValueError()
 
 
 class CommonApiTest(LowLevelCommonApiTest):
@@ -110,12 +139,14 @@ class CommonApiTest(LowLevelCommonApiTest):
 
     def assertApiGet(self, id: (int, str, None)=None, endpoint: (str, None)=None, url_suffix: str='',
                      expected_data: (list, dict, None)=None, expected_status_codes: (int, list)=200):
+        __tracebackhide__ = True
         self.assertApiRequest('get', self.__get_url(endpoint, id, url_suffix),
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
 
     def assertApiPost(self, data: dict, endpoint: (str, None)=None, url_suffix: str='',
                       expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+        __tracebackhide__ = True
         self.assertApiRequest('post', self.__get_url(endpoint, url_suffix=url_suffix),
                               data=self.__extract_data(data, 'set'),
                               expected_data=self.__extract_data(expected_data, 'get'),
@@ -123,6 +154,7 @@ class CommonApiTest(LowLevelCommonApiTest):
 
     def assertApiPut(self, id: (int, str), data: (dict, None)=None, endpoint: (str, None)=None, url_suffix: str='',
                      expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+        __tracebackhide__ = True
         self.assertApiRequest('put', self.__get_url(endpoint, id, url_suffix),
                               data=self.__extract_data(data, 'set'),
                               expected_data=self.__extract_data(expected_data, 'get'),
@@ -130,6 +162,7 @@ class CommonApiTest(LowLevelCommonApiTest):
 
     def assertApiDelete(self, id: (int, str, None)=None, endpoint: (str, None)=None, url_suffix: str='',
                         expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+        __tracebackhide__ = True
         self.assertApiRequest('delete', self.__get_url(endpoint, id, url_suffix),
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
