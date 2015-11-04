@@ -58,7 +58,7 @@ class TestUserWithPreFilledDb(CommonApiTest):
         self.assertApiPut(Stocktakings.STOCKTAKING2['id'], data=request)
 
 
-class TesCloseOutboundOfStocktaking(CommonSessionTest):
+class TesCloseStocktaking(CommonSessionTest):
     ENDPOINT = '/stocktakings'
     INIT_PUSH = [
         ('/users', [Users.USER1]),
@@ -175,7 +175,7 @@ class TestStocktakingItemWithPreFilledDb(CommonApiTest):
                           expected_status_codes=404)
 
 
-class TestStocktakingItemWithClosedOutbound(CommonSessionTest):
+class TestStocktakingItemWithClosed(CommonSessionTest):
     ENDPOINT = '/stocktakings/1/items'
     BAD_ENDPOINT = '/stocktakings/2/items'
     INIT_PUSH = [
@@ -205,6 +205,6 @@ class TestStocktakingItemWithClosedOutbound(CommonSessionTest):
         self.assertApiPut(1, data=request,
                           expected_data={'message': 'Stocktaking item was closed.'}, expected_status_codes=403)
 
-    def test_can_not_delete_stocktaking_item_after_outbound_items_are_closed(self):
+    def test_can_not_delete_stocktaking_item_after_items_are_closed(self):
         self.assertApiDelete(1,
                              expected_data={'message': 'Can not delete item.'}, expected_status_codes=403)
