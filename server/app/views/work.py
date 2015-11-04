@@ -101,7 +101,7 @@ class WorkItemView(BaseNestedViewWithDiff):
     def put(self, id: int, item_id: int):
         work = self._initialize_parent_item(id)
 
-        self._save_original_before_populate(id)
+        self._save_original_before_populate(item_id)
         item = self._put_populate(work_id=id, id=item_id)
         changed_fields = self._get_populate_diff(item).keys()
 
