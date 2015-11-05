@@ -17,8 +17,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - User can not change quantity via /items endpoint - issue #102
 - Items have to have one master barcode - issue #99
 - Lazy creating barcodes - issue #105
-
-### Removed
 - User can not delete the master barcode - issue #99
 
 ### Fixed
@@ -38,4 +36,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 [unreleased]: https://github.com/andras-tim/StoreKeeper/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/andras-tim/callrecord-renamer/compare/v1.0.0...v0.2.0
+[0.2.0]: https://github.com/andras-tim/callrecord-renamer/compare/v0.1.0...v0.2.0
