@@ -141,16 +141,16 @@ class ExampleStocktakings:
 
 class ExampleItems:
     ITEM1 = FilterableDict(commons={'name': 'Spray', 'vendor': ExampleVendors.VENDOR1.get(),
-                                    'warning_quantity': 4.0, 'unit': ExampleUnits.UNIT2.get()},
+                                    'warning_quantity': 4.0, 'unit': ExampleUnits.UNIT2.get(), 'purchase_price': 60.4},
                            setters={'article_number': 'sk132465'},
                            getters={'id': 1, 'article_number': 'SK132465', 'quantity': 0.0})
     ITEM2 = FilterableDict(commons={'name': 'Pipe', 'vendor': ExampleVendors.VENDOR2.get(),
                                     'article_number': 'FO213546',
                                     'unit': ExampleUnits.UNIT1.get()},
-                           getters={'id': 2, 'quantity': 0.0, 'warning_quantity': 0.0})
+                           getters={'id': 2, 'quantity': 0.0, 'warning_quantity': 0.0, 'purchase_price': 0.0})
     ITEM3 = FilterableDict(commons={'name': 'Screw', 'vendor': ExampleVendors.VENDOR2.get(),
                                     'article_number': 'BA45678', 'warning_quantity': 3.14,
-                                    'unit': ExampleUnits.UNIT2.get()},
+                                    'unit': ExampleUnits.UNIT2.get(), 'purchase_price': 65.5},
                            getters={'id': 3, 'quantity': 0.0})
 
 
@@ -168,10 +168,14 @@ class ExampleAcquisitionItems:
 
 
 class ExampleStocktakingItems:
-    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 132.2},
+    ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': 52.1},
                            getters={'id': 1})
-    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 32.3},
+    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': 26.8},
                            getters={'id': 2})
+    ITEM1_MINUS = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'quantity': -52.1},
+                                 getters={'id': 1})
+    ITEM2_MINUS = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'quantity': -26.8},
+                                 getters={'id': 2})
 
 
 class ExampleBarcodes:
@@ -220,14 +224,14 @@ class ExampleWorks:
 class ExampleWorkItems:
     ITEM1 = FilterableDict(commons={'item': ExampleItems.ITEM2.get(), 'outbound_quantity': 132.8},
                            getters={'id': 1, 'returned_quantity': None})
-    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 32.2,
-                                    'returned_quantity': 0.0},
+    ITEM2 = FilterableDict(commons={'item': ExampleItems.ITEM1.get(), 'outbound_quantity': 41.2,
+                                    'returned_quantity': 2.1},
                            getters={'id': 2})
 
 
 class ExampleConfigs:
     CONFIG1 = FilterableDict(getters={'app_name': 'storekeeper', 'app_title': 'StoreKeeper', 'forced_language': None,
-                                      'debug': False})
+                                      'currency': '$', 'debug': False})
 
 
 class ExampleUserConfigs:

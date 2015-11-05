@@ -3,6 +3,7 @@ from app.modules.example_data import ExampleWorkItems as WorkItems, ExampleWorks
     ExampleUsers as Users
 from test.e2e.base_api_test import CommonApiTest, append_mandatory_field_tests
 from test.e2e.base_session_test import CommonSessionTest
+from test.e2e.base_session_test_w_mutable_item import CommonSessionTestWithItemManipulation
 
 
 class TestWorkWithBrandNewDb(CommonApiTest):
@@ -58,7 +59,7 @@ class TestUserWithPreFilledDb(CommonApiTest):
                                          response])
 
 
-class TesCloseOutboundOfWork(CommonSessionTest):
+class TesCloseOutboundOfWorkWithoutWorkItems(CommonSessionTest):
     ENDPOINT = '/works'
     INIT_PUSH = [
         ('/users', [Users.USER1]),
@@ -86,7 +87,7 @@ class TesCloseOutboundOfWork(CommonSessionTest):
                           expected_status_codes=422)
 
 
-class TesCloseReturnedOfWork(CommonSessionTest):
+class TesCloseReturnedOfWorkWithoutWorkItems(CommonSessionTest):
     ENDPOINT = '/works'
     INIT_PUSH = [
         ('/users', [Users.USER1]),
@@ -157,7 +158,7 @@ class TestWorkItemWithBrandNewDb(CommonApiTest):
     def test_can_not_add_work_item_with_zero_outbound_quantity(self):
         self.assertApiPost(data=WorkItems.ITEM1.set(change={'outbound_quantity': 0}), expected_status_codes=422)
 
-    def test_can_not_add_work_item_with_zero_returned_quantity(self):
+    def test_can_not_add_work_item_with_lower_than_zero_returned_quantity(self):
         self.assertApiPost(data=WorkItems.ITEM1.set(change={'returned_quantity': -1}), expected_status_codes=422)
 
     def test_can_add_work_item_with_more_returned_quantity_than_outbound_quantity(self):
@@ -227,7 +228,127 @@ class TestWorkItemWithPreFilledDb(CommonApiTest):
                           expected_status_codes=404)
 
 
-class TestWorkItemWithClosedOutbound(CommonSessionTest):
+class TesCloseOutboundOfWorkWithWorkItems(CommonSessionTestWithItemManipulation):
+    ENDPOINT = '/works/1/items'
+    INIT_PUSH = [
+        ('/users', [Users.USER1]),
+        ('/customers', [Customers.CUSTOMER1, Customers.CUSTOMER2]),
+        ('/works', [Works.WORK1]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1, Items.ITEM2]),
+        (ENDPOINT, [WorkItems.ITEM1, WorkItems.ITEM2]),
+    ]
+
+    def setUp(self):
+        super().setUp()
+        self.assertApiLogin(Users.USER1)
+
+    def test_can_not_close_outbound_with_insufficient_item_quantities(self):
+        self.assertApiPut(Works.WORK1['id'], endpoint='/works', url_suffix='/close-outbound',
+                          expected_data={'message': 'insufficient quantities for close the outbound work items: '
+                                                    '\'Spray\': 0.0 - 41.2, \'Pipe\': 0.0 - 132.8'
+                                         },
+                          expected_status_codes=422)
+
+        self.assertApiGet(Works.WORK1['id'], endpoint='/works', expected_data=Works.WORK1)
+        self.assertApiGet(expected_data=[
+            WorkItems.ITEM1,
+            WorkItems.ITEM2,
+        ])
+
+    def test_can_not_close_outbound_with_one_insufficient_item_quantity(self):
+        self._set_item_quantity({'item_id': WorkItems.ITEM1['item']['id'], 'quantity': 1000.0})
+
+        self.assertApiPut(Works.WORK1['id'], endpoint='/works', url_suffix='/close-outbound',
+                          expected_data={'message': 'insufficient quantities for close the outbound work items: '
+                                                    '\'Spray\': 0.0 - 41.2'
+                                         },
+                          expected_status_codes=422)
+
+        self.assertApiGet(Works.WORK1['id'], endpoint='/works', expected_data=Works.WORK1)
+        self.assertApiGet(expected_data=[
+            WorkItems.ITEM1.get(change={'item': {'quantity': 1000.0}}),
+            WorkItems.ITEM2,
+        ])
+
+    def test_can_close_outbound_with_enough_item_quantities(self):
+        self._set_item_quantity(
+            {'item_id': WorkItems.ITEM1['item']['id'], 'quantity': 1000.0},
+            {'item_id': WorkItems.ITEM2['item']['id'], 'quantity': 1000.0},
+        )
+
+        self.assertApiPut(Works.WORK1['id'], endpoint='/works', url_suffix='/close-outbound')
+        self.assertApiGet(Works.WORK1['id'], endpoint='/works', expected_data=Works.WORK1_OUTBOUND_CLOSED)
+        self.assertApiGet(expected_data=[
+            WorkItems.ITEM1.get(change={'item': {'quantity': 1000.0 - WorkItems.ITEM1['outbound_quantity']}}),
+            WorkItems.ITEM2.get(change={'item': {'quantity': 1000.0 - WorkItems.ITEM2['outbound_quantity']}}),
+        ])
+
+    def test_can_close_outbound_with_just_enough_item_quantities(self):
+        self._set_item_quantity(
+            {'item_id': WorkItems.ITEM1['item']['id'], 'quantity': WorkItems.ITEM1['outbound_quantity']},
+            {'item_id': WorkItems.ITEM2['item']['id'], 'quantity': WorkItems.ITEM2['outbound_quantity']},
+        )
+
+        self.assertApiPut(Works.WORK1['id'], endpoint='/works', url_suffix='/close-outbound')
+        self.assertApiGet(Works.WORK1['id'], endpoint='/works', expected_data=Works.WORK1_OUTBOUND_CLOSED)
+        self.assertApiGet(expected_data=[
+            WorkItems.ITEM1.get(change={'item': {'quantity': 0.0}}),
+            WorkItems.ITEM2.get(change={'item': {'quantity': 0.0}}),
+        ])
+
+
+class TesCloseReturnedOfWorkWithWorkItems(CommonSessionTestWithItemManipulation):
+    ENDPOINT = '/works/1/items'
+    INIT_PUSH = [
+        ('/users', [Users.USER1]),
+        ('/customers', [Customers.CUSTOMER1, Customers.CUSTOMER2]),
+        ('/works', [Works.WORK1]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1, Items.ITEM2]),
+        (ENDPOINT, [WorkItems.ITEM1, WorkItems.ITEM2]),
+    ]
+
+    def setUp(self):
+        super().setUp()
+        # set just enough item quantity for closing outbound
+        self._set_item_quantity(
+            {'item_id': WorkItems.ITEM1['item']['id'], 'quantity': WorkItems.ITEM1['outbound_quantity']},
+            {'item_id': WorkItems.ITEM2['item']['id'], 'quantity': WorkItems.ITEM2['outbound_quantity']},
+        )
+        self.assertApiLogin(Users.USER1)
+        self.assertApiPut(Works.WORK1['id'], endpoint='/works', url_suffix='/close-outbound')
+
+    def test_can_close_returned_item_quantities(self):
+        self.assertApiPut(WorkItems.ITEM1['id'], data=WorkItems.ITEM1.set(change={'returned_quantity': 4.4}))
+        self.assertApiPut(WorkItems.ITEM2['id'], data=WorkItems.ITEM2.set(change={'returned_quantity': 9.9}))
+
+        self.assertApiPut(Works.WORK1_OUTBOUND_CLOSED['id'], endpoint='/works', url_suffix='/close-returned')
+
+        self.assertApiGet(Works.WORK1_OUTBOUND_CLOSED['id'], endpoint='/works',
+                          expected_data=Works.WORK1_RETURNED_CLOSED)
+        self.assertApiGet(expected_data=[
+            WorkItems.ITEM1.get(change={'item': {'quantity': 4.4}, 'returned_quantity': 4.4}),
+            WorkItems.ITEM2.get(change={'item': {'quantity': 9.9}, 'returned_quantity': 9.9}),
+        ])
+
+    def test_can_close_returned_with_zero_and_none_item_quantities(self):
+        self.assertApiPut(WorkItems.ITEM1['id'], data=WorkItems.ITEM1.set(change={'returned_quantity': None}))
+        self.assertApiPut(WorkItems.ITEM2['id'], data=WorkItems.ITEM2.set(change={'returned_quantity': 0.0}))
+
+        self.assertApiPut(Works.WORK1_OUTBOUND_CLOSED['id'], endpoint='/works', url_suffix='/close-returned')
+
+        self.assertApiGet(Works.WORK1_OUTBOUND_CLOSED['id'], endpoint='/works',
+                          expected_data=Works.WORK1_RETURNED_CLOSED)
+        self.assertApiGet(expected_data=[
+            WorkItems.ITEM1.get(change={'item': {'quantity': 0.0}, 'returned_quantity': 0.0}),
+            WorkItems.ITEM2.get(change={'item': {'quantity': 0.0}, 'returned_quantity': 0.0}),
+        ])
+
+
+class TestWorkItemWithClosedOutbound(CommonSessionTestWithItemManipulation):
     ENDPOINT = '/works/1/items'
     BAD_ENDPOINT = '/works/2/items'
     INIT_PUSH = [
@@ -242,6 +363,7 @@ class TestWorkItemWithClosedOutbound(CommonSessionTest):
 
     def setUp(self):
         super().setUp()
+        self._set_item_quantity({'item_id': WorkItems.ITEM1.get()['item']['id'], 'quantity': 1000.0})
         self.assertApiLogin(Users.USER1)
         self.assertApiPut(Works.WORK1['id'], endpoint='/works', url_suffix='/close-outbound')
 

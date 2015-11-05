@@ -34,7 +34,7 @@ class TestCreateFilterableDict(unittest.TestCase):
 
 class TestPreFilledFilterableDict(unittest.TestCase):
     def setUp(self):
-        self.f = FilterableDict(commons={'apple': 1, 'cacao': 11},
+        self.f = FilterableDict(commons={'apple': 1, 'cacao': 11, 'lemon': {'small': 4, 'big': 5}},
                                 getters={'banana': 2, 'peach': 22},
                                 setters={'orange': 3, 'plum': 33})
 
@@ -45,10 +45,13 @@ class TestPreFilledFilterableDict(unittest.TestCase):
         self.assertEqual(self.f['peach'], 22)
         self.assertEqual(self.f['orange'], 3)
         self.assertEqual(self.f['plum'], 33)
+        self.assertEqual(self.f['lemon'], {'small': 4, 'big': 5})
 
     def test_filter_commons(self):
         self.assertDictEqual(self.f.get(['apple']), {'apple': 1})
+        self.assertDictEqual(self.f.get(['lemon']), {'lemon': {'small': 4, 'big': 5}})
         self.assertDictEqual(self.f.set(['apple']), {'apple': 1})
+        self.assertDictEqual(self.f.set(['lemon']), {'lemon': {'small': 4, 'big': 5}})
 
     def test_filter_getters(self):
         self.assertDictEqual(self.f.get(['peach']), {'peach': 22})
@@ -59,28 +62,36 @@ class TestPreFilledFilterableDict(unittest.TestCase):
         self.assertDictEqual(self.f.set(['plum']), {'plum': 33})
 
     def test_filter_multiple_elements(self):
-        self.assertDictEqual(self.f.get(['cacao', 'banana', 'orange']), {'cacao': 11, 'banana': 2})
-        self.assertDictEqual(self.f.set(['cacao', 'banana', 'orange']), {'cacao': 11, 'orange': 3})
+        self.assertDictEqual(self.f.get(['cacao', 'banana', 'orange', 'lemon']),
+                             {'cacao': 11, 'banana': 2, 'lemon': {'small': 4, 'big': 5}})
+        self.assertDictEqual(self.f.set(['cacao', 'banana', 'orange', 'lemon']),
+                             {'cacao': 11, 'orange': 3, 'lemon': {'small': 4, 'big': 5}})
 
     def test_change(self):
-        self.assertDictEqual(self.f.get(change={'cacao': 110, 'banana': 20}),
-                             {'apple': 1, 'cacao': 110, 'banana': 20, 'peach': 22})
-        self.assertDictEqual(self.f.set(change={'cacao': 110, 'orange': 30}),
-                             {'apple': 1, 'cacao': 110, 'orange': 30, 'plum': 33})
+        self.assertDictEqual(self.f.get(change={'cacao': 110, 'banana': 20, 'lemon': {'big': 50}}),
+                             {'apple': 1, 'cacao': 110, 'banana': 20, 'peach': 22, 'lemon': {'small': 4, 'big': 50}})
+        self.assertDictEqual(self.f.set(change={'cacao': 110, 'orange': 30, 'lemon': {'big': 50}}),
+                             {'apple': 1, 'cacao': 110, 'orange': 30, 'plum': 33, 'lemon': {'small': 4, 'big': 50}})
 
     def test_change_in_another_type(self):
         self.assertDictEqual(self.f.get(change={'orange': 330}),
-                             {'apple': 1, 'cacao': 11, 'banana': 2, 'peach': 22, 'orange': 330})
+                             {'apple': 1, 'cacao': 11, 'banana': 2, 'peach': 22, 'orange': 330,
+                              'lemon': {'small': 4, 'big': 5}})
         self.assertDictEqual(self.f.set(change={'banana': 20}),
-                             {'apple': 1, 'cacao': 11, 'orange': 3, 'plum': 33, 'banana': 20})
+                             {'apple': 1, 'cacao': 11, 'orange': 3, 'plum': 33, 'banana': 20,
+                              'lemon': {'small': 4, 'big': 5}})
 
     def test_change_a_filtered_field(self):
         self.assertDictEqual(self.f.get(['cacao', 'banana', 'orange'], change={'cacao': 110}),
                              {'cacao': 110, 'banana': 2})
+        self.assertDictEqual(self.f.get(['cacao', 'lemon'], change={'lemon': {'big': 50}}),
+                             {'cacao': 11, 'lemon': {'small': 4, 'big': 50}})
         self.assertDictEqual(self.f.set(['cacao', 'banana', 'orange'], change={'cacao': 110}),
                              {'cacao': 110, 'orange': 3})
+        self.assertDictEqual(self.f.set(['cacao', 'lemon'], change={'lemon': {'big': 50}}),
+                             {'cacao': 11, 'lemon': {'small': 4, 'big': 50}})
 
-    def test_change_a_out_filtered_field(self):
+    def test_change_an_out_filtered_field(self):
         self.assertDictEqual(self.f.get(['cacao', 'banana', 'orange'], change={'peach': 220}),
                              {'cacao': 11, 'banana': 2})
         self.assertDictEqual(self.f.set(['cacao', 'banana', 'orange'], change={'plum': 330}),

@@ -149,6 +149,47 @@ appFieldsDirectives.directive('appQuantityInput',
 
 /**
  * @ngdoc directive
+ * @name appPurchasePriceInput
+ * @restrict E
+ *
+ * @param {object} aModel
+ * @param {object} aMin
+ * @param {func} aOnChange
+ *
+ * @description
+ * Purchase price input field
+ *
+ * @example
+ * <app-purchase-price-input a-model="item.purchase_price" a-min="0"></app-purchase-price-input>
+ */
+appFieldsDirectives.directive('appPurchasePriceInput',
+    function appPurchasePriceInput () {
+        return {
+            'restrict': 'E',
+            'replace': true,
+            'scope': {
+                'aModel': '=',
+                'aMin': '=',
+                'aOnChange': '&'
+            },
+            'templateUrl': 'partials/widgets/fields/purchase-price-input.html',
+            'controller': ['$scope', 'CommonFactory', 'ConfigFactory',
+                function ($scope, CommonFactory, ConfigFactory) {
+                    $scope.data = {};
+
+                    CommonFactory.handlePromise(
+                        ConfigFactory.getConfig(),
+                        'loadingCurrency',
+                        function (config) {
+                            $scope.data.currency = config.currency;
+                        });
+                }]
+        };
+    });
+
+
+/**
+ * @ngdoc directive
  * @name appItemInput
  * @restrict E
  *

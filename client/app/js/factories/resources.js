@@ -10,6 +10,7 @@ appResourceFactories.factory('ConfigFactory', ['$q', 'Restangular', 'ConfigServi
                 'app_name': undefined,
                 'app_title': undefined,
                 'forced_language': undefined,
+                'currency': undefined,
                 'debug': false
             },
             gettingConfigPromise;

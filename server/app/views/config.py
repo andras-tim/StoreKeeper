@@ -14,6 +14,7 @@ class ConfigView(restful.Resource):
             'app_name': config.App.NAME,
             'app_title': config.App.TITLE,
             'forced_language': config.App.FORCED_LANGUAGE,
+            'currency': config.App.CURRENCY,
             'debug': config.Flask.DEBUG,
         }
         return client_related_config

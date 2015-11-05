@@ -73,6 +73,13 @@ class TestItemWithPreFilledDb(CommonApiTest):
 
         self.assertApiPut(Items.ITEM2['id'], data=request, expected_data=Items.ITEM2.get())
 
+    def test_can_not_use_negative_purchase_price(self):
+        request = Items.ITEM2.set(change={'purchase_price': -0.1})
+
+        self.assertApiPut(Items.ITEM2['id'], data=request,
+                          expected_data={'message': {'purchase_price': ['Must be greater than or equal 0.']}},
+                          expected_status_codes=422)
+
     def test_update_name_to_name_of_another_item(self):
         request = Items.ITEM2.set(change={'name': Items.ITEM1['name']})
 

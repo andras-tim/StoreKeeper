@@ -14,6 +14,9 @@ class CommonTestWithDatabaseSupport(unittest.TestCase):
         db.drop_all()
         db.create_all()
 
+    def _db_commit(self):
+        db.session.commit()
+
     def tearDown(self):
         CommonTestWithDatabaseSupport.tearDownClass()
         db.session.remove()

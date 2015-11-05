@@ -89,8 +89,9 @@ class Item(db.Model):
     name = db.Column(db.String(60), nullable=False, unique=True)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
     article_number = db.Column(db.String(20))
-    quantity = db.Column(db.Float, nullable=False, default=0)
-    warning_quantity = db.Column(db.Float, nullable=False, default=0)
+    quantity = db.Column(db.Float, nullable=False, default=0.0)
+    warning_quantity = db.Column(db.Float, nullable=False, default=0.0)
+    purchase_price = db.Column(db.Float, nullable=False, default=0.0)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
 
     vendor = db.relationship('Vendor', lazy='joined')
@@ -105,7 +106,7 @@ class Item(db.Model):
 class Barcode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     barcode = db.Column(db.String(15), nullable=False, unique=True, index=True)
-    quantity = db.Column(db.Float, nullable=False, default=1)
+    quantity = db.Column(db.Float, nullable=False, default=1.0)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     master = db.Column(db.Boolean, default=False)
     main = db.Column(db.Boolean, default=False)
