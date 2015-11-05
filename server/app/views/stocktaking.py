@@ -1,13 +1,11 @@
-from flask import g
 from flask.ext.restful import abort
 
-from app.server import db
-from app.models import Stocktaking, StocktakingItem, Item
+from app.models import Stocktaking, StocktakingItem
 from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
 from app.modules.example_data import ExampleStocktakings, ExampleStocktakingItems
 from app.serializers import StocktakingSerializer, StocktakingDeserializer, StocktakingItemSerializer, \
     StocktakingItemDeserializer
-from app.views.common import api_func, commit_with_error_handling
+from app.views.common import api_func
 
 
 class StocktakingListView(BaseListView):
@@ -128,22 +126,22 @@ class StocktakingCloseView(BaseView):
     _deserializer = StocktakingDeserializer()
 
     @api_func('Close items on stocktaking', item_name='stocktaking', url_tail='/stocktakings/1/close',
-              response=ExampleStocktakings.STOCKTAKING1_CLOSED.get())
+              response=ExampleStocktakings.STOCKTAKING1_CLOSED.get(),
+              status_codes={422: '{{ original }} / items have been closed / '
+                                 'insufficient quantities for close the stocktaking items'})
     def put(self, id: int):
         stocktaking = self._get_item_by_id(id)
 
-        if stocktaking.are_items_frozen():
+        if stocktaking.are_items_closed():
             abort(422, message='Items have been closed.')
 
-        self._apply_item_changes(stocktaking)
-        stocktaking.close_items(g.user)
-
-        return self._put_commit(stocktaking)
-
-    def _apply_item_changes(self, stocktaking):
         stocktaking_items = StocktakingItem.query.filter_by(stocktaking_id=stocktaking.id).all()
+        self._apply_item_changes(
+            model_items=stocktaking_items,
+            insufficient_quantity_error_message='insufficient quantities for close the stocktaking items',
+            # FIXME: Have to enable when Work started to use and Stocktaking uses for stocktaking only
+            # multiplier_for_sign=-1,
+        )
 
-        for stocktaking_item in stocktaking_items:
-            stocktaking_item.item.quantity += stocktaking_item.quantity
-
-        commit_with_error_handling(db)
+        self._close_items(stocktaking.close_items)
+        return self._put_commit(stocktaking)

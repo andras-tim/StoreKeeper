@@ -1,4 +1,3 @@
-from flask import g
 from flask.ext.restful import abort
 
 from app.models import Work, WorkItem
@@ -139,13 +138,24 @@ class WorkCloseOutboundView(BaseView):
     _deserializer = WorkDeserializer()
 
     @api_func('Close outbound items on work', item_name='work', url_tail='/works/1/close-outbound',
-              response=ExampleWorks.WORK1_OUTBOUND_CLOSED.get())
+              response=ExampleWorks.WORK1_OUTBOUND_CLOSED.get(),
+              status_codes={422: '{{ original }} / outbound items have been closed /'
+                                 'insufficient quantities for close the outbound work items'})
     def put(self, id: int):
         work = self._get_item_by_id(id)
-        try:
-            work.close_outbound_items(g.user)
-        except RuntimeError as e:
-            abort(422, message=e.args[0])
+
+        if work.are_outbound_items_closed():
+            abort(422, message='Outbound items have been closed.')
+
+        work_items = WorkItem.query.filter_by(work_id=work.id).all()
+        self._apply_item_changes(
+            model_items=work_items,
+            insufficient_quantity_error_message='insufficient quantities for close the outbound work items',
+            item_quantity_field='outbound_quantity',
+            multiplier_for_sign=-1,
+        )
+
+        self._close_items(work.close_outbound_items)
         return self._put_commit(work)
 
 
@@ -155,11 +165,24 @@ class WorkCloseReturnedView(BaseView):
     _deserializer = WorkDeserializer()
 
     @api_func('Close returned items on work', item_name='work', url_tail='/works/1/close-returned',
-              response=ExampleWorks.WORK1_RETURNED_CLOSED.get())
+              response=ExampleWorks.WORK1_RETURNED_CLOSED.get(),
+              status_codes={422: '{{ original }} / outbound items have not been closed / '
+                                 'returned items have been closed /'
+                                 'insufficient quantities for close the returned work items'})
     def put(self, id: int):
         work = self._get_item_by_id(id)
-        try:
-            work.close_returned_items(g.user)
-        except RuntimeError as e:
-            abort(422, message=e.args[0])
+
+        if not work.are_outbound_items_closed():
+            abort(422, message='Outbound items have not been closed.')
+        elif work.are_returned_items_closed():
+            abort(422, message='Returned items have been closed.')
+
+        work_items = WorkItem.query.filter_by(work_id=work.id).all()
+        self._apply_item_changes(
+            model_items=work_items,
+            insufficient_quantity_error_message='insufficient quantities for close the returned work items',
+            item_quantity_field='returned_quantity',
+        )
+
+        self._close_items(work.close_returned_items)
         return self._put_commit(work)

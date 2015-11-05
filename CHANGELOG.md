@@ -19,6 +19,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Fixed saving processes in item sidebar and view - issue #98
 - Fixed some language issues - issue #91
+- Item quantity can not be run under 0 - issue #93
 
 
 ## 0.1.0 - 2015-10-08

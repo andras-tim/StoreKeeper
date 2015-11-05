@@ -1,3 +1,4 @@
+from flask import g
 from flask.ext.restful import abort, Resource
 from sqlalchemy.orm import Query
 from sqlalchemy.exc import IntegrityError
@@ -181,6 +182,40 @@ class BaseView(_BaseModelResource):
         item = self._query.get(id)
         _check_is_missing(item)
         return item
+
+    def _apply_item_changes(self, model_items: list, insufficient_quantity_error_message: str,
+                            item_quantity_field: str='quantity', multiplier_for_sign: int=1):
+        insufficient_quantities = []
+
+        for model_item in model_items:
+            item_quantity = getattr(model_item, item_quantity_field)
+            if item_quantity is None:
+                continue
+
+            quantity_diff = multiplier_for_sign * item_quantity
+            if model_item.item.quantity + quantity_diff < 0:
+                insufficient_quantities.append(model_item)
+                continue
+
+            model_item.item.quantity += quantity_diff
+
+        if insufficient_quantities:
+            db.session.rollback()
+            abort(422, message='{}: {}'.format(insufficient_quantity_error_message, ', '.join(
+                ['{name!r}: {current} - {decrease}'.format(
+                    name=model_item.item.name,
+                    current=model_item.item.quantity,
+                    decrease=-multiplier_for_sign * getattr(model_item, item_quantity_field)
+                ) for model_item in insufficient_quantities]
+            )))
+
+        commit_with_error_handling(db)
+
+    def _close_items(self, close_function: callable):
+        try:
+            close_function(g.user)
+        except RuntimeError as e:
+            abort(422, message=e.args[0])
 
 
 class BaseNestedListView(BaseListView):

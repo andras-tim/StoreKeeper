@@ -2,6 +2,7 @@ from app.modules.example_data import ExampleStocktakingItems as StocktakingItems
     ExampleItems as Items, ExampleVendors as Vendors, ExampleUnits as Units, ExampleUsers as Users
 from test.e2e.base_api_test import CommonApiTest, append_mandatory_field_tests
 from test.e2e.base_session_test import CommonSessionTest
+from test.e2e.base_session_test_w_mutable_item import CommonSessionTestWithItemManipulation
 
 
 class TestStocktakingWithBrandNewDb(CommonApiTest):
@@ -173,6 +174,84 @@ class TestStocktakingItemWithPreFilledDb(CommonApiTest):
     def test_can_not_update_stocktaking_item_of_a_non_existed_stocktaking(self):
         self.assertApiPut(StocktakingItems.ITEM1['id'], data=StocktakingItems.ITEM1, endpoint=self.BAD_ENDPOINT,
                           expected_status_codes=404)
+
+
+class TesCloseOfStocktakingWithStocktakingItems(CommonSessionTestWithItemManipulation):
+    ENDPOINT = '/stocktakings/1/items'
+    INIT_PUSH = [
+        ('/users', [Users.USER1]),
+        ('/stocktakings', [Stocktakings.STOCKTAKING1]),
+        ('/vendors', [Vendors.VENDOR1, Vendors.VENDOR2]),
+        ('/units', [Units.UNIT1, Units.UNIT2]),
+        ('/items', [Items.ITEM1, Items.ITEM2]),
+        (ENDPOINT, [StocktakingItems.ITEM1_MINUS, StocktakingItems.ITEM2_MINUS])
+    ]
+
+    def setUp(self):
+        super().setUp()
+        self.assertApiLogin(Users.USER1)
+
+    def test_can_not_close_with_insufficient_item_quantities(self):
+        self.assertApiPut(Stocktakings.STOCKTAKING1['id'], endpoint='/stocktakings', url_suffix='/close',
+                          expected_data={'message': 'insufficient quantities for close the stocktaking items: '
+                                                    '\'Spray\': 0.0 - 26.8, \'Pipe\': 0.0 - 52.1'
+                                         },
+                          expected_status_codes=422)
+
+        self.assertApiGet(Stocktakings.STOCKTAKING1['id'], endpoint='/stocktakings',
+                          expected_data=Stocktakings.STOCKTAKING1)
+        self.assertApiGet(expected_data=[
+            StocktakingItems.ITEM1_MINUS,
+            StocktakingItems.ITEM2_MINUS,
+        ])
+
+    def test_can_not_close_with_one_insufficient_item_quantity(self):
+        self._set_item_quantity({'item_id': StocktakingItems.ITEM1['item']['id'], 'quantity': 1000.0})
+
+        self.assertApiPut(Stocktakings.STOCKTAKING1['id'], endpoint='/stocktakings', url_suffix='/close',
+                          expected_data={'message': 'insufficient quantities for close the stocktaking items: '
+                                                    '\'Spray\': 0.0 - 26.8'
+                                         },
+                          expected_status_codes=422)
+
+        self.assertApiGet(Stocktakings.STOCKTAKING1['id'], endpoint='/stocktakings',
+                          expected_data=Stocktakings.STOCKTAKING1)
+        self.assertApiGet(expected_data=[
+            StocktakingItems.ITEM1_MINUS.get(change={'item': {'quantity': 1000.0}}),
+            StocktakingItems.ITEM2_MINUS,
+        ])
+
+    def test_can_close_with_enough_item_quantities(self):
+        self._set_item_quantity(
+            {'item_id': StocktakingItems.ITEM1_MINUS['item']['id'], 'quantity': 1000.0},
+            {'item_id': StocktakingItems.ITEM2_MINUS['item']['id'], 'quantity': 1000.0},
+        )
+
+        self.assertApiPut(Stocktakings.STOCKTAKING1['id'], endpoint='/stocktakings', url_suffix='/close')
+        self.assertApiGet(Stocktakings.STOCKTAKING1['id'], endpoint='/stocktakings',
+                          expected_data=Stocktakings.STOCKTAKING1_CLOSED)
+        self.assertApiGet(expected_data=[
+            StocktakingItems.ITEM1_MINUS.get(
+                change={'item': {'quantity': 1000.0 + StocktakingItems.ITEM1_MINUS['quantity']}}),
+            StocktakingItems.ITEM2_MINUS.get(
+                change={'item': {'quantity': 1000.0 + StocktakingItems.ITEM2_MINUS['quantity']}}),
+        ])
+
+    def test_can_close_with_just_enough_item_quantities(self):
+        self._set_item_quantity(
+            {'item_id': StocktakingItems.ITEM1_MINUS['item']['id'],
+             'quantity': -StocktakingItems.ITEM1_MINUS['quantity']},
+            {'item_id': StocktakingItems.ITEM2_MINUS['item']['id'],
+             'quantity': -StocktakingItems.ITEM2_MINUS['quantity']},
+        )
+
+        self.assertApiPut(Stocktakings.STOCKTAKING1['id'], endpoint='/stocktakings', url_suffix='/close')
+        self.assertApiGet(Stocktakings.STOCKTAKING1['id'], endpoint='/stocktakings',
+                          expected_data=Stocktakings.STOCKTAKING1_CLOSED)
+        self.assertApiGet(expected_data=[
+            StocktakingItems.ITEM1_MINUS.get(change={'item': {'quantity': 0.0}}),
+            StocktakingItems.ITEM2_MINUS.get(change={'item': {'quantity': 0.0}}),
+        ])
 
 
 class TestStocktakingItemWithClosed(CommonSessionTest):
