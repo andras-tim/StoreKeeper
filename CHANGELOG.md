@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][unreleased]
 ### Added
 - Speed up server side queries
+- Added purchase price to item - issue #95
+- Added currency to config for prices
 
 ### Changed
 - Updated install steps in documentation

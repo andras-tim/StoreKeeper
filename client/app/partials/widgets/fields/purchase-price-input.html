@@ -1,0 +1,7 @@
+<div class="input-group field-purchase-price">
+  <input name="purchase-price" ng-model="aModel" ng-change="aOnChange(barcode, true)" type="number" min="{{ aMin }}" class="form-control field-purchase-price" placeholder="{{ 'Purchase price' | translate }}" required />
+  <div ng-if="!loadingCurrency" class="input-group-addon field-unit-beside-purchase-price">
+    <span ng-if="!loadingCurrency" ng-bind="data.currency"></span>
+    <i ng-if="loadingCurrency" app-icon="spinner"></i>
+  </div>
+</div>

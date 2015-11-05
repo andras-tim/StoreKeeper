@@ -312,6 +312,7 @@ appViewControllers.controller('ItemController', ['$scope', '$window', '$q', '$ti
                 'name': '',
                 'warning_quantity': 0,
                 'quantity': 0,
+                'purchase_price': 0,
                 'unit': {},
                 'vendor': {}
             };

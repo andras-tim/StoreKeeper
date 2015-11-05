@@ -35,6 +35,10 @@
                   <app-unit-input a-model="item.unit"></app-unit-input>
                 </app-input-form>
 
+                <app-input-form a-label="{{ 'Purchase price' | translate }}" a-required="{{ 'Purchase price is required' | translate }}">
+                 <app-purchase-price-input a-model="item.purchase_price" a-min="0"></app-purchase-price-input>
+                </app-input-form>
+
               </app-details-modal-panel>
 
               <!-- Meta -->

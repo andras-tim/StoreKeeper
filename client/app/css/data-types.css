@@ -21,6 +21,22 @@
     text-align: left;
 }
 
+.field-purchase-price {
+    text-align: right;
+}
+
+.field-purchase-price.field-title {
+    text-align: center;
+}
+
+.field-currency {
+    text-align: center;
+}
+
+.field-currency-beside-purchase-price {
+    text-align: left;
+}
+
 .field-barcode {
     max-width: 12em;
 }

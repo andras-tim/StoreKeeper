@@ -114,7 +114,7 @@ class StocktakingDeserializer(Serializer):
 
 
 class ItemSerializer(BasicSerializer):
-    fields = ('id', 'name', 'article_number', 'quantity', 'warning_quantity')
+    fields = ('id', 'name', 'article_number', 'quantity', 'warning_quantity', 'purchase_price')
     nested_fields = {
         'vendor': VendorSerializer(),
         'unit': UnitSerializer(),
@@ -128,6 +128,7 @@ class ItemDeserializer(Serializer):
     article_number = UppercaseString()
     warning_quantity = fields.Float()
     unit = fields.Nested(UnitDeserializer(), required=True)
+    purchase_price = fields.Float(validate=_greater_than_or_equal_zero)
 
 
 class ItemSearchSerializer(Serializer):

@@ -20,6 +20,8 @@ DefaultConfig:
     BARCODE_PREFIX: "SK"
     BARCODE_NUMBERS: 8
 
+    CURRENCY: "$$"
+
   Flask:
     DEBUG: False
     TESTING: False
@@ -113,6 +115,8 @@ TestingConfig:
 
     BARCODE_PREFIX: "SK-TEST-"
     BARCODE_NUMBERS: 7
+
+    CURRENCY: "$$"
 
   Flask:
     WTF_CSRF_ENABLED: False
