@@ -41,3 +41,9 @@ button.btn.btn-toggle-wide {
 button.btn.dropdown-toggle {
     padding: 6px 8px;
 }
+
+input[type=number] {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 5px;
+}
