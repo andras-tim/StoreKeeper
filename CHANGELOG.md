@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+
+
+## [0.2.0] - 2015-11-05
 ### Added
 - Speed up server side queries
 - Added purchase price to item - issue #95
@@ -34,4 +37,5 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Can use barcode printer to create labels
 
 
-[unreleased]: https://github.com/andras-tim/StoreKeeper/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/andras-tim/StoreKeeper/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/andras-tim/callrecord-renamer/compare/v1.0.0...v0.2.0
