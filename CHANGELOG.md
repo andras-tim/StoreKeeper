@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+### Added
+- Item list updates automatically - issue #92
 
 
 ## [0.2.0] - 2015-11-05
