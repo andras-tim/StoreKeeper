@@ -16,9 +16,10 @@ DefaultConfig:
     # Set to DEFAULT for use default Cups printer
     LABEL_PRINTER: DEFAULT
     LABEL_BORDER: False
+    PRINT_ONE_LABEL_PER_JOB: False
 
     BARCODE_PREFIX: "SK"
-    BARCODE_NUMBERS: 8
+    BARCODE_NUMBERS: 6
 
     CURRENCY: "$$"
 
@@ -113,8 +114,8 @@ TestingConfig:
 
     MIGRATE_REPO_PATH: "$SERVER/tmp/test_db_repository"
 
-    BARCODE_PREFIX: "SK-TEST-"
-    BARCODE_NUMBERS: 7
+    BARCODE_PREFIX: "SKT"
+    BARCODE_NUMBERS: 5
 
     CURRENCY: "$$"
 

@@ -66,9 +66,9 @@
 }
 
 .table > tbody > tr > td.field-button.field-double-button {
-    min-width: 76px;
+    min-width: 80px;
 }
 
 .table > tbody > tr > td.field-button.field-triple-button {
-    min-width: 106px;
+    min-width: 110px;
 }

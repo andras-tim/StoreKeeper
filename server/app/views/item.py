@@ -221,6 +221,12 @@ class ItemBarcodePrintView(BaseNestedView):
             label_printer = _get_label_printer(barcode)
         except MissingCups as e:
             return abort(400, message=str(e))
+
+        if config.App.PRINT_ONE_LABEL_PER_JOB:
+            for i in range(copies):
+                label_printer.print()
+            return
+
         label_printer.print(copies=copies)
 
 

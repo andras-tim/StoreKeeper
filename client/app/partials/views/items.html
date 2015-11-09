@@ -23,15 +23,15 @@
       </thead>
 
       <tbody>
-        <tr ng-if="loadingItems">
-          <td colspan="5" class="text-center" app-icon="spinner"></td>
-        </tr>
         <tr ng-repeat="item in displayedItems" ng-click="openItem(item)" class="clickable">
           <td class="field-vendor">{{ item.vendor.name }}</td>
           <td class="field-article-number">{{ item.article_number }}</td>
           <td class="field-name">{{ item.name }}</td>
           <td class="field-quantity">{{ item.quantity }}</td>
           <td class="field-unit-beside-quantity">{{ item.unit.unit }}</td>
+        </tr>
+        <tr ng-if="loadingItems">
+          <td colspan="5" class="text-center" app-icon="spinner"></td>
         </tr>
       </tbody>
 

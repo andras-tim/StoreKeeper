@@ -208,19 +208,13 @@ module.exports = function (grunt) {
                 ],
                 'tasks': ['app_css']
             },
-            'js': {
+            'js_html_po': {
                 'files': [
                     'app/js/**/*.js',
                     'app/partials/**/*.html',
                     'po/*.po'
                 ],
                 'tasks': ['app_po', 'app_js']
-            },
-            'html': {
-                'files': [
-                    'app/partials/**/*.html'
-                ],
-                'tasks': ['app_po']
             },
             'index_html': {
                 'files': [
@@ -232,7 +226,10 @@ module.exports = function (grunt) {
                 'files': [
                     '../VERSION.json'
                 ],
-                'tasks': ['prepare']
+                'tasks': ['prepare'],
+                'options': {
+                    'reload': true
+                }
             }
         }
     });

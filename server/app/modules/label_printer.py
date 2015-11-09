@@ -3,6 +3,8 @@ import os
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table, Paragraph, TableStyle
 from reportlab.graphics.barcode import code39
@@ -11,6 +13,10 @@ from reportlab.lib.units import mm
 from app import configdir, tempdir
 from app.server import config
 from app.modules.printer import Printer
+
+
+class LabelGenerationError(Exception):
+    pass
 
 
 class LabelPrinter:
@@ -70,23 +76,36 @@ class _LabelPdfGenerator:
     inner_width = inner_right - margin_left
     inner_height = inner_top - margin_bottom
 
+    pdfmetrics.registerFont(TTFont('DejaVu Sans', 'DejaVuSans.ttf'))
+
     stylesheet = StyleSheet1()
     stylesheet.add(ParagraphStyle(
         name='title',
-        fontName='Helvetica',
+        fontName='DejaVu Sans',
         fontSize=12,
         alignment=TA_CENTER,
     ))
     stylesheet.add(ParagraphStyle(
         name='data',
-        fontName='Helvetica',
+        fontName='DejaVu Sans',
         fontSize=10,
         alignment=TA_CENTER,
     ))
 
-    def generate_label(self, title: str, data: str, logo_path: str, label_border: bool, output_path: str):
-        canv = self._create_new_canvas(pdf_path=output_path)
+    @classmethod
+    def _set_optimal_font_size(cls, title: str):
+        font_size = 12
+        if len(title) > 26:
+            font_size = 10
+        elif len(title) > 45:
+            font_size = 8
 
+        cls.stylesheet['title'].fontSize = font_size
+
+    def generate_label(self, title: str, data: str, logo_path: str, label_border: bool, output_path: str):
+        self._set_optimal_font_size(title=title)
+
+        canv = self._create_new_canvas(pdf_path=output_path)
         canv.setAuthor(config.App.TITLE)
         canv.setTitle(title)
         canv.setSubject(data)
@@ -115,7 +134,12 @@ class _LabelPdfGenerator:
 
     def _draw_barcode(self, canv: canvas, y: int, data: str, bar_height: int=20 * mm):
         # http://en.wikipedia.org/wiki/Code_39
-        barcode = code39.Standard39(data, barWidth=0.6 * mm, barHeight=bar_height, stop=True, checksum=False)
+        barcode = code39.Standard39(data, barWidth=0.6 * mm, barHeight=bar_height,
+                                    quiet=False, stop=True, checksum=False)
+        if barcode.width > self.inner_width:
+            raise LabelGenerationError('Generated barcode is too wide; {!s}'.format(
+                {'available_mm': self.inner_width * mm, 'barcode_mm': barcode.width * mm}))
+
         barcode.drawOn(canv, self.inner_left + (self.inner_width - barcode.width) / 2, y)
 
         box_height = 4 * mm

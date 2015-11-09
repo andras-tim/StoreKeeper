@@ -4,6 +4,20 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+### Added
+- Item list updates automatically - issue #92
+- Logging the printer jobs - issue #121
+
+### Changed
+- Order item finder downdrop by name and quantity - issue #118
+- Improved input validation
+- Auto scaling label title
+- Abort generating labels with too wide barcodes - issue #117
+
+### Fixed
+- Do not wrap button fields - issue #122
+- User can printing multiple label copies with one copy per job - issue #120
+- Support long double accents on labels - issue #116
 
 
 ## [0.2.0] - 2015-11-05

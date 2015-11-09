@@ -5,7 +5,7 @@ var appFilters = angular.module('appFilters', []);
 
 appFilters.filter('setTitle', ['PageFactory',
     function setTitle (PageFactory) {
-        return function (title) {
+        return function filterForSetTitle (title) {
             PageFactory.setPageTitle(title);
             return title;
         };

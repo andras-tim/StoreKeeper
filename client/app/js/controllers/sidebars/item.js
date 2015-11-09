@@ -3,8 +3,8 @@
 var appSidebarControllers = angular.module('appControllers.sidebars');
 
 
-appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log', '$window', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory', 'StocktakingService',
-    function ItemSidebarController ($scope, $q, $log, $window, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory, StocktakingService) {
+appSidebarControllers.controller('ItemSidebarController', ['$rootScope', '$scope', '$q', '$log', '$window', 'gettextCatalog', 'Restangular', 'CommonFactory', 'BarcodeCacheFactory', 'ItemCacheFactory', 'PersistFactory', 'StocktakingService',
+    function ItemSidebarController ($rootScope, $scope, $q, $log, $window, gettextCatalog, Restangular, CommonFactory, BarcodeCacheFactory, ItemCacheFactory, PersistFactory, StocktakingService) {
         var
             /**
              * Persistent storage
@@ -441,6 +441,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$scope', '$q', '$log
                             stocktaking.customPUT(null, 'close'),
                             'itemSidebarMovingItems',
                             function () {
+                                $rootScope.$broadcast('updateItems');
                                 readElements.removeAllElements();
                             }
                         );

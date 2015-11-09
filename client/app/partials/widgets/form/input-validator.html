@@ -1,4 +1,9 @@
-<div ng-class="{'has-error': aFormInput.$dirty && aFormInput.$error.required}">
+<div ng-class="{'has-error': aFormInput.$dirty && !aFormInput.$valid}">
   <ng-transclude></ng-transclude>
-  <p class="help-block" ng-show="aFormInput.$dirty && aFormInput.$error.required" ng-bind="aRequired"></p>
+  <p class="help-block" ng-show="aFormInput.$dirty && aFormInput.$error.required" translate>Mandatory field</p>
+  <p class="help-block" ng-show="aFormInput.$dirty && aFormInput.$error.number" translate>Number required</p>
+  <p class="help-block" ng-show="aFormInput.$dirty && aFormInput.$error.minlength" translate>Can not be shorter than {{ aRestrictions.minlength }} characters</p>
+  <p class="help-block" ng-show="aFormInput.$dirty && aFormInput.$error.maxlength" translate>Can not be longer than {{ aRestrictions.maxlength }} characters</p>
+  <p class="help-block" ng-show="aFormInput.$dirty && aFormInput.$error.min" translate>Can not be smaller than {{ aRestrictions.min }}</p>
+  <p class="help-block" ng-show="aFormInput.$dirty && aFormInput.$error.max" translate>Can not be greater than {{ aRestrictions.max }}</p>
 </div>

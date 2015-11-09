@@ -48,6 +48,11 @@ class Printer:
         if options:
             current_options.update(options)
 
+        app.logger.info('Printing {pdf_name!r} on {printer!r}; {options!s}'.format(
+            pdf_name=pdf_path,
+            printer=self.__printer_name,
+            options=current_options
+        ))
         self.__cups_connection.printFile(self.__printer_name, pdf_path, job_title, current_options)
 
         return self
