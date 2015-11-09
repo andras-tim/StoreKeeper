@@ -217,7 +217,7 @@ appFieldsDirectives.directive('appItemInput',
             },
             'controller': ['$scope', 'ItemService', 'CommonFactory',
                 function ($scope, ItemService, CommonFactory) {
-                    $scope.dataFetcher = function (filter, limit) {
+                    $scope.dataFetcher = function dataFetcher (filter, limit) {
                         var options = {
                             'expression': filter,
                             'limit': limit

@@ -29,10 +29,10 @@ storekeeperApp.constant('appVersion', angular.element('meta[name=version]').attr
 
 
 storekeeperApp.config(['$routeProvider',
-    function ($routeProvider) {
+    function appConfigRouting ($routeProvider) {
         var sessionRequired = {
             'getSession': ['$rootScope', '$q', '$location', 'SessionFactory',
-                function ($rootScope, $q, $location, SessionFactory) {
+                function getSession ($rootScope, $q, $location, SessionFactory) {
                     var result = $q.defer();
 
                     SessionFactory.getSession().then(function (session) {
@@ -68,7 +68,7 @@ storekeeperApp.config(['$routeProvider',
 
 
 storekeeperApp.run(['$rootScope',
-    function ($rootScope) {
+    function appConfigSidebars ($rootScope) {
         $rootScope.sidebars = {
             'item': {
                 'templateUrl': 'partials/sidebars/item.html',
@@ -89,13 +89,13 @@ storekeeperApp.run(['$rootScope',
 
 
 storekeeperApp.config(['RestangularProvider',
-    function (RestangularProvider) {
+    function appConfigRestangular (RestangularProvider) {
         RestangularProvider.setBaseUrl('api');
     }]);
 
 
 storekeeperApp.run(['$window', 'gettextCatalog', 'ConfigFactory', 'CommonFactory',
-    function ($window, gettextCatalog, ConfigFactory, CommonFactory) {
+    function appConfigLanguage ($window, gettextCatalog, ConfigFactory, CommonFactory) {
         ConfigFactory.getConfig().then(function (config) {
             var language = config.forced_language;
             if (language === null) {
@@ -110,7 +110,7 @@ storekeeperApp.run(['$window', 'gettextCatalog', 'ConfigFactory', 'CommonFactory
 
 
 storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog', 'SidebarFactory', 'ModalFactory',
-    function ($rootScope, $window, gettextCatalog, SidebarFactory, ModalFactory) {
+    function initDirtyWindowHandler ($rootScope, $window, gettextCatalog, SidebarFactory, ModalFactory) {
         function onWindowBeforeUnload() {
             var event = $rootScope.$broadcast('windowBeforeUnload');
 
@@ -129,7 +129,7 @@ storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog', 'SidebarFactory',
 
 
 storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider', '$asideProvider',
-    function ($modalProvider, $tooltipProvider, $typeaheadProvider, $asideProvider) {
+    function appConfigAngularstrap ($modalProvider, $tooltipProvider, $typeaheadProvider, $asideProvider) {
         angular.extend($modalProvider.defaults, {
             'html': true,
             'keyboard': false,
@@ -153,18 +153,17 @@ storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider
 
 
 storekeeperApp.config(['stConfig',
-    function (stConfig) {
+    function appConfigSmartTable (stConfig) {
         stConfig.pagination.template = 'partials/widgets/table_pager.html';
         stConfig.pagination.itemsByPage = 17;
     }]);
 
 
 storekeeperApp.config(['$provide',
-    function ($provide) {
-
+    function appConfigExceptionHandler ($provide) {
         $provide.decorator('$exceptionHandler', ['$delegate', '$injector',
-            function ($delegate, $injector) {
-                return function (exception, cause) {
+            function exceptionHandlerWrapper ($delegate, $injector) {
+                return function exceptionHandler (exception, cause) {
                     var $rootScope = $injector.get('$rootScope');
                     $rootScope.sendErrorToServer(exception, cause);
                     $delegate(exception, cause);
@@ -175,7 +174,7 @@ storekeeperApp.config(['$provide',
 
 
 storekeeperApp.run(['$rootScope', 'ErrorService',
-    function ($rootScope, ErrorService) {
+    function appConfigureErrorForwarder ($rootScope, ErrorService) {
         $rootScope.sendErrorToServer = function sendErrorToServer (exception, cause) {
             ErrorService.post({
                 'name': exception.name,
