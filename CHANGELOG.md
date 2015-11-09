@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][unreleased]
 ### Added
 - Item list updates automatically - issue #92
+- Logging the printer jobs - issue #121
 
 ### Fixed
 - Do not wrap button fields - issue #122
