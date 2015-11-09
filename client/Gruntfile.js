@@ -232,7 +232,10 @@ module.exports = function (grunt) {
                 'files': [
                     '../VERSION.json'
                 ],
-                'tasks': ['prepare']
+                'tasks': ['prepare'],
+                'options': {
+                    'reload': true
+                }
             }
         }
     });
