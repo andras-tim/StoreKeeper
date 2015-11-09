@@ -16,6 +16,7 @@ DefaultConfig:
     # Set to DEFAULT for use default Cups printer
     LABEL_PRINTER: DEFAULT
     LABEL_BORDER: False
+    PRINT_ONE_LABEL_PER_JOB: False
 
     BARCODE_PREFIX: "SK"
     BARCODE_NUMBERS: 8

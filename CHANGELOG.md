@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Do not wrap button fields - issue #122
+- User can printing multiple label copies with one copy per job - issue #120
 
 
 ## [0.2.0] - 2015-11-05
