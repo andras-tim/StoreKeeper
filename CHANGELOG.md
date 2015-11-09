@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Item list updates automatically - issue #92
 
+### Fixed
+- Do not wrap button fields - issue #122
+
 
 ## [0.2.0] - 2015-11-05
 ### Added
