@@ -24,11 +24,11 @@
                 </app-input-form>
 
                 <app-input-form a-label="{{ 'Article no.' | translate }}">
-                  <input name="articleNumber" id="articleNumberInput" ng-model="item.article_number" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter article number' | translate }}" />
+                  <input name="articleNumber" id="articleNumberInput" ng-model="item.article_number" type="text" class="form-control" ng-maxlength="20" autocomplete="off" placeholder="{{ 'Enter article number' | translate }}" />
                 </app-input-form>
 
                 <app-input-form a-label="{{ 'Name' | translate }}">
-                  <input name="name" id="nameInput" ng-model="item.name" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter name of item' | translate }}" required />
+                  <input name="name" id="nameInput" ng-model="item.name" type="text" class="form-control" ng-maxlength="60" autocomplete="off" placeholder="{{ 'Enter name of item' | translate }}" required />
                 </app-input-form>
 
                 <app-input-form a-label="{{ 'Unit' | translate }}">
@@ -89,7 +89,9 @@
                       </td>
 
                       <td class="field-quantity">
-                        <app-quantity-input a-model="barcode.quantity" a-min="1" a-on-change="setBarcodeDirty(barcode, true)" app-tooltip="{{ 'Item amount for this barcode' | translate }}"></app-quantity-input>
+                        <app-input-validator a-form-input="barcodesForm.quantity">
+                          <app-quantity-input a-model="barcode.quantity" a-min="1" a-on-change="setBarcodeDirty(barcode, true)" app-tooltip="{{ 'Item amount for this barcode' | translate }}"></app-quantity-input>
+                        </app-input-validator>
                       </td>
 
                       <td class="field-button field-triple-button">

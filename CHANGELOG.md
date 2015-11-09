@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Order item finder downdrop by name and quantity - issue #118
+- Improved input validation
 
 ### Fixed
 - Do not wrap button fields - issue #122
