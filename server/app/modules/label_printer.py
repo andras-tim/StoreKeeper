@@ -88,9 +88,20 @@ class _LabelPdfGenerator:
         alignment=TA_CENTER,
     ))
 
-    def generate_label(self, title: str, data: str, logo_path: str, label_border: bool, output_path: str):
-        canv = self._create_new_canvas(pdf_path=output_path)
+    @classmethod
+    def _set_optimal_font_size(cls, title: str):
+        font_size = 12
+        if len(title) > 26:
+            font_size = 10
+        elif len(title) > 45:
+            font_size = 8
 
+        cls.stylesheet['title'].fontSize = font_size
+
+    def generate_label(self, title: str, data: str, logo_path: str, label_border: bool, output_path: str):
+        self._set_optimal_font_size(title=title)
+
+        canv = self._create_new_canvas(pdf_path=output_path)
         canv.setAuthor(config.App.TITLE)
         canv.setTitle(title)
         canv.setSubject(data)
