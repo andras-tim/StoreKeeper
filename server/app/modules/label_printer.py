@@ -3,6 +3,8 @@ import os
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table, Paragraph, TableStyle
 from reportlab.graphics.barcode import code39
@@ -70,16 +72,18 @@ class _LabelPdfGenerator:
     inner_width = inner_right - margin_left
     inner_height = inner_top - margin_bottom
 
+    pdfmetrics.registerFont(TTFont('DejaVu Sans', 'DejaVuSans.ttf'))
+
     stylesheet = StyleSheet1()
     stylesheet.add(ParagraphStyle(
         name='title',
-        fontName='Helvetica',
+        fontName='DejaVu Sans',
         fontSize=12,
         alignment=TA_CENTER,
     ))
     stylesheet.add(ParagraphStyle(
         name='data',
-        fontName='Helvetica',
+        fontName='DejaVu Sans',
         fontSize=10,
         alignment=TA_CENTER,
     ))
