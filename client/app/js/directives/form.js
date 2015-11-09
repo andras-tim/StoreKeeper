@@ -9,31 +9,48 @@ var appFormDirectives = angular.module('appDirectives.form', []);
  * @restrict E
  *
  * @param {object} aFormInput
- * @param {string} aRequired
  *
  * @description
  * Wrap input element with error handler
  *
  * @example
  * <ng-form name="inputForm">
- *   <app-input-validator a-form-input="inputForm.foo" a-required="{{ aRequired }}">
+ *   <app-input-validator a-form-input="inputForm.foo">
  *     <input name="foo" />
  *   </app-input-validator>
  * </ng-form>
  */
-appFormDirectives.directive('appInputValidator',
-    function appInputValidator () {
+appFormDirectives.directive('appInputValidator', ['$timeout', 'CommonFactory',
+    function appInputValidator ($timeout, CommonFactory) {
         return {
             'restrict': 'E',
             'transclude': true,
             'replace': true,
             'scope': {
-                'aFormInput': '=',
-                'aRequired': '@'
+                'aFormInput': '='
             },
-            'templateUrl': 'partials/widgets/form/input-validator.html'
+            'templateUrl': 'partials/widgets/form/input-validator.html',
+            'link': function (scope, element) {
+                $timeout(function () {
+                    var inputElement = element.find('input').addBack('input');
+
+                    if (inputElement.length !== 1) {
+                        CommonFactory.printToConsole('Can not clearly identify the input element in <app-input-validator>', {
+                            'element': element,
+                            'inputElement': inputElement
+                        });
+                    }
+
+                    scope.aRestrictions = {
+                        'minlength': inputElement.attr('ng-minlength'),
+                        'maxlength': inputElement.attr('ng-maxlength'),
+                        'min': inputElement.attr('min'),
+                        'max': inputElement.attr('max')
+                    };
+                });
+            }
         };
-    });
+    }]);
 
 
 /**
@@ -42,7 +59,6 @@ appFormDirectives.directive('appInputValidator',
  * @restrict E
  *
  * @param {string} aLabel
- * @param {string} aRequired
  * @param {string=} [aLabelClass=col-sm-4]
  * @param {string=} [aInputClass=col-sm-8]
  *
@@ -50,7 +66,7 @@ appFormDirectives.directive('appInputValidator',
  * Nested forms and labels for inputs
  *
  * @example
- * <app-input-form a-label="{{ 'Username' | translate }}" a-required="{{ 'Username is required' | translate }}">
+ * <app-input-form a-label="{{ 'Username' | translate }}">
  *   <input name="username" id="usernameInput" ... />
  * </app-input-form>
  */
@@ -63,7 +79,6 @@ appFormDirectives.directive('appInputForm', ['$timeout', 'CommonFactory',
             'replace': true,
             'scope': {
                 'aLabel': '@',
-                'aRequired': '@',
                 'aLabelClass': '@',
                 'aInputClass': '@'
             },

@@ -14,7 +14,7 @@ var appFieldsDirectives = angular.module('appDirectives.fields', []);
  * Self-managed vendor controller
  *
  * @example
- * <app-input-form a-label="{{ 'Vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}">
+ * <app-input-form a-label="{{ 'Vendor' | translate }}">
  *   <app-vendor-input a-model="item.vendor"></app-vendor-input>
  * </app-input-form>
  */
@@ -71,7 +71,7 @@ appFieldsDirectives.directive('appVendorInput',
  * Self-managed unit controller
  *
  * @example
- * <app-input-form a-label="{{ 'Unit' | translate }}" a-required="{{ 'Unit is required' | translate }}">
+ * <app-input-form a-label="{{ 'Unit' | translate }}">
  *   <app-unit-input a-model="item.unit"></app-unit-input>
  * </app-input-form>
  */

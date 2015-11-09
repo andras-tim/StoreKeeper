@@ -19,7 +19,7 @@
             <form name="itemForm" class="form-horizontal" app-confirm-on-exit="itemForm.$dirty" a-modal-id="floatingObjectId">
               <app-details-modal-panel a-half-width="true">
 
-                <app-input-form a-label="{{ 'Vendor' | translate }}" a-required="{{ 'Vendor is required' | translate }}">
+                <app-input-form a-label="{{ 'Vendor' | translate }}">
                   <app-vendor-input a-model="item.vendor"></app-vendor-input>
                 </app-input-form>
 
@@ -27,15 +27,15 @@
                   <input name="articleNumber" id="articleNumberInput" ng-model="item.article_number" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter article number' | translate }}" />
                 </app-input-form>
 
-                <app-input-form a-label="{{ 'Name' | translate }}" a-required="{{ 'Name is required' | translate }}">
+                <app-input-form a-label="{{ 'Name' | translate }}">
                   <input name="name" id="nameInput" ng-model="item.name" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter name of item' | translate }}" required />
                 </app-input-form>
 
-                <app-input-form a-label="{{ 'Unit' | translate }}" a-required="{{ 'Unit is required' | translate }}">
+                <app-input-form a-label="{{ 'Unit' | translate }}">
                   <app-unit-input a-model="item.unit"></app-unit-input>
                 </app-input-form>
 
-                <app-input-form a-label="{{ 'Purchase price' | translate }}" a-required="{{ 'Purchase price is required' | translate }}">
+                <app-input-form a-label="{{ 'Purchase price' | translate }}">
                  <app-purchase-price-input a-model="item.purchase_price" a-min="0"></app-purchase-price-input>
                 </app-input-form>
 
@@ -50,7 +50,7 @@
                   </div>
                 </app-input-form>
 
-                <app-input-form a-label="{{ 'Warning quantity' | translate }}" a-required="{{ 'Warning quantity is required' | translate }}">
+                <app-input-form a-label="{{ 'Warning quantity' | translate }}">
                   <div class="input-group field-quantity">
                     <app-quantity-input a-model="item.warning_quantity" a-min="0" app-tooltip="{{ 'System will send a warning when the quantity decreases under this value' | translate }}"></app-quantity-input>
                     <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>

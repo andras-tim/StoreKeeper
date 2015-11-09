@@ -52,6 +52,22 @@ msgstr "Vonalkódhoz rendelt mennyiség"
 msgid "Barcode, item name, article number"
 msgstr "Vonalkód, elem név, cikkszám"
 
+#: app/partials/widgets/form/input-validator.html:8
+msgid "Can not be greater than {{ aRestrictions.max }}"
+msgstr "Nem lehet nagyobb mint {{ aRestrictions.max }}"
+
+#: app/partials/widgets/form/input-validator.html:6
+msgid "Can not be longer than {{ aRestrictions.maxlength }} characters"
+msgstr "Nem lehet hosszabb mint {{ aRestrictions.maxlength }} karakter"
+
+#: app/partials/widgets/form/input-validator.html:5
+msgid "Can not be shorter than {{ aRestrictions.minlength }} characters"
+msgstr "Nem lehet rövidebb mint {{ aRestrictions.minlength }} karakter"
+
+#: app/partials/widgets/form/input-validator.html:7
+msgid "Can not be smaller than {{ aRestrictions.min }}"
+msgstr "Nem lehet kisebb mint {{ aRestrictions.min }}"
+
 #: app/js/factories/common.js:39
 msgid "Can not connect to server"
 msgstr "Nem lehet csatlakozni a szerverhez"
@@ -143,10 +159,6 @@ msgstr "Elem"
 msgid "Item amount for this barcode"
 msgstr "A vonalkódhoz tartozó mennyiség"
 
-#: app/partials/views/item-selector.html:13
-msgid "Item can not be empty"
-msgstr "Az elem nem maradhat üresen"
-
 #: app/partials/sidebars/item.html:7
 msgid "Item collector"
 msgstr "Elem kereső"
@@ -163,6 +175,10 @@ msgstr "Bejelentkezés"
 msgid "Logout"
 msgstr "Kijelentkezés"
 
+#: app/partials/widgets/form/input-validator.html:3
+msgid "Mandatory field"
+msgstr "Kötelező mező"
+
 #: app/partials/views/item.html:81
 msgid "Master barcode for this item"
 msgstr "Fő címke ehhez az télelhez"
@@ -175,21 +191,17 @@ msgstr "Elemek mozgatása a Raktárkészletbe"
 msgid "Name"
 msgstr "Megnevezés"
 
-#: app/partials/views/item.html:30
-msgid "Name is required"
-msgstr "A felhasználónevet kötelező megadni"
-
 #: app/partials/views/item.html:6
 msgid "New Item"
 msgstr "Új tétel"
 
+#: app/partials/widgets/form/input-validator.html:4
+msgid "Number required"
+msgstr "Szám szükséges"
+
 #: app/partials/views/login.html:12
 msgid "Password"
 msgstr "Jelszó"
-
-#: app/partials/views/login.html:12
-msgid "Password is required"
-msgstr "A jelszót kötelező megadni"
 
 #: app/partials/views/item.html:97
 msgid "Print label"
@@ -208,10 +220,6 @@ msgstr "Címke nyomtatás az összes elemhez"
 msgid "Purchase price"
 msgstr "Vételár"
 
-#: app/partials/views/item.html:38
-msgid "Purchase price is required"
-msgstr "A vételárat kötelező megadni"
-
 #: app/partials/views/items.html:12
 #: app/partials/widgets/fields/quantity-input.html:1
 msgid "Quantity"
@@ -220,10 +228,6 @@ msgstr "Mennyiség"
 #: app/partials/views/item.html:72
 msgid "Quantity ({{ item.unit.unit }})"
 msgstr "Mennyiség"
-
-#: app/partials/views/item-selector.html:17
-msgid "Quantity can not be empty"
-msgstr "A mennyiség nem maradhat üresen"
 
 #: app/partials/views/login.html:17
 msgid "Remember me"
@@ -274,10 +278,6 @@ msgstr "Menü megjelenítése/elrejtése"
 msgid "Unit"
 msgstr "Mennyiségi egység"
 
-#: app/partials/views/item.html:34
-msgid "Unit is required"
-msgstr "A mennyiségi egységet kötelező megadni"
-
 #: app/partials/views/login.html:17
 msgid "User will not logged out after close this window"
 msgstr "A felhasználó nem lesz kijelentkeztetve a böngésző bezárása után"
@@ -286,25 +286,13 @@ msgstr "A felhasználó nem lesz kijelentkeztetve a böngésző bezárása után
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: app/partials/views/login.html:8
-msgid "Username is required"
-msgstr "A felhasználónevet kötelező megadni"
-
 #: app/partials/views/item.html:22 app/partials/views/items.html:9
 msgid "Vendor"
 msgstr "Gyártó"
 
-#: app/partials/views/item.html:22
-msgid "Vendor is required"
-msgstr "A gyártót kötelező megadni"
-
 #: app/partials/views/item.html:53
 msgid "Warning quantity"
 msgstr "Figyelmeztetési küszöb"
-
-#: app/partials/views/item.html:53
-msgid "Warning quantity is required"
-msgstr "A figyelmeztetési küszöböt kötelező megadni"
 
 #: app/partials/footer.html:3
 msgid ""
