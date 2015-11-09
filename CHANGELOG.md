@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Order item finder downdrop by name and quantity - issue #118
 - Improved input validation
 - Auto scaling label title
+- Abort generating labels with too wide barcodes - issue #117
 
 ### Fixed
 - Do not wrap button fields - issue #122

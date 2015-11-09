@@ -70,8 +70,8 @@ class ExampleTimestamp:
 
 
 class ExampleBarcode:
-    BARCODE_PREFIX = 'SK-TEST-'
-    BARCODE_NUMBERS = 7
+    BARCODE_PREFIX = 'SKT'
+    BARCODE_NUMBERS = 5
 
     @classmethod
     def generate_main(cls) -> str:

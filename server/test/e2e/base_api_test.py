@@ -27,7 +27,7 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
 
     # Pattern for timestamp; e.g: '2015-03-14T07:38:08.430655+00:00'
     __API_TIMESTAMP = re.compile(r'(?P<quote>["\'])\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}\.\d{6}\+\d{2}:\d{2}["\']')
-    # Pattern for timestamp; e.g: 'SK-TEST-1234567'
+    # Pattern for timestamp; e.g: 'SKT-12345'
     __API_BARCODE = re.compile(r'(?P<quote>["\'])' + re.escape(config.App.BARCODE_PREFIX) +
                                '[0-9]{%d}' % config.App.BARCODE_NUMBERS + '["\']')
 

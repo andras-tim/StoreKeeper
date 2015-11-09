@@ -15,6 +15,10 @@ from app.server import config
 from app.modules.printer import Printer
 
 
+class LabelGenerationError(Exception):
+    pass
+
+
 class LabelPrinter:
     __logo_path = os.path.abspath(os.path.join(configdir, 'img', 'label_logo.gif'))
     __print_cache_dir = os.path.join(tempdir, 'print_cache')
@@ -130,7 +134,12 @@ class _LabelPdfGenerator:
 
     def _draw_barcode(self, canv: canvas, y: int, data: str, bar_height: int=20 * mm):
         # http://en.wikipedia.org/wiki/Code_39
-        barcode = code39.Standard39(data, barWidth=0.6 * mm, barHeight=bar_height, stop=True, checksum=False)
+        barcode = code39.Standard39(data, barWidth=0.6 * mm, barHeight=bar_height,
+                                    quiet=False, stop=True, checksum=False)
+        if barcode.width > self.inner_width:
+            raise LabelGenerationError('Generated barcode is too wide; {!s}'.format(
+                {'available_mm': self.inner_width * mm, 'barcode_mm': barcode.width * mm}))
+
         barcode.drawOn(canv, self.inner_left + (self.inner_width - barcode.width) / 2, y)
 
         box_height = 4 * mm
