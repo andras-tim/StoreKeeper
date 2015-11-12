@@ -34,7 +34,6 @@ describe('Controllers/Common: CommonController', function () {
                 '$route': {
                     'current': {}
                 },
-                '$aside': {},
                 '$event': {
                     'preventDefault': function () {}
                 },

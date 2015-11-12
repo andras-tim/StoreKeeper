@@ -21,8 +21,8 @@ appControllers.controller('CommonController', ['$scope', 'appVersion', 'ConfigFa
     }]);
 
 
-appControllers.controller('MainMenuController', ['$rootScope', '$scope', '$aside', 'gettextCatalog', 'ConfigFactory', 'CommonFactory',
-    function MainMenuController ($rootScope, $scope, $aside, gettextCatalog, ConfigFactory, CommonFactory) {
+appControllers.controller('MainMenuController', ['$rootScope', '$scope', 'gettextCatalog', 'ConfigFactory', 'CommonFactory',
+    function MainMenuController ($rootScope, $scope, gettextCatalog, ConfigFactory, CommonFactory) {
         function initializeLanguages() {
             var languages = [
                 {
