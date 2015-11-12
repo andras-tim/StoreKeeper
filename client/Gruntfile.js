@@ -290,6 +290,7 @@ module.exports = function (grunt) {
         'app_res',
         'app_css',
         'app_js',
+        'app_po',
         'app_index_html'
     ]);
 

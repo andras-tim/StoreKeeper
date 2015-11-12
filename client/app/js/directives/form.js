@@ -172,20 +172,30 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
             'scope': false,
             'link': function (scope, element, attrs) {
                 var tooltip;
-                attrs.$observe('appTooltip', function (newValue) {
+
+                attrs.$observe('appTooltip', function (newTitle) {
                     var options;
+
                     if (tooltip !== undefined) {
                         tooltip.destroy();
                     }
 
                     options = {
-                        'title': newValue
+                        'title': newTitle
                     };
                     if (attrs.aPlacement) {
                         options.placement = attrs.aPlacement;
                     }
 
                     tooltip = $tooltip(element, options);
+                });
+
+                scope.$watch(attrs.ngDisabled, function (disabled) {
+                    if (disabled && tooltip !== undefined) {
+                        tooltip.$promise.then(function () {
+                            tooltip.hide();
+                        });
+                    }
                 });
             }
         };
