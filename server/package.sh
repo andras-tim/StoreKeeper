@@ -76,7 +76,7 @@ function do_test()
 
 function do_manage_database()
 {
-    ${PYTHON} utils/database.py "$@"
+    ${PYTHON} utils/database.py db "$@"
 }
 
 function do_fill_up_database()

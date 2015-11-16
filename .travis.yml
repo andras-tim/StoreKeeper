@@ -39,10 +39,10 @@ install:
     esac
 
 before_script:
-  - server/package.sh manage_database --create
-  - config/package.sh make_defaults
+  - ./package.sh make_defaults
+  - ./package.sh upgrade_database
   - case ${MODULE} in
-      client) server/package.sh start & sleep 3;;
+      client) ./package.sh start & sleep 3;;
     esac
 
 script:

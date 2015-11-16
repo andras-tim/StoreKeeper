@@ -7,7 +7,6 @@ DefaultConfig:
     TITLE: "StoreKeeper"
     FORCED_LANGUAGE: NULL
 
-    MIGRATE_REPO_PATH: "$SERVER/db_repository"
     SHARE_STATIC: True
 
     ADMIN_PAGE: False
@@ -111,8 +110,6 @@ TestingConfig:
     NAME: "storekeeper"
     TITLE: "StoreKeeper"
     FORCED_LANGUAGE: NULL
-
-    MIGRATE_REPO_PATH: "$SERVER/tmp/test_db_repository"
 
     BARCODE_PREFIX: "SKT"
     BARCODE_NUMBERS: 5
