@@ -33,12 +33,25 @@ available getting some info about the current module.
 
 1. Clone repo, or download & extract a release ``.tar.gz`` file
 2. Install all dependencies: ``./package.sh -p install``
-3. Make default configuration files: ``./package.sh make_defaults``
-4. Check the ``config/config.yml`` for database and other settings
-5. Prepare database: ``./package.sh create_database``
-6. Start server: ``./package.sh start``
+3. Check the ``config/config.yml`` for database and other settings
+4. Prepare database: ``./package.sh upgrade_database``
+5. Start server: ``./package.sh start``
 
 Now, you can open the WebUI: http://localhost:8000/storekeeper
+
+
+Upgrade
+-------
+
+The upgrade process is under construction, but there are the main steps:
+
+1. Update source code with **git** / extract release ``.tar.gz`` from GitHub.
+2. Update libs and others with ``./package.sh -p install``.
+3. Follow up config changes based on ``config/config.default.yml``.
+4. Upgrade database scheme with ``./package.sh upgrade_database``.
+
+.. note::
+    Proper, seamless upgrade process will be supported between the stable versions!
 
 
 Demo site
