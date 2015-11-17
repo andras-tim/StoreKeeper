@@ -51,6 +51,7 @@ The Guide
    :maxdepth: 2
 
    setup
+   upgrade
    client/index
    server/index
 

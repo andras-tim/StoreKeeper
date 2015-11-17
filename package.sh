@@ -13,9 +13,9 @@ function do_install()
     echo -e "\nAll Done!"
 }
 
-function do_create_database()
+function do_upgrade_database()
 {
-    server/package.sh manage_database --create
+    server/package.sh manage_database upgrade
 }
 
 function do_make_defaults()

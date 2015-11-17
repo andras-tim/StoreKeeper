@@ -91,7 +91,7 @@ class Item(db.Model):
     article_number = db.Column(db.String(20))
     quantity = db.Column(db.Float, nullable=False, default=0.0)
     warning_quantity = db.Column(db.Float, nullable=False, default=0.0)
-    purchase_price = db.Column(db.Float, nullable=False, default=0.0)
+    purchase_price = db.Column(db.Float, nullable=False, default=0.0, server_default='0')
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
 
     vendor = db.relationship('Vendor', lazy='joined')

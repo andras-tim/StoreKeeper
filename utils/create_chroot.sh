@@ -288,14 +288,9 @@ function configure_storekeeper()
     sed "s>${tmp_secret}>${new_secret}>g" -i "${config_path}"
 }
 
-function create_database()
+function upgrade_database()
 {
-    if [ -e "${EXT_INSTALL_DIR}/server/db_repository" ]
-    then
-        return
-    fi
-
-    run_in_prod './package.sh create_database'
+    run_in_prod './package.sh upgrade_database'
 }
 
 function restart_services()
@@ -338,5 +333,5 @@ mount_resources
 clone_update_storekeeper_code
 install_update_storekeeper
 configure_storekeeper
-create_database
+upgrade_database
 restart_services
