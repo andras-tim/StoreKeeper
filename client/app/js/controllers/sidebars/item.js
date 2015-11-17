@@ -42,111 +42,111 @@ appSidebarControllers.controller('ItemSidebarController', ['$rootScope', '$scope
                 var elements = [],
                     initialized = false,
 
-                fetchItemStorage = function fetchItemStorage () {
-                    var length = elementStorage.data.readElements.length,
-                        index,
-                        element;
+                    fetchItemStorage = function fetchItemStorage () {
+                        var length = elementStorage.data.readElements.length,
+                            index,
+                            element;
 
-                    for (index = 0; index < length; index += 1) {
-                        element = elementStorage.data.readElements.shift();
-                        addElement(element.barcode, element.count);
-                    }
-
-                    initialized = true;
-                },
-
-                addElement = function addElement (barcodeValue, count) {
-                    barcodeCache.getBarcode(barcodeValue).then(
-                        function (barcode) {
-                            addExistingElement(barcode, count);
-                        }, function (barcodeValue) {
-                            addNewElement(barcodeValue, count);
+                        for (index = 0; index < length; index += 1) {
+                            element = elementStorage.data.readElements.shift();
+                            addElement(element.barcode, element.count);
                         }
-                    );
-                },
 
-                addExistingElement = function addExistingElement (barcode, count) {
-                    var element = pushElementData({
-                            'barcode': barcode.barcode,
-                            'itemId': barcode.item_id,
+                        initialized = true;
+                    },
+
+                    addElement = function addElement (barcodeValue, count) {
+                        barcodeCache.getBarcode(barcodeValue).then(
+                            function (barcode) {
+                                addExistingElement(barcode, count);
+                            }, function (barcodeValue) {
+                                addNewElement(barcodeValue, count);
+                            }
+                        );
+                    },
+
+                    addExistingElement = function addExistingElement (barcode, count) {
+                        var element = pushElementData({
+                                'barcode': barcode.barcode,
+                                'itemId': barcode.item_id,
+                                'count': count || 1
+                            });
+
+                        element.barcode = barcode;
+                        itemCache.getItemById(barcode.item_id).then(function (item) {
+                            element.item = item;
+                        });
+                    },
+
+                    addNewElement = function createNewElement (barcodeValue, count) {
+                        pushElementData({
+                            'barcode': barcodeValue,
+                            'itemId': null,
                             'count': count || 1
                         });
+                    },
 
-                    element.barcode = barcode;
-                    itemCache.getItemById(barcode.item_id).then(function (item) {
-                        element.item = item;
-                    });
-                },
+                    pushElementData = function pushElementData (elementData) {
+                        var element = {
+                            'barcode': null,
+                            'item': null,
+                            'data': elementData
+                        };
 
-                addNewElement = function createNewElement (barcodeValue, count) {
-                    pushElementData({
-                        'barcode': barcodeValue,
-                        'itemId': null,
-                        'count': count || 1
-                    });
-                },
+                        elementStorage.data.readElements.push(elementData);
+                        elements.push(element);
 
-                pushElementData = function pushElementData (elementData) {
-                    var element = {
-                        'barcode': null,
-                        'item': null,
-                        'data': elementData
-                    };
+                        onElementChange();
+                        return element;
+                    },
 
-                    elementStorage.data.readElements.push(elementData);
-                    elements.push(element);
+                    removeElement = function removeElement (elementIndex) {
+                        elementStorage.data.readElements.splice(elementIndex, 1);
+                        elements.splice(elementIndex, 1);
+                        onElementChange();
+                    },
 
-                    onElementChange();
-                    return element;
-                },
+                    removeAllElements = function removeAllElements () {
+                        elementStorage.data.readElements.splice(0, elementStorage.data.readElements.length);
+                        elements.splice(0, elements.length);
+                        onElementChange();
+                    },
 
-                removeElement = function removeElement (elementIndex) {
-                    elementStorage.data.readElements.splice(elementIndex, 1);
-                    elements.splice(elementIndex, 1);
-                    onElementChange();
-                },
+                    getIndexByBarcode = function getIndexByBarcode (barcode) {
+                        return _.findIndex(elements, function (element) {
+                            return element.data.barcode === barcode;
+                        });
+                    },
 
-                removeAllElements = function removeAllElements () {
-                    elementStorage.data.readElements.splice(0, elementStorage.data.readElements.length);
-                    elements.splice(0, elements.length);
-                    onElementChange();
-                },
+                    onElementChange = function onElementChange () {
+                        saveChanges();
+                        checkAllElementsHasBeenAssigned();
+                    },
 
-                getIndexByBarcode = function getIndexByBarcode (barcode) {
-                    return _.findIndex(elements, function (element) {
-                        return element.data.barcode === barcode;
-                    });
-                },
+                    saveChanges = function saveChanges () {
+                        if (initialized) {
+                            elementStorage.save();
+                        }
+                    },
 
-                onElementChange = function onElementChange () {
-                    saveChanges();
-                    checkAllElementsHasBeenAssigned();
-                },
-
-                saveChanges = function saveChanges () {
-                    if (initialized) {
-                        elementStorage.save();
-                    }
-                },
-
-                checkAllElementsHasBeenAssigned = function checkAllElementsHasBeenAssigned () {
-                    if (!initialized) {
-                        return;
-                    }
-
-                    var length = elements.length,
-                        index,
-                        element;
-
-                    for (index = 0; index < length; index += 1) {
-                        element = elements[index];
-                        if (!element.data.itemId) {
-                            $scope.movable = false;
+                    checkAllElementsHasBeenAssigned = function checkAllElementsHasBeenAssigned () {
+                        if (!initialized) {
                             return;
                         }
-                        $scope.movable = true;
-                    }
-                };
+
+                        var length = elements.length,
+                            index,
+                            element;
+
+                        for (index = 0; index < length; index += 1) {
+                            element = elements[index];
+                            if (!element.data.itemId) {
+                                $scope.movable = false;
+                                return;
+                            }
+                            $scope.movable = true;
+                        }
+                    };
 
                 fetchItemStorage();
                 checkAllElementsHasBeenAssigned();
