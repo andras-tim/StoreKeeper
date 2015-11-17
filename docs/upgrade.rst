@@ -30,7 +30,7 @@ Changed the database migration framework in **v0.3.0**, therefore have to make s
         DROP TABLE migrate_version;
         CREATE TABLE alembic_version (version_num character varying(32) NOT NULL);
         -- ALTER TABLE public.alembic_version OWNER TO sql_user_of_storekeeper;
-        INSERT INTO alembic_version VALUES ('???');
+        INSERT INTO alembic_version VALUES ('305c2b0084f');
 
 4. Now, upgrade database scheme with ``./package.sh upgrade_database``.
 
