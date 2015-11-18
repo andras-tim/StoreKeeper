@@ -165,7 +165,7 @@ module.exports = function (grunt) {
                 'src': 'app/index.html',
                 'overwrite': true,
                 'replacements': [{
-                    'from': /(|\.min)\.(css|js)[^"]*"/g,
+                    'from': /(|\.min)\.(css|js)[^/"]*"/g,
                     'to': '.$2"'
                 }, {
                     'from': /(<meta name="version" content=").*("\s*\/>)/g,
@@ -176,7 +176,7 @@ module.exports = function (grunt) {
                 'src': 'app/index.html',
                 'overwrite': true,
                 'replacements': [{
-                    'from': /(|\.min)\.(css|js)[^"]*"/g,
+                    'from': /(|\.min)\.(css|js)[^/"]*"/g,
                     'to': '.min.$2?v=<%= version %>"'
                 }, {
                     'from': /(<meta name="version" content=").*("\s*\/>)/g,
