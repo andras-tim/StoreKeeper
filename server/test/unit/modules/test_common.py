@@ -1,9 +1,9 @@
-import unittest
+import pytest
 
 from app.modules import common
 
 
-class TestListInListHelpers(unittest.TestCase):
+class TestListInListHelpers:
     REFERENCE = ['apple', 'banana', 'orange']
     REDUCED = ['apple', 'banana']
     EXTENDED = ['apple', 'banana', 'orange', 'kiwi']
@@ -23,7 +23,7 @@ class TestListInListHelpers(unittest.TestCase):
         assert not common.any_in(self.DISJUNCT, self.REFERENCE)
 
 
-class TestFilterDict(unittest.TestCase):
+class TestFilterDict:
     DATA = {
         'apple': 1,
         'orange': 2,
@@ -41,16 +41,19 @@ class TestFilterDict(unittest.TestCase):
         }
 
 
-class TestRecursiveDictUpdate(unittest.TestCase):
-    def setUp(self):
-        self.single_level = {
+class TestRecursiveDictUpdate:
+    @pytest.fixture
+    def single_level(self):
+        return {
             'apple': 1,
             'orange': 2,
             'peach': 3,
         }
 
-        self.multi_level = {
-            'fruit': self.single_level,
+    @pytest.fixture
+    def multi_level(self, single_level):
+        return {
+            'fruit': single_level,
             'vegetables': {
                 'carrot': {
                     'small': 1
@@ -58,21 +61,21 @@ class TestRecursiveDictUpdate(unittest.TestCase):
             },
         }
 
-    def test_update_single_level_dict_with_single_level_dict(self):
-        common.recursive_dict_update(self.single_level, {
+    def test_update_single_level_dict_with_single_level_dict(self, single_level: dict):
+        common.recursive_dict_update(single_level, {
             'apple': 4,
             'kiwi': 5,
         })
 
-        assert self.single_level == {
+        assert single_level == {
             'apple': 4,
             'orange': 2,
             'peach': 3,
             'kiwi': 5,
         }
 
-    def test_update_single_level_dict_with_multi_level_dict(self):
-        common.recursive_dict_update(self.single_level, {
+    def test_update_single_level_dict_with_multi_level_dict(self, single_level: dict):
+        common.recursive_dict_update(single_level, {
             'apple': {
                 'small': 4
             },
@@ -81,7 +84,7 @@ class TestRecursiveDictUpdate(unittest.TestCase):
             },
         })
 
-        assert self.single_level == {
+        assert single_level == {
             'apple': {
                 'small': 4
             },
@@ -92,8 +95,8 @@ class TestRecursiveDictUpdate(unittest.TestCase):
             },
         }
 
-    def test_update_multi_level_dict_with_multi_level_dict(self):
-        common.recursive_dict_update(self.multi_level, {
+    def test_update_multi_level_dict_with_multi_level_dict(self, single_level: dict, multi_level: dict):
+        common.recursive_dict_update(multi_level, {
             'fruit': {
                 'apple': 4,
                 'orange': {
@@ -106,7 +109,7 @@ class TestRecursiveDictUpdate(unittest.TestCase):
             }
         })
 
-        assert self.multi_level == {
+        assert multi_level == {
             'fruit': {
                 'apple': 4,
                 'orange': {
@@ -119,7 +122,7 @@ class TestRecursiveDictUpdate(unittest.TestCase):
                 'carrot': 7
             },
         }
-        assert self.single_level == {
+        assert single_level == {
             'apple': 4,
             'orange': {
                 'small': 5
