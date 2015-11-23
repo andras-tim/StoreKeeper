@@ -1,9 +1,10 @@
 import logging
-from logging.handlers import RotatingFileHandler, SMTPHandler, SysLogHandler
 import socket
+from logging.handlers import RotatingFileHandler, SysLogHandler
 from flask import Flask
 
 from app.modules.yaml_config import ConfigObject
+from app.modules.utf8_smtp_handler import Utf8SMTPHandler
 
 LOG_LEVELS = {
     'CRITICAL': logging.CRITICAL,
@@ -51,7 +52,7 @@ def __get_file_handler(config: ConfigObject) -> RotatingFileHandler:
     return file_handler
 
 
-def __get_email_handler(config: ConfigObject) -> SMTPHandler:
+def __get_email_handler(config: ConfigObject) -> Utf8SMTPHandler:
     mail_subject = '{} Failure'.format(config.App.TITLE)
     log_format = '''
 Message type:       %(levelname)s
@@ -65,11 +66,11 @@ Message:
 %(message)s
 '''
 
-    mail_handler = SMTPHandler((config.Log.ToEmail.SERVER, config.Log.ToEmail.PORT),
-                               fromaddr=config.Log.ToEmail.SENDER,
-                               toaddrs=config.Log.ToEmail.RECIPIENTS,
-                               subject=mail_subject,
-                               credentials=__get_smpt_credentials(config))
+    mail_handler = Utf8SMTPHandler((config.Log.ToEmail.SERVER, config.Log.ToEmail.PORT),
+                                   fromaddr=config.Log.ToEmail.SENDER,
+                                   toaddrs=config.Log.ToEmail.RECIPIENTS,
+                                   subject=mail_subject,
+                                   credentials=__get_smpt_credentials(config))
     mail_handler.setLevel(LOG_LEVELS[config.Log.ToEmail.LEVEL])
     mail_handler.setFormatter(logging.Formatter(log_format))
 
