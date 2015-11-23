@@ -177,7 +177,7 @@ storekeeperApp.run(['$rootScope', 'ErrorService',
     function appConfigureErrorForwarder ($rootScope, ErrorService) {
         $rootScope.sendErrorToServer = function sendErrorToServer (exception, cause) {
             ErrorService.post({
-                'name': exception.name,
+                'exception': exception.name,
                 'message': exception.message,
                 'stack': exception.stack,
                 'cause': cause

@@ -3,8 +3,10 @@ import socket
 from logging.handlers import RotatingFileHandler, SysLogHandler
 from flask import Flask
 
+from app.version import Version
 from app.modules.yaml_config import ConfigObject
 from app.modules.utf8_smtp_handler import Utf8SMTPHandler
+from app.modules.log_filters import LogValuesInjectorFilter
 
 LOG_LEVELS = {
     'CRITICAL': logging.CRITICAL,
@@ -21,7 +23,7 @@ PROTOCOLS = {
 }
 
 
-def initialize(app: Flask, config: ConfigObject):
+def initialize(app: Flask, config: ConfigObject, version_info: Version):
     application_log_level = logging.INFO
     log_handler_getters = {
         'ToFile': __get_file_handler,
@@ -36,43 +38,29 @@ def initialize(app: Flask, config: ConfigObject):
 
             app.logger.addHandler(log_handler)
 
+    app.logger.addFilter(LogValuesInjectorFilter(config, version_info))
     app.logger.setLevel(application_log_level)
 
 
 def __get_file_handler(config: ConfigObject) -> RotatingFileHandler:
-    log_format = '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
-
     file_handler = RotatingFileHandler(config.Log.ToFile.PATH,
                                        mode='a',
                                        maxBytes=config.Log.ToFile.MAX_SIXE_IN_MB * (1024 ** 2),
                                        backupCount=config.Log.ToFile.HOLD_COUNT)
     file_handler.setLevel(LOG_LEVELS[config.Log.ToFile.LEVEL])
-    file_handler.setFormatter(logging.Formatter(log_format))
+    file_handler.setFormatter(logging.Formatter(config.Log.ToFile.MESSAGE_FORMAT))
 
     return file_handler
 
 
 def __get_email_handler(config: ConfigObject) -> Utf8SMTPHandler:
-    mail_subject = '{} Failure'.format(config.App.TITLE)
-    log_format = '''
-Message type:       %(levelname)s
-Location:           %(pathname)s:%(lineno)d
-Module:             %(module)s
-Function:           %(funcName)s
-Time:               %(asctime)s
-
-Message:
-
-%(message)s
-'''
-
     mail_handler = Utf8SMTPHandler((config.Log.ToEmail.SERVER, config.Log.ToEmail.PORT),
                                    fromaddr=config.Log.ToEmail.SENDER,
                                    toaddrs=config.Log.ToEmail.RECIPIENTS,
-                                   subject=mail_subject,
+                                   subject_format_string=config.Log.ToEmail.SUBJECT_FORMAT,
                                    credentials=__get_smpt_credentials(config))
     mail_handler.setLevel(LOG_LEVELS[config.Log.ToEmail.LEVEL])
-    mail_handler.setFormatter(logging.Formatter(log_format))
+    mail_handler.setFormatter(logging.Formatter(config.Log.ToEmail.MESSAGE_FORMAT))
 
     return mail_handler
 
@@ -87,4 +75,6 @@ def __get_syslog_handler(config: ConfigObject) -> SysLogHandler:
     syslog_handler = SysLogHandler((config.Log.ToSyslog.ADDRESS, config.Log.ToSyslog.PORT),
                                    socktype=PROTOCOLS[config.Log.ToSyslog.TRANSPORT])
     syslog_handler.setLevel(LOG_LEVELS[config.Log.ToSyslog.LEVEL])
+    syslog_handler.setFormatter(logging.Formatter(config.Log.ToSyslog.MESSAGE_FORMAT))
+
     return syslog_handler

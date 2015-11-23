@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+### Added
+- Configurable log and message format
+
 ### Changed
 - Replaced database migration framework - issue #115
 

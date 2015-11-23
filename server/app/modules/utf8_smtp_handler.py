@@ -1,11 +1,19 @@
 import logging
 import smtplib
 from email.message import EmailMessage
-from email.utils import formatdate
 from logging.handlers import SMTPHandler
 
 
 class Utf8SMTPHandler(SMTPHandler):
+    _subject_format_string = '%()s'
+
+    def __init__(self, *args, subject_format_string: str, **kwargs):
+        super().__init__(*args, subject=None, **kwargs)
+        self._subject_format_string = subject_format_string
+
+    def getSubject(self, record: logging.LogRecord):
+        return self._subject_format_string % record.__dict__
+
     def emit(self, record: logging.LogRecord):
         try:
             port = self.mailport
