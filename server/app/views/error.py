@@ -1,5 +1,6 @@
-from collections import OrderedDict
-from flask import g
+import json
+from pprint import pformat
+
 from flask.ext.restful import Resource, abort
 
 from app.modules.example_data import ExampleErrors
@@ -22,16 +23,19 @@ class ErrorView(Resource):
         except RequestProcessingError as e:
             return abort(422, message=e.message)
 
-        app.logger.error('client-side error: user: {!r}\n{}'.format(g.user, self._format_data(data)))
+        lines = ['Internal Client Error']
+        lines += self.__add_chapter(data, 'stack')
+        lines += self.__add_chapter(data, 'cause')
 
-    def _format_data(self, data: dict) -> str:
-        detailed_error = OrderedDict((
-            ('name', None),
-            ('message', None),
-            ('stack', None),
-            ('cause', None),
-        ))
-        detailed_error.update(data)
+        app.logger.error('\n'.join(lines))
 
-        return '\n'.join(['### {!s} ###\n{!s}\n'.format(key, value)
-                          for (key, value) in detailed_error.items() if value is not None])
+    def __add_chapter(self, data: dict, name: str) -> list:
+        value = data.get(name)
+        if value is None:
+            return []
+
+        return [
+            '',
+            '[{}]'.format(name),
+            '{!s}'.format(value)
+        ]

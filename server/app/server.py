@@ -21,7 +21,7 @@ app.config.update(config['Flask'])
 
 # logging
 if not app.debug and not app.testing and not doc_mode:
-    log.initialize(app, config)
+    log.initialize(app, config, version_info)
 
 check_warnings_in_config(app, config)
 

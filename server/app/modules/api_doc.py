@@ -113,7 +113,10 @@ class ApiDoc:
 
     @classmethod
     def __json_dump_to_lines(cls, data: (list, dict, None)) -> list:
-        return json.dumps(data, sort_keys=True, indent=2).splitlines()
+        try:
+            return json.dumps(data, sort_keys=True, indent=2).splitlines()
+        except TypeError as e:
+            raise TypeError('{!s}; data={!r}'.format(e, data))
 
     @classmethod
     def __rstrip_lines(cls, text: str) -> str:

@@ -39,10 +39,15 @@ DefaultConfig:
 
   Log:
     # The log level (LEVEL) should be: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
+    #
+    # Available attributes in format strings (SUBJECT_FORMAT, MESSAGE_FORMAT):
+    #   https://docs.python.org/3.4/library/logging.html#logrecord-attributes
+    #   source of LogValuesInjectorFilter class (server/app/modules/log_filters.py)
 
     ToFile:
       ENABLED: False
       LEVEL: INFO
+      MESSAGE_FORMAT: "%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]"
 
       PATH: "$SERVER/tmp/storekeeper.log"
       MAX_SIXE_IN_MB: 10
@@ -51,6 +56,35 @@ DefaultConfig:
     ToEmail:
       ENABLED: False
       LEVEL: ERROR
+      SUBJECT_FORMAT: "%(app_title)s %(levelname)s: %(request_path)s"
+      MESSAGE_FORMAT: |
+        ### Process ###
+        Process:            %(processName)s[%(process)d]
+        Thread:             %(threadName)s[%(thread)d]
+        Time:               %(relativeCreated)d ms from start (%(asctime)s)
+
+        ### Code ###
+        Version:            %(app_release)s
+        Location:           %(pathname)s:%(lineno)d
+        Module:             %(name)s
+        Function:           %(funcName)s
+
+        ### Request ###
+        Session:            %(user)s
+        Request:            %(request_method)s %(request_url)s
+        Referer:            %(request_referrer)s
+        Client address:     %(client_address)s
+        User agent:         %(client_user_agent)s
+        Accept languages:   %(client_accept_languages)s
+
+        ### Message ###
+        %(levelname)s: %(message)s
+
+        ### Exception info ###
+        %(exc_info)s
+
+        ### Stack info ###
+        %(stack_info)s
 
       SERVER: bar.com
       PORT: 25
@@ -66,6 +100,7 @@ DefaultConfig:
 
       ENABLED: False
       LEVEL: WARNING
+      MESSAGE_FORMAT: "%(message)s"
 
       ADDRESS: log.bar
       TRANSPORT: TCP
