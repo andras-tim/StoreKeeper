@@ -1,7 +1,7 @@
 from flask.ext.restful import abort
 
 from app.models import Work, WorkItem
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedViewWithDiff
+from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
 from app.modules.common import any_in
 from app.modules.example_data import ExampleWorks, ExampleWorkItems
 from app.serializers import WorkSerializer, WorkDeserializer, WorkItemSerializer, WorkItemDeserializer
@@ -76,7 +76,7 @@ class WorkItemListView(BaseNestedListView):
         return self._post_commit(item)
 
 
-class WorkItemView(BaseNestedViewWithDiff):
+class WorkItemView(BaseNestedView):
     _model = WorkItem
     _parent_model = Work
     _serializer = WorkItemSerializer()
@@ -100,14 +100,16 @@ class WorkItemView(BaseNestedViewWithDiff):
     def put(self, id: int, item_id: int):
         work = self._initialize_parent_item(id)
 
-        self._save_original_before_populate(item_id)
-        item = self._put_populate(work_id=id, id=item_id)
-        changed_fields = self._get_populate_diff(item).keys()
+        original_item = self._get_item_by_id(item_id)
+        self._save_original_before_populate(original_item)
+
+        modified_item = self._put_populate(work_id=id, id=item_id)
+        changed_fields = self._get_populate_diff(modified_item).keys()
 
         if self.__is_tried_to_change_closed(work, changed_fields):
             abort(403, message='Work item was closed.')
 
-        return self._put_commit(item)
+        return self._put_commit(modified_item)
 
     @api_func('Delete work item', item_name='work item', url_tail='/works/1/items/1',
               response=None,

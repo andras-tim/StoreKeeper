@@ -12,6 +12,7 @@ class _BaseModelResource(Resource):
     _model = None
     _serializer = None
     _deserializer = None
+    __differ = ModelDataDiffer()
 
     @property
     def _query(self) -> Query:
@@ -27,6 +28,12 @@ class _BaseModelResource(Resource):
 
     def _serialize_many(self, items) -> list:
         return self._serializer.dump_many(items)
+
+    def _save_original_before_populate(self, item):
+        self.__differ.save_state(item)
+
+    def _get_populate_diff(self, item) -> dict:
+        return self.__differ.get_diff(item)
 
 
 class BaseListView(_BaseModelResource):
@@ -306,16 +313,6 @@ class BaseNestedView(BaseView):
 
     def _initialize_parent_item(self, parent_id: int) -> 'item':
         return _initialize_parent_item(self._parent_model, parent_id)
-
-
-class BaseNestedViewWithDiff(BaseNestedView):
-    __differ = ModelDataDiffer()
-
-    def _save_original_before_populate(self, id: int):
-        self.__differ.save_state(self._get_item_by_id(id))
-
-    def _get_populate_diff(self, item) -> dict:
-        return self.__differ.get_diff(item)
 
 
 def _check_is_missing(item):
