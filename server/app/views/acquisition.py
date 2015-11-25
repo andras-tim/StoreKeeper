@@ -1,5 +1,5 @@
 from app.models import Acquisition, AcquisitionItem
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
+from app.views.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleAcquisitions, ExampleAcquisitionItems
 from app.serializers import AcquisitionSerializer, AcquisitionDeserializer, AcquisitionItemSerializer, \
     AcquisitionItemDeserializer
@@ -31,21 +31,21 @@ class AcquisitionView(BaseView):
     @api_func('Get acquisition', item_name='acquisition', url_tail='/acquisitions/1',
               response=ExampleAcquisitions.ACQUISITION1.get())
     def get(self, id: int):
-        return self._get(id)
+        return self._get(id=id)
 
     @api_func('Update acquisition', item_name='acquisition', url_tail='/acquisitions/1',
               request=ExampleAcquisitions.ACQUISITION1.set(change={'comment': 'A box has been damaged'}),
               response=ExampleAcquisitions.ACQUISITION1.get(change={'comment': 'A box has been damaged'}))
     def put(self, id: int):
-        return self._put(id)
+        return self._put(id=id)
 
     @api_func('Delete acquisition', item_name='acquisition', url_tail='/acquisitions/1',
               response=None)
     def delete(self, id: int):
-        return self._delete(id)
+        return self._delete(id=id)
 
 
-class AcquisitionItemListView(BaseNestedListView):
+class AcquisitionItemListView(BaseListView):
     _model = AcquisitionItem
     _parent_model = Acquisition
     _serializer = AcquisitionItemSerializer()
@@ -68,7 +68,7 @@ class AcquisitionItemListView(BaseNestedListView):
         return self._post(acquisition_id=id)
 
 
-class AcquisitionItemView(BaseNestedView):
+class AcquisitionItemView(BaseView):
     _model = AcquisitionItem
     _parent_model = Acquisition
     _serializer = AcquisitionItemSerializer()

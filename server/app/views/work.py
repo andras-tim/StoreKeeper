@@ -1,7 +1,7 @@
 from flask.ext.restful import abort
 
 from app.models import Work, WorkItem
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
+from app.views.base_views import BaseListView, BaseView
 from app.modules.common import any_in
 from app.modules.example_data import ExampleWorks, ExampleWorkItems
 from app.serializers import WorkSerializer, WorkDeserializer, WorkItemSerializer, WorkItemDeserializer
@@ -33,21 +33,21 @@ class WorkView(BaseView):
     @api_func('Get work', item_name='work', url_tail='/works/1',
               response=ExampleWorks.WORK1.get())
     def get(self, id: int):
-        return self._get(id)
+        return self._get(id=id)
 
     @api_func('Update work', item_name='work', url_tail='/works/1',
               request=ExampleWorks.WORK1.set(change={'comment': 'Something are not finished'}),
               response=ExampleWorks.WORK1.get(change={'comment': 'Something are not finished'}))
     def put(self, id: int):
-        return self._put(id)
+        return self._put(id=id)
 
     @api_func('Delete work', item_name='work', url_tail='/works/1',
               response=None)
     def delete(self, id: int):
-        return self._delete(id)
+        return self._delete(id=id)
 
 
-class WorkItemListView(BaseNestedListView):
+class WorkItemListView(BaseListView):
     _model = WorkItem
     _parent_model = Work
     _serializer = WorkItemSerializer()
@@ -76,7 +76,7 @@ class WorkItemListView(BaseNestedListView):
         return self._post_commit(item)
 
 
-class WorkItemView(BaseNestedView):
+class WorkItemView(BaseView):
     _model = WorkItem
     _parent_model = Work
     _serializer = WorkItemSerializer()

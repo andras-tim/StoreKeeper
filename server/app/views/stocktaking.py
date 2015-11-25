@@ -1,7 +1,7 @@
 from flask.ext.restful import abort
 
 from app.models import Stocktaking, StocktakingItem
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
+from app.views.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleStocktakings, ExampleStocktakingItems
 from app.serializers import StocktakingSerializer, StocktakingDeserializer, StocktakingItemSerializer, \
     StocktakingItemDeserializer
@@ -33,21 +33,21 @@ class StocktakingView(BaseView):
     @api_func('Get stocktaking', item_name='stocktaking', url_tail='/stocktakings/1',
               response=ExampleStocktakings.STOCKTAKING1.get())
     def get(self, id: int):
-        return self._get(id)
+        return self._get(id=id)
 
     @api_func('Update stocktaking', item_name='stocktaking', url_tail='/stocktakings/1',
               request=ExampleStocktakings.STOCKTAKING1.set(change={'comment': 'A box has been damaged'}),
               response=ExampleStocktakings.STOCKTAKING1.get(change={'comment': 'A box has been damaged'}))
     def put(self, id: int):
-        return self._put(id)
+        return self._put(id=id)
 
     @api_func('Delete stocktaking', item_name='stocktaking', url_tail='/stocktakings/1',
               response=None)
     def delete(self, id: int):
-        return self._delete(id)
+        return self._delete(id=id)
 
 
-class StocktakingItemListView(BaseNestedListView):
+class StocktakingItemListView(BaseListView):
     _model = StocktakingItem
     _parent_model = Stocktaking
     _serializer = StocktakingItemSerializer()
@@ -76,7 +76,7 @@ class StocktakingItemListView(BaseNestedListView):
         return self._post_commit(item)
 
 
-class StocktakingItemView(BaseNestedView):
+class StocktakingItemView(BaseView):
     _model = StocktakingItem
     _parent_model = Stocktaking
     _serializer = StocktakingItemSerializer()

@@ -7,7 +7,7 @@ from app.modules.view_helper_for_models import RequestProcessingError
 
 from app.server import config, db
 from app.models import Item, Barcode
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
+from app.views.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleItems, ExampleItemBarcodes, ExampleItemBarcodePrints, \
     ExampleItemSearchResults
 from app.modules.label_printer import LabelPrinter
@@ -88,21 +88,21 @@ class ItemView(BaseView):
     @api_func('Get item', item_name='item', url_tail='/items/1',
               response=ExampleItems.ITEM1.get())
     def get(self, id: int):
-        return self._get(id)
+        return self._get(id=id)
 
     @api_func('Update item', item_name='item', url_tail='/items/1',
               request=ExampleItems.ITEM1.set(),
               response=ExampleItems.ITEM1.get())
     def put(self, id: int):
-        return self._put(id)
+        return self._put(id=id)
 
     @api_func('Delete item', item_name='item', url_tail='/items/1',
               response=None)
     def delete(self, id: int):
-        return self._delete(id)
+        return self._delete(id=id)
 
 
-class ItemBarcodeListView(BaseNestedListView):
+class ItemBarcodeListView(BaseListView):
     _model = Barcode
     _parent_model = Item
     _serializer = ItemBarcodeSerializer()
@@ -141,7 +141,7 @@ class ItemBarcodeListView(BaseNestedListView):
         return self._post_commit(barcode)
 
 
-class ItemBarcodeView(BaseNestedView):
+class ItemBarcodeView(BaseView):
     _model = Barcode
     _parent_model = Item
     _serializer = ItemBarcodeSerializer()
@@ -178,7 +178,7 @@ class ItemBarcodeView(BaseNestedView):
         return self._delete(item_id=item_id, id=id)
 
 
-class ItemBarcodePrintView(BaseNestedView):
+class ItemBarcodePrintView(BaseView):
     _model = Barcode
     _parent_model = Item
     _serializer = ItemBarcodeSerializer()

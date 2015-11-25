@@ -31,16 +31,16 @@ class VendorView(BaseView):
     @api_func('Get vendor', item_name='vendor', url_tail='/vendors/1',
               response=ExampleVendors.VENDOR1.get())
     def get(self, id: int):
-        return self._get(id)
+        return self._get(id=id)
 
     @api_func('Update vendor', item_name='vendor', url_tail='/vendors/1',
               request=ExampleVendors.VENDOR1.set(change={'name': 'new_foo'}),
               response=ExampleVendors.VENDOR1.get(change={'name': 'new_foo'}),
               status_codes={422: '{original} / vendor is already exist'})
     def put(self, id: int):
-        return self._put(id)
+        return self._put(id=id)
 
     @api_func('Delete vendor', item_name='vendor', url_tail='/vendors/1',
               response=None)
     def delete(self, id: int):
-        return self._delete(id)
+        return self._delete(id=id)

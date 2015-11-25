@@ -2,7 +2,7 @@ from flask import g
 from flask.ext.restful import abort
 
 from app.models import User, UserConfig
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedView
+from app.views.base_views import BaseListView, BaseView
 from app.modules.example_data import ExampleUsers, ExampleUserConfigs
 from app.serializers import UserSerializer, UserDeserializer, UserConfigSerializer, UserConfigDeserializer
 from app.views.common import api_func
@@ -44,14 +44,14 @@ class UserView(BaseView):
     @api_func('Get user', item_name='user', url_tail='/users/2',
               response=ExampleUsers.USER1.get())
     def get(self, id: int):
-        return self._get(id)
+        return self._get(id=id)
 
     @api_func('Update user', item_name='user', url_tail='/users/2',
               request=ExampleUsers.USER1.set(change={'username': 'new_foo'}),
               response=ExampleUsers.USER1.get(change={'username': 'new_foo'}),
               status_codes={403: 'user can not modify other users', 422: '{original} / user is already exist'})
     def put(self, id: int):
-        user = self._put_populate(id)
+        user = self._put_populate(id=id)
         if not g.user.admin and not user.id == g.user.id:
             abort(403, message="Can not modify another user")
 
@@ -63,13 +63,13 @@ class UserView(BaseView):
               response=None,
               status_codes={403: 'user can not remove itself'})
     def delete(self, id: int):
-        user = self._delete_get_item(id)
+        user = self._delete_get_item(id=id)
         if user.id == g.user.id:
             abort(403, message="User can not remove itself")
         return self._delete_commit(user)
 
 
-class UserConfigListView(BaseNestedListView):
+class UserConfigListView(BaseListView):
     _model = UserConfig
     _parent_model = User
     _serializer = UserConfigSerializer()
@@ -92,7 +92,7 @@ class UserConfigListView(BaseNestedListView):
         return self._post(user_id=id)
 
 
-class UserConfigView(BaseNestedView):
+class UserConfigView(BaseView):
     _model = UserConfig
     _parent_model = User
     _serializer = UserConfigSerializer()

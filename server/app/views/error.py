@@ -1,6 +1,3 @@
-import json
-from pprint import pformat
-
 from flask.ext.restful import Resource, abort
 
 from app.modules.example_data import ExampleErrors

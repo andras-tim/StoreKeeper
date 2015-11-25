@@ -31,16 +31,16 @@ class CustomerView(BaseView):
     @api_func('Get customer', item_name='customer', url_tail='/customers/1',
               response=ExampleCustomers.CUSTOMER1.get())
     def get(self, id: int):
-        return self._get(id)
+        return self._get(id=id)
 
     @api_func('Update customer', item_name='customer', url_tail='/customers/1',
               request=ExampleCustomers.CUSTOMER1.set(change={'name': 'new_foo'}),
               response=ExampleCustomers.CUSTOMER1.get(change={'name': 'new_foo'}),
               status_codes={422: '{{ original }} / customer is already exist'})
     def put(self, id: int):
-        return self._put(id)
+        return self._put(id=id)
 
     @api_func('Delete customer', item_name='customer', url_tail='/customers/1',
               response=None)
     def delete(self, id: int):
-        return self._delete(id)
+        return self._delete(id=id)
