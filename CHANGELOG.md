@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     (please, follow the [custom upgrade process](http://storekeeper.readthedocs.org/en/v0.3.0/upgrade.html#upgrade-from-v0-2-1-to-v0-3-0))
 
 ### Fixed
+- Fetching Items once on pageload
 - Can not logging errors via email when message contains UTF-8 characters - issue #126
 
 
