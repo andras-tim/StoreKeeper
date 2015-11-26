@@ -88,7 +88,7 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
 .. |Logo| image:: https://raw.githubusercontent.com/andras-tim/StoreKeeper/master/config/img/logo.default.png
 
 .. |Build| image:: https://travis-ci.org/andras-tim/StoreKeeper.svg?branch=master
-   :target: https://travis-ci.org/andras-tim/StoreKeeper
+   :target: https://travis-ci.org/andras-tim/StoreKeeper/branches
    :alt: Build Status
 .. |DependencyStatus| image:: https://gemnasium.com/andras-tim/StoreKeeper.svg
    :target: https://gemnasium.com/andras-tim/StoreKeeper
