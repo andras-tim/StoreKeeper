@@ -1,7 +1,7 @@
 from flask.ext.restful import abort
 
 from app.models import Stocktaking, StocktakingItem
-from app.views.base_views import BaseView
+from app.views.base_view import BaseView
 from app.modules.example_data import ExampleStocktakings, ExampleStocktakingItems
 from app.serializers import StocktakingSerializer, StocktakingDeserializer, StocktakingItemSerializer, \
     StocktakingItemDeserializer

@@ -1,7 +1,7 @@
 from flask.ext.restful import abort
 
 from app.models import Work, WorkItem
-from app.views.base_views import BaseView
+from app.views.base_view import BaseView
 from app.modules.common import any_in
 from app.modules.example_data import ExampleWorks, ExampleWorkItems
 from app.serializers import WorkSerializer, WorkDeserializer, WorkItemSerializer, WorkItemDeserializer

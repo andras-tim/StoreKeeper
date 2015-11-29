@@ -1,7 +1,7 @@
 from flask.ext.restful import abort
 
 from app.models import User, UserConfig
-from app.views.base_views import BaseView
+from app.views.base_view import BaseView
 from app.modules.example_data import ExampleUsers, ExampleUserConfigs
 from app.serializers import UserSerializer, UserDeserializer, UserConfigSerializer, UserConfigDeserializer
 from app.views.common import api_func

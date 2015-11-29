@@ -7,7 +7,7 @@ from app.modules.view_helper_for_models import RequestProcessingError
 
 from app.server import config, db
 from app.models import Item, Barcode
-from app.views.base_views import BaseView
+from app.views.base_view import BaseView
 from app.modules.example_data import ExampleItems, ExampleItemBarcodes, ExampleItemBarcodePrints, \
     ExampleItemSearchResults
 from app.modules.label_printer import LabelPrinter

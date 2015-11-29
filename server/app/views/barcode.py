@@ -1,5 +1,5 @@
 from app.models import Barcode
-from app.views.base_views import BaseView
+from app.views.base_view import BaseView
 from app.modules.example_data import ExampleBarcodes
 from app.serializers import BarcodeSerializer
 from app.views.common import api_func

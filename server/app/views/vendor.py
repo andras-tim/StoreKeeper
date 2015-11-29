@@ -1,5 +1,5 @@
 from app.models import Vendor
-from app.views.base_views import BaseView
+from app.views.base_view import BaseView
 from app.modules.example_data import ExampleVendors
 from app.serializers import VendorSerializer, VendorDeserializer
 from app.views.common import api_func
