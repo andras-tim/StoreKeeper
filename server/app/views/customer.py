@@ -1,11 +1,11 @@
 from app.models import Customer
-from app.views.base_views import BaseListView, BaseView
+from app.views.base_views import BaseView
 from app.modules.example_data import ExampleCustomers
 from app.serializers import CustomerSerializer, CustomerDeserializer
 from app.views.common import api_func
 
 
-class CustomerListView(BaseListView):
+class CustomerListView(BaseView):
     _model = Customer
     _serializer = CustomerSerializer()
     _deserializer = CustomerDeserializer()
@@ -13,7 +13,7 @@ class CustomerListView(BaseListView):
     @api_func('List customers', url_tail='/customers',
               response=[ExampleCustomers.CUSTOMER1.get(), ExampleCustomers.CUSTOMER2.get()])
     def get(self):
-        return self._get()
+        return self._get_list()
 
     @api_func('Create customer', url_tail='/customers',
               request=ExampleCustomers.CUSTOMER1.set(),

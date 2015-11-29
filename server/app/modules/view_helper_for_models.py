@@ -23,8 +23,8 @@ class RequestProcessingError(Exception):
 
 
 class PopulateModelOnSubmit:
-    def __init__(self, item, deserializer: Serializer):
-        self.__item = item
+    def __init__(self, model_object, deserializer: Serializer):
+        self.__model_object = model_object
         self.__deserializer = deserializer
 
         self.errors = None
@@ -43,17 +43,17 @@ class PopulateModelOnSubmit:
 
     def __populate(self):
         """
-        Update item fields by request
+        Update model object fields by request
         """
         data = get_validated_request(self.__deserializer)
 
         field_errors = {}
         for name, value in data.items():
-            if hasattr(self.__item, 'nested_fields__') and name in self.__item.nested_fields__.keys():
-                self.__populate_nested_field(name, value, self.__item.nested_fields__[name], field_errors)
+            if hasattr(self.__model_object, 'nested_fields__') and name in self.__model_object.nested_fields__.keys():
+                self.__populate_nested_field(name, value, self.__model_object.nested_fields__[name], field_errors)
 
             else:
-                setattr(self.__item, name, value)
+                setattr(self.__model_object, name, value)
 
         if field_errors:
             raise RequestProcessingError(field_errors)
@@ -72,7 +72,7 @@ class PopulateModelOnSubmit:
             errors[field_name] = {'id': 'Referred object is not found.'}
             return
 
-        setattr(self.__item, field_name, nested_object)
+        setattr(self.__model_object, field_name, nested_object)
         return
 
 

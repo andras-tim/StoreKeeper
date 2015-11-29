@@ -1,11 +1,11 @@
 from app.models import Unit
-from app.views.base_views import BaseListView, BaseView
+from app.views.base_views import BaseView
 from app.modules.example_data import ExampleUnits
 from app.serializers import UnitSerializer, UnitDeserializer
 from app.views.common import api_func
 
 
-class UnitListView(BaseListView):
+class UnitListView(BaseView):
     _model = Unit
     _serializer = UnitSerializer()
     _deserializer = UnitDeserializer()
@@ -13,7 +13,7 @@ class UnitListView(BaseListView):
     @api_func('List units', url_tail='/units',
               response=[ExampleUnits.UNIT1.get(), ExampleUnits.UNIT2.get()])
     def get(self):
-        return self._get()
+        return self._get_list()
 
     @api_func('Create unit', url_tail='/units',
               request=ExampleUnits.UNIT1.set(),

@@ -1,11 +1,11 @@
 from app.models import Vendor
-from app.views.base_views import BaseListView, BaseView
+from app.views.base_views import BaseView
 from app.modules.example_data import ExampleVendors
 from app.serializers import VendorSerializer, VendorDeserializer
 from app.views.common import api_func
 
 
-class VendorListView(BaseListView):
+class VendorListView(BaseView):
     _model = Vendor
     _serializer = VendorSerializer()
     _deserializer = VendorDeserializer()
@@ -13,7 +13,7 @@ class VendorListView(BaseListView):
     @api_func('List vendors', url_tail='/vendors',
               response=[ExampleVendors.VENDOR1.get(), ExampleVendors.VENDOR2.get()])
     def get(self):
-        return self._get()
+        return self._get_list()
 
     @api_func('Create vendor', url_tail='/vendors',
               request=ExampleVendors.VENDOR1.set(),
