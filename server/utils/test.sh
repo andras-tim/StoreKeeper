@@ -61,7 +61,7 @@ function get_parallel_run_options()
 
 
 # Main
-cd "${BASEDIR}"
+cd -P "${BASEDIR}"
 
 FAST=false
 QUICK=false
