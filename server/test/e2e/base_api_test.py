@@ -17,6 +17,10 @@ class InvalidDataFormatException(Exception):
     pass
 
 
+class SetUpException(Exception):
+    pass
+
+
 class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
     """
     Super class of API based tests
@@ -144,7 +148,7 @@ class CommonApiTest(LowLevelCommonApiTest):
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
 
-    def assertApiPost(self, data: dict, endpoint: (str, None)=None, url_suffix: str='',
+    def assertApiPost(self, data: (dict, FilterableDict), endpoint: (str, None)=None, url_suffix: str='',
                       expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
         __tracebackhide__ = True
         self.assertApiRequest('post', self.__get_url(endpoint, url_suffix=url_suffix),
@@ -152,8 +156,9 @@ class CommonApiTest(LowLevelCommonApiTest):
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
 
-    def assertApiPut(self, id: (int, str), data: (dict, None)=None, endpoint: (str, None)=None, url_suffix: str='',
-                     expected_data: (str, list, dict, None)=None, expected_status_codes: (int, list)=200):
+    def assertApiPut(self, id: (int, str), data: (dict, FilterableDict, None)=None, endpoint: (str, None)=None,
+                     url_suffix: str='', expected_data: (str, list, dict, None)=None,
+                     expected_status_codes: (int, list)=200):
         __tracebackhide__ = True
         self.assertApiRequest('put', self.__get_url(endpoint, id, url_suffix),
                               data=self.__extract_data(data, 'set'),
@@ -168,9 +173,22 @@ class CommonApiTest(LowLevelCommonApiTest):
                               expected_status_codes=expected_status_codes)
 
     def _fill_up(self, list_of_endpoint_and_objects: list):
+        __tracebackhide__ = True
         for endpoint, push_objects in list_of_endpoint_and_objects:
             for push_object in push_objects:
-                self.assertApiPost(data=push_object, endpoint=endpoint)
+                self.__push_for_fill_up(data=push_object, endpoint=endpoint)
+
+    def __push_for_fill_up(self, data: (dict, FilterableDict), endpoint: str):
+        __tracebackhide__ = True
+        try:
+            self.assertApiPost(data=data, endpoint=endpoint)
+        except AssertionError as e:
+            raise SetUpException(
+                'Can not prepare database for tests; {details!r}\n---\n{exception!s}\n---'.format(
+                    details={'data': data, 'endpoint': endpoint},
+                    exception=e
+                )
+            )
 
     def __extract_data(self, data: (dict, FilterableDict, list, None), function: str) -> (list, dict, None):
         if type(data) not in (tuple, list):
