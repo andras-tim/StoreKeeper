@@ -18,21 +18,21 @@ class BasicSerializer:
     datetime_fields = ()
     nested_fields = {}
 
-    def dump(self, item) -> dict:
-        if item is None:
+    def dump(self, model_object) -> dict:
+        if model_object is None:
             return self._dump_nones()
 
-        result = dict((name, getattr(item, name)) for name in self.fields)
+        result = dict((name, getattr(model_object, name)) for name in self.fields)
 
         for name in self.datetime_fields:
-            date = getattr(item, name)
+            date = getattr(model_object, name)
             if date is None:
                 result[name] = None
             else:
                 result[name] = date.strftime(self.REST_API_DATE_FORMAT)
 
         for name, serializer in self.nested_fields.items():
-            result[name] = serializer.dump(getattr(item, name))
+            result[name] = serializer.dump(getattr(model_object, name))
 
         return result
 
