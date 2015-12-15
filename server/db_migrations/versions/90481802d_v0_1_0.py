@@ -13,7 +13,6 @@ down_revision = None
 from alembic import op
 import sqlalchemy as sa
 
-from app.server import db
 from app.models import User
 
 
@@ -21,8 +20,10 @@ def add_default_admin_user():
     user = User(username="admin", email="admin@localhost", admin=True)
     user.set_password("admin")
 
-    db.session.add(user)
-    db.session.commit()
+    user_fields = ('username', 'password_hash', 'email', 'admin')
+    user_dict = dict((field, getattr(user, field)) for field in user_fields)
+
+    op.bulk_insert(User.__table__, [user_dict])
 
 
 def upgrade():
