@@ -1,10 +1,15 @@
 from datetime import datetime
+from sqlalchemy import orm
 
 from app.server import db, bcrypt
 from app.modules.view_helper_for_models import nested_fields
 
 
 class User(db.Model):
+    __versioned__ = {
+        'exclude': ('password_hash', )
+    }
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False, unique=True, index=True)
     password_hash = db.Column(db.String(80), nullable=False)
@@ -42,6 +47,8 @@ class User(db.Model):
 
 @nested_fields(user=User)
 class UserConfig(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(40), index=True, nullable=False)
@@ -58,6 +65,8 @@ class UserConfig(db.Model):
 
 
 class Vendor(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), nullable=False, unique=True)
 
@@ -68,6 +77,8 @@ class Vendor(db.Model):
 
 
 class Unit(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     unit = db.Column(db.String(20), nullable=False, unique=True)
 
@@ -76,6 +87,8 @@ class Unit(db.Model):
 
 
 class Customer(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), nullable=False, unique=True)
 
@@ -85,6 +98,8 @@ class Customer(db.Model):
 
 @nested_fields(vendor=Vendor, unit=Unit)
 class Item(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), nullable=False, unique=True)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'), nullable=False)
@@ -104,6 +119,8 @@ class Item(db.Model):
 
 @nested_fields(item=Item)
 class Barcode(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     barcode = db.Column(db.String(15), nullable=False, unique=True, index=True)
     quantity = db.Column(db.Float, nullable=False, default=1.0)
@@ -120,6 +137,8 @@ class Barcode(db.Model):
 
 @nested_fields(customer=Customer, outbound_close_user=User, returned_close_user=User)
 class Work(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     comment = db.Column(db.Text)
@@ -162,6 +181,8 @@ class Work(db.Model):
 
 @nested_fields(work=Work, item=Item)
 class WorkItem(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     work_id = db.Column(db.Integer, db.ForeignKey('work.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
@@ -180,6 +201,8 @@ class WorkItem(db.Model):
 
 
 class Acquisition(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     comment = db.Column(db.Text)
@@ -192,6 +215,8 @@ class Acquisition(db.Model):
 
 @nested_fields(acquisition=Acquisition, item=Item)
 class AcquisitionItem(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     acquisition_id = db.Column(db.Integer, db.ForeignKey('acquisition.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
@@ -209,6 +234,8 @@ class AcquisitionItem(db.Model):
 
 
 class Stocktaking(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     comment = db.Column(db.Text)
@@ -236,6 +263,8 @@ class Stocktaking(db.Model):
 
 @nested_fields(stocktaking=Stocktaking, item=Item)
 class StocktakingItem(db.Model):
+    __versioned__ = {}
+
     id = db.Column(db.Integer, primary_key=True)
     stocktaking_id = db.Column(db.Integer, db.ForeignKey('stocktaking.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
@@ -250,3 +279,7 @@ class StocktakingItem(db.Model):
 
     def __repr__(self)-> str:
         return '{!s} [{!r}]'.format(self.id, self.item)
+
+
+# Setup SQLAlchemy-Continuum tables and hooks
+orm.configure_mappers()

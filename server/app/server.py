@@ -2,6 +2,7 @@ from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
+from sqlalchemy_continuum import make_versioned, plugins
 
 from app import test_mode, doc_mode, log, static
 from app.config import get_config, check_warnings_in_config
@@ -37,6 +38,9 @@ api = RestfulApiWithoutSimpleAuth(app)
 
 # flask-bcrypt
 bcrypt = Bcrypt(app)
+
+# SQLAlchemy-Continuum
+make_versioned(plugins=[plugins.FlaskPlugin()])
 
 # Init views (must be after common resources)
 import app.views as views

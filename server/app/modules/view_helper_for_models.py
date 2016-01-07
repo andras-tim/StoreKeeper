@@ -163,7 +163,7 @@ class ModelDataDiffer:
         if self.__nested_fields:
             return
 
-        relationships = inspect(model.__class__).relationships
+        relationships = [rel for rel in inspect(model.__class__).relationships if rel.key != 'versions']
         for relationship in relationships:
             nested_field_name = relationship.key
             for local_field, remote_field in relationship.local_remote_pairs:

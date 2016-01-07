@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][unreleased]
 ### Added
 - Configurable log and message format
+- Start logging changes (without api export and WebUI currently) - issue #128
 
 ### Changed
 - Replaced database migration framework - issue #115
