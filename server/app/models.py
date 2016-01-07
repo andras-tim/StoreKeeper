@@ -169,7 +169,7 @@ class WorkItem(db.Model):
     returned_quantity = db.Column(db.Float)
 
     work = db.relationship('Work', lazy='joined')
-    item = db.relationship('Item', lazy='joined')
+    item = db.relationship('Item', lazy='joined')  # required for _apply_quantity_changes()
 
     __table_args__ = (
         db.Index('work_item__can_not_add_one_item_twice', 'work_id', 'item_id', unique=True),
@@ -198,7 +198,7 @@ class AcquisitionItem(db.Model):
     quantity = db.Column(db.Float, nullable=False)
 
     acquisition = db.relationship('Acquisition', lazy='joined')
-    item = db.relationship('Item', lazy='joined')
+    item = db.relationship('Item', lazy='joined')  # required for _apply_quantity_changes()
 
     __table_args__ = (
         db.Index('acquisition_item__can_not_add_one_item_twice', 'acquisition_id', 'item_id', unique=True),
@@ -242,7 +242,7 @@ class StocktakingItem(db.Model):
     quantity = db.Column(db.Float, nullable=False)
 
     stocktaking = db.relationship('Stocktaking', lazy='joined')
-    item = db.relationship('Item', lazy='joined')
+    item = db.relationship('Item', lazy='joined')  # required for _apply_quantity_changes()
 
     __table_args__ = (
         db.Index('stocktaking_item__can_not_add_one_item_twice', 'stocktaking_id', 'item_id', unique=True),

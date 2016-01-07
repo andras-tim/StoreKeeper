@@ -21,9 +21,9 @@ appViewControllers.controller('ItemsController', ['$rootScope', '$scope', '$wind
                 });
         }
 
-        function periodicallyCheckItemChanges() {
+        function periodicallyUpdateItems() {
             updateItems();
-            updateTimer = $window.setTimeout(periodicallyCheckItemChanges, 300000); // 5 min
+            updateTimer = $window.setTimeout(periodicallyUpdateItems, 300000); // 5 min
         }
 
         updateItemsDestroyer = $rootScope.$on('updateItems', updateItems);
@@ -32,8 +32,7 @@ appViewControllers.controller('ItemsController', ['$rootScope', '$scope', '$wind
             updateItemsDestroyer();
         });
 
-        periodicallyCheckItemChanges();
-        updateItems();
+        periodicallyUpdateItems();
 
         $scope.openItem = openItem;
     }]);

@@ -1,14 +1,14 @@
 from flask.ext.restful import abort
 
 from app.models import Work, WorkItem
-from app.views.base_views import BaseListView, BaseView, BaseNestedListView, BaseNestedViewWithDiff
+from app.views.base_view import BaseView
 from app.modules.common import any_in
 from app.modules.example_data import ExampleWorks, ExampleWorkItems
 from app.serializers import WorkSerializer, WorkDeserializer, WorkItemSerializer, WorkItemDeserializer
 from app.views.common import api_func
 
 
-class WorkListView(BaseListView):
+class WorkListView(BaseView):
     _model = Work
     _serializer = WorkSerializer()
     _deserializer = WorkDeserializer()
@@ -16,7 +16,7 @@ class WorkListView(BaseListView):
     @api_func('List works', url_tail='/works',
               response=[ExampleWorks.WORK1.get(), ExampleWorks.WORK2.get()])
     def get(self):
-        return self._get()
+        return self._get_list()
 
     @api_func('Create work', url_tail='/works',
               request=ExampleWorks.WORK1.set(),
@@ -33,21 +33,21 @@ class WorkView(BaseView):
     @api_func('Get work', item_name='work', url_tail='/works/1',
               response=ExampleWorks.WORK1.get())
     def get(self, id: int):
-        return self._get(id)
+        return self._get(id=id)
 
     @api_func('Update work', item_name='work', url_tail='/works/1',
               request=ExampleWorks.WORK1.set(change={'comment': 'Something are not finished'}),
               response=ExampleWorks.WORK1.get(change={'comment': 'Something are not finished'}))
     def put(self, id: int):
-        return self._put(id)
+        return self._put(id=id)
 
     @api_func('Delete work', item_name='work', url_tail='/works/1',
               response=None)
     def delete(self, id: int):
-        return self._delete(id)
+        return self._delete(id=id)
 
 
-class WorkItemListView(BaseNestedListView):
+class WorkItemListView(BaseView):
     _model = WorkItem
     _parent_model = Work
     _serializer = WorkItemSerializer()
@@ -57,8 +57,8 @@ class WorkItemListView(BaseNestedListView):
               response=[ExampleWorkItems.ITEM1.get(), ExampleWorkItems.ITEM2.get()],
               queries={'id': 'ID of work'})
     def get(self, id: int):
-        self._initialize_parent_item(id)
-        return self._get(work_id=id)
+        self._initialize_parent_model_object(id)
+        return self._get_list(work_id=id)
 
     @api_func('Create work item', url_tail='/works/1/items',
               request=ExampleWorkItems.ITEM1.set(),
@@ -67,7 +67,7 @@ class WorkItemListView(BaseNestedListView):
                             422: '{{ original }} / can not add one item twice'},
               queries={'id': 'ID of work'})
     def post(self, id: int):
-        work = self._initialize_parent_item(id)
+        work = self._initialize_parent_model_object(id)
         item = self._post_populate(work_id=id)
 
         if work.are_items_frozen():
@@ -76,7 +76,7 @@ class WorkItemListView(BaseNestedListView):
         return self._post_commit(item)
 
 
-class WorkItemView(BaseNestedViewWithDiff):
+class WorkItemView(BaseView):
     _model = WorkItem
     _parent_model = Work
     _serializer = WorkItemSerializer()
@@ -87,7 +87,7 @@ class WorkItemView(BaseNestedViewWithDiff):
               queries={'id': 'ID of work',
                        'item_id': 'ID of selected work item for get'})
     def get(self, id: int, item_id: int):
-        self._initialize_parent_item(id)
+        self._initialize_parent_model_object(id)
         return self._get(work_id=id, id=item_id)
 
     @api_func('Update work item', item_name='work item', url_tail='/works/1/items/1',
@@ -98,16 +98,18 @@ class WorkItemView(BaseNestedViewWithDiff):
               queries={'id': 'ID of work',
                        'item_id': 'ID of selected work item for get'})
     def put(self, id: int, item_id: int):
-        work = self._initialize_parent_item(id)
+        work = self._initialize_parent_model_object(id)
 
-        self._save_original_before_populate(item_id)
-        item = self._put_populate(work_id=id, id=item_id)
-        changed_fields = self._get_populate_diff(item).keys()
+        original_item = self._get_model_object(id=item_id)
+        self._save_original_before_populate(original_item)
+
+        modified_item = self._put_populate(work_id=id, id=item_id)
+        changed_fields = self._get_populate_diff(modified_item).keys()
 
         if self.__is_tried_to_change_closed(work, changed_fields):
             abort(403, message='Work item was closed.')
 
-        return self._put_commit(item)
+        return self._put_commit(modified_item)
 
     @api_func('Delete work item', item_name='work item', url_tail='/works/1/items/1',
               response=None,
@@ -115,7 +117,7 @@ class WorkItemView(BaseNestedViewWithDiff):
               queries={'id': 'ID of work',
                        'item_id': 'ID of selected work item for get'})
     def delete(self, id: int, item_id: int):
-        work = self._initialize_parent_item(id)
+        work = self._initialize_parent_model_object(id)
 
         if work.are_items_frozen():
             abort(403, message='Can not delete item.')
@@ -142,20 +144,20 @@ class WorkCloseOutboundView(BaseView):
               status_codes={422: '{{ original }} / outbound items have been closed /'
                                  'insufficient quantities for close the outbound work items'})
     def put(self, id: int):
-        work = self._get_item_by_id(id)
+        work = self._get_model_object(id=id)
 
         if work.are_outbound_items_closed():
             abort(422, message='Outbound items have been closed.')
 
         work_items = WorkItem.query.filter_by(work_id=work.id).all()
-        self._apply_item_changes(
-            model_items=work_items,
+        self._apply_quantity_changes(
+            nested_model_objects=work_items,
             insufficient_quantity_error_message='insufficient quantities for close the outbound work items',
-            item_quantity_field='outbound_quantity',
+            quantity_field_of_object='outbound_quantity',
             multiplier_for_sign=-1,
         )
 
-        self._close_items(work.close_outbound_items)
+        self._call_with_handle_errors(work.close_outbound_items, self._current_user)
         return self._put_commit(work)
 
 
@@ -170,7 +172,7 @@ class WorkCloseReturnedView(BaseView):
                                  'returned items have been closed /'
                                  'insufficient quantities for close the returned work items'})
     def put(self, id: int):
-        work = self._get_item_by_id(id)
+        work = self._get_model_object(id=id)
 
         if not work.are_outbound_items_closed():
             abort(422, message='Outbound items have not been closed.')
@@ -178,11 +180,11 @@ class WorkCloseReturnedView(BaseView):
             abort(422, message='Returned items have been closed.')
 
         work_items = WorkItem.query.filter_by(work_id=work.id).all()
-        self._apply_item_changes(
-            model_items=work_items,
+        self._apply_quantity_changes(
+            nested_model_objects=work_items,
             insufficient_quantity_error_message='insufficient quantities for close the returned work items',
-            item_quantity_field='returned_quantity',
+            quantity_field_of_object='returned_quantity',
         )
 
-        self._close_items(work.close_returned_items)
+        self._call_with_handle_errors(work.close_returned_items, self._current_user)
         return self._put_commit(work)

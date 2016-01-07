@@ -25,6 +25,7 @@ class CommonSessionTest(CommonApiTest):
         cls.__set_testing_mode(True)
 
     def _fill_up(self, list_of_endpoint_and_objects: list):
+        __tracebackhide__ = True
         if not self.INIT_PUSH:
             return
 
