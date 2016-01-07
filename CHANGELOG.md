@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+
+
+## [0.3.0] - 2016-01-07
 ### Added
 - Configurable log and message format
 - Start logging changes (without api export and WebUI currently) - issue #128
@@ -14,6 +17,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     (please, follow the [custom upgrade process](http://storekeeper.readthedocs.org/en/v0.3.0/upgrade.html#upgrade-from-v0-2-1-to-v0-3-0))
 
 ### Fixed
+- Sometimes left tooltips - issue #86
 - Fetching Items once on pageload
 - Can not logging errors via email when message contains UTF-8 characters - issue #126
 
@@ -64,6 +68,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Can use barcode printer to create labels
 
 
-[unreleased]: https://github.com/andras-tim/StoreKeeper/compare/v0.2.1...HEAD
+[unreleased]: https://github.com/andras-tim/StoreKeeper/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/andras-tim/StoreKeeper/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/andras-tim/StoreKeeper/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/andras-tim/StoreKeeper/compare/v0.1.0...v0.2.0
