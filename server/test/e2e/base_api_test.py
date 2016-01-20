@@ -141,10 +141,12 @@ class CommonApiTest(LowLevelCommonApiTest):
         super().setUp()
         self._fill_up(self.INIT_PUSH)
 
-    def assertApiGet(self, id: (int, str, None)=None, endpoint: (str, None)=None, url_suffix: str='',
+    def assertApiGet(self, id: (int, str, None)=None, data: (dict, FilterableDict, None)=None,
+                     endpoint: (str, None)=None, url_suffix: str='',
                      expected_data: (list, dict, None)=None, expected_status_codes: (int, list)=200):
         __tracebackhide__ = True
         self.assertApiRequest('get', self.__get_url(endpoint, id, url_suffix),
+                              data=self.__extract_data(data, 'set'),
                               expected_data=self.__extract_data(expected_data, 'get'),
                               expected_status_codes=expected_status_codes)
 
