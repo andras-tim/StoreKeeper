@@ -110,7 +110,7 @@ class ItemBarcodeListView(BaseView):
 
     @api_func('List barcodes.', url_tail='/items/1/barcodes',
               response=[ExampleItemBarcodes.BARCODE1.get(), ExampleItemBarcodes.BARCODE2.get()],
-              queries={'id': 'ID of item'})
+              params={'id': 'ID of item'})
     def get(self, id: int):
         self._initialize_parent_model_object(id)
         return self._get_list(item_id=id)
@@ -122,7 +122,7 @@ class ItemBarcodeListView(BaseView):
                                  'can not generate unique new barcode / '
                                  'can not set non-main barcode as master barcode / '
                                  'can not set more than one master barcode to an item'},
-              queries={'id': 'ID of item'})
+              params={'id': 'ID of item'})
     def post(self, id: int):
         item = self._initialize_parent_model_object(id)
         barcode = self._post_populate(item_id=id)
@@ -149,8 +149,8 @@ class ItemBarcodeView(BaseView):
 
     @api_func('Get barcode', item_name='barcode', url_tail='/items/1/barcodes/1',
               response=ExampleItemBarcodes.BARCODE1.get(),
-              queries={'item_id': 'ID of item',
-                       'id': 'ID of selected barcode for get'})
+              params={'item_id': 'ID of item',
+                      'id': 'ID of selected barcode for get'})
     def get(self, item_id: int, id: int):
         self._initialize_parent_model_object(item_id)
         return self._get(item_id=item_id, id=id)
@@ -161,8 +161,8 @@ class ItemBarcodeView(BaseView):
               status_codes={422: '{{ original }} / can not add one barcode twice / '
                                  'can not set non-main barcode as master barcode / '
                                  'can not set more than one master barcode to an item'},
-              queries={'item_id': 'ID of item',
-                       'id': 'ID of selected barcode for put'})
+              params={'item_id': 'ID of item',
+                      'id': 'ID of selected barcode for put'})
     def put(self, item_id: int, id: int):
         self._initialize_parent_model_object(item_id)
         barcode = self._put_populate(item_id=item_id, id=id)
@@ -171,8 +171,8 @@ class ItemBarcodeView(BaseView):
 
     @api_func('Delete barcode', item_name='barcode', url_tail='/items/1/barcodes/1',
               response=None,
-              queries={'item_id': 'ID of item',
-                       'id': 'ID of selected barcode for delete'})
+              params={'item_id': 'ID of item',
+                      'id': 'ID of selected barcode for delete'})
     def delete(self, item_id: int, id: int):
         self._initialize_parent_model_object(item_id)
         return self._delete(item_id=item_id, id=id)
@@ -188,8 +188,8 @@ class ItemBarcodePrintView(BaseView):
               item_name='barcode', url_tail='/items/1/barcodes/1/print',
               response_content_type='application/pdf',
               response_filename='label__SK642031__4f0ff51c73703295643a325e55bc7ed2d94aa03d.pdf',
-              queries={'item_id': 'ID of item',
-                       'id': 'ID of selected barcode for get'})
+              params={'item_id': 'ID of item',
+                      'id': 'ID of selected barcode for get'})
     def get(self, item_id: int, id: int):
         self._initialize_parent_model_object(item_id)
         barcode = self._get_model_object(item_id=item_id, id=id)
@@ -202,8 +202,8 @@ class ItemBarcodePrintView(BaseView):
               request=ExampleItemBarcodePrints.PRINT1.set(),
               response=None,
               status_codes={400: 'missing pycups python3 module'},
-              queries={'item_id': 'ID of item',
-                       'id': 'ID of selected barcode for get'})
+              params={'item_id': 'ID of item',
+                      'id': 'ID of selected barcode for get'})
     def put(self, item_id: int, id: int):
         self._initialize_parent_model_object(item_id)
         try:

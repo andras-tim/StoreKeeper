@@ -76,7 +76,7 @@ class UserConfigListView(BaseView):
 
     @api_func('List user items.', url_tail='/users/2/config',
               response=[ExampleUserConfigs.CONFIG1.get(), ExampleUserConfigs.CONFIG2.get()],
-              queries={'id': 'ID of user'})
+              params={'id': 'ID of user'})
     def get(self, id: int):
         self._initialize_parent_model_object(id)
         return self._get_list(user_id=id)
@@ -85,7 +85,7 @@ class UserConfigListView(BaseView):
               request=ExampleUserConfigs.CONFIG1.set(),
               response=ExampleUserConfigs.CONFIG1.get(),
               status_codes={422: '{{ original }} / can not add one item twice'},
-              queries={'id': 'ID of user'})
+              params={'id': 'ID of user'})
     def post(self, id: int):
         self._initialize_parent_model_object(id)
         return self._post(user_id=id)
@@ -99,8 +99,8 @@ class UserConfigView(BaseView):
 
     @api_func('Get user item', item_name='user item', url_tail='/users/2/config/lang',
               response=ExampleUserConfigs.CONFIG1.get(),
-              queries={'id': 'ID of user',
-                       'name': 'Name of selected user config value for get'})
+              params={'id': 'ID of user',
+                      'name': 'Name of selected user config value for get'})
     def get(self, id: int, name: str):
         self._initialize_parent_model_object(id)
         return self._get(user_id=id, name=name)
@@ -109,16 +109,16 @@ class UserConfigView(BaseView):
               request=ExampleUserConfigs.CONFIG1.set(),
               response=ExampleUserConfigs.CONFIG1.get(),
               status_codes={422: '{{ original }} / can not use one config name twice'},
-              queries={'id': 'ID of user',
-                       'name': 'Name of selected user config value for put'})
+              params={'id': 'ID of user',
+                      'name': 'Name of selected user config value for put'})
     def put(self, id: int, name: str):
         self._initialize_parent_model_object(id)
         return self._put(user_id=id, name=name)
 
     @api_func('Delete user item', item_name='user item', url_tail='/users/2/config/lang',
               response=None,
-              queries={'id': 'ID of user',
-                       'name': 'Name of selected user config value for delete'})
+              params={'id': 'ID of user',
+                      'name': 'Name of selected user config value for delete'})
     def delete(self, id: int, name: str):
         self._initialize_parent_model_object(id)
         return self._delete(user_id=id, name=name)

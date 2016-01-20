@@ -53,7 +53,7 @@ class AcquisitionItemListView(BaseView):
 
     @api_func('List acquisition items', url_tail='/acquisitions/1/items',
               response=[ExampleAcquisitionItems.ITEM1.get(), ExampleAcquisitionItems.ITEM2.get()],
-              queries={'id': 'ID of acquisition'})
+              params={'id': 'ID of acquisition'})
     def get(self, id: int):
         self._initialize_parent_model_object(id)
         return self._get_list(acquisition_id=id)
@@ -62,7 +62,7 @@ class AcquisitionItemListView(BaseView):
               request=ExampleAcquisitionItems.ITEM1.set(),
               response=ExampleAcquisitionItems.ITEM1.get(),
               status_codes={422: '{{ original }} / can not add one item twice'},
-              queries={'id': 'ID of acquisition'})
+              params={'id': 'ID of acquisition'})
     def post(self, id: int):
         self._initialize_parent_model_object(id)
         return self._post(acquisition_id=id)
@@ -76,8 +76,8 @@ class AcquisitionItemView(BaseView):
 
     @api_func('Get acquisition item', item_name='acquisition item', url_tail='/acquisitions/1/items/1',
               response=ExampleAcquisitionItems.ITEM1.get(),
-              queries={'id': 'ID of acquisition',
-                       'item_id': 'ID of selected acquisition item for get'})
+              params={'id': 'ID of acquisition',
+                      'item_id': 'ID of selected acquisition item for get'})
     def get(self, id: int, item_id: int):
         self._initialize_parent_model_object(id)
         return self._get(acquisition_id=id, id=item_id)
@@ -86,16 +86,16 @@ class AcquisitionItemView(BaseView):
               request=ExampleAcquisitionItems.ITEM1.set(),
               response=ExampleAcquisitionItems.ITEM1.get(),
               status_codes={422: '{{ original }} / can not add one item twice'},
-              queries={'id': 'ID of acquisition',
-                       'item_id': 'ID of selected acquisition item for get'})
+              params={'id': 'ID of acquisition',
+                      'item_id': 'ID of selected acquisition item for get'})
     def put(self, id: int, item_id: int):
         self._initialize_parent_model_object(id)
         return self._put(acquisition_id=id, id=item_id)
 
     @api_func('Delete acquisition item', item_name='acquisition item', url_tail='/acquisitions/1/items/1',
               response=None,
-              queries={'id': 'ID of acquisition',
-                       'item_id': 'ID of selected acquisition item for get'})
+              params={'id': 'ID of acquisition',
+                      'item_id': 'ID of selected acquisition item for get'})
     def delete(self, id: int, item_id: int):
         self._initialize_parent_model_object(id)
         return self._delete(acquisition_id=id, id=item_id)

@@ -34,12 +34,12 @@ class TestApiDoc(ApiDocTestCase):
                                  response_header={'String2': 'Coconut', 'Number2': 222},
                                  response_content_type='apple',
                                  response=[{'orange': 4}, 5], response_status=201,
-                                 queries={'foobar_id': 'Foobar selector'},
+                                 params={'foobar_id': 'Foobar selector'},
                                  status_codes={201: '', 404: 'something is missing'})
         self.assertApiDoc(results, """
         Test command
 
-        :query foobar_id: Foobar selector
+        :param foobar_id: Foobar selector
 
         :statuscode 201: no error
         :statuscode 404: something is missing
