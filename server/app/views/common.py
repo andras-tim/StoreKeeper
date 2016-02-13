@@ -64,7 +64,7 @@ def api_func(title: str,
              response_filename: (str, None)=None,
              response: (str, list, dict, None)=None,
              response_status: (int, None)=None,
-             queries: (dict, None)=None,
+             params: (dict, None)=None,
              status_codes: (dict, None)=None,
              login_required: bool=True,
              admin_required: bool=False) -> callable:
@@ -88,7 +88,7 @@ def api_func(title: str,
             response_header=__get_header(response_filename),
             response=__get_content(response, response_filename),
             response_status=response_status,
-            queries=__get_queries(func, args),
+            params=__get_params(func, args),
             status_codes=__get_status_codes(func, args, login_required, response_status)
         )
         return decorated_func
@@ -117,12 +117,12 @@ def api_func(title: str,
             return response_status or 201
         return response_status or 200
 
-    def __get_queries(func: callable, args: set) -> dict:
-        new_queries = queries or {}
+    def __get_params(func: callable, args: set) -> dict:
+        new_params = params or {}
 
-        if 'id' in args and 'id' not in new_queries.keys():
-            new_queries['id'] = 'ID of selected {!s} for {!s}'.format(item_name, func.__name__)
-        return new_queries
+        if 'id' in args and 'id' not in new_params.keys():
+            new_params['id'] = 'ID of selected {!s} for {!s}'.format(item_name, func.__name__)
+        return new_params
 
     def __get_status_codes(func: callable, args: set, login_required: bool, response_status: int) -> dict:
         new_status_codes = status_codes or {}

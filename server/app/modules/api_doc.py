@@ -9,8 +9,8 @@ from app.server import config
 class ApiDoc:
     __API_CALL_TEMPLATE = Template("""
     {{ title }}
-    {% for query in queries %}
-    :query {{ query['name'] }}: {{ query['description'] }}{% endfor %}
+    {% for param in params %}
+    :param {{ param['name'] }}: {{ param['description'] }}{% endfor %}
     {% for status in statuses %}
     :statuscode {{ status['code'] }}: {{ status['description'] }}{% endfor %}
 
@@ -49,14 +49,14 @@ class ApiDoc:
     def get_doc(cls, title: str, command: str, url_tail: str, request_header: (dict, None)=None,
                 request_content_type: str='application/json', request: (list, dict, None)=None,
                 response_header: (dict, None)=None, response_content_type: str='application/json',
-                response: (list, dict, None)=None, response_status: int=200, queries: (dict, None)=None,
+                response: (list, dict, None)=None, response_status: int=200, params: (dict, None)=None,
                 status_codes: (dict, None)=None) -> str:
         doc = cls.__API_CALL_TEMPLATE.render(
             title=title,
             command=command.upper(),
             url_tail=url_tail,
             app_name=config.App.NAME,
-            queries=cls.__format_queries(queries),
+            params=cls.__format_parameters(params),
             statuses=cls.__format_status_codes(status_codes),
             request_header=cls.__format_custom_header(request_header),
             request_content_type=request_content_type,
@@ -69,10 +69,10 @@ class ApiDoc:
         return cls.__remove_double_blank_lines(cls.__rstrip_lines(doc))
 
     @classmethod
-    def __format_queries(cls, queries: (dict, None)) -> list:
-        queries = queries or {}
-        lines = [{'name': name, 'description': description} for name, description in queries.items()]
-        return sorted(lines, key=itemgetter('name'))
+    def __format_parameters(cls, parameters: (dict, None)) -> list:
+        if not parameters:
+            return []
+        return [{'name': name, 'description': parameters[name]} for name in sorted(parameters.keys())]
 
     @classmethod
     def __format_status_codes(cls, status_codes: (dict, None)) -> list:
@@ -108,8 +108,9 @@ class ApiDoc:
 
     @classmethod
     def __format_custom_header(cls, headers: (dict, None)) -> list:
-        headers = headers or {}
-        return [({'name': name, 'value': headers[name]}) for name in sorted(headers.keys())]
+        if not headers:
+            return []
+        return [{'name': name, 'value': headers[name]} for name in sorted(headers.keys())]
 
     @classmethod
     def __json_dump_to_lines(cls, data: (list, dict, None)) -> list:

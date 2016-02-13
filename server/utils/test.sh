@@ -4,7 +4,7 @@ PYTHON=${PYTHON:-${BASEDIR}/flask/bin/python3}
 
 function run_test()
 {
-    "${PYTHON}" -m pytest -c "${BASEDIR}/test/pytest.ini" --basetemp "${BASEDIR}/tmp" "$@" "${BASEDIR}/test"
+    "${PYTHON}" -m pytest -c "${BASEDIR}/test/pytest.ini" --basetemp "${BASEDIR}/tmp" --durations=10 --ff "$@" "${BASEDIR}/test"
 }
 
 function run_test_with_coverage()

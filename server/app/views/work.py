@@ -55,7 +55,7 @@ class WorkItemListView(BaseView):
 
     @api_func('List work items', url_tail='/works/1/items',
               response=[ExampleWorkItems.ITEM1.get(), ExampleWorkItems.ITEM2.get()],
-              queries={'id': 'ID of work'})
+              params={'id': 'ID of work'})
     def get(self, id: int):
         self._initialize_parent_model_object(id)
         return self._get_list(work_id=id)
@@ -65,7 +65,7 @@ class WorkItemListView(BaseView):
               response=ExampleWorkItems.ITEM1.get(),
               status_codes={403: 'can not add new work item after outbound items was closed',
                             422: '{{ original }} / can not add one item twice'},
-              queries={'id': 'ID of work'})
+              params={'id': 'ID of work'})
     def post(self, id: int):
         work = self._initialize_parent_model_object(id)
         item = self._post_populate(work_id=id)
@@ -84,8 +84,8 @@ class WorkItemView(BaseView):
 
     @api_func('Get work item', item_name='work item', url_tail='/works/1/items/1',
               response=ExampleWorkItems.ITEM1.get(),
-              queries={'id': 'ID of work',
-                       'item_id': 'ID of selected work item for get'})
+              params={'id': 'ID of work',
+                      'item_id': 'ID of selected work item for get'})
     def get(self, id: int, item_id: int):
         self._initialize_parent_model_object(id)
         return self._get(work_id=id, id=item_id)
@@ -95,8 +95,8 @@ class WorkItemView(BaseView):
               response=ExampleWorkItems.ITEM1.get(),
               status_codes={403: 'can not change work item after outbound/returned items was closed',
                             422: '{{ original }} / can not add one item twice'},
-              queries={'id': 'ID of work',
-                       'item_id': 'ID of selected work item for get'})
+              params={'id': 'ID of work',
+                      'item_id': 'ID of selected work item for get'})
     def put(self, id: int, item_id: int):
         work = self._initialize_parent_model_object(id)
 
@@ -114,8 +114,8 @@ class WorkItemView(BaseView):
     @api_func('Delete work item', item_name='work item', url_tail='/works/1/items/1',
               response=None,
               status_codes={403: 'can not delete work item after outbound/returned items was closed'},
-              queries={'id': 'ID of work',
-                       'item_id': 'ID of selected work item for get'})
+              params={'id': 'ID of work',
+                      'item_id': 'ID of selected work item for get'})
     def delete(self, id: int, item_id: int):
         work = self._initialize_parent_model_object(id)
 

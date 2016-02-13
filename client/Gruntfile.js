@@ -51,7 +51,7 @@ module.exports = function (grunt) {
         'nggettext_extract': {
             'pot': {
                 'files': {
-                    'po/template.pot': [
+                    'po/en.pot': [
                         'app/*.html',
                         'app/js/**/*.js',
                         'app/partials/**/*.html'

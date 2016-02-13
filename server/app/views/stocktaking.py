@@ -55,7 +55,7 @@ class StocktakingItemListView(BaseView):
 
     @api_func('List stocktaking items.', url_tail='/stocktakings/1/items',
               response=[ExampleStocktakingItems.ITEM1.get(), ExampleStocktakingItems.ITEM2.get()],
-              queries={'id': 'ID of stocktaking'})
+              params={'id': 'ID of stocktaking'})
     def get(self, id: int):
         self._initialize_parent_model_object(id)
         return self._get_list(stocktaking_id=id)
@@ -65,7 +65,7 @@ class StocktakingItemListView(BaseView):
               response=ExampleStocktakingItems.ITEM1.get(),
               status_codes={403: 'can not add new stocktakings item after items was closed',
                             422: '{{ original }} / can not add one item twice'},
-              queries={'id': 'ID of stocktaking'})
+              params={'id': 'ID of stocktaking'})
     def post(self, id: int):
         stocktaking = self._initialize_parent_model_object(id)
         item = self._post_populate(stocktaking_id=id)
@@ -84,8 +84,8 @@ class StocktakingItemView(BaseView):
 
     @api_func('Get stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
               response=ExampleStocktakingItems.ITEM1.get(),
-              queries={'id': 'ID of stocktaking',
-                       'item_id': 'ID of selected stocktaking item for get'})
+              params={'id': 'ID of stocktaking',
+                      'item_id': 'ID of selected stocktaking item for get'})
     def get(self, id: int, item_id: int):
         self._initialize_parent_model_object(id)
         return self._get(stocktaking_id=id, id=item_id)
@@ -95,8 +95,8 @@ class StocktakingItemView(BaseView):
               response=ExampleStocktakingItems.ITEM1.get(),
               status_codes={403: 'can not change work item after outbound/returned items was closed',
                             422: '{{ original }} / can not add one item twice'},
-              queries={'id': 'ID of stocktaking',
-                       'item_id': 'ID of selected stocktaking item for put'})
+              params={'id': 'ID of stocktaking',
+                      'item_id': 'ID of selected stocktaking item for put'})
     def put(self, id: int, item_id: int):
         stocktaking = self._initialize_parent_model_object(id)
         item = self._put_populate(stocktaking_id=id, id=item_id)
@@ -109,8 +109,8 @@ class StocktakingItemView(BaseView):
     @api_func('Delete stocktaking item', item_name='stocktaking item', url_tail='/stocktakings/1/items/1',
               response=None,
               status_codes={403: 'can not delete stocktaking item after items was closed'},
-              queries={'id': 'ID of stocktaking',
-                       'item_id': 'ID of selected stocktaking item for delete'})
+              params={'id': 'ID of stocktaking',
+                      'item_id': 'ID of selected stocktaking item for delete'})
     def delete(self, id: int, item_id: int):
         stocktaking = self._initialize_parent_model_object(id)
 
