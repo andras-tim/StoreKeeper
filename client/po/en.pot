@@ -1,0 +1,305 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+
+#: app/partials/sidebars/item.html:55
+msgid "Add barcode to a new item"
+msgstr ""
+
+#: app/partials/sidebars/item.html:17
+msgid "Add element to list"
+msgstr ""
+
+#: app/partials/sidebars/item.html:23
+msgid "Add new element to list"
+msgstr ""
+
+#: app/partials/views/items.html:10
+msgid "Article Number"
+msgstr ""
+
+#: app/partials/views/item.html:26
+msgid "Article no."
+msgstr ""
+
+#: app/partials/sidebars/item.html:56
+msgid "Assign barcode to an existing item"
+msgstr ""
+
+#: app/js/controllers/sidebars/item.js:273
+msgid "Assign to item"
+msgstr ""
+
+#: app/partials/views/item.html:71
+msgid "Barcode"
+msgstr ""
+
+#: app/partials/views/item-selector.html:17
+msgid "Barcode quantity"
+msgstr ""
+
+#: app/partials/widgets/fields/item-input.html:1
+msgid "Barcode, item name, article number"
+msgstr ""
+
+#: app/partials/widgets/form/input-validator.html:8
+msgid "Can not be greater than {{ aRestrictions.max }}"
+msgstr ""
+
+#: app/partials/widgets/form/input-validator.html:6
+msgid "Can not be longer than {{ aRestrictions.maxlength }} characters"
+msgstr ""
+
+#: app/partials/widgets/form/input-validator.html:5
+msgid "Can not be shorter than {{ aRestrictions.minlength }} characters"
+msgstr ""
+
+#: app/partials/widgets/form/input-validator.html:7
+msgid "Can not be smaller than {{ aRestrictions.min }}"
+msgstr ""
+
+#: app/js/factories/common.js:39
+msgid "Can not connect to server"
+msgstr ""
+
+#: app/partials/views/item-selector.html:33
+msgid "Cancel"
+msgstr ""
+
+#: app/partials/views/item.html:124
+#: app/partials/widgets/modal/details_modal_navbar.html:9
+msgid "Close"
+msgstr ""
+
+#: app/partials/views/item.html:73
+msgid "Commands"
+msgstr ""
+
+#: app/partials/sidebars/item.html:51
+msgid "Count"
+msgstr ""
+
+#: app/js/controllers/sidebars/item.js:396
+msgid "Do you want to clear list?"
+msgstr ""
+
+#: app/js/controllers/views/item.js:270
+msgid "Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})"
+msgstr ""
+
+#: app/js/controllers/sidebars/item.js:339
+msgid "Do you want to delete element \"{{ barcode }}\" ({{ count }} pcs)"
+msgstr ""
+
+#: app/js/controllers/sidebars/item.js:330
+msgid "Do you want to delete element \"{{ barcode }}\" ({{ count }} x {{ quantity }} {{ unit }} of item \"{{ name }}\")"
+msgstr ""
+
+#: app/js/controllers/views/item.js:277
+msgid "Do you want to delete new barcode ({{ quantity }} {{ unit }})"
+msgstr ""
+
+#: app/js/controllers/sidebars/item.js:407
+msgid "Do you want to move all element from list to Stockpile?"
+msgstr ""
+
+#: app/js/controllers/sidebars/item.js:357
+msgid "Do you want to print sum {{ count }} pcs. labels?"
+msgstr ""
+
+#: app/partials/views/item.html:100
+msgid "Download label file"
+msgstr ""
+
+#: app/partials/views/item.html:27
+msgid "Enter article number"
+msgstr ""
+
+#: app/partials/views/item.html:31
+msgid "Enter name of item"
+msgstr ""
+
+#: app/partials/widgets/fields/unit-input.html:2
+msgid "Enter unit"
+msgstr ""
+
+#: app/partials/widgets/fields/vendor-input.html:2
+msgid "Enter vendor"
+msgstr ""
+
+#: app/js/factories/common.js:29
+msgid "Error {{ status }}"
+msgstr ""
+
+#: app/partials/views/item.html:46
+msgid "In Stock"
+msgstr ""
+
+#: app/partials/views/item-selector.html:13
+#: app/partials/views/item.html:9
+msgid "Item"
+msgstr ""
+
+#: app/partials/views/item-selector.html:19
+#: app/partials/views/item.html:93
+msgid "Item amount for this barcode"
+msgstr ""
+
+#: app/partials/sidebars/item.html:7
+msgid "Item collector"
+msgstr ""
+
+#: app/partials/views/item-selector.html:5
+msgid "Item selector"
+msgstr ""
+
+#: app/partials/views/login.html:5
+msgid "Login"
+msgstr ""
+
+#: app/partials/widgets/user_menu.html:3
+msgid "Logout"
+msgstr ""
+
+#: app/partials/widgets/form/input-validator.html:3
+msgid "Mandatory field"
+msgstr ""
+
+#: app/partials/views/item.html:81
+msgid "Master barcode for this item"
+msgstr ""
+
+#: app/partials/sidebars/item.html:71
+msgid "Move elements to Stockpile"
+msgstr ""
+
+#: app/partials/views/item.html:30
+#: app/partials/views/items.html:11
+msgid "Name"
+msgstr ""
+
+#: app/partials/views/item.html:6
+msgid "New Item"
+msgstr ""
+
+#: app/partials/widgets/form/input-validator.html:4
+msgid "Number required"
+msgstr ""
+
+#: app/partials/views/login.html:12
+msgid "Password"
+msgstr ""
+
+#: app/partials/views/item.html:99
+msgid "Print label"
+msgstr ""
+
+#: app/partials/sidebars/item.html:57
+msgid "Print label for this element"
+msgstr ""
+
+#: app/partials/sidebars/item.html:69
+msgid "Print labels for all elements"
+msgstr ""
+
+#: app/partials/views/item.html:38
+#: app/partials/widgets/fields/purchase-price-input.html:2
+msgid "Purchase price"
+msgstr ""
+
+#: app/partials/views/items.html:12
+#: app/partials/widgets/fields/quantity-input.html:1
+msgid "Quantity"
+msgstr ""
+
+#: app/partials/views/item.html:72
+msgid "Quantity ({{ item.unit.unit }})"
+msgstr ""
+
+#: app/partials/views/login.html:17
+msgid "Remember me"
+msgstr ""
+
+#: app/partials/sidebars/item.html:70
+msgid "Remove all elements from list"
+msgstr ""
+
+#: app/partials/views/item.html:101
+msgid "Remove label"
+msgstr ""
+
+#: app/partials/sidebars/item.html:58
+msgid "Remove this element"
+msgstr ""
+
+#: app/partials/views/item.html:123
+msgid "Save"
+msgstr ""
+
+#: app/partials/views/login.html:23
+msgid "Sign in"
+msgstr ""
+
+#: app/partials/header.html:22
+#: app/partials/views/items.html:3
+msgid "Stockpile"
+msgstr ""
+
+#: app/partials/views/item.html:55
+msgid "System will send a warning when the quantity decreases under this value"
+msgstr ""
+
+#: app/js/app.js:118
+msgid "The form is dirty."
+msgstr ""
+
+#: app/js/directives/common.js:63
+msgid "The form is dirty. Do you want to stay on the page?"
+msgstr ""
+
+#: app/partials/header.html:6
+msgid "Toggle menu"
+msgstr ""
+
+#: app/partials/views/item.html:34
+msgid "Unit"
+msgstr ""
+
+#: app/partials/views/login.html:17
+msgid "User will not logged out after close this window"
+msgstr ""
+
+#: app/partials/views/login.html:8
+msgid "Username"
+msgstr ""
+
+#: app/partials/views/item.html:22
+#: app/partials/views/items.html:9
+msgid "Vendor"
+msgstr ""
+
+#: app/partials/views/item.html:53
+msgid "Warning quantity"
+msgstr ""
+
+#: app/partials/footer.html:3
+msgid "engine under <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE\" target=\"_blank\">GPLv2</a>"
+msgstr ""
+
+#: app/partials/views/items.html:16
+msgid "global search"
+msgstr ""
+
+#: app/partials/views/login.html:13
+msgid "password"
+msgstr ""
+
+#: app/partials/views/items.html:19
+msgid "search for vendor"
+msgstr ""
+
+#: app/partials/views/login.html:9
+msgid "username"
+msgstr ""
