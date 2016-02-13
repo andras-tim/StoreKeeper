@@ -1,16 +1,16 @@
+# 
+# Translators:
+# Andras Tim <andras.tim@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: StoreKeeper v0.4.0-beta\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2016-02-13 14:35+0000\n"
 "Last-Translator: Andras Tim <andras.tim@gmail.com>\n"
-"Language-Team:  <andras.tim@gmail.com>\n"
-"Language: hu\n"
-"MIME-Version: 1.0\n"
+"Language-Team: Hungarian (http://www.transifex.com/andras-tim/storekeeper/language/hu/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
-"X-Poedit-Basepath: ../\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: app/partials/sidebars/item.html:55
 msgid "Add barcode to a new item"
@@ -50,7 +50,7 @@ msgstr "Vonalkódhoz rendelt mennyiség"
 
 #: app/partials/widgets/fields/item-input.html:1
 msgid "Barcode, item name, article number"
-msgstr "Vonalkód, elem név, cikkszám"
+msgstr "Vonalkód, tétel név, cikkszám"
 
 #: app/partials/widgets/form/input-validator.html:8
 msgid "Can not be greater than {{ aRestrictions.max }}"
@@ -76,7 +76,7 @@ msgstr "Nem lehet csatlakozni a szerverhez"
 msgid "Cancel"
 msgstr "Mégse"
 
-#: app/partials/views/item.html:122
+#: app/partials/views/item.html:124
 #: app/partials/widgets/modal/details_modal_navbar.html:9
 msgid "Close"
 msgstr "Bezárás"
@@ -94,10 +94,9 @@ msgid "Do you want to clear list?"
 msgstr "Biztosan üríteni szeretné az elemlistát?"
 
 #: app/js/controllers/views/item.js:270
-msgid "Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})"
-msgstr ""
-"Biztosan törölni szeretné a {{ barcode }} vonalkódot ({{ quantity }} "
-"{{ unit }})?"
+msgid ""
+"Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})"
+msgstr "Biztosan törölni szeretné a {{ barcode }} vonalkódot ({{ quantity }} {{ unit }})?"
 
 #: app/js/controllers/sidebars/item.js:339
 msgid "Do you want to delete element \"{{ barcode }}\" ({{ count }} pcs)"
@@ -105,11 +104,9 @@ msgstr "Biztosan törölni szeretné a {{ barcode }} ({{ quantity }}) elemet?"
 
 #: app/js/controllers/sidebars/item.js:330
 msgid ""
-"Do you want to delete element \"{{ barcode }}\" ({{ count }} x "
-"{{ quantity }} {{ unit }} of item \"{{ name }}\")"
-msgstr ""
-"Biztosan törölni szeretné a {{ name }}) tétel {{ barcode }} ({{ count }} x "
-"{{ quantity }} {{ unit }} elemét?"
+"Do you want to delete element \"{{ barcode }}\" ({{ count }} x {{ quantity "
+"}} {{ unit }} of item \"{{ name }}\")"
+msgstr "Biztosan törölni szeretné a {{ name }}) tétel {{ barcode }} ({{ count }} x {{ quantity }} {{ unit }} elemét?"
 
 #: app/js/controllers/views/item.js:277
 msgid "Do you want to delete new barcode ({{ quantity }} {{ unit }})"
@@ -123,7 +120,7 @@ msgstr "Biztos át akarja mozgatni a lista elemeit az Raktárkészletbe?"
 msgid "Do you want to print sum {{ count }} pcs. labels?"
 msgstr "Biztosan ki szeretne nyomtatni {{ count }} darab címkét?"
 
-#: app/partials/views/item.html:98
+#: app/partials/views/item.html:100
 msgid "Download label file"
 msgstr "Címke fájl letöltése"
 
@@ -133,7 +130,7 @@ msgstr "Írja be a cikkszámot"
 
 #: app/partials/views/item.html:31
 msgid "Enter name of item"
-msgstr "Írja be a nevét"
+msgstr "Írja be a tétel nevét"
 
 #: app/partials/widgets/fields/unit-input.html:2
 msgid "Enter unit"
@@ -153,19 +150,19 @@ msgstr "Raktáron"
 
 #: app/partials/views/item-selector.html:13 app/partials/views/item.html:9
 msgid "Item"
-msgstr "Elem"
+msgstr "Tétel"
 
-#: app/partials/views/item-selector.html:19 app/partials/views/item.html:92
+#: app/partials/views/item-selector.html:19 app/partials/views/item.html:93
 msgid "Item amount for this barcode"
 msgstr "A vonalkódhoz tartozó mennyiség"
 
 #: app/partials/sidebars/item.html:7
 msgid "Item collector"
-msgstr "Elem kereső"
+msgstr "Tétel kereső"
 
 #: app/partials/views/item-selector.html:5
 msgid "Item selector"
-msgstr "Elem kiválasztó"
+msgstr "Tétel kiválasztó"
 
 #: app/partials/views/login.html:5
 msgid "Login"
@@ -181,7 +178,7 @@ msgstr "Kötelező mező"
 
 #: app/partials/views/item.html:81
 msgid "Master barcode for this item"
-msgstr "Fő címke ehhez az télelhez"
+msgstr "Fő vonalkód ehhez az télelhez"
 
 #: app/partials/sidebars/item.html:71
 msgid "Move elements to Stockpile"
@@ -203,7 +200,7 @@ msgstr "Szám szükséges"
 msgid "Password"
 msgstr "Jelszó"
 
-#: app/partials/views/item.html:97
+#: app/partials/views/item.html:99
 msgid "Print label"
 msgstr "Címke nyomtatása"
 
@@ -237,7 +234,7 @@ msgstr "Emlékezz rám"
 msgid "Remove all elements from list"
 msgstr "Az összes elem eltávolítása a listából"
 
-#: app/partials/views/item.html:99
+#: app/partials/views/item.html:101
 msgid "Remove label"
 msgstr "Címke törlése"
 
@@ -245,7 +242,7 @@ msgstr "Címke törlése"
 msgid "Remove this element"
 msgstr "Elem eltávolítása"
 
-#: app/partials/views/item.html:121
+#: app/partials/views/item.html:123
 msgid "Save"
 msgstr "Mentés"
 
@@ -258,9 +255,9 @@ msgid "Stockpile"
 msgstr "Ratkárkészlet"
 
 #: app/partials/views/item.html:55
-msgid "System will send a warning when the quantity decreases under this value"
-msgstr ""
-"A rendszer figyelmeztetni fog, ha a mennyiség ez alá az érték alá csökken."
+msgid ""
+"System will send a warning when the quantity decreases under this value"
+msgstr "A rendszer figyelmeztetni fog, ha a mennyiség ez alá az érték alá csökken."
 
 #: app/js/app.js:118
 msgid "The form is dirty."
@@ -296,11 +293,9 @@ msgstr "Figyelmeztetési küszöb"
 
 #: app/partials/footer.html:3
 msgid ""
-"engine under <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/"
-"LICENSE\" target=\"_blank\">GPLv2</a>"
-msgstr ""
-"motor <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE"
-"\" target=\"_blank\">GPLv2</a> alatt"
+"engine under <a href=\"https://github.com/andras-"
+"tim/StoreKeeper/blob/master/LICENSE\" target=\"_blank\">GPLv2</a>"
+msgstr "motor <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE\" target=\"_blank\">GPLv2</a> alatt"
 
 #: app/partials/views/items.html:16
 msgid "global search"
