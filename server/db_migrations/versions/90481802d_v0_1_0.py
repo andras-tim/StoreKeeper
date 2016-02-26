@@ -53,7 +53,9 @@ def upgrade():
     sa.Column('disabled', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_user_username'), 'user', ['username'], unique=True)
+    with op.batch_alter_table('user', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_user_username'), ['username'], unique=True)
+
     op.create_table('vendor',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=60), nullable=False),
@@ -90,8 +92,10 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_user_config_name'), 'user_config', ['name'], unique=False)
-    op.create_index('user_config__can_not_add_one_name_twice_to_a_user', 'user_config', ['user_id', 'name'], unique=True)
+    with op.batch_alter_table('user_config', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_user_config_name'), ['name'], unique=False)
+        batch_op.create_index('user_config__can_not_add_one_name_twice_to_a_user', ['user_id', 'name'], unique=True)
+
     op.create_table('work',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('customer_id', sa.Integer(), nullable=False),
@@ -114,7 +118,9 @@ def upgrade():
     sa.ForeignKeyConstraint(['item_id'], ['item.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('acquisition_item__can_not_add_one_item_twice', 'acquisition_item', ['acquisition_id', 'item_id'], unique=True)
+    with op.batch_alter_table('acquisition_item', schema=None) as batch_op:
+        batch_op.create_index('acquisition_item__can_not_add_one_item_twice', ['acquisition_id', 'item_id'], unique=True)
+
     op.create_table('barcode',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('barcode', sa.String(length=15), nullable=False),
@@ -125,7 +131,9 @@ def upgrade():
     sa.ForeignKeyConstraint(['item_id'], ['item.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_barcode_barcode'), 'barcode', ['barcode'], unique=True)
+    with op.batch_alter_table('barcode', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_barcode_barcode'), ['barcode'], unique=True)
+
     op.create_table('stocktaking_item',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('stocktaking_id', sa.Integer(), nullable=False),
@@ -135,7 +143,9 @@ def upgrade():
     sa.ForeignKeyConstraint(['stocktaking_id'], ['stocktaking.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('stocktaking_item__can_not_add_one_item_twice', 'stocktaking_item', ['stocktaking_id', 'item_id'], unique=True)
+    with op.batch_alter_table('stocktaking_item', schema=None) as batch_op:
+        batch_op.create_index('stocktaking_item__can_not_add_one_item_twice', ['stocktaking_id', 'item_id'], unique=True)
+
     op.create_table('work_item',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('work_id', sa.Integer(), nullable=False),
@@ -146,29 +156,42 @@ def upgrade():
     sa.ForeignKeyConstraint(['work_id'], ['work.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('work_item__can_not_add_one_item_twice', 'work_item', ['work_id', 'item_id'], unique=True)
+    with op.batch_alter_table('work_item', schema=None) as batch_op:
+        batch_op.create_index('work_item__can_not_add_one_item_twice', ['work_id', 'item_id'], unique=True)
 
     # Add default admin user
     add_default_admin_user()
 
 
 def downgrade():
-    op.drop_index('work_item__can_not_add_one_item_twice', table_name='work_item')
+    with op.batch_alter_table('work_item', schema=None) as batch_op:
+        batch_op.drop_index('work_item__can_not_add_one_item_twice')
+
     op.drop_table('work_item')
-    op.drop_index('stocktaking_item__can_not_add_one_item_twice', table_name='stocktaking_item')
+    with op.batch_alter_table('stocktaking_item', schema=None) as batch_op:
+        batch_op.drop_index('stocktaking_item__can_not_add_one_item_twice')
+
     op.drop_table('stocktaking_item')
-    op.drop_index(op.f('ix_barcode_barcode'), table_name='barcode')
+    with op.batch_alter_table('barcode', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_barcode_barcode'))
+
     op.drop_table('barcode')
-    op.drop_index('acquisition_item__can_not_add_one_item_twice', table_name='acquisition_item')
+    with op.batch_alter_table('acquisition_item', schema=None) as batch_op:
+        batch_op.drop_index('acquisition_item__can_not_add_one_item_twice')
+
     op.drop_table('acquisition_item')
     op.drop_table('work')
-    op.drop_index('user_config__can_not_add_one_name_twice_to_a_user', table_name='user_config')
-    op.drop_index(op.f('ix_user_config_name'), table_name='user_config')
+    with op.batch_alter_table('user_config', schema=None) as batch_op:
+        batch_op.drop_index('user_config__can_not_add_one_name_twice_to_a_user')
+        batch_op.drop_index(batch_op.f('ix_user_config_name'))
+
     op.drop_table('user_config')
     op.drop_table('stocktaking')
     op.drop_table('item')
     op.drop_table('vendor')
-    op.drop_index(op.f('ix_user_username'), table_name='user')
+    with op.batch_alter_table('user', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_user_username'))
+
     op.drop_table('user')
     op.drop_table('unit')
     op.drop_table('customer')

@@ -24,9 +24,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_acquisition_item_version_end_transaction_id'), 'acquisition_item_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_acquisition_item_version_operation_type'), 'acquisition_item_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_acquisition_item_version_transaction_id'), 'acquisition_item_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('acquisition_item_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_acquisition_item_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_acquisition_item_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_acquisition_item_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('acquisition_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('timestamp', sa.DateTime(), autoincrement=False, nullable=True),
@@ -36,9 +38,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_acquisition_version_end_transaction_id'), 'acquisition_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_acquisition_version_operation_type'), 'acquisition_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_acquisition_version_transaction_id'), 'acquisition_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('acquisition_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_acquisition_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_acquisition_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_acquisition_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('barcode_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('barcode', sa.String(length=15), autoincrement=False, nullable=True),
@@ -51,10 +55,12 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_barcode_version_barcode'), 'barcode_version', ['barcode'], unique=False)
-    op.create_index(op.f('ix_barcode_version_end_transaction_id'), 'barcode_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_barcode_version_operation_type'), 'barcode_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_barcode_version_transaction_id'), 'barcode_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('barcode_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_barcode_version_barcode'), ['barcode'], unique=False)
+        batch_op.create_index(batch_op.f('ix_barcode_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_barcode_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_barcode_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('customer_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('name', sa.String(length=60), autoincrement=False, nullable=True),
@@ -63,9 +69,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_customer_version_end_transaction_id'), 'customer_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_customer_version_operation_type'), 'customer_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_customer_version_transaction_id'), 'customer_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('customer_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_customer_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_customer_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_customer_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('item_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('name', sa.String(length=60), autoincrement=False, nullable=True),
@@ -80,9 +88,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_item_version_end_transaction_id'), 'item_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_item_version_operation_type'), 'item_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_item_version_transaction_id'), 'item_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('item_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_item_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_item_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_item_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('stocktaking_item_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('stocktaking_id', sa.Integer(), autoincrement=False, nullable=True),
@@ -93,9 +103,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_stocktaking_item_version_end_transaction_id'), 'stocktaking_item_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_stocktaking_item_version_operation_type'), 'stocktaking_item_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_stocktaking_item_version_transaction_id'), 'stocktaking_item_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('stocktaking_item_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_stocktaking_item_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_stocktaking_item_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_stocktaking_item_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('stocktaking_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('timestamp', sa.DateTime(), autoincrement=False, nullable=True),
@@ -107,9 +119,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_stocktaking_version_end_transaction_id'), 'stocktaking_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_stocktaking_version_operation_type'), 'stocktaking_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_stocktaking_version_transaction_id'), 'stocktaking_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('stocktaking_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_stocktaking_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_stocktaking_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_stocktaking_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('unit_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('unit', sa.String(length=20), autoincrement=False, nullable=True),
@@ -118,9 +132,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_unit_version_end_transaction_id'), 'unit_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_unit_version_operation_type'), 'unit_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_unit_version_transaction_id'), 'unit_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('unit_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_unit_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_unit_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_unit_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('user_config_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('user_id', sa.Integer(), autoincrement=False, nullable=True),
@@ -131,10 +147,12 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_user_config_version_end_transaction_id'), 'user_config_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_user_config_version_name'), 'user_config_version', ['name'], unique=False)
-    op.create_index(op.f('ix_user_config_version_operation_type'), 'user_config_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_user_config_version_transaction_id'), 'user_config_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('user_config_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_user_config_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_user_config_version_name'), ['name'], unique=False)
+        batch_op.create_index(batch_op.f('ix_user_config_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_user_config_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('user_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('username', sa.String(length=30), autoincrement=False, nullable=True),
@@ -147,10 +165,12 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_user_version_end_transaction_id'), 'user_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_user_version_operation_type'), 'user_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_user_version_transaction_id'), 'user_version', ['transaction_id'], unique=False)
-    op.create_index(op.f('ix_user_version_username'), 'user_version', ['username'], unique=False)
+    with op.batch_alter_table('user_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_user_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_user_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_user_version_transaction_id'), ['transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_user_version_username'), ['username'], unique=False)
+
     op.create_table('vendor_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('name', sa.String(length=60), autoincrement=False, nullable=True),
@@ -159,9 +179,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_vendor_version_end_transaction_id'), 'vendor_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_vendor_version_operation_type'), 'vendor_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_vendor_version_transaction_id'), 'vendor_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('vendor_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_vendor_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_vendor_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_vendor_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('work_item_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('work_id', sa.Integer(), autoincrement=False, nullable=True),
@@ -173,9 +195,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_work_item_version_end_transaction_id'), 'work_item_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_work_item_version_operation_type'), 'work_item_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_work_item_version_transaction_id'), 'work_item_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('work_item_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_work_item_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_work_item_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_work_item_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('work_version',
     sa.Column('id', sa.Integer(), autoincrement=False, nullable=False),
     sa.Column('customer_id', sa.Integer(), autoincrement=False, nullable=True),
@@ -189,9 +213,11 @@ def upgrade():
     sa.Column('operation_type', sa.SmallInteger(), nullable=False),
     sa.PrimaryKeyConstraint('id', 'transaction_id')
     )
-    op.create_index(op.f('ix_work_version_end_transaction_id'), 'work_version', ['end_transaction_id'], unique=False)
-    op.create_index(op.f('ix_work_version_operation_type'), 'work_version', ['operation_type'], unique=False)
-    op.create_index(op.f('ix_work_version_transaction_id'), 'work_version', ['transaction_id'], unique=False)
+    with op.batch_alter_table('work_version', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_work_version_end_transaction_id'), ['end_transaction_id'], unique=False)
+        batch_op.create_index(batch_op.f('ix_work_version_operation_type'), ['operation_type'], unique=False)
+        batch_op.create_index(batch_op.f('ix_work_version_transaction_id'), ['transaction_id'], unique=False)
+
     op.create_table('transaction',
     sa.Column('issued_at', sa.DateTime(), nullable=True),
     sa.Column('id', sa.BigInteger(), nullable=False),
@@ -200,64 +226,93 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_transaction_user_id'), 'transaction', ['user_id'], unique=False)
+    with op.batch_alter_table('transaction', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_transaction_user_id'), ['user_id'], unique=False)
 
 
 def downgrade():
-    op.drop_index(op.f('ix_transaction_user_id'), table_name='transaction')
+    with op.batch_alter_table('transaction', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_transaction_user_id'))
+
     op.drop_table('transaction')
-    op.drop_index(op.f('ix_work_version_transaction_id'), table_name='work_version')
-    op.drop_index(op.f('ix_work_version_operation_type'), table_name='work_version')
-    op.drop_index(op.f('ix_work_version_end_transaction_id'), table_name='work_version')
+    with op.batch_alter_table('work_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_work_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_work_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_work_version_end_transaction_id'))
+
     op.drop_table('work_version')
-    op.drop_index(op.f('ix_work_item_version_transaction_id'), table_name='work_item_version')
-    op.drop_index(op.f('ix_work_item_version_operation_type'), table_name='work_item_version')
-    op.drop_index(op.f('ix_work_item_version_end_transaction_id'), table_name='work_item_version')
+    with op.batch_alter_table('work_item_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_work_item_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_work_item_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_work_item_version_end_transaction_id'))
+
     op.drop_table('work_item_version')
-    op.drop_index(op.f('ix_vendor_version_transaction_id'), table_name='vendor_version')
-    op.drop_index(op.f('ix_vendor_version_operation_type'), table_name='vendor_version')
-    op.drop_index(op.f('ix_vendor_version_end_transaction_id'), table_name='vendor_version')
+    with op.batch_alter_table('vendor_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_vendor_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_vendor_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_vendor_version_end_transaction_id'))
+
     op.drop_table('vendor_version')
-    op.drop_index(op.f('ix_user_version_username'), table_name='user_version')
-    op.drop_index(op.f('ix_user_version_transaction_id'), table_name='user_version')
-    op.drop_index(op.f('ix_user_version_operation_type'), table_name='user_version')
-    op.drop_index(op.f('ix_user_version_end_transaction_id'), table_name='user_version')
+    with op.batch_alter_table('user_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_user_version_username'))
+        batch_op.drop_index(batch_op.f('ix_user_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_user_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_user_version_end_transaction_id'))
+
     op.drop_table('user_version')
-    op.drop_index(op.f('ix_user_config_version_transaction_id'), table_name='user_config_version')
-    op.drop_index(op.f('ix_user_config_version_operation_type'), table_name='user_config_version')
-    op.drop_index(op.f('ix_user_config_version_name'), table_name='user_config_version')
-    op.drop_index(op.f('ix_user_config_version_end_transaction_id'), table_name='user_config_version')
+    with op.batch_alter_table('user_config_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_user_config_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_user_config_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_user_config_version_name'))
+        batch_op.drop_index(batch_op.f('ix_user_config_version_end_transaction_id'))
+
     op.drop_table('user_config_version')
-    op.drop_index(op.f('ix_unit_version_transaction_id'), table_name='unit_version')
-    op.drop_index(op.f('ix_unit_version_operation_type'), table_name='unit_version')
-    op.drop_index(op.f('ix_unit_version_end_transaction_id'), table_name='unit_version')
+    with op.batch_alter_table('unit_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_unit_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_unit_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_unit_version_end_transaction_id'))
+
     op.drop_table('unit_version')
-    op.drop_index(op.f('ix_stocktaking_version_transaction_id'), table_name='stocktaking_version')
-    op.drop_index(op.f('ix_stocktaking_version_operation_type'), table_name='stocktaking_version')
-    op.drop_index(op.f('ix_stocktaking_version_end_transaction_id'), table_name='stocktaking_version')
+    with op.batch_alter_table('stocktaking_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_stocktaking_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_stocktaking_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_stocktaking_version_end_transaction_id'))
+
     op.drop_table('stocktaking_version')
-    op.drop_index(op.f('ix_stocktaking_item_version_transaction_id'), table_name='stocktaking_item_version')
-    op.drop_index(op.f('ix_stocktaking_item_version_operation_type'), table_name='stocktaking_item_version')
-    op.drop_index(op.f('ix_stocktaking_item_version_end_transaction_id'), table_name='stocktaking_item_version')
+    with op.batch_alter_table('stocktaking_item_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_stocktaking_item_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_stocktaking_item_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_stocktaking_item_version_end_transaction_id'))
+
     op.drop_table('stocktaking_item_version')
-    op.drop_index(op.f('ix_item_version_transaction_id'), table_name='item_version')
-    op.drop_index(op.f('ix_item_version_operation_type'), table_name='item_version')
-    op.drop_index(op.f('ix_item_version_end_transaction_id'), table_name='item_version')
+    with op.batch_alter_table('item_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_item_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_item_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_item_version_end_transaction_id'))
+
     op.drop_table('item_version')
-    op.drop_index(op.f('ix_customer_version_transaction_id'), table_name='customer_version')
-    op.drop_index(op.f('ix_customer_version_operation_type'), table_name='customer_version')
-    op.drop_index(op.f('ix_customer_version_end_transaction_id'), table_name='customer_version')
+    with op.batch_alter_table('customer_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_customer_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_customer_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_customer_version_end_transaction_id'))
+
     op.drop_table('customer_version')
-    op.drop_index(op.f('ix_barcode_version_transaction_id'), table_name='barcode_version')
-    op.drop_index(op.f('ix_barcode_version_operation_type'), table_name='barcode_version')
-    op.drop_index(op.f('ix_barcode_version_end_transaction_id'), table_name='barcode_version')
-    op.drop_index(op.f('ix_barcode_version_barcode'), table_name='barcode_version')
+    with op.batch_alter_table('barcode_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_barcode_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_barcode_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_barcode_version_end_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_barcode_version_barcode'))
+
     op.drop_table('barcode_version')
-    op.drop_index(op.f('ix_acquisition_version_transaction_id'), table_name='acquisition_version')
-    op.drop_index(op.f('ix_acquisition_version_operation_type'), table_name='acquisition_version')
-    op.drop_index(op.f('ix_acquisition_version_end_transaction_id'), table_name='acquisition_version')
+    with op.batch_alter_table('acquisition_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_acquisition_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_acquisition_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_acquisition_version_end_transaction_id'))
+
     op.drop_table('acquisition_version')
-    op.drop_index(op.f('ix_acquisition_item_version_transaction_id'), table_name='acquisition_item_version')
-    op.drop_index(op.f('ix_acquisition_item_version_operation_type'), table_name='acquisition_item_version')
-    op.drop_index(op.f('ix_acquisition_item_version_end_transaction_id'), table_name='acquisition_item_version')
+    with op.batch_alter_table('acquisition_item_version', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_acquisition_item_version_transaction_id'))
+        batch_op.drop_index(batch_op.f('ix_acquisition_item_version_operation_type'))
+        batch_op.drop_index(batch_op.f('ix_acquisition_item_version_end_transaction_id'))
+
     op.drop_table('acquisition_item_version')

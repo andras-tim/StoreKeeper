@@ -46,6 +46,7 @@ def run_migrations_offline():
     context.configure(url=url,
                       compare_type=True,
                       compare_server_default=True,
+                      render_as_batch=True,
                       template_args=template_args)
 
     with context.begin_transaction():
@@ -79,6 +80,7 @@ def run_migrations_online():
                       target_metadata=target_metadata,
                       compare_type=True,
                       compare_server_default=True,
+                      render_as_batch=True,
                       process_revision_directives=process_revision_directives,
                       template_args=template_args,
                       **current_app.extensions['migrate'].configure_args)
