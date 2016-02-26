@@ -6,7 +6,6 @@
 
 .field-quantity {
     text-align: right;
-    max-width: 10em;
 }
 
 .field-quantity.field-title {
@@ -48,6 +47,9 @@
 .field-checkbox {
     text-align: center;
 }
+
+
+.field-location {}
 
 .table > tbody > tr > td.field-checkbox {
     vertical-align: middle;

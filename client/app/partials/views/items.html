@@ -9,13 +9,14 @@
           <th st-sort="vendor.name" class="field-vendor" translate>Vendor</th>
           <th st-sort="article_number" class="field-article-number" translate>Article Number</th>
           <th st-sort="name" class="field-name" st-sort-default="true" translate>Name</th>
+          <th st-sort="location" class="field-location" translate>Location</th>
           <th colspan="2" st-sort="quantity" class="field-quantity field-title" translate>Quantity</th>
         </tr>
         <tr>
           <th colspan="2">
             <input placeholder="{{ 'global search' | translate }}" class="input-sm form-control" type="search" st-search />
           </th>
-          <th>
+          <th colspan="2">
             <input placeholder="{{ 'search for vendor' | translate }}" class="input-sm form-control" type="search" st-search="vendor.name" />
           </th>
           <th colspan="2"></th>
@@ -27,6 +28,7 @@
           <td class="field-vendor">{{ item.vendor.name }}</td>
           <td class="field-article-number">{{ item.article_number }}</td>
           <td class="field-name">{{ item.name }}</td>
+          <td class="field-location">{{ item.location }}</td>
           <td class="field-quantity">{{ item.quantity }}</td>
           <td class="field-unit-beside-quantity">{{ item.unit.unit }}</td>
         </tr>
