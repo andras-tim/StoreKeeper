@@ -5,6 +5,7 @@ SESSION_NAME='sk'
 CMD1='server/package.sh start'
 CMD2='client/package.sh resources auto_prepare'
 CMD3='docs/utils/doc_auto_rebuild.sh'
+CMD4='server/utils/db_auto_migrate.sh'
 
 tmux_base="tmux new-session -s ${SESSION_NAME}"
 if [ "${TMUX}" != '' ]
@@ -28,4 +29,6 @@ ${tmux_base} \; \
     resize-pane -t 0 -x ${server_pane_width} \; \
     split-window -h \; \
     send-keys "${CMD3}${LF}" \; \
+    split-window -h \; \
+    send-keys "${CMD4}${LF}" \; \
     select-pane -D
