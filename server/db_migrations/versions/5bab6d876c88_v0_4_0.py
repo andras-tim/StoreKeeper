@@ -14,6 +14,12 @@ import sqlalchemy as sa
 
 
 def upgrade():
+    with op.batch_alter_table('item', schema=None) as batch_op:
+        batch_op.add_column(sa.Column('location', sa.String(length=15), nullable=True))
+
+    with op.batch_alter_table('item_version', schema=None) as batch_op:
+        batch_op.add_column(sa.Column('location', sa.String(length=15), autoincrement=False, nullable=True))
+
     with op.batch_alter_table('user_version', schema=None) as batch_op:
         batch_op.drop_column('password_hash')
 
@@ -21,3 +27,9 @@ def upgrade():
 def downgrade():
     with op.batch_alter_table('user_version', schema=None) as batch_op:
         batch_op.add_column(sa.Column('password_hash', sa.VARCHAR(length=80), autoincrement=False, nullable=True))
+
+    with op.batch_alter_table('item_version', schema=None) as batch_op:
+        batch_op.drop_column('location')
+
+    with op.batch_alter_table('item', schema=None) as batch_op:
+        batch_op.drop_column('location')
