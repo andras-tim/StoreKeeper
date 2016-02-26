@@ -17,7 +17,7 @@ function upgrade_db()
 upgrade_db
 while true
 do
-    inotifywait -r -qq -e modify . app/models.py
+    inotifywait -r -qq -e modify,create,delete --exclude 'db_migrations/versions' app db_migrations utils
     sleep 1
     upgrade_db
 done
