@@ -14,8 +14,10 @@ import sqlalchemy as sa
 
 
 def upgrade():
-    op.add_column('item', sa.Column('purchase_price', sa.Float(), server_default='0', nullable=False))
+    with op.batch_alter_table('item', schema=None) as batch_op:
+        batch_op.add_column(sa.Column('purchase_price', sa.Float(), server_default='0', nullable=False))
 
 
 def downgrade():
-    op.drop_column('item', 'purchase_price')
+    with op.batch_alter_table('item', schema=None) as batch_op:
+        batch_op.drop_column('purchase_price')
