@@ -12,6 +12,7 @@ appIconsDirectives.constant('iconList', {
     'user':         'fa fa-user',
     'language':     'fa fa-flag',
     'spinner':      'fa fa-spinner fa-pulse',
+    'warn':         'fa fa-exclamation-triangle',
 
     'close':        'fa fa-times',
     'logout':       'fa fa-sign-out',

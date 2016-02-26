@@ -46,3 +46,19 @@ appFilters.filter('isContainedInNested', ['$parse', '$filter',
 
         return filter;
     }]);
+
+
+appFilters.filter('isItemQuantityWarn', [
+    function isItemQuantityWarn () {
+        return function filterForCheckWarningItemQuantity (item) {
+            return item.quantity > 0 && item.quantity <= item.warning_quantity;
+        };
+    }]);
+
+
+appFilters.filter('isItemQuantityCritical', [
+    function isItemQuantityCritical () {
+        return function filterForCheckCriticalItemQuantity (item) {
+            return item.quantity <= 0;
+        };
+    }]);

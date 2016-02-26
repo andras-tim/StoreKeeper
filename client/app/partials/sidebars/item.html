@@ -38,10 +38,12 @@
             <div class="col-md-8 col-sm-7 col-xs-6 without-padding">
               <span class="barcode-value"><i app-icon="barcode"></i> {{ readElement.data.barcode }}</span> <i app-icon="spinner" ng-if="readElement.data.itemId && (!readElement.item || !readElement.barcode)"></i>
               <span ng-if="readElement.item && readElement.barcode">
-                <span class="badge quantity-value">{{ readElement.barcode.quantity }}&nbsp;{{ readElement.item.unit.unit }}</span><br/>
-                <span class="clickable" ng-click="showElement($index, readElement)">
-                  <span class="item-name-value">{{ readElement.item.name }}</span><br/>
-                  <span class="article-number-value">{{ readElement.item.article_number }}</span> <span class="vendor-value">{{ readElement.item.vendor.name }}</span><br/>
+                <span ng-class="{'text-warning': (readElement.item | isItemQuantityWarn), 'text-danger': (readElement.item | isItemQuantityCritical)}">
+                  <span class="badge quantity-value">{{ readElement.barcode.quantity }}&nbsp;{{ readElement.item.unit.unit }}</span><br/>
+                  <span class="clickable" ng-click="showElement($index, readElement)">
+                    <span class="item-name-value">{{ readElement.item.name }}</span><br/>
+                    <span class="article-number-value">{{ readElement.item.article_number }}</span> <span class="vendor-value">{{ readElement.item.vendor.name }}</span><br/>
+                  </span>
                 </span>
               </span>
             </div>
