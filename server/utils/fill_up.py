@@ -113,6 +113,11 @@ def iterate_items(data: dict):
             warning_quantity=round(random.uniform(0, 100), 2),
             unit_id=random.randrange(unit_count) + 1,
             purchase_price=round(random.uniform(0, 1000), 2),
+            location='{shelf}{level}/{region}'.format(
+                shelf=random.sample(letters, 1)[0].upper(),
+                level=random.randint(0, 100),
+                region=random.randint(0, 100),
+            )
         )
 
 

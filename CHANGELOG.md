@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+### Added
+- Added location filed to Item
+
 ### Fixed
 - Turn off properly browser autocomplete in typeaheads too - issue #132
 

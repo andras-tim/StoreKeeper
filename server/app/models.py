@@ -108,6 +108,7 @@ class Item(db.Model):
     warning_quantity = db.Column(db.Float, nullable=False, default=0.0)
     purchase_price = db.Column(db.Float, nullable=False, default=0.0, server_default='0')
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'), nullable=False)
+    location = db.Column(db.String(15))
 
     vendor = db.relationship('Vendor', lazy='joined')
     unit = db.relationship('Unit', lazy='joined')

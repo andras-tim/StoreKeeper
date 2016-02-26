@@ -32,7 +32,7 @@ msgstr ""
 msgid "Assign to item"
 msgstr ""
 
-#: app/partials/views/item.html:71
+#: app/partials/views/item.html:75
 msgid "Barcode"
 msgstr ""
 
@@ -68,12 +68,12 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: app/partials/views/item.html:124
+#: app/partials/views/item.html:128
 #: app/partials/widgets/modal/details_modal_navbar.html:9
 msgid "Close"
 msgstr ""
 
-#: app/partials/views/item.html:73
+#: app/partials/views/item.html:77
 msgid "Commands"
 msgstr ""
 
@@ -109,12 +109,16 @@ msgstr ""
 msgid "Do you want to print sum {{ count }} pcs. labels?"
 msgstr ""
 
-#: app/partials/views/item.html:100
+#: app/partials/views/item.html:104
 msgid "Download label file"
 msgstr ""
 
 #: app/partials/views/item.html:27
 msgid "Enter article number"
+msgstr ""
+
+#: app/partials/views/item.html:61
+msgid "Enter location of item"
 msgstr ""
 
 #: app/partials/views/item.html:31
@@ -143,7 +147,7 @@ msgid "Item"
 msgstr ""
 
 #: app/partials/views/item-selector.html:19
-#: app/partials/views/item.html:93
+#: app/partials/views/item.html:97
 msgid "Item amount for this barcode"
 msgstr ""
 
@@ -153,6 +157,11 @@ msgstr ""
 
 #: app/partials/views/item-selector.html:5
 msgid "Item selector"
+msgstr ""
+
+#: app/partials/views/item.html:60
+#: app/partials/views/items.html:12
+msgid "Location"
 msgstr ""
 
 #: app/partials/views/login.html:5
@@ -167,7 +176,7 @@ msgstr ""
 msgid "Mandatory field"
 msgstr ""
 
-#: app/partials/views/item.html:81
+#: app/partials/views/item.html:85
 msgid "Master barcode for this item"
 msgstr ""
 
@@ -192,7 +201,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: app/partials/views/item.html:99
+#: app/partials/views/item.html:103
 msgid "Print label"
 msgstr ""
 
@@ -209,12 +218,12 @@ msgstr ""
 msgid "Purchase price"
 msgstr ""
 
-#: app/partials/views/items.html:12
+#: app/partials/views/items.html:13
 #: app/partials/widgets/fields/quantity-input.html:1
 msgid "Quantity"
 msgstr ""
 
-#: app/partials/views/item.html:72
+#: app/partials/views/item.html:76
 msgid "Quantity ({{ item.unit.unit }})"
 msgstr ""
 
@@ -226,7 +235,7 @@ msgstr ""
 msgid "Remove all elements from list"
 msgstr ""
 
-#: app/partials/views/item.html:101
+#: app/partials/views/item.html:105
 msgid "Remove label"
 msgstr ""
 
@@ -234,7 +243,7 @@ msgstr ""
 msgid "Remove this element"
 msgstr ""
 
-#: app/partials/views/item.html:123
+#: app/partials/views/item.html:127
 msgid "Save"
 msgstr ""
 
@@ -288,7 +297,7 @@ msgstr ""
 msgid "engine under <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE\" target=\"_blank\">GPLv2</a>"
 msgstr ""
 
-#: app/partials/views/items.html:16
+#: app/partials/views/items.html:17
 msgid "global search"
 msgstr ""
 
@@ -296,7 +305,7 @@ msgstr ""
 msgid "password"
 msgstr ""
 
-#: app/partials/views/items.html:19
+#: app/partials/views/items.html:20
 msgid "search for vendor"
 msgstr ""
 

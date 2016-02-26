@@ -57,6 +57,10 @@
                   </div>
                 </app-input-form>
 
+                <app-input-form a-label="{{ 'Location' | translate }}">
+                  <input name="location" id="locationInput" ng-model="item.location" type="text" class="form-control field-location" ng-maxlength="15" placeholder="{{ 'Enter location of item' | translate }}" />
+                </app-input-form>
+
               </app-details-modal-panel>
             </form>
 
