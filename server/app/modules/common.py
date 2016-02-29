@@ -16,3 +16,8 @@ def recursive_dict_update(dictionary: dict, updater: dict):
             recursive_dict_update(dictionary[key], value)
         else:
             dictionary[key] = value
+
+
+class CreateObject:
+    def __init__(self, **entries):
+        self.__dict__.update(entries)

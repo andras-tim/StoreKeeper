@@ -2,20 +2,20 @@ import re
 from flask import send_file, request
 from flask.ext.restful import abort
 from sqlalchemy import or_, and_
-from app.modules.view_helper_for_models import get_validated_request
-from app.modules.view_helper_for_models import RequestProcessingError
 
 from app.server import config, db
 from app.models import Item, Barcode
 from app.views.base_view import BaseView
+from app.views.common import api_func
 from app.modules.example_data import ExampleItems, ExampleItemBarcodes, ExampleItemBarcodePrints, \
     ExampleItemSearchResults
+from app.modules.common import CreateObject
 from app.modules.label_printer import LabelPrinter
+from app.modules.view_helper_for_models import get_validated_request, RequestProcessingError
 from app.modules.printer import MissingCups
 from app.modules.persistent_storage import PersistentStorage
 from app.serializers import ItemSerializer, ItemDeserializer, ItemBarcodeDeserializer, ItemBarcodeSerializer, \
     ItemBarcodePrintDeserializer, ItemSearchSerializer
-from app.views.common import api_func
 
 __MAIN_BARCODE_FORMAT = re.compile(r'^' + re.escape(config.App.BARCODE_PREFIX) +
                                    '[0-9]{%d}' % config.App.BARCODE_NUMBERS + '$')
@@ -59,8 +59,8 @@ class ItemSearchListView(BaseView):
         barcodes = Barcode.query.filter(
             Barcode.barcode.ilike(expression)
         ).limit(data['limit']).all()
-        results.extend([_CreateObject(type='barcode', item_id=row.item_id, barcode=row.barcode, quantity=row.quantity,
-                                      name=row.item.name, unit=row.item.unit.unit) for row in barcodes])
+        results.extend([CreateObject(type='barcode', item_id=row.item_id, barcode=row.barcode, quantity=row.quantity,
+                                     name=row.item.name, unit=row.item.unit.unit) for row in barcodes])
 
         if len(results) < data['limit']:
             items = db.session.query(Item, Barcode).join(Barcode).filter(
@@ -72,10 +72,10 @@ class ItemSearchListView(BaseView):
                     Barcode.master
                 )
             ).limit(data['limit'] - len(results)).all()
-            results.extend([_CreateObject(type='item', item_id=row.Item.id, name=row.Item.name,
-                                          article_number=row.Item.article_number, vendor=row.Item.vendor.name,
-                                          unit=row.Item.unit.unit,
-                                          master_barcode=row.Barcode.barcode) for row in items])
+            results.extend([CreateObject(type='item', item_id=row.Item.id, name=row.Item.name,
+                                         article_number=row.Item.article_number, vendor=row.Item.vendor.name,
+                                         unit=row.Item.unit.unit,
+                                         master_barcode=row.Barcode.barcode) for row in items])
 
         return self._serializer.dump(results, many=True).data
 
@@ -271,8 +271,3 @@ def _get_label_printer(barcode: Barcode) -> LabelPrinter:
         )
 
     return LabelPrinter(title=title, data=barcode.barcode)
-
-
-class _CreateObject:
-    def __init__(self, **entries):
-        self.__dict__.update(entries)
