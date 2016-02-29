@@ -6,6 +6,7 @@ import json
 import os.path
 import random
 import sys
+import math
 from sqlalchemy.exc import IntegrityError
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -109,8 +110,8 @@ def iterate_items(data: dict):
             ).capitalize(),
             vendor_id=random.randrange(vendor_count) + 1,
             article_number='{}{!s}'.format((''.join(random.sample(letters, 2))).upper(), random.randint(1000, 999999)),
-            quantity=round(random.uniform(0, 10000), 2),
-            warning_quantity=round(random.uniform(0, 100), 2),
+            quantity=math.floor(random.uniform(0, 1000) * 100) / 100,
+            warning_quantity=math.floor(random.uniform(0, 100)),
             unit_id=random.randrange(unit_count) + 1,
             purchase_price=round(random.uniform(0, 1000), 2),
             location='{shelf}{level}/{region}'.format(

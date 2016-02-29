@@ -10,7 +10,7 @@
           <th st-sort="article_number" class="field-article-number" translate>Article Number</th>
           <th st-sort="name" class="field-name" st-sort-default="true" translate>Name</th>
           <th st-sort="location" class="field-location" translate>Location</th>
-          <th colspan="2" st-sort="quantity" class="field-quantity field-title" translate>Quantity</th>
+          <th colspan="3" st-sort="quantity" class="field-quantity field-title" translate>Quantity</th>
         </tr>
         <tr>
           <th colspan="2">
@@ -19,17 +19,29 @@
           <th colspan="2">
             <input placeholder="{{ 'search for vendor' | translate }}" class="input-sm form-control" type="search" st-search="vendor.name" />
           </th>
-          <th colspan="2"></th>
+          <th colspan="3"></th>
         </tr>
       </thead>
 
       <tbody>
-        <tr ng-repeat="item in displayedItems" ng-click="openItem(item)" class="clickable">
+        <tr ng-repeat="item in displayedItems" ng-click="openItem(item)" class="clickable" ng-class="{'warning': (item | isItemQuantityWarn), 'danger': (item | isItemQuantityCritical)}">
           <td class="field-vendor">{{ item.vendor.name }}</td>
           <td class="field-article-number">{{ item.article_number }}</td>
           <td class="field-name">{{ item.name }}</td>
           <td class="field-location">{{ item.location }}</td>
-          <td class="field-quantity">{{ item.quantity }}</td>
+          <td class="field-quantity-warning">
+            <span class="text-warning" ng-if="item | isItemQuantityWarn">
+              <i app-icon="warn" app-tooltip="{{ 'Item quantity is lower than' | translate }} {{ item.warning_quantity }}&nbsp;{{ item.unit.unit }}"></i>
+            </span>
+            <span class="text-danger" ng-if="item | isItemQuantityCritical">
+              <i app-icon="warn" app-tooltip="{{ 'Item is out of stock' | translate }}"></i>
+            </span>
+          </td>
+          <td class="field-quantity">{{ item.quantity }}
+            <div class="progress field-quantity-progress" ng-if="(item | isItemQuantityWarn) || (item | isItemQuantityCritical)">
+              <div class="progress-bar progress-bar-danger" role="progressbar" style="width: {{ item.quantity / item.warning_quantity * 100 }}%"></div>
+            </div>
+          </td>
           <td class="field-unit-beside-quantity">{{ item.unit.unit }}</td>
         </tr>
         <tr ng-if="loadingItems">

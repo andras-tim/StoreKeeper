@@ -43,7 +43,7 @@
 
               <!-- Meta -->
               <app-details-modal-panel a-half-width="true">
-                <app-input-form a-label="{{ 'In Stock' | translate }}">
+                <app-input-form a-label="{{ 'In Stock' | translate }}" ng-class="{'has-warning': (item | isItemQuantityWarn), 'has-error': (item | isItemQuantityCritical)}">
                   <div class="input-group field-quantity">
                     <input name="currentQuantity" id="currentQuantityInput" ng-model="item.quantity" type="text" class="form-control field-quantity" readonly />
                     <div class="input-group-addon field-unit-beside-quantity" ng-bind="item.unit.unit"></div>
