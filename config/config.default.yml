@@ -37,6 +37,16 @@ DefaultConfig:
     SQLALCHEMY_DATABASE_URI: "sqlite:///$SERVER/app.sqlite"
     SQLALCHEMY_TRACK_MODIFICATIONS: False
 
+    # https://pythonhosted.org/Flask-Mail/#configuring-flask-mail
+    MAIL_SERVER: bar.com
+    MAIL_PORT: 25
+    MAIL_USE_TLS: False
+    MAIL_USE_SSL: False
+    MAIL_USERNAME: NULL
+    MAIL_PASSWORD: NULL
+    MAIL_DEFAULT_SENDER: no-reply@storekeeper
+
+
   Log:
     # The log level (LEVEL) should be: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET
     #
@@ -86,12 +96,6 @@ DefaultConfig:
         ### Stack info ###
         %(stack_info)s
 
-      SERVER: bar.com
-      PORT: 25
-      USERNAME: NULL
-      PASSWORD: NULL
-
-      SENDER: no-reply@storekeeper
       RECIPIENTS:
         - foo@bar.com
 

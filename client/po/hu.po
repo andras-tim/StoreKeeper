@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StoreKeeper v0.4.0-beta\n"
-"PO-Revision-Date: 2016-02-13 14:35+0000\n"
+"PO-Revision-Date: 2016-02-29 04:11+0000\n"
 "Last-Translator: Andras Tim <andras.tim@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/andras-tim/storekeeper/language/hu/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +40,7 @@ msgstr "Vonalkód hozzárendelése egy létező télelhez"
 msgid "Assign to item"
 msgstr "Hozzárendelés egy télelhez"
 
-#: app/partials/views/item.html:71
+#: app/partials/views/item.html:75
 msgid "Barcode"
 msgstr "Vonalkód"
 
@@ -76,12 +76,12 @@ msgstr "Nem lehet csatlakozni a szerverhez"
 msgid "Cancel"
 msgstr "Mégse"
 
-#: app/partials/views/item.html:124
+#: app/partials/views/item.html:128
 #: app/partials/widgets/modal/details_modal_navbar.html:9
 msgid "Close"
 msgstr "Bezárás"
 
-#: app/partials/views/item.html:73
+#: app/partials/views/item.html:77
 msgid "Commands"
 msgstr "Műveletek"
 
@@ -120,13 +120,17 @@ msgstr "Biztos át akarja mozgatni a lista elemeit az Raktárkészletbe?"
 msgid "Do you want to print sum {{ count }} pcs. labels?"
 msgstr "Biztosan ki szeretne nyomtatni {{ count }} darab címkét?"
 
-#: app/partials/views/item.html:100
+#: app/partials/views/item.html:104
 msgid "Download label file"
 msgstr "Címke fájl letöltése"
 
 #: app/partials/views/item.html:27
 msgid "Enter article number"
 msgstr "Írja be a cikkszámot"
+
+#: app/partials/views/item.html:61
+msgid "Enter location of item"
+msgstr "Írja be a tétel helyét"
 
 #: app/partials/views/item.html:31
 msgid "Enter name of item"
@@ -152,7 +156,7 @@ msgstr "Raktáron"
 msgid "Item"
 msgstr "Tétel"
 
-#: app/partials/views/item-selector.html:19 app/partials/views/item.html:93
+#: app/partials/views/item-selector.html:19 app/partials/views/item.html:97
 msgid "Item amount for this barcode"
 msgstr "A vonalkódhoz tartozó mennyiség"
 
@@ -163,6 +167,10 @@ msgstr "Tétel kereső"
 #: app/partials/views/item-selector.html:5
 msgid "Item selector"
 msgstr "Tétel kiválasztó"
+
+#: app/partials/views/item.html:60 app/partials/views/items.html:12
+msgid "Location"
+msgstr "Hely"
 
 #: app/partials/views/login.html:5
 msgid "Login"
@@ -176,7 +184,7 @@ msgstr "Kijelentkezés"
 msgid "Mandatory field"
 msgstr "Kötelező mező"
 
-#: app/partials/views/item.html:81
+#: app/partials/views/item.html:85
 msgid "Master barcode for this item"
 msgstr "Fő vonalkód ehhez az télelhez"
 
@@ -200,7 +208,7 @@ msgstr "Szám szükséges"
 msgid "Password"
 msgstr "Jelszó"
 
-#: app/partials/views/item.html:99
+#: app/partials/views/item.html:103
 msgid "Print label"
 msgstr "Címke nyomtatása"
 
@@ -217,12 +225,12 @@ msgstr "Címke nyomtatás az összes elemhez"
 msgid "Purchase price"
 msgstr "Vételár"
 
-#: app/partials/views/items.html:12
+#: app/partials/views/items.html:13
 #: app/partials/widgets/fields/quantity-input.html:1
 msgid "Quantity"
 msgstr "Mennyiség"
 
-#: app/partials/views/item.html:72
+#: app/partials/views/item.html:76
 msgid "Quantity ({{ item.unit.unit }})"
 msgstr "Mennyiség"
 
@@ -234,7 +242,7 @@ msgstr "Emlékezz rám"
 msgid "Remove all elements from list"
 msgstr "Az összes elem eltávolítása a listából"
 
-#: app/partials/views/item.html:101
+#: app/partials/views/item.html:105
 msgid "Remove label"
 msgstr "Címke törlése"
 
@@ -242,7 +250,7 @@ msgstr "Címke törlése"
 msgid "Remove this element"
 msgstr "Elem eltávolítása"
 
-#: app/partials/views/item.html:123
+#: app/partials/views/item.html:127
 msgid "Save"
 msgstr "Mentés"
 
@@ -297,7 +305,7 @@ msgid ""
 "tim/StoreKeeper/blob/master/LICENSE\" target=\"_blank\">GPLv2</a>"
 msgstr "motor <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE\" target=\"_blank\">GPLv2</a> alatt"
 
-#: app/partials/views/items.html:16
+#: app/partials/views/items.html:17
 msgid "global search"
 msgstr "globális szűrő"
 
@@ -305,7 +313,7 @@ msgstr "globális szűrő"
 msgid "password"
 msgstr "Jelszó"
 
-#: app/partials/views/items.html:19
+#: app/partials/views/items.html:20
 msgid "search for vendor"
 msgstr "szűrés gyártó szerint"
 
