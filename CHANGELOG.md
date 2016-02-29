@@ -4,8 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+
+
+## [0.4.0] - 2016-02-29
 ### Added
 - Added location filed to Item
+- Warning for low item quantity on UI - issue #2
 
 ### Changed
 - Moved common email related settings from "Log" to "Email" in config file
@@ -76,7 +80,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Can use barcode printer to create labels
 
 
-[unreleased]: https://github.com/andras-tim/StoreKeeper/compare/v0.3.0...HEAD
+[unreleased]: https://github.com/andras-tim/StoreKeeper/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/andras-tim/StoreKeeper/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/andras-tim/StoreKeeper/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/andras-tim/StoreKeeper/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/andras-tim/StoreKeeper/compare/v0.1.0...v0.2.0
