@@ -1,3 +1,7 @@
+from functools import wraps
+from threading import Thread
+
+
 def list_in_list(list1: list, list2: list) -> list:
     return [item in list2 for item in list1]
 
@@ -21,3 +25,11 @@ def recursive_dict_update(dictionary: dict, updater: dict):
 class CreateObject:
     def __init__(self, **entries):
         self.__dict__.update(entries)
+
+
+def async(func: callable, daemon: bool=False):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        thread = Thread(target=func, args=args, kwargs=kwargs, daemon=daemon)
+        thread.start()
+    return wrapper

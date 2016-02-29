@@ -6,6 +6,7 @@ from sqlalchemy_continuum import make_versioned, plugins
 
 from app import test_mode, doc_mode, log, static
 from app.config import get_config, check_warnings_in_config
+from app.modules.email import Email
 from app.modules.restful_api import RestfulApiWithoutSimpleAuth
 from app.version import Version
 
@@ -20,9 +21,12 @@ flask_args.update(static.get_flask_parameters(config))
 app = Flask(__name__, **flask_args)
 app.config.update(config['Flask'])
 
+# email (wrapped flask-mail)
+mail = Email(app)
+
 # logging
 if not app.debug and not app.testing and not doc_mode:
-    log.initialize(app, config, version_info)
+    log.initialize(app, config, mail, version_info)
 
 check_warnings_in_config(app, config)
 

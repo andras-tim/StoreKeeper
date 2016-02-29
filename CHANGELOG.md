@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added location filed to Item
 
+### Changed
+- Moved common email related settings from "Log" to "Email" in config file
+
 ### Fixed
 - Turn off properly browser autocomplete in typeaheads too - issue #132
 
