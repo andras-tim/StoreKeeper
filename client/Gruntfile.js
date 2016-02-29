@@ -184,7 +184,7 @@ module.exports = function (grunt) {
                 }]
             },
             'po': {
-                'src': 'po/*.po',
+                'src': ['po/*.po', 'po/*.pot'],
                 'overwrite': true,
                 'replacements': [{
                     'from': /("Project-Id-Version:\s*)[^\\]*((\\r|\\n)*")/,
