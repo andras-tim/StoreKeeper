@@ -3,17 +3,17 @@
 Fill up database with huge amount of test data
 """
 import json
-import os.path
+import math
 import random
 import sys
-import math
+import os.path
+from string import ascii_uppercase, digits
 from sqlalchemy.exc import IntegrityError
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(basedir, '..'))
 base_record_count_per_table = 150
 commit_batch_size = 50
-letters = 'abcdefghijklmnopqsrtuvwxyz'
 
 from app.server import db
 from app.models import Unit, Vendor, Item, User, UserConfig, Customer, Barcode, Work, WorkItem, Acquisition, \
@@ -30,6 +30,19 @@ def get_data() -> dict:
 def get_count(base_multiplier: float=1) -> int:
     multiplier = base_multiplier * (random.randint(7, 11) / 10)
     return int(base_record_count_per_table * multiplier)
+
+
+def random_multi_choices(seq, count: int) -> list:
+    return [random.choice(seq) for i in range(count)]
+
+
+def now() -> datetime:
+    return datetime.now()
+
+
+def get_elapsed(start_time: datetime) -> str:
+    elapsed = now() - start_time
+    return '{:0.3f}'.format(elapsed.total_seconds())
 
 
 def iterate_acquisitions(data: dict):
@@ -64,25 +77,39 @@ def iterate_barcodes(data: dict):
     item_ids = list(range(1, item_count + 1))
     random.shuffle(item_ids)
 
+    def generate_main() -> str:
+        return 'SK{number}'.format(
+            number=random.randint(100000, 999999),
+        )
+
+    def generate_other_prefix() -> str:
+        return ''.join(random_multi_choices(ascii_uppercase, random.randint(2, 4)))
+
+    def generate_other(prefix: str) -> str:
+        length = random.randint(7, 15)
+        return '{prefix}{variable}'.format(
+            prefix=prefix,
+            variable=''.join(random_multi_choices(digits, length - len(prefix))),
+        )
+
     for item_id in item_ids:
         yield Barcode(
-            barcode='SK{number}'.format(
-                number=random.randint(100000, 999999)
-            ),
+            barcode=generate_main(),
             quantity=1.0,
             item_id=item_id,
             master=True,
             main=True
         )
+
+        other_barcode_prefix = generate_other_prefix()
         for i in range(random.randint(0, 2)):
+            main_barcode = random.uniform(1, 10) > 7.5
             yield Barcode(
-                barcode='SK{number}'.format(
-                    number=random.randint(100000, 999999)
-                ),
+                barcode=generate_main() if main_barcode else generate_other(other_barcode_prefix),
                 quantity=round(random.uniform(1, 10) * 5, 2),
                 item_id=item_id,
                 master=False,
-                main=(random.uniform(1, 10) > 5)
+                main=main_barcode
             )
 
 
@@ -109,13 +136,16 @@ def iterate_items(data: dict):
                 item=random.choice(data['items'])
             ).capitalize(),
             vendor_id=random.randrange(vendor_count) + 1,
-            article_number='{}{!s}'.format((''.join(random.sample(letters, 2))).upper(), random.randint(1000, 999999)),
+            article_number='{letters}{numbers}'.format(
+                letters=''.join(random_multi_choices(ascii_uppercase, 2)),
+                numbers=random.randint(1000, 999999),
+            ),
             quantity=math.floor(random.uniform(0, 1000) * 100) / 100,
             warning_quantity=math.floor(random.uniform(0, 100)),
             unit_id=random.randrange(unit_count) + 1,
             purchase_price=round(random.uniform(0, 1000), 2),
             location='{shelf}{level}/{region}'.format(
-                shelf=random.sample(letters, 1)[0].upper(),
+                shelf=random.choice(ascii_uppercase),
                 level=random.randint(0, 100),
                 region=random.randint(0, 100),
             )
