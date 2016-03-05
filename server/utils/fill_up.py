@@ -7,6 +7,7 @@ import math
 import random
 import sys
 import os.path
+from datetime import datetime
 from string import ascii_uppercase, digits
 from sqlalchemy.exc import IntegrityError
 
@@ -263,6 +264,7 @@ def iterate_work_items(data: dict):
 
 
 def main():
+    main_start = now()
     iterators = [
         iterate_users,
         iterate_user_config,
@@ -281,6 +283,7 @@ def main():
     data = get_data()
 
     for object_iterator in iterators:
+        object_start = now()
         name = object_iterator.__name__.replace('iterate_', '').replace('_', ' ')
         sys.stdout.write(' * Generating {}...'.format(name))
         sys.stdout.flush()
@@ -297,7 +300,7 @@ def main():
                     break
 
             if record_in_batch == 0:
-                print(' Done [{}]'.format(commited_rows))
+                print(' Done [{count}, {time}s]'.format(count=commited_rows, time=get_elapsed(object_start)))
                 break
 
             try:
@@ -309,7 +312,7 @@ def main():
                 db.session.rollback()
             sys.stdout.flush()
 
-    print('All done')
+    print('All done [{}s]'.format(get_elapsed(main_start)))
 
 if __name__ == '__main__':
     sys.exit(main())
