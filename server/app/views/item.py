@@ -235,12 +235,13 @@ _persistent_storage = PersistentStorage('item')
 
 def _get_barcode_generator(barcode_prefix: str, count_of_numbers: int, base_barcode: Barcode) -> callable:
     def generator():
-        barcode_number = _persistent_storage.get('last_barcode_number', 0) + 1
-        barcode = '{prefix}{numbers}'.format(
-            prefix=barcode_prefix,
-            numbers=str(barcode_number).zfill(count_of_numbers)
-        )
-        _persistent_storage.set('last_barcode_number', barcode_number)
+        with _persistent_storage as storage:
+            barcode_number = storage.get('last_barcode_number', default=0) + 1
+            barcode = '{prefix}{numbers}'.format(
+                prefix=barcode_prefix,
+                numbers=str(barcode_number).zfill(count_of_numbers)
+            )
+            storage.set('last_barcode_number', barcode_number)
 
         return Barcode(barcode=barcode, quantity=base_barcode.quantity, item_id=base_barcode.item_id,
                        master=base_barcode.master, main=True)

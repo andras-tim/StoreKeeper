@@ -1,4 +1,5 @@
 # Pytest config for this test directory
+import os
 import pytest
 from _pytest.main import Node
 
@@ -33,6 +34,8 @@ def __skip_item(item: Node, reason: (str, None)=None):
 # Enable test mode
 import app
 app.test_mode = True
+
+app.persistent_storage_dir = os.path.join(app.tempdir, 'test_persistent_storage_{}'.format(os.getpid()))
 
 
 # Pre-load server module for preserve import order
