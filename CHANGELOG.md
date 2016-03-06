@@ -4,6 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+### Fixed
+- Table footer border and alignment on Items view
+- Turned off autocomplete when it is not necessary or annoying - issue #139
+- Persistent storage is thread-safe now - issue #137
+- Separated production and test persistent storage - issue #111
 
 
 ## [0.4.0] - 2016-02-29
