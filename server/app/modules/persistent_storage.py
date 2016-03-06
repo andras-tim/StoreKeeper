@@ -2,7 +2,7 @@ import json
 import fcntl
 import os.path
 
-from app import configdir, tempdir
+from app import persistent_storage_dir
 
 
 class PersistentStorage:
@@ -18,18 +18,16 @@ class PersistentStorage:
     ...     storage.set('apple', 20)
     """
 
-    STORAGE_PATH = os.path.join(configdir, 'persistent_storage')
-    LOCK_PATH = os.path.join(tempdir, 'persistent_storage_locks')
-
     def __init__(self, name: str= 'common'):
-        self.__json_file_path = os.path.join(self.STORAGE_PATH, '{}.json'.format(name))
-        self.__lock_file_path = os.path.join(self.LOCK_PATH, '{}.lck'.format(name))
+        self.__storage_dir_path = persistent_storage_dir
+        self.__json_file_path = os.path.join(self.__storage_dir_path, '{}.json'.format(name))
+        self.__lock_file_path = os.path.join(self.__storage_dir_path, '{}.json.lck'.format(name))
         self.__lock_fd = None
 
         self.__storage = {}
         self.__dirty = False
 
-        self.__prepare_directories()
+        self.__prepare_directory()
 
     def __enter__(self) -> 'PersistentStorage':
         self.__hold_lock()
@@ -48,11 +46,9 @@ class PersistentStorage:
         self.__storage[name] = value
         self.__dirty = True
 
-    def __prepare_directories(self):
-        if not os.path.exists(self.STORAGE_PATH):
-            os.makedirs(self.STORAGE_PATH)
-        if not os.path.exists(self.LOCK_PATH):
-            os.makedirs(self.LOCK_PATH)
+    def __prepare_directory(self):
+        if not os.path.exists(self.__storage_dir_path):
+            os.makedirs(self.__storage_dir_path)
 
     def __load(self):
         try:
