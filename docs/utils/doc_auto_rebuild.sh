@@ -14,7 +14,8 @@ function rebuild_docs()
 rebuild_docs
 while true
 do
-    inotifywait -r -qq -e modify,create,delete ../server/app
+    inotifywait -r -qq -e modify,create,delete,move_self,delete_self \
+        --exclude 'tmp' --exclude '_build' . ../VERSION.json ../server/app
     sleep 1
     rebuild_docs
 done
