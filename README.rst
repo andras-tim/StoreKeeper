@@ -88,34 +88,34 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
 .. |Logo| image:: https://raw.githubusercontent.com/andras-tim/StoreKeeper/master/config/img/logo.default.png
 
 .. |Build| image:: https://travis-ci.org/andras-tim/StoreKeeper.svg?branch=master
-   :target: https://travis-ci.org/andras-tim/StoreKeeper/branches
-   :alt: Build Status
+    :target: https://travis-ci.org/andras-tim/StoreKeeper/branches
+    :alt: Build Status
 .. |DependencyStatus| image:: https://gemnasium.com/andras-tim/StoreKeeper.svg
-   :target: https://gemnasium.com/andras-tim/StoreKeeper
-   :alt: Dependency Status
+    :target: https://gemnasium.com/andras-tim/StoreKeeper
+    :alt: Dependency Status
 .. |Docs| image:: https://readthedocs.org/projects/storekeeper/badge/?version=latest
-   :target: http://storekeeper.readthedocs.org/latest/
-   :alt: Documentation Status
+    :target: http://storekeeper.readthedocs.org/latest/
+    :alt: Documentation Status
 .. |License| image:: https://img.shields.io/badge/license-GPL%202.0-blue.svg
-   :target: https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE
-   :alt: License
+    :target: https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE
+    :alt: License
 
 .. |CodeQuality| image:: https://www.codacy.com/project/badge/6c9fb93d1b1d4333a8146e8aeb55b11f
-   :target: https://www.codacy.com/app/andras-tim/StoreKeeper
-   :alt: Code Quality
+    :target: https://www.codacy.com/app/andras-tim/StoreKeeper
+    :alt: Code Quality
 .. |CodeClimate| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/gpa.svg
-   :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
-   :alt: Code Climate
+    :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
+    :alt: Code Climate
 .. |CoverageServer| image:: https://coveralls.io/repos/andras-tim/StoreKeeper/badge.svg?branch=master&service=github
-   :target: https://coveralls.io/r/andras-tim/StoreKeeper?branch=master&service=github
-   :alt: Server Test Coverage
+    :target: https://coveralls.io/r/andras-tim/StoreKeeper?branch=master&service=github
+    :alt: Server Test Coverage
 .. |CoverageClient| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/coverage.svg
-   :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
-   :alt: Client Test Coverage
+    :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
+    :alt: Client Test Coverage
 .. |IssueStats| image:: https://img.shields.io/github/issues/andras-tim/StoreKeeper.svg
-   :target: http://issuestats.com/github/andras-tim/StoreKeeper
-   :alt: Issue Stats
+    :target: http://issuestats.com/github/andras-tim/StoreKeeper
+    :alt: Issue Stats
 
 .. |TranslationState| image:: https://www.transifex.com/projects/p/storekeeper/resource/client/chart/image_png
-   :target: https://www.transifex.com/projects/p/storekeeper/
-   :alt: See more information on Transifex.com
+    :target: https://www.transifex.com/projects/p/storekeeper/
+    :alt: See more information on Transifex.com
