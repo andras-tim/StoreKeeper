@@ -8,9 +8,6 @@ class RestfulApiWithoutSimpleAuth(restful.Api):
         allow_simple_auth = self.app.config.get("ALLOW_API_SIMPLE_AUTH", False)
         if allow_simple_auth:
             realm = self.app.config.get("HTTP_BASIC_AUTH_REALM", "flask-restful")
-            challenge = "Basic realm=\"%s\"" % realm
-        else:
-            challenge = "Digest"
+            response.headers['WWW-Authenticate'] = "Basic realm=\"%s\"" % realm
 
-        response.headers['WWW-Authenticate'] = challenge
         return response
