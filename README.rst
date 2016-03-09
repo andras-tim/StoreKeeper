@@ -93,6 +93,12 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
 .. |DependencyStatus| image:: https://gemnasium.com/andras-tim/StoreKeeper.svg
     :target: https://gemnasium.com/andras-tim/StoreKeeper
     :alt: Dependency Status
+.. |ServerDependencyStatus| image:: https://requires.io/github/andras-tim/StoreKeeper/requirements.svg?branch=master
+    :target: https://requires.io/github/andras-tim/StoreKeeper/requirements/?branch=master
+    :alt: Server Dependency Status
+.. |ClientDependencyStatus| image:: https://requires.io/github/andras-tim/StoreKeeper/requirements.svg?branch=master
+    :target: https://requires.io/github/andras-tim/StoreKeeper/requirements/?branch=master
+    :alt: Server Dependency Status
 .. |Docs| image:: https://readthedocs.org/projects/storekeeper/badge/?version=latest
     :target: http://storekeeper.readthedocs.org/latest/
     :alt: Documentation Status
@@ -117,5 +123,5 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
     :alt: Issue Stats
 
 .. |TranslationState| image:: https://www.transifex.com/projects/p/storekeeper/resource/client/chart/image_png
-    :target: https://www.transifex.com/projects/p/storekeeper/
+    :target: https://www.transifex.com/andras-tim/storekeeper/
     :alt: See more information on Transifex.com
