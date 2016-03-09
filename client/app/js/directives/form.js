@@ -93,16 +93,14 @@ appFormDirectives.directive('appInputForm', ['$timeout', 'CommonFactory',
 
                 return {
                     'post': function postLink (scope, iElement, iAttrs, iCtrl, iTransclude) {
-                        iTransclude(function (cloneElement) {
-                            element.find('ng-transclude').prepend(cloneElement);
-
+                        iTransclude(scope, function (transcludedContent) {
                             $timeout(function () {
-                                var inputElement = cloneElement.find('input').addBack('input');
+                                var inputElement = transcludedContent.find('input').addBack('input');
 
                                 if (inputElement.length !== 1) {
                                     CommonFactory.printToConsole('Can not clearly identify the input element in <app-input-form>', {
                                         'element': iElement,
-                                        'cloneElement': cloneElement,
+                                        'cloneElement': transcludedContent,
                                         'inputElement': inputElement
                                     });
                                 }
