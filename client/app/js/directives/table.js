@@ -96,7 +96,7 @@ appTableDirectives.directive('appPageInput',
     function appPageInput () {
         return {
             'restrict': 'E',
-            'template': '<input type="text" class="select-page no-buttons" ng-model="inputPage" ng-change="selectPage(inputPage)" autocomplete="off" />',
+            'template': '<input type="number" class="select-page no-buttons" ng-model="inputPage" ng-change="selectPage(inputPage)" autocomplete="off" />',
             'link': function (scope) {
                 scope.$watch('currentPage', function (newValue) {
                     scope.inputPage = newValue;

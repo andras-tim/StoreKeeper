@@ -52,11 +52,11 @@ describe('Directives/Table: appPageInput', function () {
 
         test.container.find('input').val('1');
         test.container.find('input').triggerHandler('change');
-        expect(test.mocks.selectPage).toHaveBeenCalledWith('1');
+        expect(test.mocks.selectPage).toHaveBeenCalledWith(1);
 
         test.container.find('input').val('42');
         test.container.find('input').triggerHandler('change');
-        expect(test.mocks.selectPage).toHaveBeenCalledWith('42');
+        expect(test.mocks.selectPage).toHaveBeenCalledWith(42);
     });
 
 });
