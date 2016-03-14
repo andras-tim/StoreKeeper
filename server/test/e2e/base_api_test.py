@@ -73,7 +73,7 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
         try:
             data_json = json.loads(response_string)
         except Exception as e:
-            assert False, 'Can not parse received data as JSON; data={!r}, error={!r}'.format(response_string, e)
+            assert False, 'Can not parse received data as JSON\n\ndata={!r}\nerror={!r}'.format(response_string, e)
         return data_json
 
     def __assert_status_code(self, expected_status_codes: (int, list), response: Response, request: dict):
@@ -81,7 +81,7 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
         if type(expected_status_codes) != list:
             expected_status_codes = [expected_status_codes]
         assert response.status_code in expected_status_codes, \
-            'Not expected status code; request={!r} response={!r}'.format(request, response.data.decode('utf-8'))
+            'Not expected status code\n\nrequest={!r}\nresponse={!r}'.format(request, response.data.decode('utf-8'))
 
     def __call_api(self, command: str, data: str, url: str):
         return getattr(self.client, command)('/{!s}/api{!s}'.format(config.App.NAME, url),
