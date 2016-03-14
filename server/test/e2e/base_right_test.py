@@ -23,6 +23,7 @@ def use_as_rights_data_provider(endpoint: str):
 
     def test_wrapper(test_class, right: dict) -> callable:
         def test_func(self):
+            __tracebackhide__ = True
             test_class.check_access_rights(self, **right)
         return test_func
     return decorator
@@ -45,6 +46,7 @@ class CommonRightsTest(CommonSessionTest):
             yield {'actor': actor, 'expected_per_command': expected_per_command}
 
     def check_access_rights(self, actor: str, expected_per_command: dict):
+        __tracebackhide__ = True
         commands_in_order = ('get', 'post', 'put', 'delete')
 
         for command in commands_in_order:
