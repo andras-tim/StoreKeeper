@@ -42,6 +42,10 @@ button.btn.dropdown-toggle {
     padding: 6px 8px;
 }
 
+ul.dropdown-menu {
+    outline: none;
+}
+
 input[type=number] {
     padding-top: 2px;
     padding-bottom: 2px;

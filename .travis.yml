@@ -4,8 +4,13 @@ python:
   - 3.4
 
 env:
-  - MODULE=server
-  - MODULE=client
+  global:
+    - NPM_CONFIG_SPIN=false
+    - NPM_CONFIG_PYTHON=python2
+    - DISPLAY=:99.0
+  matrix:
+    - MODULE=server
+    - MODULE=client
 
 matrix:
   fast_finish: true
@@ -20,19 +25,25 @@ cache:
     - $HOME/.cache/pip
     - $HOME/.npm
 
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
 before_install:
   - case ${MODULE} in
       server) pip install coveralls;;
-      client) export NPM_CONFIG_SPIN=false;
-              export NPM_CONFIG_PYTHON=python2;
-              npm install -g codeclimate-test-reporter;
-              export CHROME_BIN=chromium-browser;
-              export DISPLAY=:99.0;
+      client) . $HOME/.nvm/nvm.sh;
+              nvm install 4.3;
+              nvm use 4.3;
+              npm install -g npm codeclimate-test-reporter;
               sh -e /etc/init.d/xvfb start;;
     esac
-  - export GLOBAL_INSTALL=true
 
 install:
+  - export GLOBAL_INSTALL=true
   - server/package.sh install --force
   - case ${MODULE} in
       client) client/package.sh install --force;;
