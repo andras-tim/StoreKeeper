@@ -223,7 +223,7 @@ class TestUserRights(CommonRightsTest):
 
 
 @use_as_rights_data_provider('/users/2/config')
-class TestStocktakingItemRights(CommonRightsTest):
+class TestUserConfigRights(CommonRightsTest):
     ID_FIELD = 'name'
     INIT_PUSH = [
         ('/users', [Users.USER2]),

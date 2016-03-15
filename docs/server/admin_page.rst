@@ -18,11 +18,11 @@ Interface
 ---------
 
 .. image:: ../_static/server/admin/ui_model.*
-   :width: 512px
-   :height: 384px
-   :alt: SQL Table manager
+    :width: 512px
+    :height: 384px
+    :alt: SQL Table manager
 
 .. image:: ../_static/server/admin/ui_static.*
-   :width: 512px
-   :height: 384px
-   :alt: Static file manager
+    :width: 512px
+    :height: 384px
+    :alt: Static file manager

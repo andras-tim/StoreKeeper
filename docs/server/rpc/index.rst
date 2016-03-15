@@ -17,17 +17,17 @@ Endpoints
 ---------
 
 .. toctree::
-   :maxdepth: 3
+    :maxdepth: 3
 
-   acquisitions
-   barcodes
-   config
-   customers
-   error
-   items
-   session
-   stocktakings
-   units
-   users
-   vendors
-   works
+    acquisitions
+    barcodes
+    config
+    customers
+    error
+    items
+    session
+    stocktakings
+    units
+    users
+    vendors
+    works

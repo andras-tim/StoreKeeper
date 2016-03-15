@@ -17,7 +17,8 @@ function upgrade_db()
 upgrade_db
 while true
 do
-    inotifywait -r -qq -e modify,create,delete --exclude 'db_migrations/versions' app db_migrations utils
+    inotifywait -r -qq -e modify,create,delete,move_self,delete_self \
+        --exclude 'db_migrations/versions' app db_migrations utils
     sleep 1
     upgrade_db
 done

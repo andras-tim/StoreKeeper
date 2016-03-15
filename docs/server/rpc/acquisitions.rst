@@ -5,26 +5,27 @@ Acquisitions
 
 API endpoint for manage acquisitions.
 
+
 Data management
 ---------------
 
 ``/api/acquisitions``
 ^^^^^^^^^^^^^^^^^^^^^
-  .. autoflask:: app.server:app
-     :endpoints: acquisition_list
+.. autoflask:: app.server:app
+    :endpoints: acquisition_list
 
 ``/api/acquisitions/<id>``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  .. autoflask:: app.server:app
-     :endpoints: acquisition
+.. autoflask:: app.server:app
+    :endpoints: acquisition
 
 ``/api/acquisitions/<id>/items``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  .. autoflask:: app.server:app
-     :endpoints: acquisition_item_list
+.. autoflask:: app.server:app
+    :endpoints: acquisition_item_list
 
-``/api/acquisitions/<id>/items``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  .. autoflask:: app.server:app
-     :endpoints: acquisition_item
+``/api/acquisitions/<id>/items/<item_id>``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoflask:: app.server:app
+    :endpoints: acquisition_item
 

@@ -5,18 +5,19 @@ Users
 
 API endpoint for manage users.
 
+
 Data management
 ---------------
 
 ``/api/users``
 ^^^^^^^^^^^^^^
-  .. autoflask:: app.server:app
-     :endpoints: user_list
+.. autoflask:: app.server:app
+    :endpoints: user_list
 
 ``/api/users/<id>``
 ^^^^^^^^^^^^^^^^^^^
-  .. autoflask:: app.server:app
-     :endpoints: user
+.. autoflask:: app.server:app
+    :endpoints: user
 
 
 Config management
@@ -24,10 +25,10 @@ Config management
 
 ``/api/users/<id>/config``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  .. autoflask:: app.server:app
-     :endpoints: user_config_list
+.. autoflask:: app.server:app
+    :endpoints: user_config_list
 
 ``/api/users/<id>/config/<id>``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  .. autoflask:: app.server:app
-     :endpoints: user_config
+.. autoflask:: app.server:app
+    :endpoints: user_config

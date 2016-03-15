@@ -12,16 +12,16 @@ Interfaces
 ----------
 
 .. toctree::
-   :maxdepth: 1
+    :maxdepth: 1
 
-   admin_page
-   rpc/index
+    admin_page
+    rpc/index
 
 
 Details
 -------
 
 .. toctree::
-   :maxdepth: 1
+    :maxdepth: 1
 
-   sql_model
+    sql_model

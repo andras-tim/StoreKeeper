@@ -48,12 +48,12 @@ The Guide
 =========
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   setup
-   upgrade
-   client/index
-   server/index
+    setup
+    upgrade
+    client/index
+    server/index
 
 
 Indices and tables
