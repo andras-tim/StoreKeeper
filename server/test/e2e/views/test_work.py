@@ -335,7 +335,7 @@ class TesCloseReturnedOfWorkWithWorkItems(CommonSessionTestWithItemManipulation)
         ])
 
     def test_can_close_returned_with_zero_and_none_item_quantities(self):
-        self.assertApiPut(WorkItems.ITEM1['id'], data=WorkItems.ITEM1.set(change={'returned_quantity': None}))
+        # WorkItems.ITEM1 has returned_quantity=None
         self.assertApiPut(WorkItems.ITEM2['id'], data=WorkItems.ITEM2.set(change={'returned_quantity': 0.0}))
 
         self.assertApiPut(Works.WORK1_OUTBOUND_CLOSED['id'], endpoint='/works', url_suffix='/close-returned')

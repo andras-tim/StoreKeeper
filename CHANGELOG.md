@@ -4,6 +4,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+### Changed
+- Updated server and client dependencies to the latest version:
+
+    New system dependencies:
+
+    - `libjpeg-dev`
+    - `libffi-dev`
+
 ### Fixed
 - Table footer border and alignment on Items view
 - Turned off autocomplete when it is not necessary or annoying - issue #139

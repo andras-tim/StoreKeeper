@@ -30,6 +30,7 @@ DefaultConfig:
     SECRET_KEY: PleaseChangeThisImportantSecretString
 
     # https://flask-login.readthedocs.org/en/latest/
+    LOGIN_DISABLED: False
     SESSION_PROTECTION: strong
     REMEMBER_COOKIE_DURATION: 90
 
@@ -158,6 +159,9 @@ TestingConfig:
   Flask:
     WTF_CSRF_ENABLED: False
     TESTING: True
+
+    # The right checker tests will override this settings
+    LOGIN_DISABLED: True
 
     # Most of SQL related tests override this settings and use in-memory database, however tests of DatabaseMaintenance
     # class have to use file based database!

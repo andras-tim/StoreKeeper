@@ -9,11 +9,11 @@ Serializers (server => client)
 
 Deserializer (client => server)
  * define all fields with required, validate arguments
- * make make_object() for defaults (by default the not set fields the non-present fields)
+ * use `missing` argument for fill up a non-set field with a default value
  * required strings should not be blank
- * use deserializer instances(!) in nested fields
+ * use `fields.Nested(<deserializerClass>, only=['id'])` for nested fields
 """
-from marshmallow import Serializer, fields, ValidationError
+from marshmallow import Schema, fields, ValidationError
 from marshmallow.validate import Regexp
 from app.modules.basic_serializer import BasicSerializer
 
@@ -34,15 +34,15 @@ def _greater_than_or_equal_zero(number: (int, float)):
 
 
 class UppercaseString(fields.String):
-    def _deserialize(self, value):
-        return super()._deserialize(value).upper()
+    def _deserialize(self, *args, **kwargs):
+        return super()._deserialize(*args, **kwargs).upper()
 
 
 class UserSerializer(BasicSerializer):
     fields = ('id', 'username', 'email', 'admin', 'disabled')
 
 
-class UserDeserializer(Serializer):
+class UserDeserializer(Schema):
     id = fields.Int()
     username = fields.Str(required=True, validate=Regexp(r'^[a-z0-9](|[a-z0-9_.-]*[a-z0-9])$'))
     password = fields.Str(required=True, validate=_not_blank)
@@ -51,23 +51,18 @@ class UserDeserializer(Serializer):
     disabled = fields.Bool()
 
 
-class SessionDeserializer(Serializer):
+class SessionDeserializer(Schema):
     id = fields.Int()
     username = fields.Str(required=True, validate=_not_blank)
     password = fields.Str(required=True, validate=_not_blank)
-    remember = fields.Bool()
-
-    def make_object(self, data: dict) -> dict:
-        if 'remember' not in data.keys():
-            data['remember'] = False
-        return data
+    remember = fields.Bool(missing=False)
 
 
 class VendorSerializer(BasicSerializer):
     fields = ('id', 'name')
 
 
-class VendorDeserializer(Serializer):
+class VendorDeserializer(Schema):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
 
@@ -76,7 +71,7 @@ class UnitSerializer(BasicSerializer):
     fields = ('id', 'unit')
 
 
-class UnitDeserializer(Serializer):
+class UnitDeserializer(Schema):
     id = fields.Int()
     unit = fields.Str(required=True, validate=_not_blank)
 
@@ -85,7 +80,7 @@ class CustomerSerializer(BasicSerializer):
     fields = ('id', 'name')
 
 
-class CustomerDeserializer(Serializer):
+class CustomerDeserializer(Schema):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
 
@@ -95,7 +90,7 @@ class AcquisitionSerializer(BasicSerializer):
     datetime_fields = ('timestamp', )
 
 
-class AcquisitionDeserializer(Serializer):
+class AcquisitionDeserializer(Schema):
     id = fields.Int()
     comment = fields.Str()
 
@@ -108,7 +103,7 @@ class StocktakingSerializer(BasicSerializer):
     }
 
 
-class StocktakingDeserializer(Serializer):
+class StocktakingDeserializer(Schema):
     id = fields.Int()
     comment = fields.Str()
 
@@ -121,21 +116,18 @@ class ItemSerializer(BasicSerializer):
     }
 
 
-class ItemDeserializer(Serializer):
+class ItemDeserializer(Schema):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
-    vendor = fields.Nested(VendorDeserializer(), required=True)
+    vendor = fields.Nested(VendorDeserializer, required=True, only=['id'])
     article_number = UppercaseString()
     warning_quantity = fields.Float()
-    unit = fields.Nested(UnitDeserializer(), required=True)
+    unit = fields.Nested(UnitDeserializer, required=True, only=['id'])
     purchase_price = fields.Float(validate=_greater_than_or_equal_zero)
     location = fields.Str()
 
 
-class ItemSearchSerializer(Serializer):
-    class Meta:
-        skip_missing = True
-
+class ItemSearchSerializer(Schema):
     type = fields.Str(required=True)
     item_id = fields.Int(required=True)
 
@@ -153,14 +145,14 @@ class ItemBarcodeSerializer(BasicSerializer):
     fields = ('id', 'barcode', 'quantity', 'master', 'main')
 
 
-class ItemBarcodeDeserializer(Serializer):
+class ItemBarcodeDeserializer(Schema):
     id = fields.Int()
     barcode = UppercaseString(validate=_not_blank)
     quantity = fields.Float(validate=_greater_than_zero)
     master = fields.Bool()
 
 
-class ItemBarcodePrintDeserializer(Serializer):
+class ItemBarcodePrintDeserializer(Schema):
     copies = fields.Int()
 
 
@@ -171,9 +163,9 @@ class AcquisitionItemSerializer(BasicSerializer):
     }
 
 
-class AcquisitionItemDeserializer(Serializer):
+class AcquisitionItemDeserializer(Schema):
     id = fields.Int()
-    item = fields.Nested(ItemDeserializer(), required=True)
+    item = fields.Nested(ItemDeserializer, required=True, only=['id'])
     quantity = fields.Float(required=True, validate=_greater_than_zero)
 
 
@@ -184,9 +176,9 @@ class StocktakingItemSerializer(BasicSerializer):
     }
 
 
-class StocktakingItemDeserializer(Serializer):
+class StocktakingItemDeserializer(Schema):
     id = fields.Int()
-    item = fields.Nested(ItemDeserializer(), required=True)
+    item = fields.Nested(ItemDeserializer, required=True, only=['id'])
     quantity = fields.Float(required=True)
 
 
@@ -204,9 +196,9 @@ class WorkSerializer(BasicSerializer):
     }
 
 
-class WorkDeserializer(Serializer):
+class WorkDeserializer(Schema):
     id = fields.Int()
-    customer = fields.Nested(CustomerDeserializer(), required=True)
+    customer = fields.Nested(CustomerDeserializer, required=True, only=['id'])
     comment = fields.Str()
 
 
@@ -217,9 +209,9 @@ class WorkItemSerializer(BasicSerializer):
     }
 
 
-class WorkItemDeserializer(Serializer):
+class WorkItemDeserializer(Schema):
     id = fields.Int()
-    item = fields.Nested(ItemDeserializer(), required=True)
+    item = fields.Nested(ItemDeserializer, required=True, only=['id'])
     outbound_quantity = fields.Float(required=True, validate=_greater_than_zero)
     returned_quantity = fields.Float(validate=_greater_than_or_equal_zero)
 
@@ -228,13 +220,13 @@ class UserConfigSerializer(BasicSerializer):
     fields = ('name', 'value')
 
 
-class UserConfigDeserializer(Serializer):
+class UserConfigDeserializer(Schema):
     id = fields.Int()
     name = fields.Str(required=True, validate=_not_blank)
     value = fields.Str(required=True)
 
 
-class ErrorDeserializer(Serializer):
+class ErrorDeserializer(Schema):
     name = fields.Str()
     message = fields.Str(required=True)
     stack = fields.Str()

@@ -174,6 +174,7 @@ class BaseView(Resource):
         for nested_model_object in nested_model_objects:
             quantity = getattr(nested_model_object, quantity_field_of_object)
             if quantity is None:
+                setattr(nested_model_object, quantity_field_of_object, 0.0)
                 continue
 
             quantity_diff = multiplier_for_sign * quantity

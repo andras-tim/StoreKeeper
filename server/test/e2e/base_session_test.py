@@ -6,23 +6,20 @@ from test.e2e.base_api_test import CommonApiTest
 class CommonSessionTest(CommonApiTest):
     """
     Super class of Session tests
-
-    Have to turn off temporary TESTING mode, because Flask-Login will not authenticate @login_required requests.
-    https://flask-login.readthedocs.org/en/latest/#protecting-views
     """
     def setUp(self):
-        CommonSessionTest.__set_testing_mode(False)
+        CommonSessionTest.__enable_auth(True)
         super().setUp()
         self.authenticated_user = None
 
     def tearDown(self):
         super().tearDown()
-        CommonSessionTest.__set_testing_mode(True)
+        CommonSessionTest.__enable_auth(False)
 
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
-        cls.__set_testing_mode(True)
+        cls.__enable_auth(False)
 
     def _fill_up(self, list_of_endpoint_and_objects: list):
         __tracebackhide__ = True
@@ -51,6 +48,6 @@ class CommonSessionTest(CommonApiTest):
                           expected_status_codes=expected_status_codes)
 
     @classmethod
-    def __set_testing_mode(cls, enable: bool):
-        app.config['TESTING'] = enable
+    def __enable_auth(cls, enable: bool):
+        app.config['LOGIN_DISABLED'] = not enable
         lm.init_app(app)

@@ -29,14 +29,17 @@ class User(db.Model):
         return bcrypt.check_password_hash(self.password_hash, password)
 
     # flask-loginmanager
+    @property
     def is_authenticated(self) -> bool:
         return True
 
     # flask-loginmanager
+    @property
     def is_active(self) -> bool:
         return not self.disabled
 
     # flask-loginmanager
+    @property
     def is_anonymous(self) -> bool:
         return False
 

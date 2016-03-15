@@ -19,7 +19,7 @@ function init()
 function do_preinstall()
 {
     # Extra dependencies for fast Yaml file reading (http://stackoverflow.com/a/24791419/1108919)
-    packages="build-essential python${PYTHON_VERSION} python${PYTHON_VERSION}-dev python3-pip libyaml-dev python3-cups python3-psycopg2 fonts-dejavu"
+    packages="build-essential python${PYTHON_VERSION} python${PYTHON_VERSION}-dev python3-pip libjpeg-dev libffi-dev libyaml-dev python3-cups python3-psycopg2 fonts-dejavu"
     if [ "${GLOBAL_INSTALL}" == false ]
     then
         packages="${packages} python-virtualenv"
@@ -34,7 +34,7 @@ function do_preinstall()
             virtualenv --system-site-packages -p python${PYTHON_VERSION} flask
         fi
     fi
-    ${PIP} install --upgrade pip setuptools
+    ${PIP} install --upgrade pip setuptools wheel
 }
 
 function do_install()

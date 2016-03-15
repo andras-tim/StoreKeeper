@@ -10,26 +10,17 @@ function do_preinstall()
 
     if [ ! -e '/etc/apt/sources.list.d/nodesource.list' ]
     then
-        wget -q 'https://deb.nodesource.com/setup' -O - | sudo bash -
+        wget -q 'https://deb.nodesource.com/setup_4.x' -O - | sudo bash -
     fi
     apt_get_install nodejs
+
+    sudo npm install -g npm
 }
 
 function do_install()
 {
-    if [ "${PRODUCTION}" == true ]
-    then
-        npm install --production
-    else
-        npm install
-    fi
-
-    if [ "${FORCE}" == true ]
-    then
-        node_modules/bower/bin/bower install --config.interactive=false
-    else
-        node_modules/bower/bin/bower install
-    fi
+    install_node_dependencies
+    install_bower_dependencies
 
     if [ "${PRODUCTION}" == false ]
     then
@@ -38,6 +29,37 @@ function do_install()
 
     mkdir -p tmp
     run resources
+}
+
+function install_node_dependencies()
+{
+    local args='--no-optional'
+
+    if [ "${PRODUCTION}" == true ]
+    then
+        args="${args} --production"
+    fi
+
+    echo -e "\n$ npm install ${args}"
+    npm install ${args}
+}
+
+function install_bower_dependencies()
+{
+    local args=
+
+    if [ "${PRODUCTION}" == true ]
+    then
+        args="${args} --production"
+    fi
+
+    if [ "${FORCE}" == true ]
+    then
+        args="${args} --config.interactive=false"
+    fi
+
+    echo -e "\n$ bower install ${args}"
+    node_modules/bower/bin/bower install ${args}
 }
 
 function do_resources()

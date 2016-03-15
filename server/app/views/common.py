@@ -30,23 +30,23 @@ def before_request():
 
     app.logger.debug(request)
 
-    if g.user.is_authenticated() and not g.user.is_active():
+    if g.user.is_authenticated and not g.user.is_active:
         logout_user()
         app.logger.debug('before_request: user: {!r}\nlogged out because is not active'.format(g.user))
 
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         app.logger.debug('before_request: user: {!r}\nauthenticated'.format(g.user))
     else:
         g.user.id = None
-        g.user.admin = app.config['TESTING']
+        g.user.admin = app.config['LOGIN_DISABLED']
         app.logger.debug('before_request: user: {!r}\nnot authenticated'.format(g.user))
 
 
 def admin_login_required(func: callable):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if not app.config['TESTING']:
-            if not g.user.is_authenticated():
+        if not app.config['LOGIN_DISABLED']:
+            if not g.user.is_authenticated:
                 abort(401)
             if not g.user.admin:
                 abort(403)

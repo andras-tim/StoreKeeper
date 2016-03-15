@@ -16,12 +16,12 @@ msgstr ""
 msgid "Add new element to list"
 msgstr ""
 
-#: app/partials/views/items.html:10
-msgid "Article Number"
-msgstr ""
-
 #: app/partials/views/item.html:26
 msgid "Article no."
+msgstr ""
+
+#: app/partials/views/items.html:10
+msgid "Article Number"
 msgstr ""
 
 #: app/partials/sidebars/item.html:58
@@ -113,6 +113,10 @@ msgstr ""
 msgid "Download label file"
 msgstr ""
 
+#: app/partials/footer.html:3
+msgid "engine under <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE\" target=\"_blank\">GPLv2</a>"
+msgstr ""
+
 #: app/partials/views/item.html:27
 msgid "Enter article number"
 msgstr ""
@@ -135,6 +139,10 @@ msgstr ""
 
 #: app/js/factories/common.js:29
 msgid "Error {{ status }}"
+msgstr ""
+
+#: app/partials/views/items.html:17
+msgid "global search"
 msgstr ""
 
 #: app/partials/views/item.html:46
@@ -205,6 +213,10 @@ msgstr ""
 msgid "Number required"
 msgstr ""
 
+#: app/partials/views/login.html:13
+msgid "password"
+msgstr ""
+
 #: app/partials/views/login.html:12
 msgid "Password"
 msgstr ""
@@ -255,6 +267,10 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#: app/partials/views/items.html:20
+msgid "search for vendor"
+msgstr ""
+
 #: app/partials/views/login.html:23
 msgid "Sign in"
 msgstr ""
@@ -288,6 +304,10 @@ msgstr ""
 msgid "User will not logged out after close this window"
 msgstr ""
 
+#: app/partials/views/login.html:9
+msgid "username"
+msgstr ""
+
 #: app/partials/views/login.html:8
 msgid "Username"
 msgstr ""
@@ -299,24 +319,4 @@ msgstr ""
 
 #: app/partials/views/item.html:53
 msgid "Warning quantity"
-msgstr ""
-
-#: app/partials/footer.html:3
-msgid "engine under <a href=\"https://github.com/andras-tim/StoreKeeper/blob/master/LICENSE\" target=\"_blank\">GPLv2</a>"
-msgstr ""
-
-#: app/partials/views/items.html:17
-msgid "global search"
-msgstr ""
-
-#: app/partials/views/login.html:13
-msgid "password"
-msgstr ""
-
-#: app/partials/views/items.html:20
-msgid "search for vendor"
-msgstr ""
-
-#: app/partials/views/login.html:9
-msgid "username"
 msgstr ""
