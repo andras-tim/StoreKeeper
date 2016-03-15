@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
     - `libjpeg-dev`
     - `libffi-dev`
+    - `zlib1g-dev`
 
 ### Fixed
 - Table footer border and alignment on Items view
