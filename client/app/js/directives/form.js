@@ -296,7 +296,7 @@ appFormDirectives.directive('appLazyTypeahead', ['$q', '$timeout', '$typeahead',
                 'aTitleAttribute': '@'
             },
             'link': function (scope, element, attrs, controller) {
-                var options,
+                var config,
                     typeahead,
 
                     delayedPromise = CommonFactory.createDelayedPromiseCallback(function (filter) {
@@ -337,7 +337,7 @@ appFormDirectives.directive('appLazyTypeahead', ['$q', '$timeout', '$typeahead',
                     'elements': []
                 };
 
-                options = {
+                config = {
                     'scope': scope,
                     'bsOptions': 'element for element in data.elements',
                     'minLength': 1,
@@ -345,7 +345,7 @@ appFormDirectives.directive('appLazyTypeahead', ['$q', '$timeout', '$typeahead',
                     'templateUrl': scope.appLazyTypeahead
                 };
 
-                typeahead = TypeaheadFactory.createTypeahead(scope, element, controller, options);
+                typeahead = TypeaheadFactory.createTypeahead(scope, element, controller, config);
 
                 scope.$watch(function () {
                     return controller.$modelValue;
