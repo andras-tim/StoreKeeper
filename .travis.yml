@@ -33,8 +33,9 @@ addons:
       - google-chrome-stable
 
 before_install:
+  - pip install --upgrade pip setuptools wheel
   - case ${MODULE} in
-      server) pip install coveralls;;
+      server) pip install --upgrade coveralls;;
       client) . $HOME/.nvm/nvm.sh;
               nvm install 4.3;
               nvm use 4.3;

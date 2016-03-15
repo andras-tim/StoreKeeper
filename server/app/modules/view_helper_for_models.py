@@ -1,6 +1,6 @@
 import re
 from flask import request
-from marshmallow import Serializer
+from marshmallow import Schema
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.inspection import inspect
 
@@ -23,7 +23,7 @@ class RequestProcessingError(Exception):
 
 
 class PopulateModelOnSubmit:
-    def __init__(self, model_object, deserializer: Serializer):
+    def __init__(self, model_object, deserializer: Schema):
         self.__model_object = model_object
         self.__deserializer = deserializer
 
@@ -121,7 +121,7 @@ class SqlErrorParser:
         return ', '.join(sorted(split_fields))
 
 
-def get_validated_request(deserializer: Serializer) -> (dict, list, None):
+def get_validated_request(deserializer: Schema) -> (dict, list, None):
         json_input = request.get_json()
         if json_input is None:
             raise RequestProcessingError('Validation error; data is non-Json!')

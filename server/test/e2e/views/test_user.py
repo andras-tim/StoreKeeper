@@ -34,7 +34,7 @@ class TestUserWithBrandNewDb(CommonApiTest):
 
     def test_can_not_add_user_with_bad_email(self):
         self.assertApiPost(data=Users.USER1.set(change={'email': 'foo.bar'}),
-                           expected_data={'message': {'email': ['"foo.bar" is not a valid email address.']}},
+                           expected_data={'message': {'email': ['Not a valid email address.']}},
                            expected_status_codes=422)
 
 
