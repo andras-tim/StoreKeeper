@@ -1,7 +1,9 @@
+import flask
 import inspect
-from flask import g, request
+from flask import g
 from flask.ext.restful import abort
 from flask.ext.login import current_user, login_required as login_required_decorator, logout_user
+from flask.ext.sqlalchemy import SQLAlchemy
 from functools import wraps
 from sqlalchemy.exc import IntegrityError
 
@@ -28,7 +30,7 @@ def load_user(unique_id):
 def before_request():
     g.user = current_user
 
-    app.logger.debug(request)
+    app.logger.debug(flask.request)
 
     if g.user.is_authenticated and not g.user.is_active:
         logout_user()
@@ -74,8 +76,8 @@ def api_func(title: str,
             return decorated_func
 
         args = __get_args(func)
-        login_required = __get_login_required()
-        response_status = __get_response_status(func)
+        calculated_login_required = __get_login_required()
+        calculated_response_status = __get_response_status(func)
 
         decorated_func.__doc__ = ApiDoc.get_doc(
             title=__get_title(),
@@ -87,9 +89,9 @@ def api_func(title: str,
             response_content_type=response_content_type,
             response_header=__get_header(response_filename),
             response=__get_content(response, response_filename),
-            response_status=response_status,
+            response_status=calculated_response_status,
             params=__get_params(func, args),
-            status_codes=__get_status_codes(func, args, login_required, response_status)
+            status_codes=__get_status_codes(func, args, calculated_login_required, calculated_response_status)
         )
         return decorated_func
 
@@ -124,12 +126,13 @@ def api_func(title: str,
             new_params['id'] = 'ID of selected {!s} for {!s}'.format(item_name, func.__name__)
         return new_params
 
-    def __get_status_codes(func: callable, args: set, login_required: bool, response_status: int) -> dict:
+    def __get_status_codes(func: callable, args: set, calculated_login_required: bool,
+                           calculated_response_status: int) -> dict:
         new_status_codes = status_codes or {}
 
-        if response_status not in new_status_codes.keys():
-            new_status_codes[response_status] = ''
-        if login_required and 401 not in new_status_codes.keys():
+        if calculated_response_status not in new_status_codes.keys():
+            new_status_codes[calculated_response_status] = ''
+        if calculated_login_required and 401 not in new_status_codes.keys():
             new_status_codes[401] = ''
         if admin_required and 403 not in new_status_codes.keys():
             new_status_codes[403] = ''
@@ -156,7 +159,7 @@ def api_func(title: str,
     return wrapper
 
 
-def commit_and_rollback_on_error(db):
+def commit_and_rollback_on_error(db: SQLAlchemy):
     try:
         db.session.commit()
     except IntegrityError:
@@ -164,7 +167,7 @@ def commit_and_rollback_on_error(db):
         raise
 
 
-def commit_with_error_handling(db):
+def commit_with_error_handling(db: SQLAlchemy):
     try:
         commit_and_rollback_on_error(db)
     except IntegrityError as e:
