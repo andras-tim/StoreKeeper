@@ -9,8 +9,19 @@ module.exports = function (grunt) {
             var jsonObject = grunt.file.readJSON(filePath);
             jsonObject.version = version;
             grunt.file.write(filePath, JSON.stringify(jsonObject, null, 2) + '\n');
+        },
+
+        abortOnWarning = function abortOnWarning () {
+            // Workaround for fail on warnings
+            var log = grunt.log,
+                logWarn = log.warn;
+            log.warn = function warnChecker () {
+                logWarn.apply(log, arguments);
+                grunt.fail.warn('Abort on warning!');
+            };
         };
 
+    abortOnWarning();
 
     grunt.initConfig({
         'pkg': grunt.file.readJSON('package.json'),
@@ -50,20 +61,20 @@ module.exports = function (grunt) {
 
         'nggettext_extract': {
             'pot': {
-                'files': {
-                    'po/en.pot': [
-                        'app/*.html',
-                        'app/js/**/*.js',
-                        'app/partials/**/*.html'
-                    ]
-                }
+                'nonull': true,
+                'src': [
+                    'app/*.html',
+                    'app/js/**/*.js',
+                    'app/partials/**/*.html'
+                ],
+                'dest': 'po/en.pot'
             }
         },
         'nggettext_compile': {
             'po': {
-                'files': {
-                    'app/js/translations.tmp.js': ['po/*.po']
-                }
+                'nonull': true,
+                'src': ['po/*.po'],
+                'dest': 'app/js/translations.tmp.js'
             }
         },
 
@@ -82,6 +93,7 @@ module.exports = function (grunt) {
                         'removeStyleLinkTypeAttributes': true
                     }
                 },
+                'nonull': true,
                 'cwd': 'app',
                 'src': ['partials/**/*.html'],
                 'dest': 'app/js/partials.tmp.js'
@@ -94,6 +106,7 @@ module.exports = function (grunt) {
                 'sourceMap': production
             },
             'res_js': {
+                'nonull': true,
                 'src': [
                     'bower_components/jquery/dist/jquery<%= min %>.js',
                     'bower_components/lodash/dist/lodash<%= min %>.js',
@@ -112,10 +125,12 @@ module.exports = function (grunt) {
                 'dest': 'app/dist/js/resources<%= min %>.js'
             },
             'app_js': {
+                'nonull': true,
                 'src': ['app/js/**/*.js'],
                 'dest': 'app/dist/js/storekeeper.js'
             },
             'res_css': {
+                'nonull': true,
                 'src': [
                     'bower_components/bootstrap/dist/css/bootstrap<%= min %>.css',
                     'bower_components/bootstrap-additions/dist/bootstrap-additions<%= min %>.css',
@@ -129,6 +144,7 @@ module.exports = function (grunt) {
                 }
             },
             'app_css': {
+                'nonull': true,
                 'src': ['app/css/**/*.css'],
                 'dest': 'app/dist/css/storekeeper.css'
             }
@@ -142,9 +158,9 @@ module.exports = function (grunt) {
                 'sourceMapIn': '<%= concat.app_js.dest %>.map'
             },
             'app_js': {
-                'files': {
-                    'app/dist/js/storekeeper.min.js': ['<%= concat.app_js.dest %>']
-                }
+                'nonull': true,
+                'src': ['<%= concat.app_js.dest %>'],
+                'dest': 'app/dist/js/storekeeper.min.js'
             }
         },
 
@@ -154,14 +170,15 @@ module.exports = function (grunt) {
                 'sourceMap': production
             },
             'app_css': {
-                'files': {
-                    'app/dist/css/storekeeper.min.css': ['<%= concat.app_css.dest %>']
-                }
+                'nonull': true,
+                'src': ['<%= concat.app_css.dest %>'],
+                'dest': 'app/dist/css/storekeeper.min.css'
             }
         },
 
         'replace': {
             'index_html': {
+                'nonull': true,
                 'src': 'app/index.html',
                 'overwrite': true,
                 'replacements': [{
@@ -173,6 +190,7 @@ module.exports = function (grunt) {
                 }]
             },
             'index_html_min': {
+                'nonull': true,
                 'src': 'app/index.html',
                 'overwrite': true,
                 'replacements': [{
@@ -184,6 +202,7 @@ module.exports = function (grunt) {
                 }]
             },
             'po': {
+                'nonull': true,
                 'src': ['po/*.po', 'po/*.pot'],
                 'overwrite': true,
                 'replacements': [{
