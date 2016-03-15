@@ -9,6 +9,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Turned off autocomplete when it is not necessary or annoying - issue #139
 - Persistent storage is thread-safe now - issue #137
 - Separated production and test persistent storage - issue #111
+- Small performance improvements in WebUI
+- Fixed login issue in Firefox
+- Fixed number input of pager in Firefox
 
 
 ## [0.4.0] - 2016-02-29
