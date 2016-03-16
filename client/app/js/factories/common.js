@@ -118,7 +118,7 @@ appCommonFactories.factory('CommonFactory', ['$rootScope', '$q', '$timeout', '$a
                 }
             }
 
-            delayMs = delayMs || 600;
+            delayMs = delayMs || $rootScope.appDefaults.delayedPromiseCallback.delayMs;
 
             return {
                 'callback': callback,

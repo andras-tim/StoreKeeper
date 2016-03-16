@@ -284,7 +284,7 @@ msgstr ""
 msgid "System will send a warning when the quantity decreases under this value"
 msgstr ""
 
-#: app/js/app.js:118
+#: app/js/app.js:123
 msgid "The form is dirty."
 msgstr ""
 
