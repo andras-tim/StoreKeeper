@@ -44,6 +44,14 @@ button.btn.dropdown-toggle {
 
 ul.dropdown-menu {
     outline: none;
+
+    /* required by container=body */
+    z-index: 2000;
+}
+
+div.tooltip {
+    /* required by container=body */
+    z-index: 2050;
 }
 
 input[type=number] {

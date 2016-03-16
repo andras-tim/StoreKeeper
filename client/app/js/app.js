@@ -128,14 +128,15 @@ storekeeperApp.run(['$rootScope', '$window', 'gettextCatalog', 'SidebarFactory',
     }]);
 
 
-storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider', '$asideProvider',
-    function appConfigAngularstrap ($modalProvider, $tooltipProvider, $typeaheadProvider, $asideProvider) {
+storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider', '$asideProvider', '$dropdownProvider',
+    function appConfigAngularstrap ($modalProvider, $tooltipProvider, $typeaheadProvider, $asideProvider, $dropdownProvider) {
         angular.extend($modalProvider.defaults, {
             'html': true,
             'keyboard': false,
             'show': false
         });
         angular.extend($tooltipProvider.defaults, {
+            'container': 'body',
             'trigger': 'hover',
             'delay': {
                 'show': 800,
@@ -143,11 +144,15 @@ storekeeperApp.config(['$modalProvider', '$tooltipProvider', '$typeaheadProvider
             }
         });
         angular.extend($typeaheadProvider.defaults, {
+            'container': 'body',
             'minLength': 0,
             'autoSelect': true
         });
         angular.extend($asideProvider.defaults, {
             'show': false
+        });
+        angular.extend($dropdownProvider.defaults, {
+            'container': 'body'
         });
     }]);
 

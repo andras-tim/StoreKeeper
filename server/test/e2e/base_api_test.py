@@ -40,9 +40,9 @@ class LowLevelCommonApiTest(CommonTestWithDatabaseSupport):
 
         admin = User(username=Users.ADMIN['username'], email=Users.ADMIN['email'], admin=True)
         admin.set_password(Users.ADMIN['password'])
-
         db.session.add(admin)
         db.session.commit()
+
         self.client = app.test_client()
 
     def assertApiRequest(self, command: str, url: str, data: (dict, None)=None,

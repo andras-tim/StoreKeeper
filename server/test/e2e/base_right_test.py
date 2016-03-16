@@ -97,5 +97,6 @@ class CommonRightsTest(CommonSessionTest):
         expected_status_codes = [200, 201]
         if not expected:
             expected_status_codes = [401, 403]
+
         self.assertApiRequest(command, url, data=data,
                               expected_status_codes=expected_status_codes)

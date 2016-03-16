@@ -9,11 +9,11 @@ appFormFactories.factory('TypeaheadFactory', ['$typeahead', '$parseOptions',
 
         var defaults = $typeahead.defaults,
 
-            getParsedOptions = function getParsedOptions (options) {
-                var filter = options.filter || defaults.filter,
-                    limit = options.limit || defaults.limit,
-                    comparator = options.comparator || defaults.comparator,
-                    bsOptions = options.bsOptions;
+            getParsedOptions = function getParsedOptions (config) {
+                var filter = config.filter || defaults.filter,
+                    limit = config.limit || defaults.limit,
+                    comparator = config.comparator || defaults.comparator,
+                    bsOptions = config.bsOptions;
 
                 if (filter) {
                     bsOptions += ' | ' + filter + ':$viewValue';
@@ -28,9 +28,9 @@ appFormFactories.factory('TypeaheadFactory', ['$typeahead', '$parseOptions',
                 return $parseOptions(bsOptions);
             },
 
-            createTypeahead = function createTypeahead (scope, element, controller, options) {
-                var parsedOptions = getParsedOptions(options),
-                    typeahead = $typeahead(element, controller, options),
+            createTypeahead = function createTypeahead (scope, element, controller, config) {
+                var parsedOptions = getParsedOptions(config),
+                    typeahead = $typeahead(element, controller, config),
 
                     updateTypeahead = function updateTypeahead () {
                         parsedOptions.valuesFn(scope, controller).then(function (values) {

@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
     - `libjpeg-dev`
     - `libffi-dev`
+    - `zlib1g-dev`
 
 ### Fixed
 - Table footer border and alignment on Items view
@@ -20,6 +21,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Small performance improvements in WebUI
 - Fixed login issue in Firefox
 - Fixed number input of pager in Firefox
+- Moved dropdown-menu elements to body to avoid cropping by the parent container - issue #147
 
 
 ## [0.4.0] - 2016-02-29
