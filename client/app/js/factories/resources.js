@@ -180,7 +180,7 @@ appResourceFactories.factory('BarcodeCacheFactory', ['$q', 'Restangular', 'Commo
                         var result = $q.defer();
 
                         getBarcodes().then(function (barcodes) {
-                            var index = _.findIndex(barcodes, 'barcode', barcodeValue);
+                            var index = _.findIndex(barcodes, {'barcode': barcodeValue});
 
                             if (index === -1) {
                                 result.reject(barcodeValue);
