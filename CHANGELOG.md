@@ -22,6 +22,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed login issue in Firefox
 - Fixed number input of pager in Firefox
 - Moved dropdown-menu elements to body to avoid cropping by the parent container - issue #147
+- Fixed item selection problem in typeaheads - issue #100
 
 
 ## [0.4.0] - 2016-02-29

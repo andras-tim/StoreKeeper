@@ -18,7 +18,6 @@ var storekeeperApp = angular.module('storekeeperApp', [
     'appDirectives.modal',
     'appDirectives.table',
     'appFactories.common',
-    'appFactories.form',
     'appFactories.resources',
     'appFilters',
     'appServices'
@@ -68,7 +67,7 @@ storekeeperApp.config(['$routeProvider',
 
 
 storekeeperApp.run(['$rootScope',
-    function appConfigSidebars ($rootScope) {
+    function appConfig ($rootScope) {
         $rootScope.sidebars = {
             'item': {
                 'templateUrl': 'partials/sidebars/item.html',
@@ -83,6 +82,11 @@ storekeeperApp.run(['$rootScope',
             'item-selector': {
                 'templateUrl': 'partials/views/item-selector.html',
                 'saveState': false
+            }
+        };
+        $rootScope.appDefaults = {
+            'delayedPromiseCallback': {
+                'delayMs': 100
             }
         };
     }]);

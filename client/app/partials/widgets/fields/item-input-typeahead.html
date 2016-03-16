@@ -1,11 +1,11 @@
 <ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="select">
-  <li role="presentation" ng-repeat="match in $matches | orderBy:['label.name', 'label.quantity']" ng-class="{active: $index == $activeIndex}">
+  <li role="presentation" ng-repeat="match in $matches | orderBy:['value.name', 'value.quantity']" ng-class="{active: $index == $activeIndex}">
     <a role="menuitem" tabindex="-1" ng-click="$select($index, $event)">
-      <div ng-if="match.label.type === 'barcode'">
-        <i app-icon="barcode"></i> {{ match.label.barcode }} <i>{{ match.label.name }} ({{ match.label.quantity }} {{ match.label.unit }})</i>
+      <div ng-if="match.value.type === 'barcode'">
+        <i app-icon="barcode"></i> {{ match.value.barcode }} <i>{{ match.value.name }} ({{ match.value.quantity }} {{ match.value.unit }})</i>
       </div>
-      <div ng-if="match.label.type === 'item'">
-        <i app-icon="item"></i> {{ match.label.article_number }} <i>{{ match.label.name }}</i>
+      <div ng-if="match.value.type === 'item'">
+        <i app-icon="item"></i> {{ match.value.article_number }} <i>{{ match.value.name }}</i>
       </div>
     </a>
   </li>
