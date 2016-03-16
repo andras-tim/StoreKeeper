@@ -215,18 +215,32 @@ appFieldsDirectives.directive('appItemInput',
             'compile': function (element, attrs) {
                 element.find('input').attr('autofocus', angular.isUndefined(attrs.aAutofocus) ? null : '');
             },
-            'controller': ['$scope', 'ItemService', 'CommonFactory',
-                function ($scope, ItemService, CommonFactory) {
-                    $scope.dataFetcher = function dataFetcher (filter, limit) {
-                        var options = {
-                            'expression': filter,
-                            'limit': limit
+            'controller': ['$scope', '$q', '$typeahead', 'ItemService', 'CommonFactory',
+                function ($scope, $q, $typeahead, ItemService, CommonFactory) {
+
+                    var dataFetcher = function dataFetcher (filter) {
+                            var options = {
+                                'expression': filter,
+                                'limit': $typeahead.defaults.limit
+                            };
+
+                            return CommonFactory.handlePromise(
+                                ItemService.one('search').getList(null, options)
+                            );
+                        },
+
+                        delayedDataFetcher = CommonFactory.createDelayedPromiseCallback(dataFetcher),
+
+                        getData = function getData ($modelValue, $viewValue) {
+                            delayedDataFetcher.cancel();
+                            if (!$viewValue || angular.isObject($modelValue)) {
+                                return;
+                            }
+
+                            return delayedDataFetcher.callback($viewValue);
                         };
 
-                        return CommonFactory.handlePromise(
-                            ItemService.one('search').getList(null, options)
-                        );
-                    };
+                    $scope.getData = getData;
                 }]
         };
     });
