@@ -169,32 +169,45 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
             'restrict': 'A',
             'scope': false,
             'link': function (scope, element, attrs) {
-                var tooltip;
+                var tooltip,
 
-                attrs.$observe('appTooltip', function (newTitle) {
-                    var options;
+                    hide = function hide () {
+                        if (angular.isDefined(tooltip)) {
+                            tooltip.hide();
+                        }
+                    },
 
-                    if (tooltip !== undefined) {
-                        tooltip.destroy();
-                    }
+                    destroy = function destroy () {
+                        if (angular.isDefined(tooltip)) {
+                            tooltip.destroy();
+                        }
+                    },
 
-                    options = {
-                        'title': newTitle
+                    setTitle = function setTitle (newTitle) {
+                        var options;
+
+                        destroy();
+
+                        options = {
+                            'title': newTitle
+                        };
+                        if (attrs.aPlacement) {
+                            options.placement = attrs.aPlacement;
+                        }
+
+                        tooltip = $tooltip(element, options);
                     };
-                    if (attrs.aPlacement) {
-                        options.placement = attrs.aPlacement;
-                    }
 
-                    tooltip = $tooltip(element, options);
-                });
+                attrs.$observe('appTooltip', setTitle);
 
                 scope.$watch(attrs.ngDisabled, function (disabled) {
-                    if (disabled && tooltip !== undefined) {
-                        tooltip.$promise.then(function () {
-                            tooltip.hide();
-                        });
+                    if (disabled) {
+                        hide();
                     }
                 });
+
+                element.bind('$destroy', destroy);
+                scope.$on('$destroy', destroy);
             }
         };
     }]);
