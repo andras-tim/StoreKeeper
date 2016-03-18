@@ -1,7 +1,7 @@
 {
   "name": "storekeeper",
   "description": "StoreKeeper",
-  "version": "0.5.0",
+  "version": "0.6.0-beta",
   "authors": [
     "Andras Tim <andras.tim@gmail.com>"
   ],
