@@ -1,11 +1,9 @@
 /**
  * Dropdown
  */
-ul.dropdown-menu {
+.dropdown-menu {
+    z-index: 2000;  /* required by container=body */
     outline: none;
-
-    /* required by container=body */
-    z-index: 2000;
 }
 
 
@@ -13,12 +11,8 @@ ul.dropdown-menu {
  * Tooltip
  */
 .tooltip {
+    z-index: 2050; /* required by container=body */
     font-size: small;
-}
-
-div.tooltip {
-    /* required by container=body */
-    z-index: 2050;
 }
 
 .tooltip-inner {
@@ -49,22 +43,22 @@ input[type=number].no-buttons {
 /**
  * Button
  */
-button.btn-sm.btn-sm-wide {
+.btn-sm.btn-sm-wide {
     padding-left: 20px;
     padding-right: 20px;
 }
 
-button.btn.btn-wide {
+.btn.btn-wide {
     padding-left: 24px;
     padding-right: 24px;
 }
 
-button.btn.btn-toggle-wide {
+.btn.btn-toggle-wide {
     padding-left: 24px;
     padding-right: 12px;
 }
 
-button.btn.dropdown-toggle {
+.btn.dropdown-toggle {
     padding: 6px 8px;
 }
 
