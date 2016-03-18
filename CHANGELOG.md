@@ -12,6 +12,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `libjpeg-dev`
     - `libffi-dev`
     - `zlib1g-dev`
+    
+- Customizable search for item types. Now, the item selector will return items only - issue #119
 
 ### Fixed
 - Table footer border and alignment on Items view
@@ -24,6 +26,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Moved dropdown-menu elements to body to avoid cropping by the parent container - issue #147
 - Fixed item selection problem in typeaheads - issue #100
 - Removed annoying warning about bad value from quantity input fields
+- Fixed commit-able state check of Item sideber - issue #141
 
 
 ## [0.4.0] - 2016-02-29

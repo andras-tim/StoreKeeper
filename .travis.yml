@@ -36,18 +36,20 @@ before_install:
   - pip install --upgrade pip setuptools wheel
   - case ${MODULE} in
       server) pip install --upgrade coveralls;;
-      client) . $HOME/.nvm/nvm.sh;
-              nvm install 4.3;
-              nvm use 4.3;
-              npm install -g npm codeclimate-test-reporter;
+      client) source $HOME/.nvm/nvm.sh &&
+              nvm install 4.3 &&
+              nvm use 4.3 &&
+              npm update -g npm &&
+              npm install -g codeclimate-test-reporter &&
               sh -e /etc/init.d/xvfb start;;
     esac
 
 install:
   - export GLOBAL_INSTALL=true
-  - server/package.sh install --force
+  - server/package.sh --force install
   - case ${MODULE} in
-      client) client/package.sh install --force;;
+      client) client/package.sh --production --force install &&
+              client/package.sh --force install;;
     esac
 
 before_script:

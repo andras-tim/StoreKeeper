@@ -41,28 +41,37 @@ class ItemListView(BaseView):
 class ItemSearchListView(BaseView):
     _serializer = ItemSearchSerializer()
 
-    @api_func('Search in items and barcodes', url_tail='/items/search?expression=sk&limit=6',
-              response=[ExampleItemSearchResults.RESULT1.get(), ExampleItemSearchResults.RESULT2.get()])
+    @api_func('Search in items and barcodes', url_tail='/items/search?expression=sk&limit=6&barcodes=1&items=1',
+              response=[ExampleItemSearchResults.RESULT1.get(), ExampleItemSearchResults.RESULT2.get()],
+              params={'expression': 'Query string (search in barcode, item name, article number)',
+                      'limit': 'Limit of result set [default: 6]',
+                      'barcodes': 'Filter for master barcodes [0=False (default), 1=True]',
+                      'items': 'Filter for items [0=False (default), 1=True]',
+                      })
     def get(self):
         if 'expression' not in request.args.keys():
             return abort(422, message='Missing mandatory \'expression\' argument')
         data = {
             'expression': request.args['expression'],
-            'limit': 6,
+            'limit': int(_get_query_value(request, 'limit', default='6')),
+            'barcodes': int(_get_query_value(request, 'barcodes', default='0')) == 1,
+            'items': int(_get_query_value(request, 'items', default='0')) == 1,
         }
-        if 'limit' in request.args.keys():
-            data['limit'] = int(request.args['limit'])
+
+        print(data)
 
         results = []
-
         expression = '%{}%'.format(data['expression'])
-        barcodes = Barcode.query.filter(
-            Barcode.barcode.ilike(expression)
-        ).limit(data['limit']).all()
-        results.extend([CreateObject(type='barcode', item_id=row.item_id, barcode=row.barcode, quantity=row.quantity,
-                                     name=row.item.name, unit=row.item.unit.unit) for row in barcodes])
 
-        if len(results) < data['limit']:
+        if data['barcodes']:
+            barcodes = Barcode.query.filter(
+                Barcode.barcode.ilike(expression)
+            ).limit(data['limit']).all()
+            results.extend([CreateObject(type='barcode', item_id=row.item_id, barcode=row.barcode,
+                                         quantity=row.quantity, name=row.item.name, unit=row.item.unit.unit)
+                            for row in barcodes])
+
+        if data['items'] and len(results) < data['limit']:
             items = db.session.query(Item, Barcode).join(Barcode).filter(
                 and_(
                     or_(
@@ -272,3 +281,10 @@ def _get_label_printer(barcode: Barcode) -> LabelPrinter:
         )
 
     return LabelPrinter(title=title, data=barcode.barcode)
+
+
+def _get_query_value(query_request, argument_name: str, default: str=None):
+    if argument_name not in query_request.args.keys():
+        return default
+
+    return query_request.args[argument_name]
