@@ -215,8 +215,8 @@ appFieldsDirectives.directive('appItemInput',
             'compile': function (element, attrs) {
                 element.find('input').attr('autofocus', angular.isUndefined(attrs.aAutofocus) ? null : '');
             },
-            'controller': ['$scope', '$q', '$typeahead', 'ItemService', 'CommonFactory',
-                function ($scope, $q, $typeahead, ItemService, CommonFactory) {
+            'controller': ['$scope', '$typeahead', 'ItemService', 'CommonFactory',
+                function ($scope, $typeahead, ItemService, CommonFactory) {
 
                     var dataFetcher = function dataFetcher (filter) {
                             var options = {
@@ -231,13 +231,13 @@ appFieldsDirectives.directive('appItemInput',
 
                         delayedDataFetcher = CommonFactory.createDelayedPromiseCallback(dataFetcher),
 
-                        getData = function getData ($modelValue, $viewValue) {
+                        getData = function getData ($modelValue) {
                             delayedDataFetcher.cancel();
-                            if (!$viewValue || angular.isObject($modelValue)) {
+                            if (!$modelValue || angular.isObject($modelValue)) {
                                 return;
                             }
 
-                            return delayedDataFetcher.callback($viewValue);
+                            return delayedDataFetcher.callback($modelValue);
                         };
 
                     $scope.getData = getData;
