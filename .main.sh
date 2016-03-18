@@ -20,11 +20,42 @@ function show_title()
 {
     local dirname="$(basename "$(dirname "$0")")"
     local prefix=
+    local args=
 
     if [ "${dirname}" != '.' ]; then
         prefix="${dirname}: "
     fi
-    echo -e "\n### ${prefix}${cmd} ###"
+
+    args="$(get_package_args)"
+    if [ ! "${args}" == '' ]
+    then
+        args=" [${args}]"
+    fi
+
+    echo -e "\n### ${prefix}${cmd}${args} ###"
+}
+
+function get_package_args()
+{
+    local args=()
+
+    if [ "${GLOBAL_INSTALL}" == true ]
+    then
+        args+=('global')
+    fi
+
+    if [ "${PRODUCTION}" == true ]
+    then
+        args+=('production')
+    fi
+
+    if [ "${FORCE}" == true ]
+    then
+        args+=('force')
+    fi
+
+    joined="$(printf ",%s" "${args[@]}")"
+    echo "${joined:1}"
 }
 
 function show_help()
