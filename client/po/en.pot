@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Project-Id-Version: StoreKeeper v0.5.0-beta\n"
+"Project-Id-Version: StoreKeeper v0.5.0\n"
 
 #: app/partials/sidebars/item.html:57
 msgid "Add barcode to a new item"

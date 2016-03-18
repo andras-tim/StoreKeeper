@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+
+
+## [0.5.0] - 2016-03-18
 ### Changed
 - Updated server and client dependencies to the latest version:
 
@@ -103,7 +106,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Can use barcode printer to create labels
 
 
-[unreleased]: https://github.com/andras-tim/StoreKeeper/compare/v0.4.0...HEAD
+[unreleased]: https://github.com/andras-tim/StoreKeeper/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/andras-tim/StoreKeeper/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/andras-tim/StoreKeeper/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/andras-tim/StoreKeeper/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/andras-tim/StoreKeeper/compare/v0.2.0...v0.2.1
