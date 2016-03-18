@@ -169,32 +169,45 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
             'restrict': 'A',
             'scope': false,
             'link': function (scope, element, attrs) {
-                var tooltip;
+                var tooltip,
 
-                attrs.$observe('appTooltip', function (newTitle) {
-                    var options;
+                    hide = function hide () {
+                        if (angular.isDefined(tooltip)) {
+                            tooltip.hide();
+                        }
+                    },
 
-                    if (tooltip !== undefined) {
-                        tooltip.destroy();
-                    }
+                    destroy = function destroy () {
+                        if (angular.isDefined(tooltip)) {
+                            tooltip.destroy();
+                        }
+                    },
 
-                    options = {
-                        'title': newTitle
+                    setTitle = function setTitle (newTitle) {
+                        var options;
+
+                        destroy();
+
+                        options = {
+                            'title': newTitle
+                        };
+                        if (attrs.aPlacement) {
+                            options.placement = attrs.aPlacement;
+                        }
+
+                        tooltip = $tooltip(element, options);
                     };
-                    if (attrs.aPlacement) {
-                        options.placement = attrs.aPlacement;
-                    }
 
-                    tooltip = $tooltip(element, options);
-                });
+                attrs.$observe('appTooltip', setTitle);
 
                 scope.$watch(attrs.ngDisabled, function (disabled) {
-                    if (disabled && tooltip !== undefined) {
-                        tooltip.$promise.then(function () {
-                            tooltip.hide();
-                        });
+                    if (disabled) {
+                        hide();
                     }
                 });
+
+                element.bind('$destroy', destroy);
+                scope.$on('$destroy', destroy);
             }
         };
     }]);
@@ -214,7 +227,7 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
  *
  * @example
  * <app-typeahead-helper a-create-callback="createVendor()" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor">
- *   <input ng-model="item.vendor" bs-options="vendor as vendor.name for vendor in vendors" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
+ *   <input ng-model="item.vendor" bs-options="vendor as vendor.name for vendor in data.vendorList | filter: { 'name': $viewValue } | orderBy: 'name' track by vendor.id" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
  * </app-typeahead-helper>
  */
 appFormDirectives.directive('appTypeaheadHelper', ['$timeout',

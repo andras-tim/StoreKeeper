@@ -62,3 +62,24 @@ appFilters.filter('isItemQuantityCritical', [
             return item.quantity <= 0;
         };
     }]);
+
+
+appFilters.filter('orderByPromise', ['$q', 'orderByFilter',
+    function orderByPromise ($q, orderByFilter) {
+        return function filter (array, sortPredicate, reverseOrder) {
+            var result;
+
+            if (!array) {
+                return;
+            }
+
+            result = $q.defer();
+            array.then(function (resp) {
+                result.resolve(orderByFilter(resp, sortPredicate, reverseOrder));
+            }, function () {
+                result.reject();
+            });
+
+            return result.promise;
+        };
+    }]);

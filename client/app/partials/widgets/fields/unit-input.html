@@ -1,3 +1,3 @@
 <app-typeahead-helper a-create-callback="createUnit()" a-loading-spinner="loadingUnits" a-creating-spinner="creatingUnit">
-  <input name="unit" id="unitTypeahead" ng-model="data.unit" bs-options="unit as unit.unit for unit in data.unitList" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter unit' | translate }}" required bs-typeahead />
+  <input name="unit" id="unitTypeahead" ng-model="data.unit" bs-options="unit as unit.unit for unit in data.unitList | filter: { 'unit': $viewValue } | orderBy: 'unit' track by unit.id" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter unit' | translate }}" required bs-typeahead />
 </app-typeahead-helper>

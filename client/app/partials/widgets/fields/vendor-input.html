@@ -1,3 +1,3 @@
 <app-typeahead-helper a-create-callback="createVendor()" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor">
-  <input name="vendor" id="vendorTypeahead" ng-model="data.vendor" bs-options="vendor as vendor.name for vendor in data.vendorList" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
+  <input name="vendor" id="vendorTypeahead" ng-model="data.vendor" bs-options="vendor as vendor.name for vendor in data.vendorList | filter: { 'name': $viewValue } | orderBy: 'name' track by vendor.id" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
 </app-typeahead-helper>
