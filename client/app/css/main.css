@@ -1,23 +1,53 @@
 /**
- * Common
+ * Structure
  */
+html,
 body {
-    padding-top: 70px;
+	margin: 0;
+	padding: 0;
+	height: 100%;
 }
 
-body {
-    background: url("../../img/background.svg") no-repeat top left;
-    background-position-y: 70vh;
-    background-size: cover;
+.app {
+	min-height: 100%;
+	position: relative;
+}
+
+.app-header {
+    padding-bottom: 4.6em; /* navbar:height (3.6em) + gap (1em) */
+}
+@media (max-width: 247px) {
+    .app-header {
+        padding-bottom: 6.2em; /* navbar:height (5.2em) + gap (1em) */
+    }
+}
+
+.app-body {
+    padding-bottom: 5em; /* footer:height (3.5em) + gap (1.5em) */
+}
+
+.app-footer {
+    position: absolute;
+    bottom: 0;
+	left: 0;
+    width: 100%;
+    height: 3.5em;
+}
+
+@media (max-width: 1142px) {
+    .aside {
+        max-width: 35%;
+    }
 }
 
 
 /**
- * Navbar
+ * Header
  */
 .main-navbar .navbar-brand {
     padding: 8px 15px;
 }
+
 .main-navbar .navbar-brand img {
     display: inline;
     max-height: 35px;
@@ -33,19 +63,10 @@ body {
 
 
 /**
- * Page body
- */
-.page-body {
-    min-height: 80vh;
-}
-
-
-/**
  * Footer
  */
 .main-footer {
-    margin-top: 30px;
-    padding-top: 15px;
+    padding-top: 1em;
     border-top: 1px solid #e5e5e5;
     text-align: center;
 }
@@ -56,10 +77,10 @@ body {
 
 
 /**
- * Aside
+ * Background
  */
-@media (max-width: 1142px) {
-    .aside {
-        max-width: 35%;
-    }
+body {
+    background: url("../../img/background.svg") no-repeat top left;
+    background-position-y: 70vh;
+    background-size: cover;
 }

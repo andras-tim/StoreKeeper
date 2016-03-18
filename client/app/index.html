@@ -20,11 +20,17 @@
   <link rel="stylesheet" href="dist/css/storekeeper.css">
 </head>
 <body ng-keydown="onKeyDown($event)">
-  <div ng-include="'partials/header.html'"></div>
-  <div class="page-body">
-    <div ng-view></div>
+  <div class="app">
+    <div class="app-header">
+      <div ng-include="'partials/header.html'"></div>
+    </div>
+    <div class="app-body">
+      <div ng-view></div>
+    </div>
+    <div class="app-footer">
+      <div ng-include="'partials/footer.html'"></div>
+    </div>
   </div>
-  <div ng-include="'partials/footer.html'"></div>
 
   <script src="dist/js/resources.js"></script>
   <script src="dist/js/storekeeper.js"></script>
