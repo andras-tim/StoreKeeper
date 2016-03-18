@@ -12,7 +12,7 @@
             <div class="row">
               <div class="col-xs-10 without-padding">
                 <div class="input-group">
-                  <app-item-input a-model="searchField" a-autofocus></app-item-input>
+                  <app-item-input a-model="searchField" a-barcodes="true" a-items="true" a-autofocus></app-item-input>
                   <span class="input-group-btn">
                     <button type="submit" class="btn btn-success" ng-disabled="elementForm.$invalid" ng-click="enterElement()" app-tooltip="{{ 'Add element to list' | translate }}" a-placement="bottom"><i app-icon="add"></i></button>
                   </span>

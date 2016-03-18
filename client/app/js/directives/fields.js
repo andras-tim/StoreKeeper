@@ -201,7 +201,7 @@ appFieldsDirectives.directive('appPurchasePriceInput',
  * Item selector typeahead (results is not trimmed)
  *
  * @example
- * <app-item-input a-model="data"></app-item-input>
+ * <app-item-input a-model="data" a-barcodes="true" a-items="true"></app-item-input>
  */
 appFieldsDirectives.directive('appItemInput',
     function appItemInput () {
@@ -209,6 +209,8 @@ appFieldsDirectives.directive('appItemInput',
             'restrict': 'E',
             'scope': {
                 'aModel': '=',
+                'aBarcodes': '=',
+                'aItems': '=',
                 'aOnChange': '&'
             },
             'templateUrl': 'partials/widgets/fields/item-input.html',
@@ -221,7 +223,9 @@ appFieldsDirectives.directive('appItemInput',
                     var dataFetcher = function dataFetcher (filter) {
                             var options = {
                                 'expression': filter,
-                                'limit': $typeahead.defaults.limit
+                                'limit': $typeahead.defaults.limit,
+                                'barcodes': $scope.aBarcodes ? '1' : '0',
+                                'items': $scope.aItems ? '1' : '0'
                             };
 
                             return CommonFactory.handlePromise(

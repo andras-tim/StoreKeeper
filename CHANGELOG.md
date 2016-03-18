@@ -12,6 +12,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `libjpeg-dev`
     - `libffi-dev`
     - `zlib1g-dev`
+    
+- Customizable search for item types. Now, the item selector will return items only - issue #119
 
 ### Fixed
 - Table footer border and alignment on Items view
