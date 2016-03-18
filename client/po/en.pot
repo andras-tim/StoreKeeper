@@ -28,7 +28,7 @@ msgstr ""
 msgid "Assign barcode to an existing item"
 msgstr ""
 
-#: app/js/controllers/sidebars/item.js:273
+#: app/js/controllers/sidebars/item.js:275
 msgid "Assign to item"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Count"
 msgstr ""
 
-#: app/js/controllers/sidebars/item.js:396
+#: app/js/controllers/sidebars/item.js:399
 msgid "Do you want to clear list?"
 msgstr ""
 
@@ -89,11 +89,11 @@ msgstr ""
 msgid "Do you want to delete barcode {{ barcode }} ({{ quantity }} {{ unit }})"
 msgstr ""
 
-#: app/js/controllers/sidebars/item.js:339
+#: app/js/controllers/sidebars/item.js:342
 msgid "Do you want to delete element \"{{ barcode }}\" ({{ count }} pcs)"
 msgstr ""
 
-#: app/js/controllers/sidebars/item.js:330
+#: app/js/controllers/sidebars/item.js:333
 msgid "Do you want to delete element \"{{ barcode }}\" ({{ count }} x {{ quantity }} {{ unit }} of item \"{{ name }}\")"
 msgstr ""
 
@@ -101,11 +101,11 @@ msgstr ""
 msgid "Do you want to delete new barcode ({{ quantity }} {{ unit }})"
 msgstr ""
 
-#: app/js/controllers/sidebars/item.js:407
+#: app/js/controllers/sidebars/item.js:410
 msgid "Do you want to move all element from list to Stockpile?"
 msgstr ""
 
-#: app/js/controllers/sidebars/item.js:357
+#: app/js/controllers/sidebars/item.js:360
 msgid "Do you want to print sum {{ count }} pcs. labels?"
 msgstr ""
 

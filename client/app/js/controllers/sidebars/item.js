@@ -156,7 +156,8 @@ appSidebarControllers.controller('ItemSidebarController', ['$rootScope', '$scope
                     'addElement': addElement,
                     'removeElement': removeElement,
                     'removeAllElements': removeAllElements,
-                    'getIndexByBarcode': getIndexByBarcode
+                    'getIndexByBarcode': getIndexByBarcode,
+                    'checkAllElementsHasBeenAssigned': checkAllElementsHasBeenAssigned
                 };
             },
 
@@ -229,6 +230,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$rootScope', '$scope
                             readElement.data.itemId = item.id;
                             readElement.item = item;
                             readElement.barcode = masterBarcode;
+                            readElements.checkAllElementsHasBeenAssigned();
                         }
                     }
                 };
@@ -278,6 +280,7 @@ appSidebarControllers.controller('ItemSidebarController', ['$rootScope', '$scope
                         addBarcodeToItem(elementData.selectedItem.item_id, readElement.data.barcode, elementData.barcodeQuantity, readElement).then(
                             function () {
                                 $scope.closeModal('item-selector');
+                                readElements.checkAllElementsHasBeenAssigned();
                             });
                     }
                 };
