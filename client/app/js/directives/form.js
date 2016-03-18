@@ -227,7 +227,7 @@ appFormDirectives.directive('appTooltip', ['$tooltip',
  *
  * @example
  * <app-typeahead-helper a-create-callback="createVendor()" a-loading-spinner="loadingVendors" a-creating-spinner="creatingVendor">
- *   <input ng-model="item.vendor" bs-options="vendor as vendor.name for vendor in vendors" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
+ *   <input ng-model="item.vendor" bs-options="vendor as vendor.name for vendor in data.vendorList | filter: { 'name': $viewValue } | orderBy: 'name' track by vendor.id" type="text" class="form-control" autocomplete="off" placeholder="{{ 'Enter vendor' | translate }}" required bs-typeahead />
  * </app-typeahead-helper>
  */
 appFormDirectives.directive('appTypeaheadHelper', ['$timeout',
