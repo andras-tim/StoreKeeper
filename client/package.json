@@ -32,7 +32,7 @@
   "devDependencies": {
     "jasmine-core": "^2.4.1",
     "jscs": "^2.11.0",
-    "jshint": "~2.9.1",
+    "jshint": "^2.9.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.2",
     "karma-coverage": "^0.5.5",
