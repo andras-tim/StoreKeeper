@@ -33,6 +33,8 @@ class DbModelRenderer:
     def __generate_graphviz_dot_file_content(self, db_models) -> str:
         desc = sadisplay.describe(db_models,
                                   show_indexes=self.__show_indexes,
+                                  show_simple_indexes=False,
+                                  show_columns_of_indexes=False,
                                   show_methods=self.__show_active_components,
                                   show_properties=self.__show_active_components)
         return sadisplay.dot(desc)
