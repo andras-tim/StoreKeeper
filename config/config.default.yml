@@ -1,4 +1,4 @@
-USED_CONFIG: DefaultConfig
+USED_CONFIG>: DefaultConfig
 
 
 DefaultConfig:
@@ -113,7 +113,7 @@ DefaultConfig:
 
 
 ProductionConfig:
-  Base: DefaultConfig
+  <BASE: DefaultConfig
 
   App:
     SHARE_STATIC: False
@@ -128,7 +128,7 @@ ProductionConfig:
 
 
 DevelopmentConfig:
-  Base: DefaultConfig
+  <BASE: DefaultConfig
 
   App:
     ADMIN_PAGE: True
@@ -144,7 +144,7 @@ DevelopmentConfig:
 
 
 TestingConfig:
-  Base: DefaultConfig
+  <BASE: DefaultConfig
 
   App:
     NAME: "storekeeper"

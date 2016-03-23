@@ -2,10 +2,10 @@ import logging
 import socket
 from logging.handlers import RotatingFileHandler, SysLogHandler
 from flask import Flask
+from octoconf import ConfigObject
 
 from app.modules.email import Email
 from app.version import Version
-from app.modules.yaml_config import ConfigObject
 from app.modules.utf8_smtp_handler import Utf8SMTPHandler
 from app.modules.log_filters import LogValuesInjectorFilter
 

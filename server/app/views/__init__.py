@@ -1,6 +1,6 @@
-from app.modules.yaml_config import ConfigObject
-from app.modules.restful_api import RestfulApiWithoutSimpleAuth
+from octoconf import ConfigObject
 
+from app.modules.restful_api import RestfulApiWithoutSimpleAuth
 from app.views import common, acquisition, barcode, config, customer, error, item, session, stocktaking, unit, user, \
     vendor, work
 

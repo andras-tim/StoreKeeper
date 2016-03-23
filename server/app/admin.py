@@ -1,13 +1,13 @@
-from operator import attrgetter
 from flask import Flask
 from flask.ext.admin.contrib.fileadmin import FileAdmin
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_sqlalchemy import _BoundDeclarativeMeta as ModelType
+from octoconf import ConfigObject
+from operator import attrgetter
 
 from app import models
-from app.modules.yaml_config import ConfigObject
 
 
 def initialize(app: Flask, db: SQLAlchemy, config: ConfigObject):

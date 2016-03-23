@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import redirect, url_for
+from octoconf import ConfigObject
 
-from app.modules.yaml_config import ConfigObject
 from app import basedir
 
 

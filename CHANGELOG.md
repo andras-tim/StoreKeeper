@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased][unreleased]
+### Changed
+- Updated server and client resources (e.g. used mainline of ``sadisplay`` instead of a fork)
+- Extracted config management to [octoconf](https://github.com/andras-tim/octoconf) and followed up changes
 
 
 ## [0.5.0] - 2016-03-18

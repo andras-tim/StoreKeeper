@@ -1,7 +1,7 @@
 import logging
 import flask
+from octoconf import ConfigObject
 
-from app.modules.yaml_config import ConfigObject
 from app.version import Version
 
 
