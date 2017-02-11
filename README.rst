@@ -112,6 +112,9 @@ StoreKeeper is building in multilingual approach, therefore it can easily transl
 .. |CodeClimate| image:: https://codeclimate.com/github/andras-tim/StoreKeeper/badges/gpa.svg
     :target: https://codeclimate.com/github/andras-tim/StoreKeeper/coverage
     :alt: Code Climate
+.. |Landscape| image:: https://landscape.io/github/andras-tim/StoreKeeper/master/landscape.svg?style=flat
+    :target: https://landscape.io/github/andras-tim/StoreKeeper/master
+    :alt: Landscape.io
 .. |CoverageServer| image:: https://coveralls.io/repos/andras-tim/StoreKeeper/badge.svg?branch=master&service=github
     :target: https://coveralls.io/r/andras-tim/StoreKeeper?branch=master&service=github
     :alt: Server Test Coverage

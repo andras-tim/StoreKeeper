@@ -1,0 +1,15 @@
+max-line-length: 120
+uses:
+  - flask
+autodetect: true
+requirements:
+  - server/requirements.txt
+ignore-paths:
+  - client
+  - config
+  - server/db_migrations/versions
+python-targets:
+  - 3
+pep8:
+  disable:
+    - E402
